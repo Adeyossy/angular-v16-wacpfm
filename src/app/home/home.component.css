@@ -1,0 +1,30 @@
+.wacpfm-home-first {
+  height: 100vh;
+  padding: var(--wacpfm-spacing-default);
+}
+
+.wacpfm-activities {
+  padding: var(--wacpfm-spacing-default);
+}
+
+.wacpfm-activities:nth-child(1) {
+  background-color: var(--wacpfm-primary-colour-light);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.wacpfm-activity {
+  padding: var(--wacpfm-spacing-default);
+}
+
+.wacpfm-activity-title {
+  width: max-content;
+  margin: 0;
+}
+
+.wacpfm-activity-title-underline {
+  width: min-content;
+}
+
+button.wacpfm-activity-button {
+  width: auto;
+}

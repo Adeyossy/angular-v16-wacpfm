@@ -1,1 +1,173 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --wacpfm-primary-colour: #003CB2;
+  --wacpfm-primary-colour-contrast: #002060;
+  --wacpfm-primary-colour-light: #EBF1FF;
+  --wacpfm-accent-colour-green: #467C30;
+  --wacpfm-accent-colour-orange: #EB921C;
+  --wacpfm-accent-colour-red: #DB3237;
+  --wacpfm-background-colour: #F5F7FA;
+  --wacpfm-overlay-background: rgba(0, 0, 0, 0.1);
+  --wacpfm-primary-shadow: #CCDDFF;
+  --wacpfm-border-radius: 8px;
+  --wacpfm-text-colour: black;
+  --wacpfm-spacing-large: 48px;
+  --wacpfm-spacing-medium: 40px;
+  --wacpfm-spacing-default: 30px;
+  --wacpfm-three-colours: linear-gradient(to right, var(--wacpfm-accent-colour-red) 0%, 
+                                          var(--wacpfm-accent-colour-red) 33.33%, 
+                                          var(--wacpfm-accent-colour-orange) 33.33%,
+                                          var(--wacpfm-accent-colour-orange) 66.66%, 
+                                          var(--wacpfm-accent-colour-green) 66.67%);
+}
+
+body {
+  background-color: var(--wacpfm-background-colour);
+}
+
+h1, h2, h3, h4, h5, h6, .wacpfm-heading {
+  font-family: 'ITC Avant Garde Pro Md', Arial, Helvetica, sans-serif;
+  color: var(--wacpfm-text-colour);
+  margin: 0px;
+}
+
+h1.wacpfm-heading-avantgarde {
+  font-family: 'ITC Avant Garde Pro Md', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+}
+
+.wacpfm-heading-big {
+  font-size: 54pt;
+  font-weight: 700;
+}
+
+.wacpfm-heading-medium {
+  font-size: 36px;
+}
+
+.wacpfm-heading-small {
+  font-size: 28px;
+}
+
+.wacpfm-subheading {
+  font-size: 21px;
+  opacity: 0.8;
+}
+
+.wacpfm-small-text {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+.wacpfm-padding-default {
+  padding: var(--wacpfm-spacing-default);
+}
+
+p, label, input {
+  color: var(--wacpfm-text-colour);
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 18px;
+  line-height: 1.2em;
+  letter-spacing: -0.5px;
+  color: var(--wacpfm-text-colour);
+}
+
+label {
+  font-weight: 700;
+  font-family: Arial, Helvetica, sans-serif;
+  opacity: 0.8;
+}
+
+input {
+  width: 100%;
+  display: block;
+  padding: 16px 24px;
+  border: 2px solid var(--wacpfm-primary-shadow);
+  appearance: initial;
+  margin-bottom: 4px;
+}
+
+button {
+  width: 100%;
+  height: 64px;
+  padding: 2px 5%;
+  background-color: transparent;
+  color: var(--wacpfm-primary-colour);
+  font-family: 'ITC Avant Garde Pro Md', Arial, Helvetica, sans-serif;
+  border: 3px solid var(--wacpfm-primary-colour);
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  transition: color 200ms ease-in, background-color 200ms ease-in, border-color 200ms ease-in;
+}
+
+button.wacpfm-primary-button {
+  background-color: var(--wacpfm-primary-colour);
+  color: white;
+}
+
+button:active {
+  background-color: var(--wacpfm-accent-colour-orange);
+  color: white;
+  border-color: var(--wacpfm-accent-colour-orange);
+}
+
+.wacpfm-overlay-container {
+  position: fixed;
+  z-index: 2;
+}
+
+.wacpfm-page-divider {
+  height: 8px;
+  background: var(--wacpfm-three-colours);
+}
+
+.wacpfm-underline {
+  display: inline-block;
+  width: 100%;
+  padding: 8px;
+  background-color: var(--wacpfm-primary-colour);
+  box-shadow: 2px 3px var(--wacpfm-accent-colour-orange);
+  border-radius: var(--wacpfm-border-radius);
+}
+
+.wacpfm-heading-underline {
+  width: fit-content;
+}
+
+.wacpfm-green {
+  color: var(--wacpfm-accent-colour-green);
+}
+
+.wacpfm-red {
+  color: var(--wacpfm-accent-colour-red);
+}
+
+:disabled {
+  opacity: 0.5;
+  filter: grayscale(1);
+  cursor: not-allowed;
+}
+
+@media only screen and (min-width: 768px) {
+  :root {
+    --wacpfm-spacing-default: 36px;
+  }
+
+  button:hover {
+    color: var(--wacpfm-accent-colour-orange);
+    border-color: var(--wacpfm-accent-colour-orange);
+  }
+
+  :disabled:hover {
+    color: unset;
+    background-color: unset;
+    border-color: unset;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  :root {
+    --wacpfm-spacing-default: 48px;
+  }
+}
