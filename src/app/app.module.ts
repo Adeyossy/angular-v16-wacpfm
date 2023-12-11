@@ -8,6 +8,7 @@ import { RegisterComponent } from './register/register.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
+import { OverlayComponent } from './overlay/overlay.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { FormsModule } from '@angular/forms';
     HomeComponent,
     RegisterComponent,
     VerifyEmailComponent,
-    LoginComponent
+    LoginComponent,
+    OverlayComponent
   ],
   imports: [
     BrowserModule,

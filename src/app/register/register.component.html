@@ -1,1 +1,42 @@
-<p>register works!</p>
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <div class="col-lg-7 d-none d-lg-block"></div>
+    <div class="col-lg-5">
+      <div class="wacpfm-register wacpfm-padding-default">
+        <div class="wacpfm-heading-underline">
+          <h1 class="wacpfm-heading-small fw-bold">Create an Account</h1>
+          <div class="wacpfm-underline"></div>
+        </div>
+        <br>
+        <p class="wacpfm-subheading">Sign up to begin using the Faculty App</p>
+        <br>
+        <label for="wacpfm-register-email">Email</label>
+        <input type="email" name="email" id="wacpfm-register-email" required placeholder="e.g. lagbaja@email.com"
+        [(ngModel)]="this.email" autocomplete="off">
+        <p class="wacpfm-input-feedback wacpfm-small-text"
+        [ngClass]="emailCorrect ? 'wacpfm-green' : 'wacpfm-red'">{{emailFeedback}}</p>
+        <br>
+        <label for="wacpfm-register-password">Password</label>
+        <input type="password" name="password" id="wacpfm-register-password" required placeholder="xxxxxxxxx"
+        [ngModel]="this.password" (ngModelChange)="checkPassword($event)">
+        <p class="wacpfm-input-feedback wacpfm-small-text"
+        [ngClass]="passwordCorrect ? 'wacpfm-green' : 'wacpfm-red'">{{ passwordFeedback }}</p>
+        <br>
+        <label for="wacpfm-register-confirm-password">Confirm Password</label>
+        <input type="password" name="wacpfm-register-confirm-password" id="confirmPassword" required placeholder="xxxxxxxxx"
+        [ngModel]="this.confirmPassword" (ngModelChange)="comparePasswords($event)">
+        <p class="wacpfm-input-feedback wacpfm-small-text"
+        [ngClass]="confirmPasswordCorrect ? 'wacpfm-green' : 'wacpfm-red'">{{ confirmPasswordFeedback }}</p>
+        <br>
+        <button class="wacpfm-primary-button">Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid p-0" *ngIf="hasAuthStarted">
+  <div class="row g-0">
+    <div class="offset-lg-8 col-lg-4">
+      <app-overlay title="Signing In" description="Creating your account" bi="bi-gear-wide"></app-overlay>
+    </div>
+  </div>
+</div>
