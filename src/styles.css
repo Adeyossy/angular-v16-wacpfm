@@ -7,13 +7,14 @@
   --wacpfm-accent-colour-orange: #EB921C;
   --wacpfm-accent-colour-red: #DB3237;
   --wacpfm-background-colour: #F5F7FA;
-  --wacpfm-overlay-background: rgba(0, 0, 0, 0.1);
+  --wacpfm-overlay-background: rgba(0, 0, 0, 0.5);
   --wacpfm-primary-shadow: #CCDDFF;
   --wacpfm-border-radius: 8px;
   --wacpfm-text-colour: black;
   --wacpfm-spacing-large: 48px;
   --wacpfm-spacing-medium: 40px;
   --wacpfm-spacing-default: 30px;
+  --wacpfm-spacing-nav: 80px;
   --wacpfm-three-colours: linear-gradient(to right, var(--wacpfm-accent-colour-red) 0%, 
                                           var(--wacpfm-accent-colour-red) 33.33%, 
                                           var(--wacpfm-accent-colour-orange) 33.33%,
@@ -23,6 +24,10 @@
 
 body {
   background-color: var(--wacpfm-background-colour);
+}
+
+main {
+  margin-top: var(--wacpfm-spacing-nav);
 }
 
 h1, h2, h3, h4, h5, h6, .wacpfm-heading {
@@ -115,6 +120,7 @@ button:active {
 .wacpfm-overlay-container {
   position: fixed;
   z-index: 2;
+  top: 0;
 }
 
 .wacpfm-page-divider {
@@ -149,6 +155,20 @@ button:active {
   cursor: not-allowed;
 }
 
+.wacpfm-loading {
+  animation: rotate 1000ms linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media only screen and (min-width: 768px) {
   :root {
     --wacpfm-spacing-default: 36px;
@@ -168,6 +188,7 @@ button:active {
 
 @media only screen and (min-width: 1024px) {
   :root {
+    --wacpfm-spacing-large: 80px;
     --wacpfm-spacing-default: 48px;
   }
 }

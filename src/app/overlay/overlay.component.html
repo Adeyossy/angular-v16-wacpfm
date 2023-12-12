@@ -1,11 +1,13 @@
 <div class="wacpfm-overlay d-flex flex-column justify-content-end">
   <div class="wacpfm-overlay-dialog">
     <div class="wacpfm-overlay-dialog-header w-100">
-      <h1 class="wacpfm-overlay-dialog-title">{{ title }}</h1>
+      <h1 class="wacpfm-overlay-dialog-title wacpfm-heading-small fw-bold">{{ title }}</h1>
     </div>
     <div class="wacpfm-overlay-dialog-description d-flex">
-      <i class="bi {{ bi }}"></i>
-      <p>{{ description }}</p>
+      <div><i class="bi {{ bi }}"></i></div>
+      <p class="p-1">{{ description }}</p>
     </div>
+    <br>
+    <button class="wacpfm-overlay-dialog-button wacpfm-primary-button" (click)="emitClick()">Dismiss</button>
   </div>
 </div>

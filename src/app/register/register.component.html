@@ -8,11 +8,11 @@
           <div class="wacpfm-underline"></div>
         </div>
         <br>
-        <p class="wacpfm-subheading">Sign up to begin using the Faculty App</p>
+        <!-- <p class="wacpfm-subheading">Sign up to begin using the Faculty App</p> -->
         <br>
         <label for="wacpfm-register-email">Email</label>
-        <input type="email" name="email" id="wacpfm-register-email" required placeholder="e.g. lagbaja@email.com"
-        [(ngModel)]="this.email" autocomplete="off">
+        <input #emailModel="ngModel" type="email" name="wacpfm-register-email" id="wacpfm-register-email" required placeholder="e.g. lagbaja@email.com"
+        [ngModel]="this.email" autocomplete="off" (ngModelChange)="checkEmail(emailModel)">
         <p class="wacpfm-input-feedback wacpfm-small-text"
         [ngClass]="emailCorrect ? 'wacpfm-green' : 'wacpfm-red'">{{emailFeedback}}</p>
         <br>
@@ -28,15 +28,17 @@
         <p class="wacpfm-input-feedback wacpfm-small-text"
         [ngClass]="confirmPasswordCorrect ? 'wacpfm-green' : 'wacpfm-red'">{{ confirmPasswordFeedback }}</p>
         <br>
-        <button class="wacpfm-primary-button">Create Account</button>
+        <button class="wacpfm-primary-button" (click)="signUp()"
+        [disabled]="!emailCorrect || !passwordCorrect || !confirmPasswordCorrect">Create Account</button>
       </div>
     </div>
   </div>
 </div>
-<div class="container-fluid p-0" *ngIf="hasAuthStarted">
+<div class="container-fluid p-0 wacpfm-overlay-container" *ngIf="hasAuthStarted">
   <div class="row g-0">
-    <div class="offset-lg-8 col-lg-4">
-      <app-overlay title="Signing In" description="Creating your account" bi="bi-gear-wide"></app-overlay>
+    <div class="offset-lg-7 col-lg-5">
+      <app-overlay title="Signing Up" [description]="message" bi="bi-gear-wide wacpfm-loading"
+      (clickEmitter)="dismissOverlay()"></app-overlay>
     </div>
   </div>
 </div>

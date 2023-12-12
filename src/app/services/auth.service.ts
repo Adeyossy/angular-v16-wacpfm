@@ -19,7 +19,9 @@ export class AuthService {
 
   FIRESTORE_NULL_DOCUMENT = "firestore/document does not exist";
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+    this.httpClient.get(`${this.backendUrl}/index`).subscribe(this.asyncSubject);
+  }
 
   getFirebaseConfig$(): AsyncSubject<FirebaseOptions> {
     if (this.asyncSubject.closed)
