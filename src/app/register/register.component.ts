@@ -45,14 +45,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.userCredential$ = this.authService.signUp$(this.email, this.password).subscribe({
       next: userCredential => {
         const userEmail = userCredential.user.email;
-        console.log("UserCredential.user => ", userCredential.user);
         if (userEmail) this.message = `Account successfully created! Welcome ${userEmail}.`;
         else throw new Error(AuthErrorCodes.INVALID_EMAIL);
       },
       error: (error: AuthError) => {
         console.log("error => ", error);
         if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
-          this.message = "Sorry! This email already exists. ";
+          this.message = "Sorry! This email already exists.";
           return;
         }
         this.message = "Sorry! An error occurred. Please try again";

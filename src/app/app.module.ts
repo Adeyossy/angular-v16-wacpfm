@@ -10,6 +10,8 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { OverlayComponent } from './overlay/overlay.component';
 import { HttpClientModule } from '@angular/common/http';
+import { AccessComponent } from './access/access.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { HttpClientModule } from '@angular/common/http';
     RegisterComponent,
     VerifyEmailComponent,
     LoginComponent,
-    OverlayComponent
+    OverlayComponent,
+    AccessComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

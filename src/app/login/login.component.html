@@ -1,1 +1,24 @@
-<p>login works!</p>
+<div class="wacpfm-login wacpfm-padding-default">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-heading-small fw-bold">Sign In</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br>
+  <!-- <p class="wacpfm-subheading">Sign up to begin using the Faculty App</p> -->
+  <br>
+  <label for="wacpfm-login-email">Email</label>
+  <input #emailModel="ngModel" type="email" name="wacpfm-login-email" id="wacpfm-login-email" required
+    placeholder="e.g. lagbaja@email.com" [(ngModel)]="this.email" autocomplete="off">
+  <br>
+  <label for="wacpfm-login-password">Password</label>
+  <input type="password" name="password" id="wacpfm-login-password" required placeholder="xxxxxxxxx"
+    [(ngModel)]="this.password">
+  <br>
+  <a routerLink="/access/register">Create your account if you're new!</a>
+  <br>
+  <button class="wacpfm-primary-button" (click)="login()" [disabled]="!email || !password">Create Account</button>
+</div>
+<div class="wacpfm-overlay-container" *ngIf="hasAuthStarted">
+  <app-overlay title="Signing In" [description]="message" bi="bi-gear-wide wacpfm-loading"
+    (clickEmitter)="dismissOverlay()"></app-overlay>
+</div>
