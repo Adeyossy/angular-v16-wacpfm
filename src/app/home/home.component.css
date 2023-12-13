@@ -1,5 +1,5 @@
 .wacpfm-home-first {
-  height: 100vh;
+  height: 91vh;
   padding: var(--wacpfm-spacing-default);
 }
 
@@ -8,7 +8,7 @@
 }
 
 .wacpfm-activities:nth-child(1) {
-  background-color: var(--wacpfm-primary-colour-light);
+  background-color: var(--wacpfm-primary-shadow);
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 

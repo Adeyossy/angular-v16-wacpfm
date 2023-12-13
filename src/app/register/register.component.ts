@@ -28,6 +28,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   isAuthFinished = false;
   message = "Creating your account...";
 
+  navLink = "/access/register/verifyemail";
+  navText = "Continue";
+
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
@@ -52,12 +55,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
         console.log("error => ", error);
         if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
           this.message = "Sorry! This email already exists.";
+          this.navText = "Login Instead";
+          this.navLink = "/access/login";
           return;
         }
         this.message = "Sorry! An error occurred. Please try again";
       },
       complete: () => {
         this.isAuthFinished = true;
+        this.navText = "Continue";
       }
     });
   }
@@ -110,6 +116,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   dismissOverlay() {
     this.hasAuthStarted = false;
     // this.userCredential$.unsubscribe();
-    if (this.isAuthFinished) this.router.navigateByUrl("/access/register/verifyemail");
+    if (this.isAuthFinished) this.router.navigateByUrl(this.navLink);
   }
 }

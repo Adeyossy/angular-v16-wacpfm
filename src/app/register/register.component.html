@@ -1,7 +1,10 @@
 <div class="wacpfm-register wacpfm-padding-default">
   <div class="wacpfm-heading-underline">
-    <h1 class="wacpfm-heading-small fw-bold">Create an Account</h1>
+    <h1 class="wacpfm-heading-small wacpfm-heading-primary fw-bold">Faculty App Registration</h1>
+  <div class="wacpfm-heading-underline">
+    <p class="wacpfm-subheading fw-bold m-0">Create Your Account</p>
     <div class="wacpfm-underline"></div>
+  </div>
   </div>
   <br>
   <!-- <p class="wacpfm-subheading">Sign up to begin using the Faculty App</p> -->
@@ -25,8 +28,8 @@
   <p class="wacpfm-input-feedback wacpfm-small-text" [ngClass]="confirmPasswordCorrect ? 'wacpfm-green' : 'wacpfm-red'">
     {{ confirmPasswordFeedback }}</p>
   <br>
-  <a routerLink="/access/register">Login here if you have an account</a>
-  <br>
+  <a routerLink="/access/login">Login here if you already have an account</a>
+  <br><br><br>
   <button class="wacpfm-primary-button" (click)="signUp()"
     [disabled]="!emailCorrect || !passwordCorrect || !confirmPasswordCorrect">Create Account</button>
 </div>

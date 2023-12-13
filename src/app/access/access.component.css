@@ -1,0 +1,10 @@
+.wacpfm-access-left {
+  min-height: 100vh;
+  background: url("../../assets/kente.png");
+  background-size: 100% auto;
+}
+
+.wacpfm-access-content {
+  /* padding-top: var(--wacpfm-spacing-default); */
+  background-color: var(--wacpfm-background-colour);
+}

@@ -12,6 +12,7 @@ import { OverlayComponent } from './overlay/overlay.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AccessComponent } from './access/access.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { NavComponent } from './nav/nav.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     LoginComponent,
     OverlayComponent,
     AccessComponent,
-    DashboardComponent
+    DashboardComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,
