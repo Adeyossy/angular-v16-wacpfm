@@ -79,7 +79,6 @@ h1.wacpfm-heading-avantgarde {
 
 .wacpfm-small-text {
   font-size: 16px;
-  opacity: 0.7;
 }
 
 .wacpfm-padding-default {
@@ -115,6 +114,14 @@ a {
   font-size: 16px;
   color: var(--wacpfm-primary-colour);
   box-shadow: 0px 2px var(--wacpfm-primary-colour);
+}
+
+i.bi {
+  margin-right: 8px;
+}
+
+label > i.bi {
+  color: var(--wacpfm-accent-colour-orange);
 }
 
 button {

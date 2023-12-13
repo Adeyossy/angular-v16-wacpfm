@@ -13,13 +13,13 @@ import { FirebaseOptions } from 'firebase/app';
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   email = '';
-  emailFeedback = "";
+  emailFeedback = "Email is invalid";
   emailCorrect = false;
   password = '';
-  passwordFeedback = '';
+  passwordFeedback = "Password is invalid";
   passwordCorrect = false;
   confirmPassword = '';
-  confirmPasswordFeedback = '';
+  confirmPasswordFeedback = "Passwords do not match";
   confirmPasswordCorrect = false;
   userCredential$ = new Subscription();
   config$ = new Observable<FirebaseOptions>();
@@ -43,7 +43,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   signUp() {
-    console.log("signup clicked");
     this.hasAuthStarted = true;
     this.userCredential$ = this.authService.signUp$(this.email, this.password).subscribe({
       next: userCredential => {
@@ -52,7 +51,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         else throw new Error(AuthErrorCodes.INVALID_EMAIL);
       },
       error: (error: AuthError) => {
-        console.log("error => ", error);
+        this.isAuthFinished = false;
         if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
           this.message = "Sorry! This email already exists.";
           this.navText = "Login Instead";
@@ -60,6 +59,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           return;
         }
         this.message = "Sorry! An error occurred. Please try again";
+        this.navText = "Dismiss";
       },
       complete: () => {
         this.isAuthFinished = true;

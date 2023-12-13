@@ -18,6 +18,9 @@ export class LoginComponent implements OnDestroy {
   message = "Please wait while we log you in...";
   loginSubscription = new Subscription();
 
+  navLink = "/dashboard";
+  navText = "Continue";
+
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnDestroy(): void {
@@ -32,7 +35,8 @@ export class LoginComponent implements OnDestroy {
         else throw new Error(AuthErrorCodes.INVALID_EMAIL);
       },
       error: (error: AuthError) => {
-        console.log("error => ", error);
+        this.isAuthFinished = false;
+        this.navText = "Dismiss";
         if (error.code === AuthErrorCodes.INVALID_EMAIL) {
           this.message = "Sorry! Your email is invalid.";
           return;
