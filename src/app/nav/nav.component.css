@@ -2,3 +2,7 @@ h1.wacpfm-subheading {
   opacity: 1;
   color: var(--wacpfm-primary-colour);
 }
+
+i {
+  font-size: 36px;
+}
