@@ -56,7 +56,7 @@ h1.wacpfm-heading-avantgarde {
 }
 
 .wacpfm-heading-big {
-  font-size: 54pt;
+  font-size: 54px;
   font-weight: 700;
 }
 
@@ -65,7 +65,7 @@ h1.wacpfm-heading-avantgarde {
 }
 
 .wacpfm-heading-small {
-  font-size: 28px;
+  font-size: 24px;
 }
 
 .wacpfm-heading-primary {
@@ -73,7 +73,7 @@ h1.wacpfm-heading-avantgarde {
 }
 
 .wacpfm-subheading {
-  font-size: 21px;
+  font-size: 20px;
   opacity: 0.8;
 }
 
