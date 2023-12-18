@@ -97,7 +97,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       }
 
       this.passwordCorrect = true;
-      this.passwordFeedback = "Password is very strong";
+      this.passwordFeedback = "Password is strong";
     }
     this.comparePasswords(this.confirmPassword);
   }

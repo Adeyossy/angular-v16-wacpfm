@@ -26,7 +26,7 @@
   <input type="password" name="wacpfm-register-confirm-password" id="confirmPassword" required placeholder="xxxxxxxxx"
     [ngModel]="this.confirmPassword" (ngModelChange)="comparePasswords($event)">
   <p class="wacpfm-input-feedback wacpfm-small-text" [ngClass]="confirmPasswordCorrect ? 'wacpfm-green' : 'wacpfm-red'">
-    {{ confirmPasswordFeedback }}</p>
+    <i class="bi" [ngClass]="confirmPasswordCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i> {{ confirmPasswordFeedback }}</p>
   <br>
   <a routerLink="/access/login">Login here if you already have an account</a>
   <br><br><br>
