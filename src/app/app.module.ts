@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AccessComponent } from './access/access.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavComponent } from './nav/nav.component';
+import { RegistrationComponent } from './registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { NavComponent } from './nav/nav.component';
     OverlayComponent,
     AccessComponent,
     DashboardComponent,
-    NavComponent
+    NavComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,

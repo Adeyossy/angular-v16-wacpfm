@@ -4,6 +4,15 @@
     <p class="wacpfm-subheading m-0">Verify Your Email</p>
     <div class="wacpfm-underline"></div>
   </div>
-  <p></p>
   <br>
+  <p>Hello! Your account was created successfully but let's make sure you can receive emails from us
+    by verifying your email address ({{ (user$ | async )?.email }}). A link has been sent.
+  </p>
+  <br>
+  <button class="wacpfm-primary-button" [disabled]="disabled">Verify Email</button>
+  <br>
+</div>
+<div class="wacpfm-overlay-container" *ngIf="verificationStarted">
+  <app-overlay title="Signing In" [description]="message" bi="bi-gear-wide wacpfm-loading"
+    (clickEmitter)="dismissOverlay()" [navText]="navText"></app-overlay>
 </div>

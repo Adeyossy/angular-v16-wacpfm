@@ -82,8 +82,10 @@ export class AuthService {
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
         if(user) {
-          return sendEmailVerification(user)
-        } else throw new Error(AuthErrorCodes.INVALID_EMAIL)
+          return sendEmailVerification(user, {
+            url: `${window.location.origin}/access/registration`
+          });
+        } else throw new Error(AuthErrorCodes.NULL_USER);
       })
     )
   }
