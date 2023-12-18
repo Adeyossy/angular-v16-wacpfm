@@ -10,3 +10,12 @@ export type UpdateCourse = {
   totParticipants: string[];
   resourcePersons: string[];
 }
+
+export type UpdateCourseLecture = {
+  lectureId: string;
+  lectureName: string;
+  lecturerName: string;
+  lecturerId: string;
+  startTime: string;
+  endTime: string;
+}
