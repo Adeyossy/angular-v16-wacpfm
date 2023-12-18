@@ -1,16 +1,19 @@
-.wacpfm-overlay {
-  width: 100%;
-  height: 100vh;
+.container-fluid {
   background-color: var(--wacpfm-overlay-background);
+}
+
+.wacpfm-overlay {
+  height: 100vh;
 }
 
 .wacpfm-overlay-dialog {
   width: 100%;
   background-color: var(--wacpfm-background-colour);
+  margin-top: 48vh;
 }
 
-.wacpfm-overlay-dialog > div {
-  padding: var(--wacpfm-spacing-default);
+.wacpfm-overlay-dialog-spaced {
+  padding: var(--wacpfm-spacing-small) var(--wacpfm-spacing-default);
 }
 
 .wacpfm-overlay-dialog-header {

@@ -6,5 +6,6 @@
 
 .wacpfm-access-content {
   /* padding-top: var(--wacpfm-spacing-default); */
+  position: relative;
   background-color: var(--wacpfm-background-colour);
 }

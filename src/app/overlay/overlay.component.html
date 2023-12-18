@@ -1,13 +1,20 @@
-<div class="wacpfm-overlay d-flex flex-column justify-content-end">
-  <div class="wacpfm-overlay-dialog">
-    <div class="wacpfm-overlay-dialog-header w-100">
-      <h1 class="wacpfm-overlay-dialog-title wacpfm-heading-small fw-bold">{{ title }}</h1>
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <div class="wacpfm-overlay offset-md-2 col-md-8 offset-lg-1 col-lg-10 d-flex flex-column justify-content-center">
+      <div class="wacpfm-overlay-dialog">
+        <div class="wacpfm-page-divider"></div>
+        <div class="wacpfm-overlay-dialog-header wacpfm-overlay-dialog-spaced w-100">
+          <h1 class="wacpfm-overlay-dialog-title wacpfm-heading-small fw-bold">{{ title }}</h1>
+        </div>
+        <div class="wacpfm-overlay-dialog-description wacpfm-overlay-dialog-spaced">
+          <div><i class="bi {{ bi }}"></i></div>
+          <p class="p-1">{{ description }}</p>
+        </div>
+        <br>
+        <div class="p-1">
+          <button class="wacpfm-overlay-dialog-button wacpfm-primary-button" (click)="emitClick()">{{ navText }}</button>
+        </div>
+      </div>
     </div>
-    <div class="wacpfm-overlay-dialog-description d-flex">
-      <div><i class="bi {{ bi }}"></i></div>
-      <p class="p-1">{{ description }}</p>
-    </div>
-    <br>
-    <button class="wacpfm-overlay-dialog-button wacpfm-primary-button" (click)="emitClick()">{{ navText }}</button>
   </div>
 </div>
