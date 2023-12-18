@@ -6,6 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccessComponent } from './access/access.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { RegistrationComponent } from './registration/registration.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, title:"Faculty of Family Medicine App, West African College of Physicians" },
@@ -16,7 +17,8 @@ const routes: Routes = [
       { path: "login", component: LoginComponent }
     ]
   },
-  { path: "dashboard", component: DashboardComponent, title: "Dashboard | Faculty of Family Medicine" }
+  { path: "dashboard", component: DashboardComponent, title: "Dashboard | Faculty of Family Medicine" },
+  { path: "profile/registration", component: RegistrationComponent }
 ];
 
 @NgModule({

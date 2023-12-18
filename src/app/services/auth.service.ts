@@ -83,7 +83,7 @@ export class AuthService {
       concatMap(user => {
         if(user) {
           return sendEmailVerification(user, {
-            url: `${window.location.origin}/access/registration`
+            url: `${window.location.origin}/profile/registration`
           });
         } else throw new Error(AuthErrorCodes.NULL_USER);
       })
