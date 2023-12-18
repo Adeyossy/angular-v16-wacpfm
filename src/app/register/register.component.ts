@@ -28,8 +28,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   isAuthFinished = false;
   message = "Creating your account...";
 
-  navLink = "/access/register/verifyemail";
-  navText = "Continue";
+  navLink = "";
+  navText = "Loading";
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -64,6 +64,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       complete: () => {
         this.isAuthFinished = true;
         this.navText = "Continue";
+        this.navLink = "/access/register/verifyemail";
       }
     });
   }

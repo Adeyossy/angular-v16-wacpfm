@@ -19,3 +19,8 @@
 .wacpfm-overlay-dialog-header {
   background-color: var(--wacpfm-primary-shadow);
 }
+
+i {
+  color: var(--wacpfm-primary-colour);
+  font-size: 18px;
+}

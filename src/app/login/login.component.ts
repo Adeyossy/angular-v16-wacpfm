@@ -18,8 +18,8 @@ export class LoginComponent implements OnDestroy {
   message = "Please wait while we log you in...";
   loginSubscription = new Subscription();
 
-  navLink = "/dashboard";
-  navText = "Continue";
+  navLink = "";
+  navText = "Loading...";
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -51,13 +51,15 @@ export class LoginComponent implements OnDestroy {
     //   },
     //   complete: () => {
     //     this.isAuthFinished = true;
+    //     this.navText = "Continue";
+    //     this.navLink = "/dashboard";
     //   }
     // });
   }
 
   dismissOverlay() {
     this.hasAuthStarted = false;
-    // this.loginSubscription.unsubscribe();
+    this.loginSubscription.unsubscribe();
     if (this.isAuthFinished) this.router.navigateByUrl("/dashboard");
   }
 }
