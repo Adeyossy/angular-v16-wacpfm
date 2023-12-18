@@ -20,4 +20,4 @@ export type ResourcePerson = {
   accountName: string;
   bankName: string;
   updateCourseLectureId: string; //id of the lecture from the update course lecture collection
-}
+} & AppUser;
