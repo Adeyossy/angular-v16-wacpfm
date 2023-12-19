@@ -35,7 +35,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.userSubscription = this.authService.getFirebaseUser$().subscribe({
       next: user => {
         if (user) {
-          if (user.email) this.user.email = user.email;
+          if (user.email) {
+            this.user.email = user.email;
+            this.user.userId = user.uid;
+          }
           else throw new Error(AuthErrorCodes.INVALID_EMAIL);
         } else throw new Error(AuthErrorCodes.NULL_USER);
       },
