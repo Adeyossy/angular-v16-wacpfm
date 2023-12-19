@@ -14,6 +14,7 @@ import { AccessComponent } from './access/access.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavComponent } from './nav/nav.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { SelectComponent } from './widgets/select/select.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { RegistrationComponent } from './registration/registration.component';
     AccessComponent,
     DashboardComponent,
     NavComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    SelectComponent
   ],
   imports: [
     BrowserModule,
