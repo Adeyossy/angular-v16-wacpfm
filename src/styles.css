@@ -139,6 +139,10 @@ input:invalid {
   border-left: 4px solid var(--wacpfm-accent-colour-red);
 }
 
+::placeholder {
+  opacity: 0.75;
+}
+
 a {
   text-decoration: none;
   font-size: 16px;
