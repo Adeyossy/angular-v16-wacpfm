@@ -4,12 +4,13 @@
 }
 
 .wacpfm-activities {
-  padding: var(--wacpfm-spacing-default);
+  padding: var(--wacpfm-spacing-default) 0;
 }
 
 .wacpfm-activities:nth-child(1) {
   background-color: var(--wacpfm-primary-shadow);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  /* border: 1px solid rgba(0, 0, 0, 0.1); */
+  border-bottom: 4px solid var(--wacpfm-primary-colour);
 }
 
 .wacpfm-activity {
@@ -27,4 +28,15 @@
 
 button.wacpfm-activity-button {
   width: auto;
+}
+
+@media only screen and (min-width: 992px) {
+  .wacpfm-activities {
+    padding: var(--wacpfm-spacing-default);
+  }
+
+  .wacpfm-activities:nth-child(1) {
+    border-bottom: none;
+    border-right: 4px solid var(--wacpfm-primary-colour);
+  }
 }

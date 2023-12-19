@@ -75,7 +75,7 @@ h1.wacpfm-heading-avantgarde {
 }
 
 .wacpfm-heading-small {
-  font-size: var(--wacpfm-font-big);
+  font-size: var(--wacpfm-font-small);
 }
 
 .wacpfm-heading-primary {
@@ -100,8 +100,13 @@ p, label, input {
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: var(--wacpfm-font-text);
   line-height: 1.2em;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
+  word-spacing: 1px;
   color: var(--wacpfm-text-colour);
+}
+
+p {
+  line-height: 1.3;
 }
 
 label {
@@ -118,6 +123,19 @@ input {
   border: 2px solid var(--wacpfm-primary-shadow);
   appearance: initial;
   margin-bottom: 4px;
+  transition: border 200ms ease-in;
+}
+
+input:hover {
+  border-color: var(--wacpfm-accent-colour-orange);
+}
+
+input:valid {
+  border-left: 4px solid var(--wacpfm-accent-colour-green);
+}
+
+input:invalid {
+  border-left: 4px solid var(--wacpfm-accent-colour-red);
 }
 
 a {
@@ -165,6 +183,11 @@ button:active {
   width: 100%;
   z-index: 2;
   top: 0;
+}
+
+.wacpfm-design-block {
+  background: url("./assets/kwanzaa.png");
+  background-size: cover;
 }
 
 .wacpfm-page-divider {
@@ -235,10 +258,14 @@ button:active {
   }
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 922px) {
   :root {
     --wacpfm-spacing-large: 80px;
     --wacpfm-spacing-default: 48px;
     --wacpfm-spacing-small: 30px;
+    --wacpfm-font-big: 60px;
+    --wacpfm-font-medium: 48px;
+    --wacpfm-font-small: 28px;
+    --wacpfm-font-text: 18px;
   }
 }

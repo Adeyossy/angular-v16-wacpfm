@@ -11,5 +11,7 @@ import { User } from 'firebase/auth';
 export class NavComponent {
   user$ = new Observable<User | null>();
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+    this.user$ = authService.getFirebaseUser$();
+  }
 }

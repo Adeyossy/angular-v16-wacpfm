@@ -1,1 +1,35 @@
-<p>registration works!</p>
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <div class="col-lg-3 d-none d-lg-block wacpfm-design-block"></div>
+    <div class="offset-md-1 col-md-10 col-lg-7">
+      <div class="wacpfm-register wacpfm-padding-default">
+        <div class="wacpfm-heading-underline">
+          <h1 class="wacpfm-heading-small wacpfm-heading-primary fw-bold">Faculty App Registration</h1>
+          <div class="wacpfm-heading-underline">
+            <p class="wacpfm-subheading m-0">Complete Your Profile</p>
+            <div class="wacpfm-underline"></div>
+          </div>
+        </div>
+        <br>
+        <!-- <p class="wacpfm-subheading">Sign up to begin using the Faculty App</p> -->
+        <br>
+        <label for="wacpfm-profile-email"><i class="bi bi-envelope-fill"></i> Email</label>
+        <input type="email" name="wacpfm-profile-email" id="wacpfm-profile-email" required
+          placeholder="e.g. lagbaja@email.com" [ngModel]="this.user.email" autocomplete="off" disabled>
+        <br>
+        <label for="wacpfm-profile-firstname"><i class="bi bi-envelope-fill"></i> Firstname</label>
+        <input type="text" name="wacpfm-profile-firstname" id="wacpfm-profile-firstname" required
+          placeholder="hint: what your friends call you" [ngModel]="this.user.firstname" autocomplete="off">
+        <br>
+        <label for="wacpfm-profile-middlename"><i class="bi bi-envelope-fill"></i> Middlename</label>
+        <input type="text" name="wacpfm-profile-middlename" id="wacpfm-profile-middlename" required
+          placeholder="hint: your least-known name" [ngModel]="this.user.lastname" autocomplete="off">
+        <br>
+        <label for="wacpfm-profile-lastname"><i class="bi bi-envelope-fill"></i> Lastname</label>
+        <input type="text" name="wacpfm-profile-lastname" id="wacpfm-profile-lastname" required
+          placeholder="hint: what your colleagues call you" [ngModel]="this.user.lastname" autocomplete="off">
+        <br>
+      </div>
+    </div>
+  </div>
+</div>
