@@ -21,6 +21,11 @@
                                           var(--wacpfm-accent-colour-orange) 33.33%,
                                           var(--wacpfm-accent-colour-orange) 66.66%, 
                                           var(--wacpfm-accent-colour-green) 66.67%);
+  --wacpfm-font-big: 54px;
+  --wacpfm-font-medium: 36px;
+  --wacpfm-font-small: 24px;
+  --wacpfm-font-subheading: 20px;
+  --wacpfm-font-text: 16px;
 }
 
 body {
@@ -61,16 +66,16 @@ h1.wacpfm-heading-avantgarde {
 }
 
 .wacpfm-heading-big {
-  font-size: 54px;
+  font-size: var(--wacpfm-font-big);
   font-weight: 700;
 }
 
 .wacpfm-heading-medium {
-  font-size: 36px;
+  font-size: var(--wacpfm-font-medium);
 }
 
 .wacpfm-heading-small {
-  font-size: 24px;
+  font-size: var(--wacpfm-font-big);
 }
 
 .wacpfm-heading-primary {
@@ -78,7 +83,7 @@ h1.wacpfm-heading-avantgarde {
 }
 
 .wacpfm-subheading {
-  font-size: 20px;
+  font-size: var(--wacpfm-font-subheading);
   opacity: 0.8;
 }
 
@@ -93,7 +98,7 @@ h1.wacpfm-heading-avantgarde {
 p, label, input {
   color: var(--wacpfm-text-colour);
   font-family: Georgia, 'Times New Roman', Times, serif;
-  font-size: 18px;
+  font-size: var(--wacpfm-font-text);
   line-height: 1.2em;
   letter-spacing: -0.5px;
   color: var(--wacpfm-text-colour);
