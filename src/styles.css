@@ -91,6 +91,10 @@ h1.wacpfm-heading-avantgarde {
   font-size: 16px;
 }
 
+.wacpfm-smaller-text {
+  font-size: 14px;
+}
+
 .wacpfm-padding-default {
   padding: var(--wacpfm-spacing-default);
 }
@@ -156,8 +160,8 @@ i.bi {
 }
 
 label > i.bi {
-  color: var(--wacpfm-primary-colour);
-  text-shadow: 2px 2px var(--wacpfm-accent-colour-orange);
+  color: var(--wacpfm-accent-colour-orange);
+  text-shadow: 1px 1px var(--wacpfm-primary-colour);
 }
 
 button {
@@ -194,7 +198,7 @@ button:active {
 
 .wacpfm-design-block {
   background: url("./assets/kwanzaa.png");
-  background-size: cover;
+  background-size: 100% auto;
 }
 
 .wacpfm-page-divider {

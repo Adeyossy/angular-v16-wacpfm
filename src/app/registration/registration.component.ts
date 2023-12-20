@@ -17,7 +17,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     firstname: "",
     middlename: "",
     lastname: "",
-    gender: undefined,
+    gender: "",
     country: "",
     phoneNumber: "",
     whatsapp: "",
@@ -28,8 +28,20 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     updateCourseRecords: [],
     userRoles: []
   }
-  
-  constructor(private authService: AuthService) {}
+
+  countries = [
+    'Nigeria', 'Ghana', 'Liberia', 'Sierra Leone', 'Togo',
+    'Benin', 'Burkina Faso', 'Niger', 'Mali', 'Senegal', 'Ivory Coast',
+    'Gambia', 'Guinea'
+  ];
+
+  countryCodes: any = {
+    nigeria: "+234", ghana: "+233", liberia: "+231", sierra_leone: "+232", togo: "+216",
+    benin: "+229", burkina_faso: "+226", niger: "+227", mali: "+223", senegal: "+221",
+    ivory_coast: "+225", gambia: "+220", guinea: "+224"
+  }
+
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     this.userSubscription = this.authService.getFirebaseUser$().subscribe({
@@ -50,5 +62,20 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
+  }
+
+  updateGender(value: string[]): void {
+    console.log("emitted items => ", value);
+    this.user.gender = value.length ? value[0] : "";
+  }
+
+  updateCountry(value: string[]): void {
+    this.user.country = value[0];
+  }
+
+  getCountryCode(): string {
+    const code = this.user.country.replace(" ", "_").toLowerCase();
+    // if (Object.hasOwn(this.countries, code))
+    return this.countryCodes[code]
   }
 }

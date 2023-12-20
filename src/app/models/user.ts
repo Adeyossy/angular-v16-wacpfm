@@ -3,7 +3,7 @@ export type AppUser = {
   firstname: string;
   middlename: string;
   lastname: string;
-  gender: "Male" | "Female" | undefined;
+  gender: string;
   phoneNumber: string;
   whatsapp: string;
   email: string;

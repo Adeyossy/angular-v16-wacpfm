@@ -3,3 +3,12 @@ button {
   font-weight: 400;
   border-width: 2px;
 }
+
+.wacpfm-showall {
+  cursor: pointer;
+  color: var(--wacpfm-primary-colour);
+}
+
+.wacpfm-showall:hover {
+  color: var(--wacpfm-accent-colour-orange);
+}

@@ -9,7 +9,7 @@ export class SelectComponent implements OnInit {
   @Input() mode = "";
   @Input() items: string[] = [];
   itemsSelectionState: boolean[] = [];
-  @Input() selectedItems: string[] = [];
+  overallState = false;
   @Output() emitItems = new EventEmitter<string[]>();
 
   ngOnInit(): void {
@@ -26,9 +26,21 @@ export class SelectComponent implements OnInit {
     } else {
       this.itemsSelectionState[index] = !this.itemsSelectionState[index];
     }
-    this.emitItems.emit(this.items.filter(_item => this.itemsSelectionState[index]));
+    this.emitItems.emit(this.items.filter((_item, index) => this.itemsSelectionState[index]));
   }
 
-  toggleItems(index: number) {
+  showItem(index: number): boolean {
+    this.overallState = !!this.itemsSelectionState.find(item => item);
+    if (this.overallState) {
+      return this.itemsSelectionState[index];
+    } else {
+      return !this.itemsSelectionState[index];
+    }
   }
+
+  showAll() {
+    this.itemsSelectionState.fill(false);
+  }
+
+
 }
