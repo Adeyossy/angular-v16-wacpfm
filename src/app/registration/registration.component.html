@@ -30,8 +30,7 @@
           placeholder="hint: what your colleagues call you" [ngModel]="this.user.lastname" autocomplete="off">
         <br><br>
         <label for="wacpfm-profile-gender"><i class="bi bi-emoji-neutral-fill"></i> Gender</label>
-        <input type="text" name="wacpfm-profile-gender" id="wacpfm-profile-gender" required
-          placeholder="hint: what your colleagues call you" [ngModel]="this.user.lastname" autocomplete="off">
+        <app-select mode="single" [items]="['Male', 'Female']" ></app-select>
         <br><br>
       </div>
     </div>

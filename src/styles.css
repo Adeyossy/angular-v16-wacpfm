@@ -132,6 +132,7 @@ input:hover {
 }
 
 input:valid {
+  border-color: var(--wacpfm-primary-colour);
   border-left: 4px solid var(--wacpfm-accent-colour-green);
 }
 
@@ -155,7 +156,8 @@ i.bi {
 }
 
 label > i.bi {
-  color: var(--wacpfm-accent-colour-orange);
+  color: var(--wacpfm-primary-colour);
+  text-shadow: 2px 2px var(--wacpfm-accent-colour-orange);
 }
 
 button {

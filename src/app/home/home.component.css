@@ -37,6 +37,6 @@ button.wacpfm-activity-button {
 
   .wacpfm-activities:nth-child(1) {
     border-bottom: none;
-    border-right: 4px solid var(--wacpfm-primary-colour);
+    border-right: 1px solid var(--wacpfm-primary-colour);
   }
 }
