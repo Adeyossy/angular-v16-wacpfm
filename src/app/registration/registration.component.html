@@ -35,19 +35,37 @@
         <label for="wacpfm-profile-country"><i class="bi bi-flag-fill"></i> Country</label>
         <app-select mode="single" [items]="countries" (emitItems)="updateCountry($event)"></app-select>
         <br><br>
-        <label for="wacpfm-profile-phone"><i class="bi bi-flag-fill"></i> Phone</label>
+        <label for="wacpfm-profile-phone"><i class="bi bi-phone-fill"></i> Phone</label>
         <div class="container-fluid p-0">
           <div class="row g-0">
             <div class="col-3 col-lg-2">
               <button class="wacpfm-primary-button">{{ user.country ? getCountryCode() : "" }}</button>
             </div>
             <div class="col-9 col-lg-10">
-              <input type="text" inputmode="numeric" name="wacpfm-profile-phone" id="wacpfm-profile-lastname" required
-                placeholder="80XXXXXXX" [(ngModel)]="this.user.phoneNumber" autocomplete="off" pattern="\d+">
+              <input type="tel" inputmode="numeric" name="wacpfm-profile-phone" id="wacpfm-profile-lastname" required
+                placeholder="80XXXXXXX" [(ngModel)]="this.user.phoneNumber" autocomplete="off" pattern="\d+"
+                class="wacpfm-font-arial">
             </div>
           </div>
         </div>
         <br><br>
+        <label for="wacpfm-profile-whatsapp"><i class="bi bi-whatsapp"></i> WhatsApp</label>
+        <p class="wacpfm-toggle wacpfm-small-text d-inline-block m-3" [ngClass]="phoneToggle ? 'toggled' : ''"
+          (click)="usePhoneForWhatsApp()"><i class="bi bi-check-circle-fill text-white" *ngIf="phoneToggle"></i> Same as above</p>
+        <div class="container-fluid p-0">
+          <div class="row g-0">
+            <div class="col-3 col-lg-2">
+              <button class="wacpfm-primary-button">{{ user.country ? getCountryCode() : "" }}</button>
+            </div>
+            <div class="col-9 col-lg-10">
+              <input type="tel" inputmode="numeric" name="wacpfm-profile-whatsapp" id="wacpfm-profile-lastname" required
+                placeholder="80XXXXXXX" [(ngModel)]="this.user.whatsapp" autocomplete="off" pattern="\d+"
+                class="wacpfm-font-arial">
+            </div>
+          </div>
+        </div>
+        <br><br>
+        <button class="wacpfm-primary-button">Update Profile</button>
       </div>
     </div>
   </div>

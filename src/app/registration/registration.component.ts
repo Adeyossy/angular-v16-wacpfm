@@ -41,6 +41,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     ivory_coast: "+225", gambia: "+220", guinea: "+224"
   }
 
+  phoneToggle = false;
+
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
@@ -77,5 +79,19 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     const code = this.user.country.replace(" ", "_").toLowerCase();
     // if (Object.hasOwn(this.countries, code))
     return this.countryCodes[code]
+  }
+
+  usePhoneForWhatsApp() {
+    this.phoneToggle = !this.phoneToggle;
+    if (this.phoneToggle) this.user.whatsapp = this.user.phoneNumber;
+    else this.user.whatsapp = "";
+  }
+
+  verify(): boolean {
+    return !!this.user.country || !!this.user.dateOfRegistration || !!this.user.email || 
+            !!this.user.examinationRecords.length || !!this.user.firstname || 
+            !!this.user.gender || !!this.user.lastname || !!this.user.middlename ||
+            !!this.user.phoneNumber  || !!this.user.updateCourseRecords.length ||
+            !!this.user.userId || !!this.user.whatsapp || !!this.user.zip
   }
 }
