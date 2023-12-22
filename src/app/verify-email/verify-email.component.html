@@ -1,4 +1,4 @@
-<div class="wacpfm-login wacpfm-padding-default">
+<div class="wacpfm-login wacpfm-padding-default" *ngIf="(user$ | async ) as user">
   <h1 class="wacpfm-heading-small wacpfm-heading-primary fw-bold">Faculty App: Verification</h1>
   <div class="wacpfm-heading-underline">
     <p class="wacpfm-subheading m-0">Verify Your Email</p>
@@ -7,7 +7,7 @@
   <br>
   <p>Hello! Your account was created successfully but let's make sure you can receive emails from us
     by verifying your email address 
-    <span *ngIf="(user$ | async )?.email as mail" class="fw-bold wacpfm-font-arial">({{ mail }})</span>.
+    <span *ngIf="user?.email as mail" class="fw-bold wacpfm-font-arial">({{ mail }})</span>.
   </p>
   <p>Click the button below to continue.</p>
   <br>

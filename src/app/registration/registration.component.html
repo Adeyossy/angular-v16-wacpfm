@@ -51,7 +51,8 @@
         <br><br>
         <label for="wacpfm-profile-whatsapp"><i class="bi bi-whatsapp"></i> WhatsApp</label>
         <p class="wacpfm-toggle wacpfm-small-text d-inline-block m-3" [ngClass]="phoneToggle ? 'toggled' : ''"
-          (click)="usePhoneForWhatsApp()"><i class="bi bi-check-circle-fill text-white" *ngIf="phoneToggle"></i> Same as above</p>
+          (click)="usePhoneForWhatsApp()"><i class="bi bi-check-circle-fill text-white" *ngIf="phoneToggle"></i> Same as
+          above</p>
         <div class="container-fluid p-0">
           <div class="row g-0">
             <div class="col-3 col-lg-2">
@@ -65,7 +66,15 @@
           </div>
         </div>
         <br><br>
-        <button class="wacpfm-primary-button">Update Profile</button>
+        <p class="wacpfm-small-text">Click the button below to update your profile on the Faculty App.</p>
+        <br><br>
+        <button class="wacpfm-primary-button" [disabled]="!this.user.country || !this.user.email || 
+          !this.user.firstname || !this.user.gender || !this.user.lastname || !this.user.middlename ||
+          !this.user.phoneNumber || !this.user.userId || !this.user.whatsapp || !this.user.zip">Update Profile</button>
+      </div>
+      <div class="wacpfm-overlay-container" *ngIf="uploadStarted">
+        <app-overlay title="Uploading Profile" [description]="message" bi="bi-gear-wide wacpfm-loading"
+          (clickEmitter)="dismissOverlay()" [navText]="navText"></app-overlay>
       </div>
     </div>
   </div>

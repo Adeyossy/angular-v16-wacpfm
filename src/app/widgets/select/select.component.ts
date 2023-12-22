@@ -10,6 +10,7 @@ export class SelectComponent implements OnInit {
   @Input() items: string[] = [];
   itemsSelectionState: boolean[] = [];
   overallState = false;
+  noOfClicks = 0;
   @Output() emitItems = new EventEmitter<string[]>();
 
   ngOnInit(): void {
@@ -17,8 +18,7 @@ export class SelectComponent implements OnInit {
   }
 
   toggleItem(index: number) {
-    console.log('index => ', index);
-    console.log('itemsSelectionState => ', this.itemsSelectionState[index]);
+    ++this.noOfClicks;
     if (this.mode === "single") {
       const itemState = this.itemsSelectionState[index];
       this.itemsSelectionState = this.itemsSelectionState.fill(false);
@@ -30,8 +30,7 @@ export class SelectComponent implements OnInit {
   }
 
   showItem(index: number): boolean {
-    this.overallState = !!this.itemsSelectionState.find(item => item);
-    if (this.overallState) {
+    if (this.noOfClicks % 2 === 1) {
       return this.itemsSelectionState[index];
     } else {
       return !this.itemsSelectionState[index];
@@ -39,8 +38,7 @@ export class SelectComponent implements OnInit {
   }
 
   showAll() {
+    this.noOfClicks = 0;
     this.itemsSelectionState.fill(false);
   }
-
-
 }

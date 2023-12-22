@@ -1,3 +1,5 @@
+import { FieldValue } from "firebase/firestore";
+
 export type AppUser = {
   userId: string; // corresponds to Firebase UserId
   firstname: string;
@@ -9,7 +11,7 @@ export type AppUser = {
   email: string;
   country: string;
   zip: string;
-  dateOfRegistration: string; // add this timestamp on the server
+  dateOfRegistration: FieldValue; // add this timestamp on the server
   updateCourseRecords: string[];
   examinationRecords: string[];
   userRoles: Array<"candidate" | "resource_person" | "participant" | "admin" | "college">

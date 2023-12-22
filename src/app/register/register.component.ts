@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   message = "Creating your account...";
 
   navLink = "";
-  navText = "Loading";
+  navText = "Loading...";
 
   constructor(private authService: AuthService, private router: Router) { }
 

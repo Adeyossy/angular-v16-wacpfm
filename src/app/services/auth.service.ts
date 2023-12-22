@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { AsyncSubject, Observable, concatMap, from, map, of } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
-import { DocumentReference, Firestore, addDoc, collection, deleteDoc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
+import { DocumentReference, Firestore, addDoc, collection, deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
+import { AppUser } from '../models/user';
+import { UpdateCourse } from '../models/update_course';
 
 @Injectable({
   providedIn: 'root'
@@ -102,21 +104,22 @@ export class AuthService {
     );
   }
 
-  addDoc$(collectionName: string, doc: any) {
+  addDoc$(collectionName: string, data: any) {
     return this.getFirestore$().pipe(
-      concatMap(db => addDoc(collection(db, collectionName), doc))
-    )
+      concatMap(db => addDoc(collection(db, collectionName), data))
+    );
   }
 
   /**
-   * this method adds a document to firestore
-   * @param docRef - the reference to the firestore document
-   * @param doc - the document data to be stored
+   * this method adds a document with a pre-existing ID to a named firestore collection
+   * @param collectionName - name of the collection
+   * @param docId - string: id of the Document you want to upload
+   * @param data - an object representing the data to be stored
    * @returns Observable<void>
    */
-  addDocWithRef$(docRef: DocumentReference, doc: any) {
+  addDocWithRef$(collectionName: string, docId: string, data: AppUser) {
     return this.getFirestore$().pipe(
-      concatMap(db => setDoc(docRef, doc))
+      concatMap(db => setDoc(doc(db, collectionName, docId), data))
     );
   }
 

@@ -3,8 +3,8 @@
     <div class="col-6 col-md-4 col-lg-3 p-2" *ngFor="let item of items; index as i" [ngClass]="i > 0 ? '' : ''"
       [ngClass]="showItem(i) ? 'd-block' : 'd-none'">
       <button [ngClass]="itemsSelectionState[i] ? 'wacpfm-primary-button' : ''"
-      (click)="toggleItem(i)">{{ item }}</button>
+      (click)="toggleItem(i)" class="wacpfm-font-arial">{{ item }}</button>
     </div>
   </div>
 </div>
-<p class="wacpfm-small-text wacpfm-showall p-2 d-inline-block" *ngIf="overallState" (click)="showAll()">Choose another</p>
+<p class="wacpfm-small-text wacpfm-showall p-2 d-inline-block" *ngIf="noOfClicks % 2 === 1" (click)="showAll()">Choose another</p>

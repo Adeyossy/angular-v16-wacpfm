@@ -3,6 +3,8 @@ import { AuthService } from '../services/auth.service';
 import { Subscription } from 'rxjs';
 import { AuthErrorCodes } from 'firebase/auth';
 import { AppUser } from '../models/user';
+import { serverTimestamp } from 'firebase/firestore';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -10,6 +12,7 @@ import { AppUser } from '../models/user';
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
+  COLLECTION_NAME = 'user';
   userSubscription = new Subscription();
   email = "";
   user: AppUser = {
@@ -23,7 +26,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     whatsapp: "",
     email: "",
     zip: "",
-    dateOfRegistration: "",
+    dateOfRegistration: serverTimestamp(),
     examinationRecords: [],
     updateCourseRecords: [],
     userRoles: []
@@ -42,8 +45,13 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   phoneToggle = false;
+  uploadStarted = false;
+  done = false;
+  navText = "Loading...";
+  navLink = "";
+  message = "Please wait while we save your profile...";
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.userSubscription = this.authService.getFirebaseUser$().subscribe({
@@ -77,8 +85,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   getCountryCode(): string {
     const code = this.user.country.replace(" ", "_").toLowerCase();
+    this.user.zip = this.countryCodes[code];
+    // this.user.phoneNumber = this.user.zip.concat(this.user.phoneNumber);
+    // this.user.whatsapp = this.user.zip.concat(this.user.whatsapp);
     // if (Object.hasOwn(this.countries, code))
-    return this.countryCodes[code]
+    return this.user.zip;
   }
 
   usePhoneForWhatsApp() {
@@ -88,10 +99,35 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   verify(): boolean {
-    return !!this.user.country || !!this.user.dateOfRegistration || !!this.user.email || 
-            !!this.user.examinationRecords.length || !!this.user.firstname || 
-            !!this.user.gender || !!this.user.lastname || !!this.user.middlename ||
-            !!this.user.phoneNumber  || !!this.user.updateCourseRecords.length ||
-            !!this.user.userId || !!this.user.whatsapp || !!this.user.zip
+    return !!this.user.country || !!this.user.dateOfRegistration || !!this.user.email ||
+      !!this.user.examinationRecords.length || !!this.user.firstname ||
+      !!this.user.gender || !!this.user.lastname || !!this.user.middlename ||
+      !!this.user.phoneNumber || !!this.user.updateCourseRecords.length ||
+      !!this.user.userId || !!this.user.whatsapp || !!this.user.zip
+  }
+
+  updateProfile() {
+    this.authService.addDocWithRef$(this.COLLECTION_NAME, this.user.userId,
+      this.user).subscribe({
+        next: value => {
+          this.message = "Your profile was saved successfully.";
+          // this.navLink = "/dashboard";
+        },
+        error: error => {
+          console.log("error => ", error);
+          this.message = "An error occurred while saving your profile.";
+          this.navText = "Dismiss";
+        },
+        complete: () => {
+          this.navText = "Continue";
+          this.navLink = "/dashboard";
+        }
+      })
+  }
+
+  dismissOverlay() {
+    this.uploadStarted = false;
+    // this.userCredential$.unsubscribe();
+    if (this.done) this.router.navigateByUrl(this.navLink);
   }
 }
