@@ -5,14 +5,24 @@
     <div class="wacpfm-underline"></div>
   </div>
   <br>
-  <p>Hello! Your account was created successfully but let's make sure you can receive emails from us
-    by verifying your email address 
-    <span *ngIf="user?.email as mail" class="fw-bold wacpfm-font-arial">({{ mail }})</span>.
-  </p>
-  <p>Click the button below to continue.</p>
-  <br>
-  <br>
-  <button class="wacpfm-primary-button" [disabled]="disabled" (click)="verifyEmail()">Verify Email</button>
+  <div *ngIf="!user.emailVerified; else verified">
+    <p>Hello! Your account was created successfully but let's make sure you can receive emails from us
+      by verifying your email address 
+      <span *ngIf="user?.email as mail" class="fw-bold wacpfm-font-arial wacpfm-small-text">({{ mail }})</span>.
+    </p>
+    <p>Click the button below to continue.</p>
+    <br>
+    <br>
+    <button class="wacpfm-primary-button" [disabled]="disabled" (click)="verifyEmail()">Verify Email</button>
+  </div>
+  <ng-template #verified>
+    <p>Hello! <span *ngIf="user?.email as mail" class="fw-bold wacpfm-font-arial wacpfm-small-text">({{ mail }})</span>
+    </p>
+    <p>Your email has been verified.</p>
+    <br>
+    <br>
+    <button class="wacpfm-primary-button" routerLink="/profile/registration">Proceed</button>
+  </ng-template>
   <br>
 </div>
 <div class="wacpfm-overlay-container" *ngIf="verificationStarted">

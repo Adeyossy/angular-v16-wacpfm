@@ -32,11 +32,15 @@ export class VerifyEmailComponent implements OnDestroy {
       concatMap(_value => this.user$)
     ).subscribe({
       next: user => {
-        if (user) this.message = "Email Verification link has been sent. Check your email, " 
+        if (user) {
+          this.message = "Email Verification link has been sent. Check your email, " 
           + user.email + ".";
+          this.navText = "Dismiss";
+        }
         else throw new Error(AuthErrorCodes.NULL_USER);
       },
       error: (error) => {
+        console.log("error => ", error);
         this.message = "Error sending email verification link";
         this.navText = "Dismiss"
       },
