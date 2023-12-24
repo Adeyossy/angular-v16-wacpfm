@@ -42,7 +42,7 @@ export class VerifyEmailComponent implements OnDestroy {
       error: (error) => {
         console.log("error => ", error);
         this.message = "Error sending email verification link";
-        this.navText = "Dismiss"
+        this.navText = "Dismiss";
       },
       complete: () => {
         this.navText = "Dismiss";

@@ -3,9 +3,9 @@
   --wacpfm-primary-colour: #003CB2;
   --wacpfm-primary-colour-contrast: #002060;
   --wacpfm-primary-colour-light: #EBF1FF;
-  --wacpfm-accent-colour-green: #48ff00;
+  --wacpfm-accent-colour-green: #ffe600;
   --wacpfm-accent-colour-orange: #ff7300;
-  --wacpfm-accent-colour-red: #DB3237;
+  --wacpfm-accent-colour-red: #ff0008;
   --wacpfm-background-colour: #F5F7FA;
   --wacpfm-overlay-background: rgba(0, 0, 0, 0.5);
   --wacpfm-primary-shadow: #CCDDFF;
@@ -206,8 +206,9 @@ button:active {
 .wacpfm-overlay-container {
   position: absolute;
   width: 100%;
+  height: 100%;
   z-index: 2;
-  top: 0;
+  bottom: 0;
 }
 
 .wacpfm-design-block {

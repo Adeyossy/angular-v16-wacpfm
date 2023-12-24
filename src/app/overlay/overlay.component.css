@@ -1,15 +1,21 @@
 .container-fluid {
   background-color: var(--wacpfm-overlay-background);
+  height: 100%;
+}
+
+.row {
+  height: 100%;
 }
 
 .wacpfm-overlay {
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
 }
 
 .wacpfm-overlay-dialog {
   width: 100%;
   background-color: var(--wacpfm-background-colour);
-  margin-top: 48vh;
+  /* margin-bottom: 25vh; */
 }
 
 .wacpfm-overlay-dialog-spaced {
