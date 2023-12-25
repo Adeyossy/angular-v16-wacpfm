@@ -108,24 +108,25 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   updateProfile() {
     this.uploadStarted = true;
-    // this.authService.addDocWithRef$(this.COLLECTION_NAME, this.user.userId,
-    //   this.user).subscribe({
-    //     next: value => {
-    //       console.log("Successful! Received void");
-    //       this.message = "Your profile was saved successfully.";
-    //       // this.navLink = "/dashboard";
-    //     },
-    //     error: error => {
-    //       console.log("error => ", error);
-    //       this.message = "An error occurred while saving your profile.";
-    //       this.navText = "Dismiss";
-    //     },
-    //     complete: () => {
-    //       console.log("Completed!");
-    //       this.navText = "Continue";
-    //       this.navLink = "/dashboard";
-    //     }
-    //   })
+    this.authService.getDoc$(this.COLLECTION_NAME, this.user.userId);
+    this.authService.addDocWithRef$(this.COLLECTION_NAME, this.user.userId,
+      this.user).subscribe({
+        next: value => {
+          console.log("Successful! Received void");
+          this.message = "Your profile was saved successfully.";
+          // this.navLink = "/dashboard";
+        },
+        error: error => {
+          console.log("error => ", error);
+          this.message = "An error occurred while saving your profile.";
+          this.navText = "Dismiss";
+        },
+        complete: () => {
+          console.log("Completed!");
+          this.navText = "Continue";
+          this.navLink = "/dashboard";
+        }
+      });
   }
 
   dismissOverlay() {

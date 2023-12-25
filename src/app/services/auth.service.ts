@@ -123,10 +123,9 @@ export class AuthService {
     );
   }
 
-  getDoc$(docRef: DocumentReference, doc: any) {
+  getDoc$(collectionName: string, docId: string) {
     return this.getFirestore$().pipe(
-      concatMap(db => getDoc(docRef)),
-      map(docSnap => docSnap.exists() ? docSnap.data() : new Error(this.FIRESTORE_NULL_DOCUMENT))
+      concatMap(db => getDoc(doc(db, collectionName, docId)))
     );
   }
 
