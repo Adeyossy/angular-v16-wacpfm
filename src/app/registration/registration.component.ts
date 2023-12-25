@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Subscription } from 'rxjs';
+import { Subscription, concatMap, filter } from 'rxjs';
 import { AuthErrorCodes } from 'firebase/auth';
 import { AppUser } from '../models/user';
 import { serverTimestamp } from 'firebase/firestore';
@@ -51,6 +51,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   navLink = "";
   message = "Please wait while we save your profile...";
 
+  profileSubscription = new Subscription();
+
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
@@ -72,6 +74,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
+    this.profileSubscription.unsubscribe();
   }
 
   updateGender(value: string[]): void {
@@ -108,9 +111,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   updateProfile() {
     this.uploadStarted = true;
-    this.authService.getDoc$(this.COLLECTION_NAME, this.user.userId);
-    this.authService.addDocWithRef$(this.COLLECTION_NAME, this.user.userId,
-      this.user).subscribe({
+    this.profileSubscription = this.authService.getDoc$(this.COLLECTION_NAME, this.user.userId).pipe(
+      concatMap(docSnap => docSnap.exists() ?
+        this.authService.addDocWithRef$(this.COLLECTION_NAME, this.user.userId, this.user) :
+        this.authService.updateDoc$(this.COLLECTION_NAME, this.user.userId, this.user))
+    ).subscribe({
         next: value => {
           console.log("Successful! Received void");
           this.message = "Your profile was saved successfully.";

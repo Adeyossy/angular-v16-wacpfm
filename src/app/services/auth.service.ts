@@ -129,9 +129,9 @@ export class AuthService {
     );
   }
 
-  updateDoc$(docRef: DocumentReference, delta: any) {
+  updateDoc$(collectionName: string, docId: string, delta: any) {
     return this.getFirestore$().pipe(
-      concatMap(db => updateDoc(docRef, delta))
+      concatMap(db => updateDoc(doc(db, collectionName, docId), delta))
     );
   }
 
