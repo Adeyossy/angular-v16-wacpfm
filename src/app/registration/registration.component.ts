@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Subscription, concatMap, filter } from 'rxjs';
+import { Subscription, concatMap, filter, from, of } from 'rxjs';
 import { AuthErrorCodes } from 'firebase/auth';
 import { AppUser } from '../models/user';
 import { serverTimestamp } from 'firebase/firestore';
@@ -113,7 +113,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.uploadStarted = true;
     this.profileSubscription = this.authService.getDoc$(this.COLLECTION_NAME, this.user.userId).pipe(
       concatMap(docSnap => docSnap.exists() ?
-        this.authService.updateDoc$(this.COLLECTION_NAME, this.user.userId, this.user) :
+        of() :
         this.authService.addDocWithRef$(this.COLLECTION_NAME, this.user.userId, this.user))
     ).subscribe({
       next: value => {
@@ -128,7 +128,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         console.log("Completed!");
+        this.done = true;
         this.navText = "Continue";
+        this.message = "Click the button below to continue";
         this.navLink = "/dashboard";
       }
     });

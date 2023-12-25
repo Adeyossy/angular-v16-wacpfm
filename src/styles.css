@@ -3,9 +3,10 @@
   --wacpfm-primary-colour: #003CB2;
   --wacpfm-primary-colour-contrast: #002060;
   --wacpfm-primary-colour-light: #EBF1FF;
+  --wacpfm-accent-colour-correct:rgb(29, 245, 0);
   --wacpfm-accent-colour-green: #ffe600;
   --wacpfm-accent-colour-orange: #ff7300;
-  --wacpfm-accent-colour-red: #ff0008;
+  --wacpfm-accent-colour-red: #e60000;
   --wacpfm-background-colour: #F5F7FA;
   --wacpfm-overlay-background: rgba(0, 0, 0, 0.5);
   --wacpfm-primary-shadow: #CCDDFF;
@@ -151,7 +152,7 @@ input:hover {
 
 input:valid {
   border-color: var(--wacpfm-primary-colour);
-  border-left: 4px solid var(--wacpfm-accent-colour-green);
+  border-left: 4px solid var(--wacpfm-accent-colour-correct);
 }
 
 input:invalid {
@@ -235,7 +236,7 @@ button:active {
 }
 
 .wacpfm-green {
-  color: var(--wacpfm-accent-colour-green);
+  color: var(--wacpfm-accent-colour-correct);
 }
 
 .wacpfm-red {

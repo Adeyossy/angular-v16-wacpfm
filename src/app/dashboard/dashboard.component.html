@@ -1,1 +1,13 @@
-<p>dashboard works!</p>
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <div class="col-lg-3 d-lg-block" [ngClass]="showOnMobile ? 'd-block' : 'd-none'">
+      <app-leftbar></app-leftbar>
+    </div>
+    <div class="col-lg-9">
+      <div class="wacpfm-dashboard">
+        <div class="wacpfm-dashboard-urgent"></div>
+        <div class="wacpfm-dashboard-quicklinks"></div>
+      </div>
+    </div>
+  </div>
+</div>

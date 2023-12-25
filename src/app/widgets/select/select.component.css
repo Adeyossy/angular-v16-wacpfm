@@ -2,6 +2,7 @@ button {
   text-transform: capitalize;
   font-weight: 400;
   border-width: 2px;
+  letter-spacing: normal;
 }
 
 .wacpfm-showall {
