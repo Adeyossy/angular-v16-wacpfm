@@ -113,25 +113,25 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.uploadStarted = true;
     this.profileSubscription = this.authService.getDoc$(this.COLLECTION_NAME, this.user.userId).pipe(
       concatMap(docSnap => docSnap.exists() ?
-        this.authService.addDocWithRef$(this.COLLECTION_NAME, this.user.userId, this.user) :
-        this.authService.updateDoc$(this.COLLECTION_NAME, this.user.userId, this.user))
+        this.authService.updateDoc$(this.COLLECTION_NAME, this.user.userId, this.user) :
+        this.authService.addDocWithRef$(this.COLLECTION_NAME, this.user.userId, this.user))
     ).subscribe({
-        next: value => {
-          console.log("Successful! Received void");
-          this.message = "Your profile was saved successfully.";
-          // this.navLink = "/dashboard";
-        },
-        error: error => {
-          console.log("error => ", error);
-          this.message = "An error occurred while saving your profile.";
-          this.navText = "Dismiss";
-        },
-        complete: () => {
-          console.log("Completed!");
-          this.navText = "Continue";
-          this.navLink = "/dashboard";
-        }
-      });
+      next: value => {
+        console.log("Successful! Received void");
+        this.message = "Your profile was saved successfully.";
+        // this.navLink = "/dashboard";
+      },
+      error: error => {
+        console.log("error => ", error);
+        this.message = "An error occurred while saving your profile.";
+        this.navText = "Dismiss";
+      },
+      complete: () => {
+        console.log("Completed!");
+        this.navText = "Continue";
+        this.navLink = "/dashboard";
+      }
+    });
   }
 
   dismissOverlay() {
