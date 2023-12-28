@@ -1,16 +1,26 @@
+.wacpfm-leftbar-item {
+  padding: 18px var(--wacpfm-spacing-small);
+  background-color: var(--wacpfm-primary-colour);
+}
+
+.wacpfm-leftbar-header {
+  color: white;
+}
+
 .wacpfm-leftbar-link {
   background-color: var(--wacpfm-light-grey);
-  border: 2px solid var(--wacpfm-light-grey);
-  color: var(--wacpfm-text-colour);
-  font-size: 24px;
+  border: 1px solid var(--wacpfm-primary-shadow);
+  color: var(--wacpfm-primary-colour-contrast);
+  font-size: 18px;
   line-height: 1;
-  padding: 18px var(--wacpfm-spacing-small);
+  vertical-align: middle;
   transition: background-color 200ms ease-in, border-color 200ms ease-in, color 200ms ease-in;
 }
 
 .wacpfm-leftbar i.bi {
   color: var(--wacpfm-accent-colour-orange);
   margin-right: 16px;
+  line-height: inherit;
 }
 
 .wacpfm-leftbar-link:hover {

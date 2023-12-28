@@ -9,16 +9,25 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { RegistrationComponent } from './registration/registration.component';
 
 const routes: Routes = [
-  { path: "", component: HomeComponent, title:"Faculty of Family Medicine App, West African College of Physicians" },
-  { path: "access", component: AccessComponent, title: "Gain Access | Faculty of Family Medicine App",
+  { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
+  {
+    path: "access", component: AccessComponent, title: "Gain Access | Faculty of Family Medicine App",
     children: [
       { path: "register", component: RegisterComponent },
       { path: "register/verifyemail", component: VerifyEmailComponent },
       { path: "login", component: LoginComponent }
     ]
   },
-  { path: "dashboard", component: DashboardComponent, title: "Dashboard | Faculty of Family Medicine" },
-  { path: "profile/registration", component: RegistrationComponent }
+  {
+    path: "dashboard", component: DashboardComponent, title: "Dashboard | Faculty of Family Medicine App",
+    children: [
+      { path: "", }
+    ]
+  },
+  {
+    path: "profile/registration", component: RegistrationComponent,
+    title: "Update Your Profile | Faculty of Family Medicine App"
+  }
 ];
 
 @NgModule({
