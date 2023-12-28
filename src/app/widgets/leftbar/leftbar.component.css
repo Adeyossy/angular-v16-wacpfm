@@ -1,0 +1,30 @@
+.wacpfm-leftbar-link {
+  background-color: var(--wacpfm-light-grey);
+  border: 2px solid var(--wacpfm-light-grey);
+  color: var(--wacpfm-text-colour);
+  font-size: 24px;
+  line-height: 1;
+  padding: 18px var(--wacpfm-spacing-small);
+  transition: background-color 200ms ease-in, border-color 200ms ease-in, color 200ms ease-in;
+}
+
+.wacpfm-leftbar i.bi {
+  color: var(--wacpfm-accent-colour-orange);
+  margin-right: 16px;
+}
+
+.wacpfm-leftbar-link:hover {
+  background-color: var(--wacpfm-primary-shadow);
+  border-color: var(--wacpfm-accent-colour-orange);
+}
+
+.wacpfm-leftbar-link:active, .wacpfm-leftbar-link.active {
+  background-color: var(--wacpfm-primary-colour);
+  color: var(--wacpfm-primary-colour-light);
+}
+
+span {
+  line-height: 1.5;
+  color: inherit;
+  font-size: 16px;
+}

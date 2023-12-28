@@ -2,7 +2,7 @@
 :root {
   --wacpfm-primary-colour: #003CB2;
   --wacpfm-primary-colour-contrast: #002060;
-  --wacpfm-primary-colour-light: #EBF1FF;
+  --wacpfm-primary-colour-light: rgb(235, 241, 255);
   --wacpfm-accent-colour-correct:rgb(29, 245, 0);
   --wacpfm-accent-colour-green: #ffe600;
   --wacpfm-accent-colour-orange: #ff7300;
@@ -10,6 +10,7 @@
   --wacpfm-background-colour: #F5F7FA;
   --wacpfm-overlay-background: rgba(0, 0, 0, 0.5);
   --wacpfm-primary-shadow: #CCDDFF;
+  --wacpfm-light-grey: rgb(234, 234, 255);
   --wacpfm-border-radius: 8px;
   --wacpfm-text-colour: black;
   --wacpfm-spacing-large: 48px;
@@ -100,7 +101,7 @@ h1.wacpfm-heading-avantgarde {
   padding: var(--wacpfm-spacing-default);
 }
 
-p, label, input {
+p, label, input, span {
   color: var(--wacpfm-text-colour);
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: var(--wacpfm-font-text);
