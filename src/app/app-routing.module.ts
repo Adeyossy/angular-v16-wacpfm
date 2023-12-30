@@ -7,6 +7,7 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccessComponent } from './access/access.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { UpdateCourseComponent } from './update-course/update-course.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
@@ -21,7 +22,7 @@ const routes: Routes = [
   {
     path: "dashboard", component: DashboardComponent, title: "Dashboard | Faculty of Family Medicine App",
     children: [
-      // { path: "", }
+      { path: "updatecourse", component: UpdateCourseComponent }
     ]
   },
   {

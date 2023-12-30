@@ -232,6 +232,16 @@ button:active {
   border-radius: var(--wacpfm-border-radius);
 }
 
+.wacpfm-underline.subheading {
+  background-color: var(--wacpfm-primary-colour);
+  padding: 4px;
+  box-shadow: 2px 4px black;
+}
+
+.wacpfm-underline.subheading ~ h1.wacpfm-subheading {
+  line-height: 0;
+}
+
 .wacpfm-heading-underline {
   width: fit-content;
 }
