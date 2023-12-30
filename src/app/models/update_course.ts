@@ -1,3 +1,6 @@
+export const UPDATE_COURSES = "update_courses";
+export const UPDATE_COURSES_LECTURES = "update_course_lectures";
+
 export type UpdateCourse = {
   updateCourseId: string;
   creator: string;

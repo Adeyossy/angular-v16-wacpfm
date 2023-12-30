@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AsyncSubject, Observable, concatMap, from, map, of } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
-import { DocumentReference, Firestore, addDoc, collection, deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
+import { DocumentReference, Firestore, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { AppUser } from '../models/user';
 import { UpdateCourse } from '../models/update_course';
 
@@ -83,7 +83,7 @@ export class AuthService {
     // users should be able to enter a code to be verified
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
-        if(user) {
+        if (user) {
           return sendEmailVerification(user, {
             url: `${window.location.origin}/profile/registration`
           });
@@ -135,9 +135,26 @@ export class AuthService {
     );
   }
 
-  deleteDoc$(docRef: DocumentReference) {
+  deleteDoc$(collectionName: string, docId: string) {
     return this.getFirestore$().pipe(
-      concatMap(db => deleteDoc(docRef))
+      concatMap(db => deleteDoc(doc(db, collectionName, docId)))
     );
   }
+
+  queryCollections$(collectionName: string, property: string,
+    comparator: WhereFilterOp, value: string | boolean) {
+    return this.getFirestore$().pipe(
+      concatMap(db => getDocs(query(collection(db, collectionName),
+        where(property, comparator, value))))
+    );
+  }
+
+  queryByUserId$(collectionName: string) {
+      return this.getFirebaseUser$().pipe(
+        concatMap(user => {
+          if (user) return this.queryCollections$(collectionName, "userId", "==", user.uid);
+          else throw new Error(AuthErrorCodes.NULL_USER);
+        })
+      );
+    }
 }
