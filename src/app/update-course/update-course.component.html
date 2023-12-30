@@ -7,13 +7,13 @@
       </div>
     </div>
     <br>
-    <div class="col-8 col-md-5 col-lg-4 col-xl-3 wacpfm-admin-block">
+    <div class="col-8 col-md-5 col-lg-4 col-xl-3 wacpfm-admin-block py-4">
       <button>+ New Course</button>
     </div>
     <div class="offset-1 col-md-5 col-lg-4 col-xl-3"></div>
     <div class="col-3 col-md-1 col-lg-3 col-xl-5"></div>
     <br><br>
-    <div class="col-12">
+    <div class="col-12 py-4">
       <div class="wacpfm-ongoing-course wacpfm-card">
         <div class="wacpfm-heading-underline">
           <h1 class="fw-bold wacpfm-small-text">ONGOING</h1>
@@ -31,6 +31,7 @@
       </div>
     </div>
   </div>
+  <br><br>
   <div class="row g-0">
     <div class="col-12">
       <div class="wacpfm-heading-underline">
@@ -39,10 +40,12 @@
       </div>
     </div>
   </div>
-  <div class="row g-0" *ngIf="(docs | async) as results">
+  <div class="row g-0" *ngIf="(previousCourses | async) as results">
     <div class="col-md-6 col-lg-4" *ngFor="let result of results">
-      <div class="wacpfm-card">
-        <p>{{ result }}</p>
+      <div class="wacpfm-card" *ngIf="result | async as course">
+        <p>{{ course.title }}</p>
+        <div class="wacpfm-page-divider"></div>
+        <p class="wacpfm-small-text">{{ course.startDate }}</p>
       </div>
     </div>
   </div>
