@@ -264,6 +264,13 @@ button:active {
   animation: rotate 1000ms linear infinite;
 }
 
+.wacpfm-card {
+  width: 100%;
+  background-color: var(--wacpfm-primary-colour-light);
+  padding: var(--wacpfm-spacing-default);
+  border: 2px solid var(--wacpfm-primary-shadow);
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0);
