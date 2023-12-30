@@ -21,7 +21,7 @@ const routes: Routes = [
   {
     path: "dashboard", component: DashboardComponent, title: "Dashboard | Faculty of Family Medicine App",
     children: [
-      { path: "", }
+      // { path: "", }
     ]
   },
   {

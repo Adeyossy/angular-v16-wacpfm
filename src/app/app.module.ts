@@ -16,6 +16,7 @@ import { NavComponent } from './nav/nav.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { SelectComponent } from './widgets/select/select.component';
 import { LeftbarComponent } from './widgets/leftbar/leftbar.component';
+import { UpdateCourseComponent } from './update-course/update-course.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { LeftbarComponent } from './widgets/leftbar/leftbar.component';
     NavComponent,
     RegistrationComponent,
     SelectComponent,
-    LeftbarComponent
+    LeftbarComponent,
+    UpdateCourseComponent
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,7 @@
+.wacpfm-leftbar {
+  background-color: var(--wacpfm-primary-colour-light);
+}
+
 .wacpfm-leftbar-item {
   padding: 18px var(--wacpfm-spacing-small);
   background-color: var(--wacpfm-primary-colour);
