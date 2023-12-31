@@ -1,5 +1,7 @@
 import { FieldValue } from "firebase/firestore";
 
+export const USERS = "users";
+
 export type AppUser = {
   userId: string; // corresponds to Firebase UserId
   firstname: string;

@@ -142,7 +142,7 @@ export class AuthService {
   }
 
   queryCollections$(collectionName: string, property: string,
-    comparator: WhereFilterOp, value: string | boolean) {
+    comparator: WhereFilterOp, value: string | boolean | number) {
     return this.getFirestore$().pipe(
       concatMap(db => getDocs(query(collection(db, collectionName),
         where(property, comparator, value))))

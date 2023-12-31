@@ -8,24 +8,28 @@
     </div>
     <br>
     <div class="col-8 col-md-5 col-lg-4 col-xl-3 wacpfm-admin-block py-4">
-      <button>+ New Course</button>
+      <button routerLink="/dashboard/updatecourse/new">+ New Course</button>
     </div>
     <div class="offset-1 col-md-5 col-lg-4 col-xl-3"></div>
     <div class="col-3 col-md-1 col-lg-3 col-xl-5"></div>
     <br><br>
-    <div class="col-12 py-4">
+    <div class="col-12 pb-4">
       <div class="wacpfm-ongoing-course wacpfm-card">
         <div class="wacpfm-heading-underline">
-          <h1 class="fw-bold wacpfm-small-text">ONGOING</h1>
+          <h1 class="fw-bold wacpfm-small-text">NEW COURSE</h1>
           <div class="wacpfm-underline"></div>
         </div>
         <br>
-        <div class="wacpfm-ongoing-course-preview" *ngIf="ongoing; else empty"></div>
+        <div class="wacpfm-ongoing-course-preview" *ngIf="ongoing | async as newCourse; else empty">
+          <p>{{ newCourse.title }}</p>
+          <div class="wacpfm-page-divider"></div>
+          <p class="wacpfm-small-text">{{ getDate(newCourse.startDate) }}</p>
+        </div>
         <ng-template #empty>
           <div class="d-flex flex-column justify-content-center align-items-center">
             <img src="../../assets/empty.png" alt="No update course in view - vector image by pikisuperstar"
               class="img-fluid w-50 text-center">
-            <p class="wacpfm-smaller-text">No update course</p>
+            <p class="wacpfm-smaller-text">No new update course</p>
           </div>
         </ng-template>
       </div>

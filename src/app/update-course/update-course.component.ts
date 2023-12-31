@@ -12,7 +12,7 @@ import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 })
 export class UpdateCourseComponent implements OnInit {
   previousCourses = new Observable<Observable<UpdateCourse>[]>();
-  ongoing = new Observable();
+  ongoing = new Observable<UpdateCourse | null>();
 
   constructor(private authService: AuthService) {
   }
@@ -27,6 +27,15 @@ export class UpdateCourseComponent implements OnInit {
           else throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT)
         })
       )))
-    )
+    );
+
+    this.ongoing = this.authService
+      .queryCollections$(UPDATE_COURSES, "endDate", ">=", Date.now()).pipe(
+        map(result => result.empty ? null : result.docs[0].data() as UpdateCourse)
+      )
+  }
+
+  getDate(millis: number) {
+    return new Date(millis).toLocaleDateString();
   }
 }

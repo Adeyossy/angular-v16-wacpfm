@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
-  COLLECTION_NAME = 'user';
+  COLLECTION_NAME = 'users';
   userSubscription = new Subscription();
   email = "";
   user: AppUser = {
