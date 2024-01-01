@@ -1,32 +1,36 @@
 <div class="wacpfm-register wacpfm-padding-default">
   <div class="wacpfm-heading-underline">
     <h1 class="wacpfm-heading-small wacpfm-heading-primary fw-bold">Faculty App Registration</h1>
-  <div class="wacpfm-heading-underline">
-    <p class="wacpfm-subheading m-0">Create Your Account</p>
-    <div class="wacpfm-underline"></div>
-  </div>
+    <div class="wacpfm-heading-underline">
+      <p class="wacpfm-subheading m-0">Create Your Account</p>
+      <div class="wacpfm-underline"></div>
+    </div>
   </div>
   <br>
   <!-- <p class="wacpfm-subheading">Sign up to begin using the Faculty App</p> -->
   <br>
-  <label for="wacpfm-register-email"><i class="bi bi-envelope-fill"></i>  Email</label>
+  <label for="wacpfm-register-email"><i class="bi bi-envelope-fill"></i> Email</label>
   <input #emailModel="ngModel" type="email" name="wacpfm-register-email" id="wacpfm-register-email" required
     placeholder="e.g. lagbaja@email.com" [ngModel]="this.email" autocomplete="off"
     (ngModelChange)="checkEmail(emailModel)">
   <p class="wacpfm-input-feedback wacpfm-small-text" [ngClass]="emailCorrect ? 'wacpfm-green' : 'wacpfm-red'">
-    <i class="bi" [ngClass]="emailCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i> {{emailFeedback}}</p>
+    <i class="bi" [ngClass]="emailCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i> {{emailFeedback}}
+  </p>
   <br>
-  <label for="wacpfm-register-password"><i class="bi bi-key-fill"></i>  Password</label>
+  <label for="wacpfm-register-password"><i class="bi bi-key-fill"></i> Password</label>
   <input type="password" name="password" id="wacpfm-register-password" required placeholder="xxxxxxxxx"
     [ngModel]="this.password" (ngModelChange)="checkPassword($event)">
   <p class="wacpfm-input-feedback wacpfm-small-text" [ngClass]="passwordCorrect ? 'wacpfm-green' : 'wacpfm-red'">
-    <i class="bi" [ngClass]="passwordCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i> {{ passwordFeedback }}</p>
+    <i class="bi" [ngClass]="passwordCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i> {{ passwordFeedback }}
+  </p>
   <br>
   <label for="wacpfm-register-confirm-password"><i class="bi bi-key-fill"></i> Confirm Password</label>
   <input type="password" name="wacpfm-register-confirm-password" id="confirmPassword" required placeholder="xxxxxxxxx"
     [ngModel]="this.confirmPassword" (ngModelChange)="comparePasswords($event)">
   <p class="wacpfm-input-feedback wacpfm-small-text" [ngClass]="confirmPasswordCorrect ? 'wacpfm-green' : 'wacpfm-red'">
-    <i class="bi" [ngClass]="confirmPasswordCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i> {{ confirmPasswordFeedback }}</p>
+    <i class="bi" [ngClass]="confirmPasswordCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i> {{
+    confirmPasswordFeedback }}
+  </p>
   <br>
   <a routerLink="/access/login">Login here if you already have an account</a>
   <br><br><br>
