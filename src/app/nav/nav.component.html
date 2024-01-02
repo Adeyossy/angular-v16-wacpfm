@@ -11,8 +11,10 @@
       </div>
       <div class="col-md-5 col-lg-6 d-none d-md-block"></div>
       <div class="offset-3 col-2 offset-md-2 col-md-1 col-lg-1">
-        <i class="bi" 
-        [ngClass]="(user$ | async) ? 'bi-person-circle' : 'bi-person-x'"></i>
+        <button *ngIf="(user$ | async); else nullUser" class="small wacpfm-smaller-text" (click)="this.signOut()">Logout</button>
+        <ng-template #nullUser>
+          <button class="wacpfm-primary-button small wacpfm-smaller-text">Login</button>
+        </ng-template>
       </div>
     </div>
   </div>

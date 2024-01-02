@@ -14,4 +14,13 @@ export class NavComponent {
   constructor(private authService: AuthService) {
     this.user$ = authService.getFirebaseUser$();
   }
+
+  signOut() {
+    const subscription = this.authService.signOut$().subscribe({
+      next: (_value) => {
+        subscription.unsubscribe();
+      },
+      error: err => console.log("Error occurred while logging out => ", err)
+    })
+  }
 }
