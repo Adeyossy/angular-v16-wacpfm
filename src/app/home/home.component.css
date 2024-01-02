@@ -30,6 +30,15 @@ button.wacpfm-activity-button {
   width: auto;
 }
 
+.wacpfm-footer {
+  background: var(--wacpfm-primary-colour-contrast);
+  color: white;
+}
+
+.wacpfm-footer p, .wacpfm-footer h1 {
+  color: white;
+}
+
 @media only screen and (min-width: 992px) {
   .wacpfm-activities {
     padding: var(--wacpfm-spacing-default);
