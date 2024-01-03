@@ -217,7 +217,7 @@ button:active {
   width: 100%;
   height: 100%;
   z-index: 2;
-  bottom: 64px;
+  bottom: 0;
 }
 
 .wacpfm-design-block {
