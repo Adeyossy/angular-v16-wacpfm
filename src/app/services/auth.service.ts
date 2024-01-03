@@ -99,6 +99,12 @@ export class AuthService {
     );
   }
 
+  getDocId$(collectionName: string) {
+    return this.getFirestore$().pipe(
+      map(db => doc(collection(db, collectionName)))
+    )
+  }
+
   addDoc$(collectionName: string, data: any) {
     return this.getFirestore$().pipe(
       concatMap(db => addDoc(collection(db, collectionName), data))
@@ -112,9 +118,21 @@ export class AuthService {
    * @param data - an object representing the data to be stored
    * @returns Observable<void>
    */
-  addDocWithRef$(collectionName: string, docId: string, data: AppUser) {
+  addDocWithID$(collectionName: string, docId: string, data: AppUser) {
     return this.getFirestore$().pipe(
       concatMap(db => setDoc(doc(db, collectionName, docId), data))
+    );
+  }
+
+  /**
+   * this method adds a document with a pre-existing ID to a named firestore collection
+   * @param docRef - DocumentReference: id of the Document you want to upload
+   * @param data - an object representing the data to be stored
+   * @returns Observable<void>
+   */
+  addDocWithRef$(docRef: DocumentReference, data: AppUser | UpdateCourse) {
+    return this.getFirestore$().pipe(
+      concatMap(db => setDoc(docRef, data))
     );
   }
 
@@ -156,11 +174,11 @@ export class AuthService {
   }
 
   queryByUserId$(collectionName: string) {
-      return this.getFirebaseUser$().pipe(
-        concatMap(user => {
-          if (user) return this.queryCollections$(collectionName, "userId", "==", user.uid);
-          else throw new Error(AuthErrorCodes.NULL_USER);
-        })
-      );
-    }
+    return this.getFirebaseUser$().pipe(
+      concatMap(user => {
+        if (user) return this.queryCollections$(collectionName, "userId", "==", user.uid);
+        else throw new Error(AuthErrorCodes.NULL_USER);
+      })
+    );
+  }
 }
