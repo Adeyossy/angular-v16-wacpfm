@@ -16,7 +16,8 @@ export type AppUser = {
   dateOfRegistration: FieldValue; // add this timestamp on the server
   updateCourseRecords: string[];
   examinationRecords: string[];
-  userRoles: Array<"candidate" | "resource_person" | "participant" | "admin" | "college">
+  updateCourseRole: "admin" | "resource_person" | "college" | "participant" | "";
+  examinationRole: "candidate" | "examiner" | "chief_examiner" | "";
 }
 
 export type ResourcePerson = {

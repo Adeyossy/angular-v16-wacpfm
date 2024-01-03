@@ -29,7 +29,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     dateOfRegistration: serverTimestamp(),
     examinationRecords: [],
     updateCourseRecords: [],
-    userRoles: []
+    updateCourseRole: "",
+    examinationRole: ""
   }
 
   countries = [
