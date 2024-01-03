@@ -15,7 +15,7 @@
 .wacpfm-overlay-dialog {
   width: 100%;
   background-color: var(--wacpfm-background-colour);
-  /* margin-bottom: 25vh; */
+  margin-bottom: var(--wacpfm-spacing-default);
 }
 
 .wacpfm-overlay-dialog-spaced {
