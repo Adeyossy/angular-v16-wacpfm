@@ -12,7 +12,8 @@
 <br><br>
 <label for="wacpfm-registration-open"><i class="bi bi-calendar-check-fill"></i> Date Registration Opens</label>
 <input type="date" name="wacpfm-registration-open" id="wacpfm-registration-open" required
-  placeholder="i.e. " [ngModel]="this.updateCourse.registrationOpenDate" autocomplete="off">
+  placeholder="i.e. date" [ngModel]="this.updateCourse.registrationOpenDate" autocomplete="off"
+  (ngModelChange)="updateAnyDate($event, 'registrationOpenDate')">
 <br><br>
 <label for="wacpfm-registration-closes"><i class="bi bi-calendar-x-fill"></i> Date Registration Closes</label>
 <input type="date" name="wacpfm-registration-closes" id="wacpfm-registration-closes" required

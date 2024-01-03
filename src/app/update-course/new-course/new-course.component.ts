@@ -34,4 +34,11 @@ export class NewCourseComponent implements OnInit {
   ngOnInit(): void {
     // this.userSubscription = this.authService.getFirebaseUser$().pipe()
   }
+
+  updateAnyDate(value: string, property: "registrationOpenDate" | "registrationCloseDate" | "startDate" | "endDate") {
+    console.log("date from html => ", value);
+    if(value) {
+      this.updateCourse[property] = new Date(value).getTime();
+    }
+  }
 }
