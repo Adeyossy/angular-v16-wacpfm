@@ -11,11 +11,6 @@ import { UpdateCourse } from '../models/update_course';
   providedIn: 'root'
 })
 export class AuthService {
-
-  usersCollection = "users";
-  updateCourseCollection = "update_courses";
-  updateCourseRecordsCollection = "update_course_records";
-  paymentsCollection = "payments";
   backendUrl = "/.netlify/functions";
   asyncSubject = new AsyncSubject<FirebaseOptions>();
 

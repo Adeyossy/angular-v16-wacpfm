@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Subscription, concatMap, filter, from, of } from 'rxjs';
 import { AuthErrorCodes } from 'firebase/auth';
-import { AppUser } from '../models/user';
+import { AppUser, USERS } from '../models/user';
 import { serverTimestamp } from 'firebase/firestore';
 import { Router } from '@angular/router';
 
@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
-  COLLECTION_NAME = 'users';
   userSubscription = new Subscription();
   email = "";
   user: AppUser = {
@@ -112,10 +111,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   updateProfile() {
     this.uploadStarted = true;
-    this.profileSubscription = this.authService.getDoc$(this.COLLECTION_NAME, this.user.userId).pipe(
+    this.profileSubscription = this.authService.getDoc$(USERS, this.user.userId).pipe(
       concatMap(docSnap => docSnap.exists() ?
         of() :
-        this.authService.addDocWithRef$(this.COLLECTION_NAME, this.user.userId, this.user))
+        this.authService.addDocWithRef$(USERS, this.user.userId, this.user))
     ).subscribe({
       next: value => {
         console.log("Successful! Received void");
