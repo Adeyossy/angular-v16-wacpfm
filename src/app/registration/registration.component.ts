@@ -114,7 +114,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.profileSubscription = this.authService.getDoc$(USERS, this.user.userId).pipe(
       concatMap(docSnap => docSnap.exists() ?
         of() :
-        this.authService.addDocWithRef$(USERS, this.user.userId, this.user))
+        this.authService.addDocWithID$(USERS, this.user.userId, this.user))
     ).subscribe({
       next: value => {
         console.log("Successful! Received void");
