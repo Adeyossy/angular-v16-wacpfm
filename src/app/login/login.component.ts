@@ -29,32 +29,32 @@ export class LoginComponent implements OnDestroy {
   
   login() {
     this.hasAuthStarted = true;
-    // this.loginSubscription = this.authService.login$(this.email, this.password).subscribe({
-    //   next: userCredential => {
-    //     const userEmail = userCredential.user.email;
-    //     if (userEmail) this.message = `Successfully logged in. Welcome! ${userEmail}.`;
-    //     else throw new Error(AuthErrorCodes.INVALID_EMAIL);
-    //   },
-    //   error: (error: AuthError) => {
-    //     this.isAuthFinished = false;
-    //     this.navText = "Dismiss";
-    //     if (error.code === AuthErrorCodes.INVALID_EMAIL) {
-    //       this.message = "Sorry! Your email is invalid.";
-    //       return;
-    //     }
+    this.loginSubscription = this.authService.login$(this.email, this.password).subscribe({
+      next: userCredential => {
+        const userEmail = userCredential.user.email;
+        if (userEmail) this.message = `Successfully logged in. Welcome! ${userEmail}.`;
+        else throw new Error(AuthErrorCodes.INVALID_EMAIL);
+      },
+      error: (error: AuthError) => {
+        this.isAuthFinished = false;
+        this.navText = "Dismiss";
+        if (error.code === AuthErrorCodes.INVALID_EMAIL) {
+          this.message = "Sorry! Your email is invalid.";
+          return;
+        }
 
-    //     if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
-    //       this.message = "Sorry! Your email or password is invalid";
-    //       return;
-    //     }
-    //     this.message = "Sorry! An error occurred. Please try again.";
-    //   },
-    //   complete: () => {
-    //     this.isAuthFinished = true;
-    //     this.navText = "Continue";
-    //     this.navLink = "/dashboard";
-    //   }
-    // });
+        if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
+          this.message = "Sorry! Your email or password is invalid";
+          return;
+        }
+        this.message = "Sorry! An error occurred. Please try again.";
+      },
+      complete: () => {
+        this.isAuthFinished = true;
+        this.navText = "Continue";
+        this.navLink = "/dashboard";
+      }
+    });
   }
 
   dismissOverlay() {
