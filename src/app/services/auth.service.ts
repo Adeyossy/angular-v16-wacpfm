@@ -129,6 +129,17 @@ export class AuthService {
     );
   }
 
+  getDocByUserId$(collectionName: string) {
+    return this.getFirebaseUser$().pipe(
+      concatMap(user => {
+        if (user) return this.getFirestore$().pipe(
+          concatMap(db => getDoc(doc(db, collectionName, user.uid)))
+        );
+        else throw new Error(AuthErrorCodes.NULL_USER);
+      })
+    )
+  }
+
   updateDoc$(collectionName: string, docId: string, delta: any) {
     return this.getFirestore$().pipe(
       concatMap(db => updateDoc(doc(db, collectionName, docId), delta))
