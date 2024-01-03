@@ -42,3 +42,7 @@
 <input #emailModel="ngModel" type="text" name="wacpfm-tot-theme" id="wacpfm-tot-theme" required
   placeholder="Theme for the ToT Course" [(ngModel)]="this.updateCourse.totTheme" autocomplete="off">
 <br><br>
+<button class="wacpfm-primary-button" [disabled]="!this.updateCourse.creator || !this.updateCourse.title
+  || !this.updateCourse.membershipTheme || !this.updateCourse.fellowshipTheme || !this.updateCourse.totTheme
+  || !this.updateCourse.startDate || !this.updateCourse.endDate || !this.updateCourse.registrationCloseDate
+  || !this.updateCourse.registrationOpenDate" (click)="createCourse()">Submit</button>
