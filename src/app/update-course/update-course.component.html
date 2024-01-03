@@ -6,14 +6,18 @@
         <div class="wacpfm-underline"></div>
       </div>
     </div>
-    <br>
+  </div>
+  <br>
+  <div class="row g-0" *ngIf="user$ | async">
     <div class="col-8 col-md-5 col-lg-4 col-xl-3 wacpfm-admin-block py-4">
       <button routerLink="/dashboard/updatecourse/new">+ New Course</button>
     </div>
     <div class="offset-1 col-md-5 col-lg-4 col-xl-3"></div>
     <div class="col-3 col-md-1 col-lg-3 col-xl-5"></div>
     <br><br>
-    <div class="col-12 pb-4">
+  </div>
+  <div class="row">
+    <div class="col-12 col-lg-8 col-xl-6 pb-4">
       <div class="wacpfm-ongoing-course wacpfm-card">
         <div class="wacpfm-heading-underline">
           <h1 class="fw-bold wacpfm-small-text">NEW COURSE</h1>

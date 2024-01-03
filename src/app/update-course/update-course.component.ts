@@ -4,6 +4,8 @@ import { Observable, concatAll, concatMap, map, switchMap } from 'rxjs';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
 import { FirestoreError, QueryDocumentSnapshot, QuerySnapshot } from 'firebase/firestore';
 import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
+import { User } from 'firebase/auth';
+import { AppUser, USERS } from '../models/user';
 
 @Component({
   selector: 'app-update-course',
@@ -13,11 +15,15 @@ import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 export class UpdateCourseComponent implements OnInit {
   previousCourses = new Observable<Observable<UpdateCourse>[]>();
   ongoing = new Observable<UpdateCourse | null>();
+  user$ = new Observable<AppUser | null>();
 
   constructor(private authService: AuthService) {
   }
 
   ngOnInit(): void {
+    this.user$ = this.authService.getDocByUserId$(USERS).pipe(
+      map(val => val.exists() ? val.data() as AppUser : null)
+    );
     this.previousCourses = this.authService.queryByUserId$(UPDATE_COURSES_RECORDS).pipe(
       map(value => value.docs as QueryDocumentSnapshot<UpdateCourseRecord>[]),
       map(docs => docs.map(doc => doc.data().updateCourseId)),

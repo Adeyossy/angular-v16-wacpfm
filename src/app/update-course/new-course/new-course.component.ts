@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UpdateCourse } from 'src/app/models/update_course';
 import { AuthService } from 'src/app/services/auth.service';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-new-course',
@@ -16,10 +17,10 @@ export class NewCourseComponent implements OnInit {
     updateCourseId: "",
     title: "",
     creator: "",
-    registrationOpenDate: 0,
-    registrationCloseDate: 0,
-    startDate: 0,
-    endDate: 0,
+    registrationOpenDate: Date.now(),
+    registrationCloseDate: Date.now(),
+    startDate: Date.now(),
+    endDate: Date.now() + (4*24*60*60*1000),
     membershipTheme: "",
     fellowshipTheme: "",
     totTheme: "",
@@ -29,7 +30,9 @@ export class NewCourseComponent implements OnInit {
     resourcePersons: []
   }
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, public helper: HelperService) {
+    console.log("Today's date => ", helper.getTodaysDate());
+  }
 
   ngOnInit(): void {
     // this.userSubscription = this.authService.getFirebaseUser$().pipe()
