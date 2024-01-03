@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { UpdateCourse } from 'src/app/models/update_course';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -10,6 +11,24 @@ import { AuthService } from 'src/app/services/auth.service';
 export class NewCourseComponent implements OnInit {
   userSubscription = new Subscription();
   courseSubscription = new Subscription();
+
+  updateCourse: UpdateCourse = {
+    updateCourseId: "",
+    title: "",
+    creator: "",
+    registrationOpenDate: 0,
+    registrationCloseDate: 0,
+    startDate: 0,
+    endDate: 0,
+    membershipTheme: "",
+    fellowshipTheme: "",
+    totTheme: "",
+    membershipParticipants: [],
+    fellowshipParticipants: [],
+    totParticipants: [],
+    resourcePersons: []
+  }
+
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {

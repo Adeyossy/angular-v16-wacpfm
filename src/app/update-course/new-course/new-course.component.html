@@ -6,3 +6,22 @@
   </div>
 </div>
 <br><br>
+<label for="wacpfm-course-title"><i class="bi bi-envelope-fill"></i> Course Title</label>
+<input #emailModel="ngModel" type="text" name="wacpfm-course-title" id="wacpfm-course-title" required
+  placeholder="i.e. the title of the Update Course" [(ngModel)]="this.updateCourse.title" autocomplete="off">
+<br><br>
+<label for="wacpfm-registration-open"><i class="bi bi-calendar-check-fill"></i> Date Registration Opens</label>
+<input type="date" name="wacpfm-registration-open" id="wacpfm-registration-open" required
+  placeholder="i.e. " [ngModel]="this.updateCourse.registrationOpenDate" autocomplete="off">
+<br><br>
+<label for="wacpfm-registration-closes"><i class="bi bi-calendar-x-fill"></i> Date Registration Closes</label>
+<input type="date" name="wacpfm-registration-closes" id="wacpfm-registration-closes" required
+  placeholder="i.e. " [(ngModel)]="this.updateCourse.title" autocomplete="off">
+<br><br>
+<label for="wacpfm-course-closes"><i class="bi bi-calendar-check-fill"></i> First Day of the Course</label>
+<input type="date" name="wacpfm-course-closes" id="wacpfm-course-closes" required
+  placeholder="i.e. " [(ngModel)]="this.updateCourse.title" autocomplete="off">
+<br><br>
+<label for="wacpfm-course-closes"><i class="bi bi-calendar-x-fill"></i> Last Day of the Course</label>
+<input type="date" name="wacpfm-course-closes" id="wacpfm-course-closes" required
+  placeholder="i.e. " [(ngModel)]="this.updateCourse.title" autocomplete="off">
