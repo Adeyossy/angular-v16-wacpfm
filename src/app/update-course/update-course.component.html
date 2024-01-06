@@ -13,17 +13,17 @@
   </div>
   <br>
   <div class="row">
-    <div class="col-12 col-lg-8 col-xl-6 pb-4">
+    <div class="col-lg-8 pb-4">
       <div class="wacpfm-ongoing-course wacpfm-card">
-        <div class="wacpfm-heading-underline">
+        <div class="wacpfm-heading-underline mb-3">
           <h1 class="fw-bold wacpfm-small-text">NEW COURSE</h1>
           <div class="wacpfm-underline"></div>
         </div>
-        <br>
         <div class="wacpfm-ongoing-course-preview" *ngIf="ongoing | async as newCourse; else empty">
-          <p>{{ newCourse.title }}</p>
-          <div class="wacpfm-page-divider"></div>
-          <p class="wacpfm-small-text">{{ getDate(newCourse.startDate) }}</p>
+          <h1 class="wacpfm-small-text">{{ newCourse.title }}</h1>
+          <div class="wacpfm-page-divider my-3"></div>
+          <p class="wacpfm-small-text"><span>{{ getDate(newCourse.startDate) }}</span> to 
+          <span>{{ getDate(newCourse.endDate) }}</span></p>
         </div>
         <ng-template #empty>
           <div class="d-flex flex-column justify-content-center align-items-center">
