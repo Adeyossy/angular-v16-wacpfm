@@ -10,19 +10,19 @@
   </div>
   <div class="wacpfm-ongoing-course-preview" *ngIf="ongoing | async as newCourse; else empty">
     <div *ngIf="newCourse.creator; else nullCourse" class="wacpfm-clickable">
-      <h1 class="wacpfm-heading-small">{{ newCourse.title }}</h1>
+      <h1 class="wacpfm-heading-small wacpfm-font-arial">{{ newCourse.title }}</h1>
       <!-- <div class="wacpfm-page-divider my-3"></div> -->
       <br>
       <div class="container-fluid p-0">
         <div class="row g-0">
           <div class="col-md-6 col-lg-4">
             <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
-              <button class="wacpfm-primary-button small">View Course</button>
+              <button class="wacpfm-primary-button small">Register</button>
             </a>
           </div>
-          <div class="col-md-6 offset-lg-4 col-lg-4">
+          <div class="col-md-6 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3" *ngIf="(user$ | async)?.updateCourseRole === 'admin'">
             <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
-              <button class="wacpfm-primary-button small">Edit</button>
+              <button class="small">Edit</button>
             </a>
           </div>
         </div>

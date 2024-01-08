@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { User } from 'firebase/auth';
 import { Observable, concatMap, map } from 'rxjs';
 import { UPDATE_COURSES, UpdateCourse } from 'src/app/models/update_course';
+import { AppUser, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -11,6 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class UpdateCourseDetailsComponent implements OnInit {
   ongoing: Observable<UpdateCourse | null> = new Observable();
+  user$: Observable<AppUser> = new Observable();
   updateCourseId = "";
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService) {}
@@ -30,6 +33,13 @@ export class UpdateCourseDetailsComponent implements OnInit {
         if (doc.exists()) return doc.data() as UpdateCourse;
         else throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT);
       })
-    )
+    );
+
+    this.user$ = this.authService.getDocByUserId$(USERS).pipe(
+      map(doc => {
+        if (doc.exists()) return doc.data() as AppUser;
+        else throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT);
+      })
+    );
   }
 }
