@@ -6,3 +6,7 @@ h1.wacpfm-subheading {
 i {
   font-size: 36px;
 }
+
+a.wacpfm-normal-link {
+  box-shadow: none;
+}
