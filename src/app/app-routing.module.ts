@@ -26,8 +26,8 @@ const routes: Routes = [
     children: [
       { path: "updatecourse", component: UpdateCourseComponent },
       { path: "updatecourse/new", component: NewCourseComponent },
-      { path: "updatecourse/:courseId/details", component: UpdateCourseDetailsComponent },
-      { path: "updatecourse/:courseId/details/edit", component: NewCourseComponent }
+      { path: "updatecourse/:updateCourseId/details", component: UpdateCourseDetailsComponent },
+      { path: "updatecourse/:updateCourseId/details/edit", component: NewCourseComponent }
     ]
   },
   {

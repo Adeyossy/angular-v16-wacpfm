@@ -20,12 +20,16 @@
           <div class="wacpfm-underline"></div>
         </div>
         <div class="wacpfm-ongoing-course-preview" *ngIf="ongoing | async as newCourse; else empty">
-          <div *ngIf="newCourse.creator; else nullCourse" routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
+          <div *ngIf="newCourse.creator; else nullCourse" class="wacpfm-clickable">
             <h1 class="wacpfm-small-text wacpfm-font-arial">{{ newCourse.title }}</h1>
-            <div class="wacpfm-page-divider my-3"></div>
-            <p class="wacpfm-smaller-text wacpfm-font-arial"><span>{{ getDate(newCourse.startDate) }}</span> to
+            <!-- <div class="wacpfm-page-divider my-3"></div> -->
+            <hr>
+            <p class="wacpfm-smaller-text fw-bold wacpfm-font-arial"><span>{{ getDate(newCourse.startDate) }}</span> -
               <span>{{ getDate(newCourse.endDate) }}</span>
             </p>
+            <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
+              <button class="wacpfm-primary-button small w-50">View Course</button>
+            </a>
           </div>
           <ng-template #nullCourse>
             <div class="d-flex flex-column justify-content-center align-items-center">

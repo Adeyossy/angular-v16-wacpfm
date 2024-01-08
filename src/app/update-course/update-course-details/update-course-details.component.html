@@ -1,1 +1,45 @@
-<p>update-course-details works!</p>
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small fw-bold">Update Course: Details</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+<br><br>
+<div class="wacpfm-ongoing-course wacpfm-card">
+  <div class="wacpfm-heading-underline mb-3">
+    <h1 class="fw-bold wacpfm-small-text">NEW COURSE</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <div class="wacpfm-ongoing-course-preview" *ngIf="ongoing | async as newCourse; else empty">
+    <div *ngIf="newCourse.creator; else nullCourse" class="wacpfm-clickable">
+      <h1 class="wacpfm-heading-small">{{ newCourse.title }}</h1>
+      <!-- <div class="wacpfm-page-divider my-3"></div> -->
+      <br>
+      <div class="container-fluid p-0">
+        <div class="row g-0">
+          <div class="col-md-6 col-lg-4">
+            <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
+              <button class="wacpfm-primary-button small">View Course</button>
+            </a>
+          </div>
+          <div class="col-md-6 offset-lg-4 col-lg-4">
+            <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
+              <button class="wacpfm-primary-button small">Edit</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #nullCourse>
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <img src="../../assets/empty.png" alt="No update course in view - vector image by pikisuperstar"
+          class="img-fluid w-50 text-center">
+        <p class="wacpfm-smaller-text">No new update course</p>
+      </div>
+    </ng-template>
+  </div>
+  <ng-template #empty>
+    <div>
+      <div class="wacpfm-loading d-inline-block"><i class="bi bi-gear-fill"></i></div>
+      <span>Loading...</span>
+    </div>
+  </ng-template>
+</div>

@@ -101,7 +101,7 @@ h1.wacpfm-heading-avantgarde {
   padding: var(--wacpfm-spacing-default);
 }
 
-p, label, input, span {
+p, label, input {
   color: var(--wacpfm-text-colour);
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: var(--wacpfm-font-text);
@@ -278,6 +278,7 @@ button:active {
   background-color: var(--wacpfm-primary-colour-light);
   padding: var(--wacpfm-spacing-default);
   border: 2px solid var(--wacpfm-primary-shadow);
+  transition: background-color 200ms ease-in;
 }
 
 .wacpfm-loading-icons-red {
@@ -323,6 +324,10 @@ button:active {
   a:hover {
     color: var(--wacpfm-accent-colour-orange);
     box-shadow: 0px 2px var(--wacpfm-accent-colour-orange);
+  }
+
+  .wacpfm-card:hover {
+    background-color: var(--wacpfm-background-colour);
   }
 
   .wacpfm-toggle:hover {
