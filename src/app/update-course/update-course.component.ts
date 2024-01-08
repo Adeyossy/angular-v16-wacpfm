@@ -42,6 +42,7 @@ export class UpdateCourseComponent implements OnInit {
   }
 
   getDate(millis: number) {
-    return new Date(millis).toLocaleDateString();
+    return new Intl.DateTimeFormat("en-NG").format(millis);
+    // return new Date(millis).toLocaleDateString();
   }
 }

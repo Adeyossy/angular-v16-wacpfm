@@ -23,7 +23,7 @@
           <div *ngIf="newCourse.creator; else nullCourse" routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
             <h1 class="wacpfm-small-text wacpfm-font-arial">{{ newCourse.title }}</h1>
             <div class="wacpfm-page-divider my-3"></div>
-            <p class="wacpfm-small-text"><span>{{ getDate(newCourse.startDate) }}</span> to
+            <p class="wacpfm-smaller-text wacpfm-font-arial"><span>{{ getDate(newCourse.startDate) }}</span> to
               <span>{{ getDate(newCourse.endDate) }}</span>
             </p>
           </div>
