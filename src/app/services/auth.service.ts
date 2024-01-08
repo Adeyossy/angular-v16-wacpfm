@@ -4,7 +4,7 @@ import { AsyncSubject, Observable, concatMap, from, map, of } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
 import { DocumentReference, Firestore, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from 'firebase/firestore';
-import { AppUser } from '../models/user';
+import { AppUser, USERS } from '../models/user';
 import { UpdateCourse } from '../models/update_course';
 
 @Injectable({
@@ -151,6 +151,15 @@ export class AuthService {
         else throw new Error(AuthErrorCodes.NULL_USER);
       })
     )
+  }
+
+  getAppUser$() {
+    return this.getDocByUserId$(USERS).pipe(
+      map(doc => {
+        if (doc.exists()) return doc.data() as AppUser;
+        else throw new Error(this.FIRESTORE_NULL_DOCUMENT);
+      })
+    );
   }
 
   updateDoc$(collectionName: string, docId: string, delta: any) {
