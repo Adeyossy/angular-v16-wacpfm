@@ -1,5 +1,6 @@
 .wacpfm-leftbar-item {
   padding: 18px var(--wacpfm-spacing-small);
+  margin: 8px;
 }
 
 .wacpfm-leftbar-header {
@@ -7,8 +8,8 @@
 }
 
 .wacpfm-leftbar-link {
-  background-color: var(--wacpfm-light-grey);
-  border: 1px solid var(--wacpfm-primary-shadow);
+  background-color: var(--wacpfm-background-colour-darker);
+  border: 1px solid var(--wacpfm-light-grey);
   color: var(--wacpfm-primary-colour-contrast);
   font-size: 18px;
   line-height: 1;
@@ -23,12 +24,12 @@
 }
 
 .wacpfm-leftbar-link:hover {
-  background-color: var(--wacpfm-primary-shadow);
+  background-color: var(--wacpfm-primary-colour-light);
   border-color: var(--wacpfm-accent-colour-orange);
 }
 
 .wacpfm-leftbar-link:active, .wacpfm-leftbar-link.active {
-  background-color: var(--wacpfm-primary-colour-contrast);
+  background-color: var(--wacpfm-primary-colour);
   color: var(--wacpfm-primary-colour-light);
 }
 
