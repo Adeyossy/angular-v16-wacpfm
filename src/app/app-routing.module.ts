@@ -24,7 +24,9 @@ const routes: Routes = [
     path: "dashboard", component: DashboardComponent, title: "Dashboard | Faculty of Family Medicine App",
     children: [
       { path: "updatecourse", component: UpdateCourseComponent },
-      { path: "updatecourse/new", component: NewCourseComponent }
+      { path: "updatecourse/new", component: NewCourseComponent },
+      { path: "updatecourse/:courseId/details", component: NewCourseComponent },
+      { path: "updatecourse/:courseId/details/edit", component: NewCourseComponent }
     ]
   },
   {

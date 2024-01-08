@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="col-8 col-md-5 col-lg-4 col-xl-3 wacpfm-admin-block"
-     *ngIf="(user$ | async)?.updateCourseRole === 'admin'">
+      *ngIf="(user$ | async)?.updateCourseRole === 'admin'">
       <button routerLink="/dashboard/updatecourse/new">+ New Course</button>
     </div>
   </div>
@@ -20,16 +20,25 @@
           <div class="wacpfm-underline"></div>
         </div>
         <div class="wacpfm-ongoing-course-preview" *ngIf="ongoing | async as newCourse; else empty">
-          <h1 class="wacpfm-small-text">{{ newCourse.title }}</h1>
-          <div class="wacpfm-page-divider my-3"></div>
-          <p class="wacpfm-small-text"><span>{{ getDate(newCourse.startDate) }}</span> to 
-          <span>{{ getDate(newCourse.endDate) }}</span></p>
+          <div *ngIf="newCourse.creator; else nullCourse">
+            <h1 class="wacpfm-small-text wacpfm-font-arial">{{ newCourse.title }}</h1>
+            <div class="wacpfm-page-divider my-3"></div>
+            <p class="wacpfm-small-text"><span>{{ getDate(newCourse.startDate) }}</span> to
+              <span>{{ getDate(newCourse.endDate) }}</span>
+            </p>
+          </div>
+          <ng-template #nullCourse>
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <img src="../../assets/empty.png" alt="No update course in view - vector image by pikisuperstar"
+                class="img-fluid w-50 text-center">
+              <p class="wacpfm-smaller-text">No new update course</p>
+            </div>
+          </ng-template>
         </div>
         <ng-template #empty>
-          <div class="d-flex flex-column justify-content-center align-items-center">
-            <img src="../../assets/empty.png" alt="No update course in view - vector image by pikisuperstar"
-              class="img-fluid w-50 text-center">
-            <p class="wacpfm-smaller-text">No new update course</p>
+          <div>
+            <div class="wacpfm-loading d-inline-block"><i class="bi bi-gear-fill"></i></div>
+            <span>Loading...</span>
           </div>
         </ng-template>
       </div>

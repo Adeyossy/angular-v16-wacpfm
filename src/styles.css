@@ -269,6 +269,8 @@ button:active {
 
 .wacpfm-loading {
   animation: rotate 1000ms linear infinite;
+  width: fit-content;
+  height: fit-content;
 }
 
 .wacpfm-card {
@@ -278,6 +280,10 @@ button:active {
   border: 2px solid var(--wacpfm-primary-shadow);
 }
 
+.wacpfm-loading-icons-red {
+  color: var(--wacpfm-accent-colour-red);
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0);
@@ -285,6 +291,16 @@ button:active {
 
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes loading {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(16px);
   }
 }
 
