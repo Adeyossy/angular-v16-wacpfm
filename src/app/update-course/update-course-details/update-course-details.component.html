@@ -2,7 +2,7 @@
   <h1 class="wacpfm-heading-small fw-bold">Update Course: Details</h1>
   <div class="wacpfm-underline"></div>
 </div>
-<br><br>
+<br>
 <div class="wacpfm-ongoing-course wacpfm-card">
   <div class="wacpfm-heading-underline mb-3">
     <h1 class="fw-bold wacpfm-small-text">NEW COURSE</h1>
@@ -15,14 +15,15 @@
       <br>
       <div class="container-fluid p-0">
         <div class="row g-0">
-          <div class="col-md-6 col-lg-4">
+          <div class="col-md-6 col-lg-4 py-2">
             <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
-              <button class="wacpfm-primary-button small">Register</button>
+              <button class="wacpfm-primary-button small w-auto px-4">Register</button>
             </a>
           </div>
-          <div class="col-md-6 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3" *ngIf="(user$ | async)?.updateCourseRole === 'admin'">
+          <div class="col-md-6 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3 py-2 text-end"
+            *ngIf="(user$ | async)?.updateCourseRole === 'admin'">
             <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
-              <button class="small">Edit</button>
+              <button class="small w-auto px-4">Edit</button>
             </a>
           </div>
         </div>
