@@ -13,6 +13,7 @@ export type AppUser = {
   email: string;
   country: string;
   zip: string;
+  designation: string;
   dateOfRegistration: FieldValue; // add this timestamp on the server
   updateCourseRecords: string[];
   examinationRecords: string[];

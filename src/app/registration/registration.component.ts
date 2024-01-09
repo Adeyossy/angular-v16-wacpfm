@@ -25,6 +25,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     whatsapp: "",
     email: "",
     zip: "",
+    designation: "",
     dateOfRegistration: serverTimestamp(),
     examinationRecords: [],
     updateCourseRecords: [],
@@ -78,8 +79,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   updateGender(value: string[]): void {
-    console.log("emitted items => ", value);
     this.user.gender = value.length ? value[0] : "";
+  }
+
+  updateField(field: "gender"|"designation"|"country", value: Array<string>): void {
+    this.user[field] = value.length ? value[0] : "";
   }
 
   updateCountry(value: string[]): void {

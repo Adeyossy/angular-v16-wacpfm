@@ -70,6 +70,9 @@
                 </div>
               </div>
               <br><br>
+              <label for="wacpfm-profile-designation"><i class="bi bi-person-vcard"></i> Designation</label>
+              <app-select mode="single" [items]="['Trainer', 'Fellow', 'Senior Resident', 'Junior Resident']" (emitItems)="updateField('designation', $event)"></app-select>
+              <br><br>
               <p class="wacpfm-small-text">Click the button below to update your profile on the Faculty App.</p>
               <br><br>
               <button class="wacpfm-primary-button" [disabled]="!this.user.country || !this.user.email || 
