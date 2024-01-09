@@ -26,6 +26,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     email: "",
     zip: "",
     designation: "",
+    practicePlace: "",
     dateOfRegistration: serverTimestamp(),
     examinationRecords: [],
     updateCourseRecords: [],
@@ -82,7 +83,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.user.gender = value.length ? value[0] : "";
   }
 
-  updateField(field: "gender"|"designation"|"country", value: Array<string>): void {
+  updateField(field: "gender" | "designation" | "country" | "practicePlace",
+    value: Array<string>): void {
     this.user[field] = value.length ? value[0] : "";
   }
 

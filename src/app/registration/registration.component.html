@@ -71,7 +71,12 @@
               </div>
               <br><br>
               <label for="wacpfm-profile-designation"><i class="bi bi-person-vcard"></i> Designation</label>
-              <app-select mode="single" [items]="['Trainer', 'Fellow', 'Senior Resident', 'Junior Resident']" (emitItems)="updateField('designation', $event)"></app-select>
+              <app-select mode="single" [items]="['Trainer', 'Fellow', 'Senior Resident', 'Junior Resident']"
+                (emitItems)="updateField('designation', $event)"></app-select>
+              <br><br>
+              <label for="wacpfm-profile-practice"><i class="bi bi-hospital"></i> Institution/Hospital of Practice</label>
+              <input type="email" name="wacpfm-profile-practice" id="wacpfm-profile-practice" required
+                placeholder="e.g. COMUI" [(ngModel)]="this.user.practicePlace" disabled>
               <br><br>
               <p class="wacpfm-small-text">Click the button below to update your profile on the Faculty App.</p>
               <br><br>
