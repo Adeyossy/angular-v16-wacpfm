@@ -74,15 +74,20 @@
               <app-select mode="single" [items]="['Trainer', 'Fellow', 'Senior Resident', 'Junior Resident']"
                 (emitItems)="updateField('designation', $event)"></app-select>
               <br><br>
+              <label for="wacpfm-profile-college"><i class="bi bi-house"></i> Which College do you belong to?</label>
+              <app-select mode="single" [items]="getChapters()"
+                (emitItems)="updateField('college', $event)"></app-select>
+              <br><br>
               <label for="wacpfm-profile-practice"><i class="bi bi-hospital"></i> Institution/Hospital of Practice</label>
-              <input type="email" name="wacpfm-profile-practice" id="wacpfm-profile-practice" required
-                placeholder="e.g. COMUI" [(ngModel)]="this.user.practicePlace" disabled>
+              <input type="text" name="wacpfm-profile-practice" id="wacpfm-profile-practice" required
+                placeholder="e.g. COMUI" [(ngModel)]="this.user.practicePlace">
               <br><br>
               <p class="wacpfm-small-text">Click the button below to update your profile on the Faculty App.</p>
               <br><br>
               <button class="wacpfm-primary-button" [disabled]="!this.user.country || !this.user.email || 
                 !this.user.firstname || !this.user.gender || !this.user.lastname || !this.user.middlename ||
-                !this.user.phoneNumber || !this.user.userId || !this.user.whatsapp || !this.user.zip"
+                !this.user.phoneNumber || !this.user.userId || !this.user.whatsapp || !this.user.zip ||
+                !this.user.college || !this.user.practicePlace || !this.user.designation"
                 (click)="updateProfile()">Update Profile</button>
             </div>
           </div>

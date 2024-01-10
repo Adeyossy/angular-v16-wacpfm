@@ -15,6 +15,7 @@ export type AppUser = {
   zip: string;
   designation: string;
   practicePlace: string;
+  college: string;
   dateOfRegistration: FieldValue; // add this timestamp on the server
   updateCourseRecords: string[];
   examinationRecords: string[];

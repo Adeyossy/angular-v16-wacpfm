@@ -27,6 +27,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     zip: "",
     designation: "",
     practicePlace: "",
+    college: "",
     dateOfRegistration: serverTimestamp(),
     examinationRecords: [],
     updateCourseRecords: [],
@@ -35,15 +36,21 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   countries = [
-    'Nigeria', 'Ghana', 'Liberia', 'Sierra Leone', 'Togo',
-    'Benin', 'Burkina Faso', 'Niger', 'Mali', 'Senegal', 'Ivory Coast',
-    'Gambia', 'Guinea'
+    'Benin', 'Burkina Faso', 'Gambia', 'Ghana', 'Guinea',
+    'Ivory Coast', 'Liberia', 'Niger', 'Nigeria', 'Senegal', 
+    'Sierra Leone', 'Togo'
   ];
 
   countryCodes: any = {
-    nigeria: "+234", ghana: "+233", liberia: "+231", sierra_leone: "+232", togo: "+216",
-    benin: "+229", burkina_faso: "+226", niger: "+227", mali: "+223", senegal: "+221",
-    ivory_coast: "+225", gambia: "+220", guinea: "+224"
+    benin: "+229", burkina_faso: "+226", gambia: "+220", ghana: "+233", guinea: "+224",
+    ivory_coast: "+225", liberia: "+231", niger: "+227", nigeria: "+234", senegal: "+221",
+    sierra_leone: "+232", togo: "+216"
+  }
+
+  chapters: any = {
+    benin: "WACP-BEN", burkina_faso: "WACP-BFA", gambia: "WACP-GMB", ghana: "WACP-GHA", guinea: "WACP-GIN",
+    ivory_coast: "WACP-CIV", liberia: "WACP-LBR", niger: "WACP-NER", nigeria: "WACP-NGA", senegal: "WACP-SEN",
+    sierra_leone: "WACP-SLE", togo: "WACP-TGO", npmcn: "NPMCN", both: "NPMCN & WACP", 
   }
 
   phoneToggle = false;
@@ -83,13 +90,19 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.user.gender = value.length ? value[0] : "";
   }
 
-  updateField(field: "gender" | "designation" | "country" | "practicePlace",
+  updateField(field: "gender" | "designation" | "country" | "college",
     value: Array<string>): void {
     this.user[field] = value.length ? value[0] : "";
   }
 
   updateCountry(value: string[]): void {
-    this.user.country = value[0];
+    if (value.length) {
+      this.user.country = value[0];
+      const countryAsProp = this.user.country.replace(" ", "_").toLowerCase();
+      if (Object.hasOwn(this.chapters, countryAsProp)) {
+        //  this.user.college = this.chapters[countryAsProp];
+      }
+    }
   }
 
   getCountryCode(): string {
@@ -99,6 +112,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     // this.user.whatsapp = this.user.zip.concat(this.user.whatsapp);
     // if (Object.hasOwn(this.countries, code))
     return this.user.zip;
+  }
+
+  getChapters(): string[] {
+    return Object.values(this.chapters);
   }
 
   usePhoneForWhatsApp() {
