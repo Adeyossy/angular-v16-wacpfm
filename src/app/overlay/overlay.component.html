@@ -7,7 +7,8 @@
           <h1 class="wacpfm-overlay-dialog-title wacpfm-subheading fw-bold">{{ title }}</h1>
         </div>
         <div class="wacpfm-overlay-dialog-description wacpfm-overlay-dialog-spaced">
-          <div class=" d-inline-block wacpfm-loading"><i class="bi {{ bi }} m-0"></i></div>
+          <div class="wacpfm-loading"
+          [ngClass]="done ? 'd-none' : 'd-inline-block'"><i class="bi {{ bi }} m-0"></i></div>
           <br>
           <p class="p-1">{{ description }}</p>
         </div>
