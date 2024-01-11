@@ -26,6 +26,6 @@
   <br>
 </div>
 <div class="wacpfm-overlay-container" *ngIf="verificationStarted">
-  <app-overlay title="Signing In" [description]="message" bi="bi-gear-wide wacpfm-loading"
-    (clickEmitter)="dismissOverlay()" [navText]="navText"></app-overlay>
+  <app-overlay title="Sending Email" [description]="message" bi="bi-gear-wide"
+    (clickEmitter)="dismissOverlay()" [navText]="navText" [done]="done"></app-overlay>
 </div>

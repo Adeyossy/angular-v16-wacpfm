@@ -15,6 +15,7 @@ export class VerifyEmailComponent implements OnDestroy {
   navText = "Loading...";
   message = "Sending Verification Email";
   disabled = false;
+  done = false;
 
   constructor(private authService: AuthService) {
     this.user$ = this.authService.getFirebaseUser$();
@@ -38,11 +39,13 @@ export class VerifyEmailComponent implements OnDestroy {
           this.navText = "Dismiss";
         }
         else throw new Error(AuthErrorCodes.NULL_USER);
+        this.done = true;
       },
       error: (error) => {
         console.log("error => ", error);
         this.message = "Error sending email verification link";
         this.navText = "Dismiss";
+        this.done = true;
       },
       complete: () => {
         this.navText = "Dismiss";

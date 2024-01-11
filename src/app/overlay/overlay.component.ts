@@ -10,6 +10,7 @@ export class OverlayComponent {
   @Input() description = "";
   @Input() bi = "";
   @Input() navText = "";
+  @Input() done = false;
   @Output() clickEmitter = new EventEmitter();
 
   emitClick() {
