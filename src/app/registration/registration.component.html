@@ -95,7 +95,7 @@
       </div>
       <div class="wacpfm-overlay-container" *ngIf="uploadStarted">
         <app-overlay title="Uploading Profile" [description]="message" bi="bi-gear-wide wacpfm-loading"
-          (clickEmitter)="dismissOverlay()" [navText]="navText"></app-overlay>
+          (clickEmitter)="dismissOverlay()" [navText]="navText" [done]="done"></app-overlay>
       </div>
     </div>
   </div>

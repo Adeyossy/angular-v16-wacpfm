@@ -21,5 +21,5 @@
 </div>
 <div class="wacpfm-overlay-container" *ngIf="hasAuthStarted">
   <app-overlay title="Signing In" [description]="message" bi="bi-gear-wide wacpfm-loading"
-    (clickEmitter)="dismissOverlay()" [navText]="navText"></app-overlay>
+    (clickEmitter)="dismissOverlay()" [navText]="navText" [done]="isAuthFinished"></app-overlay>
 </div>
