@@ -5,6 +5,7 @@ import { AuthErrorCodes } from 'firebase/auth';
 import { AppUser, USERS } from '../models/user';
 import { serverTimestamp } from 'firebase/firestore';
 import { Router } from '@angular/router';
+import { FirebaseError } from 'firebase/app';
 
 @Component({
   selector: 'app-registration',
@@ -146,7 +147,12 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       },
       error: error => {
         console.log("error => ", error);
-        this.message = "An error occurred while saving your profile.";
+        if (error instanceof FirebaseError) {
+          if (error.message.trim() === "Failed to get document because the client is offline.") {
+            this.message = `Check your internet connection. 
+            You're either offline or your network is very slow or unstable.`;
+          }
+        } else this.message = "An error occurred while saving your profile.";
         this.navText = "Dismiss";
       },
       complete: () => {
