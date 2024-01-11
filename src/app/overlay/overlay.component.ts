@@ -11,6 +11,7 @@ export class OverlayComponent {
   @Input() bi = "";
   @Input() navText = "";
   @Input() done = false;
+  @Input() narrow = false;
   @Output() clickEmitter = new EventEmitter();
 
   emitClick() {
