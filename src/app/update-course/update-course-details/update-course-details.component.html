@@ -15,12 +15,12 @@
       <br>
       <div class="container-fluid p-0">
         <div class="row g-0">
-          <div class="col-md-6 col-lg-4 py-2">
+          <div class="col-6 col-md-6 col-lg-4 py-2">
             <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
               <button class="wacpfm-primary-button small w-auto px-4">Register</button>
             </a>
           </div>
-          <div class="col-md-6 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3 py-2 text-end"
+          <div class="offset-1 col-5 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3 py-2 text-end"
             *ngIf="(user$ | async)?.updateCourseRole === 'admin'">
             <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
               <button class="small w-auto px-4">Edit</button>
