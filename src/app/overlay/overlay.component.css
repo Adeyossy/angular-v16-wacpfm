@@ -21,7 +21,7 @@ html {
 .wacpfm-overlay-dialog {
   width: 100%;
   background-color: var(--wacpfm-background-colour);
-  margin-bottom: var(--wacpfm-spacing-default);
+  margin-bottom: var(--wacpfm-spacing-nav);
 }
 
 .wacpfm-overlay-dialog-spaced {

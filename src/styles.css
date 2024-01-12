@@ -18,7 +18,7 @@
   --wacpfm-spacing-medium: 40px;
   --wacpfm-spacing-default: 30px;
   --wacpfm-spacing-small: 24px;
-  --wacpfm-spacing-nav: 5vh;
+  --wacpfm-spacing-nav: 8vh;
   --wacpfm-three-colours: linear-gradient(to right, var(--wacpfm-accent-colour-red) 0%, 
                                           var(--wacpfm-accent-colour-red) 33.33%, 
                                           var(--wacpfm-accent-colour-orange) 33.33%,
@@ -222,6 +222,11 @@ button:active {
   height: 100dvh;
   z-index: 2;
   top: 0;
+}
+
+.wacpfm-full-height {
+  height: 92dvh;
+  overflow-y: hidden;
 }
 
 .wacpfm-design-block {
