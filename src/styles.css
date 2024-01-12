@@ -24,10 +24,10 @@
                                           var(--wacpfm-accent-colour-orange) 33.33%,
                                           var(--wacpfm-accent-colour-orange) 66.66%, 
                                           var(--wacpfm-accent-colour-green) 66.67%);
-  --wacpfm-font-big: 54px;
-  --wacpfm-font-medium: 36px;
-  --wacpfm-font-small: 24px;
-  --wacpfm-font-subheading: 20px;
+  --wacpfm-font-big: 48px;
+  --wacpfm-font-medium: 32px;
+  --wacpfm-font-small: 21px;
+  --wacpfm-font-subheading: 18px;
   --wacpfm-font-text: 16px;
 }
 
