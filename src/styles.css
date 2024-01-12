@@ -286,7 +286,7 @@ button:active {
   width: 100%;
   background-color: var(--wacpfm-background-colour-darker);
   padding: var(--wacpfm-spacing-default);
-  border: 2px solid var(--wacpfm-light-grey);
+  border: 2px solid var(--wacpfm-primary-shadow);
   transition: background-color 200ms ease-in;
 }
 
