@@ -266,6 +266,10 @@ button:active {
   color: var(--wacpfm-accent-colour-correct);
 }
 
+.wacpfm-orange {
+  color: var(--wacpfm-accent-colour-orange);
+}
+
 .wacpfm-red {
   color: var(--wacpfm-accent-colour-red);
 }
@@ -290,18 +294,18 @@ button:active {
   transition: background-color 200ms ease-in;
 }
 
-.wacpfm-loading-icons {
+.wacpfm-loading-circle {
   width: 16px;
   height: 16px;
   border-radius: 50%;
   animation: loading 1s ease-in 0 infinite alternate;
 }
 
-.wacpfm-loading-icons.second {
+.wacpfm-loading-circle.second {
   animation-delay: 500ms;
 }
 
-.wacpfm-loading-icons.third {
+.wacpfm-loading-circle.third {
   animation-delay: 1000ms;
 }
 
