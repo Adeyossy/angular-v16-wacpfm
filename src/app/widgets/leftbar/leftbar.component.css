@@ -9,9 +9,10 @@
 
 .wacpfm-leftbar-link {
   background-color: var(--wacpfm-background-colour-darker);
-  border: 1px solid var(--wacpfm-light-grey);
+  border: 2px solid var(--wacpfm-light-grey);
   color: var(--wacpfm-primary-colour-contrast);
   font-size: 18px;
+  font-weight: 500;
   line-height: 1;
   vertical-align: middle;
   transition: background-color 200ms ease-in, border-color 200ms ease-in, color 200ms ease-in;
@@ -31,6 +32,7 @@
 .wacpfm-leftbar-link:active, .wacpfm-leftbar-link.active {
   background-color: var(--wacpfm-primary-colour);
   color: var(--wacpfm-primary-colour-light);
+  border-color: var(--wacpfm-primary-colour-contrast);
 }
 
 span {
