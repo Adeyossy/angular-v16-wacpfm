@@ -20,6 +20,7 @@ import { UpdateCourseComponent } from './update-course/update-course.component';
 import { NewCourseComponent } from './update-course/new-course/new-course.component';
 import { UpdateCourseDetailsComponent } from './update-course/update-course-details/update-course-details.component';
 import { LoadingUiComponent } from './widgets/loading-ui/loading-ui.component';
+import { LoadingCirclesComponent } from './widgets/loading-circles/loading-circles.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { LoadingUiComponent } from './widgets/loading-ui/loading-ui.component';
     UpdateCourseComponent,
     NewCourseComponent,
     UpdateCourseDetailsComponent,
-    LoadingUiComponent
+    LoadingUiComponent,
+    LoadingCirclesComponent
   ],
   imports: [
     BrowserModule,
