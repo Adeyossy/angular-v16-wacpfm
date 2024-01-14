@@ -19,6 +19,7 @@ import { LeftbarComponent } from './widgets/leftbar/leftbar.component';
 import { UpdateCourseComponent } from './update-course/update-course.component';
 import { NewCourseComponent } from './update-course/new-course/new-course.component';
 import { UpdateCourseDetailsComponent } from './update-course/update-course-details/update-course-details.component';
+import { LoadingUiComponent } from './widgets/loading-ui/loading-ui.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { UpdateCourseDetailsComponent } from './update-course/update-course-deta
     LeftbarComponent,
     UpdateCourseComponent,
     NewCourseComponent,
-    UpdateCourseDetailsComponent
+    UpdateCourseDetailsComponent,
+    LoadingUiComponent
   ],
   imports: [
     BrowserModule,
