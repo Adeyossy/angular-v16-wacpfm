@@ -290,8 +290,28 @@ button:active {
   transition: background-color 200ms ease-in;
 }
 
-.wacpfm-loading-icons-red {
-  color: var(--wacpfm-accent-colour-red);
+.wacpfm-loading-icons {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  animation: loading 1s ease-in 0 infinite alternate;
+}
+
+.wacpfm-loading-icons.second {
+  animation-delay: 500ms;
+}
+
+.wacpfm-loading-icons.third {
+  animation-delay: 1000ms;
+}
+
+.wacpfm-loading-bar {
+  width: 33.33%;
+  height: 100%;
+  background: linear-gradient(to right, var(--wacpfm-background-colour-darker), 
+                                        var(--wacpfm-light-grey));
+  background-blend-mode: overlay;
+  animation: loadingUI 1000ms ease 100ms infinite alternate;
 }
 
 @keyframes rotate {
@@ -304,13 +324,23 @@ button:active {
   }
 }
 
+@keyframes loadingUI {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
 @keyframes loading {
   from {
     transform: translateY(0);
   }
 
   to {
-    transform: translateY(16px);
+    transform: translateY(32px);
   }
 }
 
