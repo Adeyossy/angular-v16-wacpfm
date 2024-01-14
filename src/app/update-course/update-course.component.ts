@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Observable, concatAll, concatMap, map, switchMap } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
-import { FirestoreError, QueryDocumentSnapshot, QuerySnapshot } from 'firebase/firestore';
+import { QueryDocumentSnapshot } from 'firebase/firestore';
 import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
-import { User } from 'firebase/auth';
 import { AppUser, USERS } from '../models/user';
 
 @Component({
@@ -45,6 +44,5 @@ export class UpdateCourseComponent implements OnInit {
 
   getDate(millis: number) {
     return new Intl.DateTimeFormat("en-NG").format(millis);
-    // return new Date(millis).toLocaleDateString();
   }
 }
