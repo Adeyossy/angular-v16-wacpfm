@@ -298,15 +298,18 @@ button:active {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  animation: loading 1s ease-in 0 infinite alternate;
+  background-color: var(--wacpfm-accent-colour-red);
+  animation: loading 300ms ease infinite alternate;
 }
 
 .wacpfm-loading-circle.second {
-  animation-delay: 500ms;
+  animation-delay: 150ms;
+  background-color: var(--wacpfm-accent-colour-orange);
 }
 
 .wacpfm-loading-circle.third {
-  animation-delay: 1000ms;
+  animation-delay: 300ms;
+  background-color: var(--wacpfm-accent-colour-green);
 }
 
 @keyframes rotate {
@@ -324,6 +327,7 @@ button:active {
     transform: translateX(0);
   }
 
+
   to {
     transform: translateX(200%);
   }
@@ -335,7 +339,7 @@ button:active {
   }
 
   to {
-    transform: translateY(32px);
+    transform: translateY(-16px);
   }
 }
 

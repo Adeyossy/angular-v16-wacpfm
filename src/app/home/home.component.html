@@ -12,23 +12,32 @@
             (WACP) App.</p>
           <p class="wacpfm-subheading m-0">Its aim is to simplify and coordinate the activities of the faculty.</p>
         </div>
-        <div class="container-fluid p-0">
-          <div class="row g-0" *ngIf="!(user$ | async); else goToDashboard">
+        <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
+          <div class="row g-0" *ngIf="user; else goToDashboard">
             <div class="col-lg-4 py-4">
-              <button routerLink="/access/register" class="wacpfm-primary-button">Register</button>
-            </div>
-            <div class="offset-lg-1 col-lg-4 py-4">
-              <button routerLink="/access/login" class="">Sign In</button>
+              <button class="wacpfm-primary-button" routerLink="/dashboard">Go to Dashboard</button>
             </div>
           </div>
           <ng-template #goToDashboard>
             <div class="row g-0">
               <div class="col-lg-4 py-4">
-                <button class="wacpfm-primary-button" routerLink="/dashboard">Go to Dashboard</button>
+                <button routerLink="/access/register" class="wacpfm-primary-button">Register</button>
+              </div>
+              <div class="offset-lg-1 col-lg-4 py-4">
+                <button routerLink="/access/login" class="">Sign In</button>
               </div>
             </div>
           </ng-template>
         </div>
+        <ng-template #loadingCircles>
+          <div class="container-fluid p-0">
+            <div class="row g-0">
+              <div class="col-md-6 col-lg-4">
+                <app-loading-circles></app-loading-circles>
+              </div>
+            </div>
+          </div>
+        </ng-template>
       </div>
     </div>
     <div class="col-lg-6"></div>
