@@ -16,10 +16,8 @@
       <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
         <div class="row g-0">
           <div class="col-6 col-md-6 col-lg-4 py-2">
-            <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details"
-              *ngIf="!newCourse.totParticipants.includes(user!.userId)">
-              <button class="wacpfm-primary-button small w-auto px-4">Register</button>
-            </a>
+            <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true"
+            *ngIf="!newCourse.totParticipants.includes(user!.userId)">Register</button>
           </div>
           <div class="offset-1 col-5 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3 py-2 text-end"
             *ngIf="user?.updateCourseRole === 'admin'">
@@ -48,4 +46,26 @@
     <br>
     <app-loading-ui></app-loading-ui>
   </ng-template>
+  <div class="wacpfm-ongoing-course-register" [ngClass]="openCategoryUI ? 'd-block' : 'd-none'">
+    <div class="container-fluid p-0">
+      <div class="row g-0">
+        <div class="col-lg-6">
+          <h2 class="wacpfm-subheading">Which course do you want to register for?</h2>
+        </div>
+        <div class="col-lg-6">
+          <a routerLink="./register"><button>Junior Resident Update Course</button></a>
+          <a routerLink="./register"><button>Senior Resident Update Course</button></a>
+          <a routerLink="./register"><button>ToT Course</button></a>
+          <a routerLink="./register"><button>ToT and Update Course</button></a>
+        </div>
+      </div>
+      <br>
+      <div class="row g-0 justify-content-end">
+        <div class="col-4 col-lg-3 col-xl-2">
+          <button class="wacpfm-primary-button small text-end bg-danger"
+          (click)="openCategoryUI = false">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

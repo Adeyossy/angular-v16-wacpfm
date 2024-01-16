@@ -15,6 +15,7 @@ export class UpdateCourseDetailsComponent implements OnInit {
   ongoing: Observable<UpdateCourse | null> = new Observable();
   user$: Observable<AppUser> = new Observable();
   updateCourseId = "";
+  openCategoryUI = false;
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService) {}
 
