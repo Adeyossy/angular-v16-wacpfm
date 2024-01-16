@@ -15,6 +15,7 @@ export type UpdateCourse = {
   fellowshipParticipants: string[];
   totTheme: string;
   totParticipants: string[];
+  totUpdateParticipants: string[];
   resourcePersons: string[];
 }
 

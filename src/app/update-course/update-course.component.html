@@ -6,8 +6,7 @@
         <div class="wacpfm-underline"></div>
       </div>
     </div>
-    <div class="col-4 col-lg-4 col-xl-3 wacpfm-admin-block"
-      *ngIf="(user$ | async)?.updateCourseRole === 'admin'">
+    <div class="col-4 col-lg-4 col-xl-3 wacpfm-admin-block" *ngIf="(user$ | async)?.updateCourseRole === 'admin'">
       <button routerLink="/dashboard/updatecourse/new">
         <span class="d-none d-md-block">+ New Course</span>
         <span class="d-sm-block d-md-none d-lg-none d-xl-none wacpfm-smaller-text p-1">+ New</span>
@@ -23,7 +22,8 @@
           <div class="wacpfm-underline"></div>
         </div>
         <div class="wacpfm-ongoing-course-preview" *ngIf="ongoing | async as newCourse; else empty">
-          <div *ngIf="newCourse.creator; else nullCourse" class="wacpfm-clickable">
+          <div *ngIf="newCourse.hasOwnProperty('creator') && newCourse.creator; else nullCourse"
+            class="wacpfm-clickable">
             <h1 class="wacpfm-small-text wacpfm-font-arial">{{ newCourse.title }}</h1>
             <!-- <div class="wacpfm-page-divider my-3"></div> -->
             <hr>

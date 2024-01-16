@@ -13,7 +13,7 @@ import { AppUser, USERS } from '../models/user';
 })
 export class UpdateCourseComponent implements OnInit {
   previousCourses = new Observable<Observable<UpdateCourse>[]>();
-  ongoing = new Observable<UpdateCourse | null>();
+  ongoing = new Observable<UpdateCourse>();
   user$ = new Observable<AppUser | null>();
 
   constructor(private authService: AuthService) {
@@ -38,7 +38,24 @@ export class UpdateCourseComponent implements OnInit {
     // the user may or may not have registered
     this.ongoing = this.authService
       .queryCollections$(UPDATE_COURSES, "endDate", ">=", Date.now()).pipe(
-        map(result => result.empty ? null : result.docs[0].data() as UpdateCourse)
+        map(result => result.empty ?
+          {
+            updateCourseId: "",
+            title: "",
+            creator: "",
+            registrationOpenDate: 0,
+            registrationCloseDate: 0,
+            startDate: 0,
+            endDate: 0,
+            membershipTheme: "",
+            membershipParticipants: [],
+            fellowshipTheme: "",
+            fellowshipParticipants: [],
+            totTheme: "",
+            totParticipants: [],
+            totUpdateParticipants: [],
+            resourcePersons: []
+          } : result.docs[0].data() as UpdateCourse)
       )
   }
 
