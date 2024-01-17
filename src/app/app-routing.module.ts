@@ -27,6 +27,7 @@ const routes: Routes = [
       { path: "updatecourse", component: UpdateCourseComponent },
       { path: "updatecourse/new", component: NewCourseComponent },
       { path: "updatecourse/:updateCourseId/details", component: UpdateCourseDetailsComponent },
+      { path: "updatecourse/:updateCourseId/details/payment/:category", component: UpdateCourseDetailsComponent },
       { path: "updatecourse/:updateCourseId/details/edit", component: NewCourseComponent }
     ]
   },
