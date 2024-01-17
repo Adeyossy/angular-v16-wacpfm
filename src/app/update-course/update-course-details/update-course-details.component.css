@@ -10,3 +10,12 @@
   top: 0; left: 0;
   background-color: var(--wacpfm-background-colour-darker);
 }
+
+i {
+  color: var(--wacpfm-accent-colour-orange);
+  font-size: 32px;
+}
+
+button {
+  text-transform: none;
+}
