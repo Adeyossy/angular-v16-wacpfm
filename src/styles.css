@@ -137,7 +137,7 @@ label {
   margin-bottom: 6px;
 }
 
-input {
+input, .label-as-input {
   width: 100%;
   display: block;
   padding: 16px 24px;
@@ -148,7 +148,7 @@ input {
   transition: border 200ms ease-in;
 }
 
-input:hover {
+input:hover, .label-as-input:hover {
   border-color: var(--wacpfm-accent-colour-orange);
 }
 

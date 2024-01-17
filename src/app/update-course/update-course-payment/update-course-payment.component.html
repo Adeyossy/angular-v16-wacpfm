@@ -8,10 +8,23 @@
 <div class="container-fluid p-0">
   <div class="row g-0">
     <div class="col-lg-6 p-2">
-      <button><i class="bi bi-cloud-arrow-up-fill color-accent"></i> Upload Receipt</button>
+      <button (click)="uploadChosen = true"><i class="bi bi-cloud-arrow-up-fill color-accent"></i> Upload Receipt</button>
     </div>
     <div class="col-lg-6 p-2">
       <button disabled><i class="bi bi-credit-card-fill color-accent"></i> Pay Now</button>
     </div>
   </div>
+</div>
+<br><br>
+<div class="wacpfm-upload-receipt" *ngIf="uploadChosen">
+  <div class="wacpfm-heading-underline">
+    <h1 class="fw-bold wacpfm-subheading">Upload Your Receipt</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br>
+  <label for="wacpfm-receipt" class="label-as-input w-50 text-center">
+    <i class="bi bi-cloud-arrow-up-fill"></i> Choose a File
+  </label>
+  <input type="file" name="wacpfm-receipt" id="wacpfm-receipt" placeholder="Choose a file" class="d-none"
+    accept=".png, .jpg, .jpeg" required>
 </div>
