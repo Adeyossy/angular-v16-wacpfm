@@ -160,7 +160,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         this.done = true;
         this.navText = "Continue";
         this.message = "Click the button below to continue";
-        this.navLink = "/dashboard";
+        this.navLink = "/dashboard/updatecourse";
       }
     });
   }
