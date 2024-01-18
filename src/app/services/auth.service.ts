@@ -79,6 +79,7 @@ export class AuthService {
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
         if (user) {
+          console.log("url => ", window.location.origin);
           return sendEmailVerification(user, {
             url: `${window.location.origin}/profile/registration`
           });
