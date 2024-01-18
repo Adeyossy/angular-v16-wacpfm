@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { User } from 'firebase/auth';
 
 @Component({
@@ -14,6 +14,8 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.user$ = this.authService.getFirebaseUser$();
+    this.user$ = this.authService.getFirebaseUser$().pipe(
+      map(user => user ? user : Object.create(null))
+    );
   }
 }
