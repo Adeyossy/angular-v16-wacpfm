@@ -119,8 +119,11 @@ export class AuthService {
    * @param data - an object representing the data to be stored
    * @returns Observable<void>
    */
-  addDocWithID$(collectionName: string, docId: string, data: AppUser) {
-    return this.getFirestore$().pipe(
+  addDocWithID$(collectionName: string, docId: string, data: AppUser, merge=false) {
+    return merge ? this.getFirestore$().pipe(
+      concatMap(db => setDoc(doc(db, collectionName, docId), data, { merge: true }))
+    ) : 
+    this.getFirestore$().pipe(
       concatMap(db => setDoc(doc(db, collectionName, docId), data))
     );
   }
