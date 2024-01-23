@@ -37,5 +37,5 @@
 </div>
 <div class="wacpfm-overlay-container" *ngIf="verificationStarted">
   <app-overlay title="Sending Email" [description]="message" bi="bi-gear-wide" (clickEmitter)="dismissOverlay()"
-    [navText]="navText" [done]="done"></app-overlay>
+    [navText]="navText" [done]="done" [narrow]="true"></app-overlay>
 </div>
