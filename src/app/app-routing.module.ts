@@ -11,6 +11,7 @@ import { UpdateCourseComponent } from './update-course/update-course.component';
 import { NewCourseComponent } from './update-course/new-course/new-course.component';
 import { UpdateCourseDetailsComponent } from './update-course/update-course-details/update-course-details.component';
 import { UpdateCoursePaymentComponent } from './update-course/update-course-payment/update-course-payment.component';
+import { accessGuard } from './access.guard';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
@@ -18,12 +19,13 @@ const routes: Routes = [
     path: "access", component: AccessComponent, title: "Gain Access | Faculty of Family Medicine App",
     children: [
       { path: "register", component: RegisterComponent },
-      { path: "register/verifyemail", component: VerifyEmailComponent },
+      { path: "register/verifyemail", component: VerifyEmailComponent, canActivate: [accessGuard] },
       { path: "login", component: LoginComponent }
     ]
   },
   {
     path: "dashboard", component: DashboardComponent, title: "Dashboard | Faculty of Family Medicine App",
+    canActivate: [accessGuard],
     children: [
       { path: "updatecourse", component: UpdateCourseComponent },
       { path: "updatecourse/new", component: NewCourseComponent },
@@ -34,7 +36,7 @@ const routes: Routes = [
   },
   {
     path: "profile/registration", component: RegistrationComponent,
-    title: "Update Your Profile | Faculty of Family Medicine App"
+    title: "Update Your Profile | Faculty of Family Medicine App", canActivate: [accessGuard]
   }
 ];
 
