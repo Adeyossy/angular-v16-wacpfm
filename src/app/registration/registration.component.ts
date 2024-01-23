@@ -135,14 +135,14 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   updateProfile() {
     this.uploadStarted = true;
-    this.profileSubscription = this.authService.getDoc$(USERS, this.user.userId).pipe(
-      concatMap(docSnap => docSnap.exists() ?
-        of() :
-        this.authService.addDocWithID$(USERS, this.user.userId, this.user))
-    ).subscribe({
+    this.profileSubscription = this.authService.addDocWithID$(USERS, this.user.userId, this.user, true)
+    .subscribe({
       next: value => {
         console.log("Successful! Received void");
-        this.message = "Your profile was saved successfully.";
+        this.message = "Your profile was saved successfully. Click the button below to continue";
+        this.navText = "Continue";
+        this.navLink = "/dashboard/updatecourse";
+        this.done = true;
         // this.navLink = "/dashboard";
       },
       error: error => {
@@ -157,10 +157,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         console.log("Completed!");
-        this.done = true;
-        this.navText = "Continue";
-        this.message = "Click the button below to continue";
-        this.navLink = "/dashboard/updatecourse";
       }
     });
   }
