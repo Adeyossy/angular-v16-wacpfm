@@ -8,10 +8,10 @@
   --wacpfm-accent-colour-orange: #ff7300;
   --wacpfm-accent-colour-red: #e60000;
   --wacpfm-background-colour: #F5F7FA;
-  --wacpfm-background-colour-darker: #F2F4F7;
+  --wacpfm-background-colour-darker: #F1F3F6;
   --wacpfm-overlay-background: rgba(0, 0, 0, 0.5);
   --wacpfm-primary-shadow: #CCDDFF;
-  --wacpfm-light-grey: rgb(234, 234, 255);
+  --wacpfm-light-grey: rgb(228, 228, 228);
   --wacpfm-border-radius: 8px;
   --wacpfm-text-colour: black;
   --wacpfm-spacing-large: 48px;
@@ -294,7 +294,7 @@ button:active {
   width: 100%;
   background-color: var(--wacpfm-background-colour-darker);
   padding: var(--wacpfm-spacing-default);
-  border: 2px solid var(--wacpfm-primary-shadow);
+  border: 2px solid var(--wacpfm-light-grey);
   transition: background-color 200ms ease-in;
 }
 
@@ -373,6 +373,7 @@ button:active {
 
   .wacpfm-card:hover {
     background-color: var(--wacpfm-primary-colour-light);
+    border-color: var(--wacpfm-primary-shadow);
   }
 
   .wacpfm-toggle:hover {
