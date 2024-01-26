@@ -22,4 +22,13 @@ button {
 
 .wacpfm-category-theme {
   height: 100%;
+  position: relative;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.wacpfm-category-theme button {
+  position: absolute;
+  bottom: var(--wacpfm-spacing-small);
+  left: var(--wacpfm-spacing-default);
 }

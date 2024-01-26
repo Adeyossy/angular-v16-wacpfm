@@ -79,36 +79,24 @@
 <div class="container-fluid p-0">
   <div class="row" *ngIf="ongoing | async as newCourse">
     <div class="col-md-6 mb-4">
-      <div class="wacpfm-card wacpfm-category-theme">
-        <h1 class="wacpfm-subheading">Membership Course</h1>
-        <br>
-        <h2 class="wacpfm-smaller-text fw-bold">THEME</h2>
+      <div class="wacpfm-card wacpfm-category-theme wacpfm-border-membership">
+        <h1 class="wacpfm-smaller-text fw-bold" id="membership">MEMBERSHIP THEME</h1>
         <hr>
         <p>{{ newCourse.membershipTheme }}</p>
-        <br>
-        <button class="wacpfm-primary-button small w-auto p-2">Register</button>
       </div>
     </div>
     <div class="col-md-6 mb-4">
-      <div class="wacpfm-card wacpfm-category-theme">
-        <h1 class="wacpfm-subheading">Fellowship Course</h1>
-        <br>
-        <h2 class="wacpfm-smaller-text fw-bold">THEME</h2>
+      <div class="wacpfm-card wacpfm-category-theme wacpfm-border-fellowship" id="fellowship">
+        <h1 class="wacpfm-smaller-text fw-bold">FELLOWSHIP THEME</h1>
         <hr>
         <p>{{ newCourse.fellowshipTheme }}</p>
-        <br>
-        <button class="wacpfm-primary-button small w-auto p-2">Register</button>
       </div>
     </div>
     <div class="col-md-6 mb-4">
-      <div class="wacpfm-card wacpfm-category-theme">
-        <h1 class="wacpfm-subheading">ToT Course</h1>
-        <br>
-        <h2 class="wacpfm-smaller-text fw-bold">THEME</h2>
+      <div class="wacpfm-card wacpfm-category-theme wacpfm-border-tot" id="tot">
+        <h1 class="wacpfm-smaller-text fw-bold">TOT THEME</h1>
         <hr>
         <p>{{ newCourse.totTheme }}</p>
-        <br>
-        <button class="wacpfm-primary-button small w-auto p-2">Register</button>
       </div>
     </div>
   </div>
