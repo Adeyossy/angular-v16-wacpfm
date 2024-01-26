@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from 'firebase/auth';
 import { Observable, concatMap, map } from 'rxjs';
 import { UPDATE_COURSES, UpdateCourse } from 'src/app/models/update_course';
+import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
 import { AppUser, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -13,6 +14,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class UpdateCourseDetailsComponent implements OnInit {
   ongoing: Observable<UpdateCourse | null> = new Observable();
+  courseRecords: Observable<UpdateCourseRecord[]> = new Observable();
   user$: Observable<AppUser> = new Observable();
   updateCourseId = "";
   openCategoryUI = false;
@@ -42,5 +44,11 @@ export class UpdateCourseDetailsComponent implements OnInit {
         else throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT);
       })
     );
+
+    this.courseRecords = this.activatedRoute.paramMap.pipe(
+      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_RECORDS, 
+        "updateCourseId", "==", params.get("updateCourseId") as string)),
+      map(doc =>  doc.docs.map(docDoc => docDoc.data() as UpdateCourseRecord))
+    )
   }
 }
