@@ -5,9 +5,10 @@ export const UPDATE_COURSES_RECORDS = "update_course_records";
 export type UpdateCourseRecord = {
   updateCourseId: string;
   userId: string;
+  userEmail: string;
+  courseType: "Membership" | "Fellowship" | "TOT";
   paidFor: { 
-    courseType: "Membership" | "Fellowship" | "TOT"; 
-    paymentInfo: Payment; 
-    evidence?: string; 
+    paymentInfo: Payment;
+    evidence?: string;
   };
 }
