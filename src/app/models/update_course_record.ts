@@ -7,8 +7,6 @@ export type UpdateCourseRecord = {
   userId: string;
   userEmail: string;
   courseType: "Membership" | "Fellowship" | "TOT";
-  paidFor: { 
-    paymentInfo: Payment;
-    evidence?: string;
-  };
+  paymentId: Payment;
+  paymentEvidence?: string;
 }
