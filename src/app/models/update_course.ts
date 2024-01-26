@@ -23,7 +23,7 @@ export type UpdateCourseLecture = {
   updateCourseId: string;
   courseType: "Membership" | "Fellowship" | "ToT" | "Hybrid"
   lectureId: string;
-  lectureName: string;
+  lectureTitle: string;
   lecturerName: string;
   lecturerId: string;
   startTime: string;
