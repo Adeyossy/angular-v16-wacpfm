@@ -316,6 +316,18 @@ button:active {
   background-color: var(--wacpfm-accent-colour-green);
 }
 
+.wacpfm-border-membership {
+  border-color: var(--wacpfm-accent-colour-green);
+}
+
+.wacpfm-border-fellowship {
+  border-color: var(--wacpfm-accent-colour-orange);
+}
+
+.wacpfm-border-tot {
+  border-color: var(--wacpfm-primary-colour);
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0);
