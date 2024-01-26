@@ -30,3 +30,19 @@ button {
   bottom: var(--wacpfm-spacing-small);
   left: var(--wacpfm-spacing-default);
 }
+
+p, span {
+  margin: 0;
+}
+
+.wacpfm-lecture {
+  border: none;
+}
+
+.wacpfm-lecture:nth-child(2n) {
+  background-color: var(--wacpfm-primary-colour-light);
+}
+
+.wacpfm-lecture:nth-child(2n+1) {
+  background-color: var(--wacpfm-primary-shadow);
+}

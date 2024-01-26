@@ -16,10 +16,9 @@
       <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
         <div class="row g-0">
           <div class="col-6 col-md-6 col-lg-4 py-2">
-            <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true"
-            *ngIf="!newCourse.totParticipants.includes(user!.userId) ||
-                   !newCourse.fellowshipParticipants.includes(user!.userId) ||
-                   !newCourse.membershipParticipants.includes(user!.userId)">Register</button>
+            <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true" *ngIf="!newCourse.totParticipants.includes(user!.email) ||
+                   !newCourse.fellowshipParticipants.includes(user!.email) ||
+                   !newCourse.membershipParticipants.includes(user!.email)">Register</button>
           </div>
           <div class="offset-1 col-5 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3 py-2 text-end"
             *ngIf="user?.updateCourseRole === 'admin'">
@@ -53,7 +52,8 @@
       <div class="row g-0">
         <div class="col-12 py-4">
           <h2 class="wacpfm-subheading fw-bold">
-            <i class="bi bi-patch-question-fill"></i> Which course do you want to register for?</h2>
+            <i class="bi bi-patch-question-fill"></i> Which course do you want to register for?
+          </h2>
         </div>
         <div class="col-lg-6 p-2">
           <a routerLink="./payment/jnr"><button class="small">Junior Resident</button></a>
@@ -70,35 +70,41 @@
       </div>
       <div class="row g-0 justify-content-end">
         <div class="col-4 col-lg-3 col-xl-2 text-end p-2">
-          <button class="wacpfm-primary-button small"
-          (click)="openCategoryUI = false">Close</button>
+          <button class="wacpfm-primary-button small" (click)="openCategoryUI = false">Close</button>
         </div>
       </div>
     </div>
   </div>
 </div>
-<br>
-<div class="container-fluid p-0">
-  <div class="row" *ngIf="ongoing | async as newCourse">
-    <div class="col-md-6 mb-4">
-      <div class="wacpfm-card wacpfm-category-theme wacpfm-border-membership">
-        <h1 class="wacpfm-smaller-text fw-bold" id="membership">MEMBERSHIP THEME</h1>
-        <hr>
-        <p>{{ newCourse.membershipTheme }}</p>
+<br><br>
+<div class="container-fluid p-0" *ngIf="ongoing | async as newCourse">
+  <div class="row g-0 wacpfm-card pe-1" *ngFor="let record of courseRecords | async">
+    <div class="col-lg-6">
+        <div class="wacpfm-heading-underline">
+          <h1 class="wacpfm-subheading fw-bold">{{record.courseType}} Course</h1>
+          <div class="wacpfm-underline"></div>
+        </div>
+        <br>
+        <div class="wacpfm-category-theme" id="tot">
+          <h1 class="wacpfm-small-text mb-1">THEME</h1>
+          <p class="wacpfm-heading-small fw-bold wacpfm-font-arial">
+            {{ record.courseType === 'Membership' ? newCourse.membershipTheme :
+            record.courseType === 'Fellowship' ? newCourse.fellowshipTheme :
+            newCourse.totTheme }}
+          </p>
       </div>
     </div>
-    <div class="col-md-6 mb-4">
-      <div class="wacpfm-card wacpfm-category-theme wacpfm-border-fellowship" id="fellowship">
-        <h1 class="wacpfm-smaller-text fw-bold">FELLOWSHIP THEME</h1>
-        <hr>
-        <p>{{ newCourse.fellowshipTheme }}</p>
-      </div>
-    </div>
-    <div class="col-md-6 mb-4">
-      <div class="wacpfm-card wacpfm-category-theme wacpfm-border-tot" id="tot">
-        <h1 class="wacpfm-smaller-text fw-bold">TOT THEME</h1>
-        <hr>
-        <p>{{ newCourse.totTheme }}</p>
+    <div class="col-lg-6 p-1">
+      <h2 class="wacpfm-small-text fw-bold">LECTURES</h2>
+      <div class="wacpfm-page-divider mt-1 mb-2"></div>
+      <div class="wacpfm-card wacpfm-lecture px-3 py-3" *ngFor="let lecture of updateCourseLecture$ | async; index as i">
+        <div class="container-fluid p-0">
+          <div class="row g-0">
+            <div class="col-1"><p class="wacpfm-small-text">{{ i + 1 }}.</p></div>
+            <div class="col-9"><p class="wacpfm-small-text">{{ lecture.lectureTitle }}</p></div>
+            <div class="col-2"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

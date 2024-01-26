@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'firebase/auth';
 import { Observable, concatMap, map } from 'rxjs';
-import { UPDATE_COURSES, UpdateCourse } from 'src/app/models/update_course';
+import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture } from 'src/app/models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
 import { AppUser, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -16,10 +16,11 @@ export class UpdateCourseDetailsComponent implements OnInit {
   ongoing: Observable<UpdateCourse | null> = new Observable();
   courseRecords: Observable<UpdateCourseRecord[]> = new Observable();
   user$: Observable<AppUser> = new Observable();
+  updateCourseLecture$: Observable<UpdateCourseLecture[]> = new Observable();
   updateCourseId = "";
   openCategoryUI = false;
 
-  constructor(private activatedRoute: ActivatedRoute, private authService: AuthService) {}
+  constructor(private activatedRoute: ActivatedRoute, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.ongoing = this.activatedRoute.paramMap.pipe(
@@ -46,9 +47,25 @@ export class UpdateCourseDetailsComponent implements OnInit {
     );
 
     this.courseRecords = this.activatedRoute.paramMap.pipe(
-      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_RECORDS, 
+      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_RECORDS,
         "updateCourseId", "==", params.get("updateCourseId") as string)),
-      map(doc =>  doc.docs.map(docDoc => docDoc.data() as UpdateCourseRecord))
+      map(doc => doc.docs.map(docDoc => {
+        console.log(docDoc.data());
+        return docDoc.data() as UpdateCourseRecord;
+      }))
     )
+
+    this.updateCourseLecture$ = this.activatedRoute.paramMap.pipe(
+      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
+        "==", params.get("updateCourseId") as string)),
+      map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)))
+  }
+
+  getLectureObservable$(updateCourseId: string) {
+    console.log("updateCourseId => ", updateCourseId);
+    return this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
+      "==", updateCourseId).pipe(
+        map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture))
+      )
   }
 }
