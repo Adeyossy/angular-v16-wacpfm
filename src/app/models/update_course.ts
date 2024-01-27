@@ -9,10 +9,13 @@ export type UpdateCourse = {
   registrationCloseDate: number;
   startDate: number;
   endDate: number;
+  membershipLectures: string[];
   membershipTheme: string;
   membershipParticipants: string[];
+  fellowshipLectures: string[];
   fellowshipTheme: string;
   fellowshipParticipants: string[];
+  totLectures: string[];
   totTheme: string;
   totParticipants: string[];
   totUpdateParticipants: string[];
