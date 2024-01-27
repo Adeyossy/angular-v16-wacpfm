@@ -35,14 +35,16 @@ p, span {
   margin: 0;
 }
 
+i {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.wacpfm-lecture-table {
+  padding-top: var(--wacpfm-spacing-default);
+  padding-bottom: var(--wacpfm-spacing-default);
+}
+
 .wacpfm-lecture {
   border: none;
-}
-
-.wacpfm-lecture:nth-child(2n) {
-  background-color: var(--wacpfm-primary-colour-light);
-}
-
-.wacpfm-lecture:nth-child(2n+1) {
-  background-color: var(--wacpfm-primary-shadow);
 }
