@@ -58,14 +58,15 @@ export class UpdateCourseDetailsComponent implements OnInit {
     this.updateCourseLecture$ = this.activatedRoute.paramMap.pipe(
       concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
         "==", params.get("updateCourseId") as string)),
-      map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)))
+      map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)
+      .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))))
   }
 
   getLectureObservable$(updateCourseId: string) {
-    console.log("updateCourseId => ", updateCourseId);
     return this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
       "==", updateCourseId).pipe(
-        map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture))
+        map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)
+          .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime)))
       )
   }
 }
