@@ -13,7 +13,7 @@
 
 i {
   color: var(--wacpfm-accent-colour-orange);
-  font-size: 32px;
+  line-height: 1;
 }
 
 button {
@@ -35,12 +35,12 @@ p, span {
   margin: 0;
 }
 
-i {
+i.bi-file-earmark-pdf-fill {
   font-size: 20px;
-  line-height: 1;
 }
 
 .wacpfm-lecture-table {
+  min-height: 40vh;
   padding-top: var(--wacpfm-spacing-default);
   padding-bottom: var(--wacpfm-spacing-default);
 }

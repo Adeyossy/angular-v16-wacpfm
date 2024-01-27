@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'firebase/auth';
-import { Observable, concatMap, map } from 'rxjs';
+import { Observable, concatMap, map, partition } from 'rxjs';
 import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture } from 'src/app/models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
 import { AppUser, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-update-course-details',
@@ -17,10 +18,13 @@ export class UpdateCourseDetailsComponent implements OnInit {
   courseRecords: Observable<UpdateCourseRecord[]> = new Observable();
   user$: Observable<AppUser> = new Observable();
   updateCourseLecture$: Observable<UpdateCourseLecture[]> = new Observable();
+  lecturesSplit: Observable<UpdateCourseLecture[]>[] = [];
   updateCourseId = "";
   openCategoryUI = false;
+  day = 0; // first day (zero-based numbering)
 
-  constructor(private activatedRoute: ActivatedRoute, private authService: AuthService) { }
+  constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
+    public helper: HelperService) { }
 
   ngOnInit(): void {
     this.ongoing = this.activatedRoute.paramMap.pipe(
@@ -59,7 +63,22 @@ export class UpdateCourseDetailsComponent implements OnInit {
       concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
         "==", params.get("updateCourseId") as string)),
       map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)
-      .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))))
+        .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))))
+
+    this.lecturesSplit = [
+      this.updateCourseLecture$.pipe(
+        map(lectures => lectures.filter((lecture, index, array) =>
+          new Date(parseInt(lecture.startTime)).getDay() === 
+          new Date(parseInt(array[0].startTime)).getDay())
+        )
+      ),
+      this.updateCourseLecture$.pipe(
+        map(lectures => lectures.filter((lecture, index, array) =>
+          new Date(parseInt(lecture.startTime)).getDay() !== 
+          new Date(parseInt(array[0].startTime)).getDay())
+        )
+      )
+    ]
   }
 
   getLectureObservable$(updateCourseId: string) {
@@ -68,5 +87,9 @@ export class UpdateCourseDetailsComponent implements OnInit {
         map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)
           .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime)))
       )
+  }
+
+  toggleDay(day: number) {
+    if (this.day !== day) this.day = day;
   }
 }

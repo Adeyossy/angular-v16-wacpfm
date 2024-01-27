@@ -87,25 +87,25 @@
       <br>
       <div class="wacpfm-category-theme" id="tot">
         <h1 class="wacpfm-small-text wacpfm-heading-primary fw-bold mb-1">THEME</h1>
-        <p class="wacpfm-heading-small wacpfm-font-arial">
+        <h2 class="wacpfm-subheading fw-bold">
           {{ record.courseType === 'Membership' ? newCourse.membershipTheme :
           record.courseType === 'Fellowship' ? newCourse.fellowshipTheme :
           newCourse.totTheme }}
-        </p>
+        </h2>
       </div>
     </div>
     <div class="col-lg-6 wacpfm-lecture-table">
       <div class="container-fluid p-0 wacpfm-lecture-table-head">
         <div class="row g-0 px-3 py-2">
           <!-- <div class="col-1"><p class="wacpfm-small-text color-accent">#</p></div> -->
-          <div class="offset-1 col-10">
-            <h2 class="wacpfm-smaller-text fw-bold">LECTURES</h2>
-            <p class="wacpfm-toggle wacpfm-small-text d-inline-block m-3" [class.toggled]="day === 1"
-              (click)="toggleDay(1)">
+          <div class="offset-1 col-10 px-1">
+            <h2 class="wacpfm-smaller-text fw-bold mb-1">LECTURES</h2>
+            <p class="wacpfm-toggle wacpfm-smaller-text d-inline-block py-1" [class.toggled]="day === 0"
+              (click)="toggleDay(0)">
               Day 1
             </p>
-            <p class="wacpfm-toggle wacpfm-small-text d-inline-block m-3" [class.toggled]="day === 2"
-              (click)="toggleDay(2)">
+            <p class="wacpfm-toggle wacpfm-smaller-text d-inline-block py-1" [class.toggled]="day === 1"
+              (click)="toggleDay(1)">
               Day 2
             </p>
           </div>
@@ -114,16 +114,21 @@
           </div>
         </div>
       </div>
-      <div class="wacpfm-lecture-container px-2" *ngFor="let lecture of updateCourseLecture$ | async; index as i"
+      <div class="wacpfm-lecture-container px-2" *ngFor="let lecture of lecturesSplit[day] | async; index as i"
         [class.d-none]="lecture.courseType !== record.courseType">
-        <hr *ngIf="i > 0" class="m-0">
-        <div class="container-fluid px-3 py-4 wacpfm-lecture">
+        <hr *ngIf="i > 0" class="m-0 wacpfm-heading-primary">
+        <div class="container-fluid px-3 py-3 wacpfm-lecture">
           <div class="row g-0">
             <div class="col-1">
               <p class="wacpfm-small-text color-accent">{{ i + 1 }}.</p>
             </div>
             <div class="col-10 px-1">
-              <p class="wacpfm-small-text">{{ lecture.lectureTitle }}</p>
+              <p class="wacpfm-lecture-title">{{ lecture.lectureTitle }}</p>
+              <span class="wacpfm-smaller-text opacity-75 pe-2">{{ lecture.lecturerName }}</span>
+              <i class="bi bi-three-dots-vertical color-accent wacpfm-smaller-text"></i>
+              <span class="wacpfm-smaller-text fw-bold opacity-75">
+                {{ helper.millisToHour(lecture.startTime) }}
+              </span>
             </div>
             <div class="col-1 text-end">
               <i class="bi bi-file-earmark-pdf-fill color-accent" disabled></i>
