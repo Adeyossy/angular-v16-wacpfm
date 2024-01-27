@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Observable, map } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
 import { QueryDocumentSnapshot } from 'firebase/firestore';
 import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
@@ -23,6 +23,7 @@ export class UpdateCourseComponent implements OnInit {
     this.user$ = this.authService.getDocByUserId$(USERS).pipe(
       map(val => val.exists() ? val.data() as AppUser : null)
     );
+
     this.previousCourses = this.authService.queryByUserId$(UPDATE_COURSES_RECORDS).pipe(
       map(value => value.docs as QueryDocumentSnapshot<UpdateCourseRecord>[]),
       map(docs => docs.map(doc => doc.data().updateCourseId)),
@@ -30,7 +31,8 @@ export class UpdateCourseComponent implements OnInit {
         map(uCourse => {
           if (uCourse.exists()) return uCourse.data() as UpdateCourse;
           else throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT)
-        })
+        }),
+        filter(uCourseRecord => Date.now() > uCourseRecord.endDate + (7*24*60*60*1000))
       )))
     );
 
