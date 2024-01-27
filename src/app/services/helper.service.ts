@@ -27,4 +27,8 @@ export class HelperService {
   getTodaysDate() {
     return this.getDateString(Date.now());
   }
+
+  millisToHour(millis: string) {
+    return new Date(parseInt(millis)).getHours().toString().concat(":00");
+  }
 }
