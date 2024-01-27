@@ -30,6 +30,9 @@ export class NewCourseComponent implements OnInit {
     membershipParticipants: [],
     fellowshipParticipants: [],
     totParticipants: [],
+    membershipLectures: [],
+    fellowshipLectures: [],
+    totLectures: [],
     totUpdateParticipants: [],
     resourcePersons: []
   }
