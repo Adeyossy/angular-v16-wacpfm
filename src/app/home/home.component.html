@@ -15,7 +15,7 @@
         <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
           <div class="row g-0" *ngIf="user?.email; else goToDashboard">
             <div class="col-lg-4 py-4">
-              <button class="wacpfm-primary-button" routerLink="/dashboard">Go to Dashboard</button>
+              <button class="wacpfm-primary-button" routerLink="/dashboard/updatecourse">Go to Dashboard</button>
             </div>
           </div>
           <ng-template #goToDashboard>
