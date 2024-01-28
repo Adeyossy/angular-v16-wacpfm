@@ -39,6 +39,12 @@ button.wacpfm-activity-button {
   color: white;
 }
 
+.wacpfm-home-first-artwork {
+  background: url('../../assets/spaced.artwork.png');
+  background-size: cover;
+  background-position: 25% center;
+}
+
 @media only screen and (min-width: 992px) {
   .wacpfm-activities {
     padding: var(--wacpfm-spacing-default);
