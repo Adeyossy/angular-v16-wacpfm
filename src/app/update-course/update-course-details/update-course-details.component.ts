@@ -54,7 +54,6 @@ export class UpdateCourseDetailsComponent implements OnInit {
       concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_RECORDS,
         "updateCourseId", "==", params.get("updateCourseId") as string)),
       map(doc => doc.docs.map(docDoc => {
-        console.log(docDoc.data());
         return docDoc.data() as UpdateCourseRecord;
       }))
     )
