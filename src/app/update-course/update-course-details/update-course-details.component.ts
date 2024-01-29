@@ -19,6 +19,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   courseRecords: Observable<UpdateCourseRecord[]> = new Observable();
   user$: Observable<AppUser> = new Observable();
   updateCourseLecture$: Observable<UpdateCourseLecture[]> = new Observable();
+  lecturesPerRecord$: Observable<UpdateCourseLecture[][][]> = new Observable();
   lecturesSplit: Observable<UpdateCourseLecture[]>[] = [];
   updateCourseId = "";
   openCategoryUI = false;
@@ -54,11 +55,9 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
     this.courseRecords = this.getCourseRecords();
 
-    this.updateCourseLecture$ = this.activatedRoute.paramMap.pipe(
-      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
-        "==", params.get("updateCourseId") as string)),
-      map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)
-        .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))));
+    this.updateCourseLecture$ = this.getCourseLectures();
+
+    this.lecturesPerRecord$ = this.getLecturesPerRecord();
 
     this.lecturesSplit = [
       this.updateCourseLecture$.pipe(
@@ -133,10 +132,11 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: _val => {
         console.log("converted successfully");
-        this.courseRecords = this.courseRecords.pipe(
+        this.courseRecords = this.getCourseRecords().pipe(
           map(rec => rec.sort((a, b) => a.courseType.charCodeAt(0) - b.courseType.charCodeAt(0)))
         );
-        this.updateCourseLecture$ = this.updateCourseLecture$.pipe(map(lecs => lecs));
+        this.updateCourseLecture$ = this.getCourseLectures();
+        this.lecturesPerRecord$ = this.getLecturesPerRecord();
       },
       error: err => {
         console.log("error on conversion");
@@ -169,9 +169,37 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
       })),
       concatMap(doc => this.user$.pipe(
         map(user => doc.filter(d => d.userEmail.toLowerCase() === user.email.toLowerCase())
-        .sort((a, b) => a.courseType.charCodeAt(0) - b.courseType.charCodeAt(0)))
+          .sort((a, b) => a.courseType.charCodeAt(0) - b.courseType.charCodeAt(0)))
       ))
     );
+  }
+
+  getCourseLectures() {
+    return this.activatedRoute.paramMap.pipe(
+      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
+        "==", params.get("updateCourseId") as string)),
+      map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)
+        .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))));
+  }
+
+  getLecturesPerRecord() {
+    return this.updateCourseLecture$.pipe(
+      concatMap(lectures => this.courseRecords.pipe(
+        map(records =>
+          records.map(record =>
+            lectures.filter(lect => lect.courseType === record.courseType)
+          )
+        )
+      )),
+      map(lecturess => lecturess.map(lectures => [
+        lectures.filter((lecture, index, array) =>
+          new Date(parseInt(lecture.startTime)).getDay() ===
+          new Date(parseInt(array[0].startTime)).getDay()),
+        lectures.filter((lecture, index, array) =>
+          new Date(parseInt(lecture.startTime)).getDay() !==
+          new Date(parseInt(array[0].startTime)).getDay())
+      ]))
+    )
   }
 
   toggleDay(day: number) {
