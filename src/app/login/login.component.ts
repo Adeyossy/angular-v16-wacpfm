@@ -59,7 +59,7 @@ export class LoginComponent implements OnDestroy {
 
   dismissOverlay() {
     this.hasAuthStarted = false;
-    this.loginSubscription.unsubscribe();
     if (this.isAuthFinished) this.router.navigateByUrl("/dashboard/updatecourse");
+    this.loginSubscription.unsubscribe();
   }
 }
