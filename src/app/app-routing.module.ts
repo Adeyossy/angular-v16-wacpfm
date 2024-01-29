@@ -26,7 +26,7 @@ const routes: Routes = [
   },
   {
     path: "dashboard", component: DashboardComponent, title: "Dashboard | Faculty of Family Medicine App",
-    canActivate: [accessGuard, profileGuard],
+    canActivate: [profileGuard],
     children: [
       { path: "updatecourse", component: UpdateCourseComponent },
       { path: "updatecourse/new", component: NewCourseComponent },
