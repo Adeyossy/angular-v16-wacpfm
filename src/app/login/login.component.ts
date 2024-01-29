@@ -52,7 +52,7 @@ export class LoginComponent implements OnDestroy {
       complete: () => {
         this.isAuthFinished = true;
         this.navText = "Continue";
-        this.navLink = "/dashboard";
+        this.navLink = "/dashboard/updatecourse";
       }
     });
   }
@@ -60,6 +60,6 @@ export class LoginComponent implements OnDestroy {
   dismissOverlay() {
     this.hasAuthStarted = false;
     this.loginSubscription.unsubscribe();
-    if (this.isAuthFinished) this.router.navigateByUrl("/dashboard");
+    if (this.isAuthFinished) this.router.navigateByUrl("/dashboard/updatecourse");
   }
 }
