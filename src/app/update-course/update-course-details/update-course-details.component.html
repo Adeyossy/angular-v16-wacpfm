@@ -13,10 +13,12 @@
       <h1 class="wacpfm-heading-small wacpfm-font-arial">{{ newCourse.title }}</h1>
       <!-- <div class="wacpfm-page-divider my-3"></div> -->
       <br>
-      <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
+      <!-- The lower block of commented code should be uncommented ahead of next course -->
+      <!-- <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
         <div class="row g-0">
           <div class="col-6 col-md-6 col-lg-4 py-2">
-            <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true" *ngIf="!newCourse.totParticipants.includes(user!.email) ||
+            <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true" 
+            *ngIf="!newCourse.totParticipants.includes(user!.email) ||
                    !newCourse.fellowshipParticipants.includes(user!.email) ||
                    !newCourse.membershipParticipants.includes(user!.email)">Register</button>
           </div>
@@ -27,7 +29,7 @@
             </a>
           </div>
         </div>
-      </div>
+      </div> -->
       <ng-template #loadingCircles>
         <app-loading-circles></app-loading-circles>
       </ng-template>
