@@ -31,4 +31,6 @@ export type UpdateCourseLecture = {
   lecturerId: string;
   startTime: string;
   endTime: string;
+  materialLink: string;
+  videoLink: string;
 }
