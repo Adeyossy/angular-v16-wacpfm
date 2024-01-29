@@ -55,6 +55,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
           this.message = "Sorry! This email already exists.";
           this.navText = "Login Instead";
+          this.isAuthFinished = true;
           this.navLink = "/access/login";
           return;
         }
