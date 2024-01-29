@@ -78,7 +78,7 @@
 </div>
 <br><br>
 <div class="container-fluid p-0" *ngIf="ongoing | async as newCourse">
-  <div class="row g-0 wacpfm-card p-0 wacpfm-course-details" *ngFor="let record of courseRecords | async">
+  <div class="row g-0 wacpfm-card p-0 wacpfm-course-details mb-5" *ngFor="let record of courseRecords | async">
     <div class="col-lg-6 wacpfm-padding-default">
       <div class="wacpfm-heading-underline">
         <h1 class="wacpfm-subheading fw-bold">{{record.courseType}} Course</h1>

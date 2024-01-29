@@ -52,16 +52,28 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.courseRecords = this.activatedRoute.paramMap.pipe(
-      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_RECORDS,
-        "updateCourseId", "==", params.get("updateCourseId") as string)),
-      map(doc => doc.docs.map(docDoc => {
-        return docDoc.data() as UpdateCourseRecord;
-      })),
-      concatMap(doc => this.user$.pipe(
-        map(user => doc.filter(d => d.userEmail.toLowerCase() === user.email.toLowerCase()))
-      ))
-    );
+    this.courseRecords = this.getCourseRecords();
+
+    this.updateCourseLecture$ = this.activatedRoute.paramMap.pipe(
+      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
+        "==", params.get("updateCourseId") as string)),
+      map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)
+        .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))));
+
+    this.lecturesSplit = [
+      this.updateCourseLecture$.pipe(
+        map(lectures => lectures.filter((lecture, index, array) =>
+          new Date(parseInt(lecture.startTime)).getDay() ===
+          new Date(parseInt(array[0].startTime)).getDay())
+        )
+      ),
+      this.updateCourseLecture$.pipe(
+        map(lectures => lectures.filter((lecture, index, array) =>
+          new Date(parseInt(lecture.startTime)).getDay() !==
+          new Date(parseInt(array[0].startTime)).getDay())
+        )
+      )
+    ]
 
     this.conversionSub = this.user$.pipe(
       concatMap(appUser => this.ongoing.pipe(
@@ -121,7 +133,10 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: _val => {
         console.log("converted successfully");
-        // this.updateCourseLecture$ = this.updateCourseLecture$.pipe();
+        this.courseRecords = this.courseRecords.pipe(
+          map(rec => rec.sort((a, b) => a.courseType.charCodeAt(0) - b.courseType.charCodeAt(0)))
+        );
+        this.updateCourseLecture$ = this.updateCourseLecture$.pipe(map(lecs => lecs));
       },
       error: err => {
         console.log("error on conversion");
@@ -131,27 +146,6 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
         console.log("conversion complete");
       }
     })
-
-    this.updateCourseLecture$ = this.activatedRoute.paramMap.pipe(
-      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
-        "==", params.get("updateCourseId") as string)),
-      map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)
-        .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))))
-
-    this.lecturesSplit = [
-      this.updateCourseLecture$.pipe(
-        map(lectures => lectures.filter((lecture, index, array) =>
-          new Date(parseInt(lecture.startTime)).getDay() ===
-          new Date(parseInt(array[0].startTime)).getDay())
-        )
-      ),
-      this.updateCourseLecture$.pipe(
-        map(lectures => lectures.filter((lecture, index, array) =>
-          new Date(parseInt(lecture.startTime)).getDay() !==
-          new Date(parseInt(array[0].startTime)).getDay())
-        )
-      )
-    ]
   }
 
   ngOnDestroy(): void {
@@ -164,6 +158,20 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
         map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)
           .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime)))
       )
+  }
+
+  getCourseRecords() {
+    return this.activatedRoute.paramMap.pipe(
+      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_RECORDS,
+        "updateCourseId", "==", params.get("updateCourseId") as string)),
+      map(doc => doc.docs.map(docDoc => {
+        return docDoc.data() as UpdateCourseRecord;
+      })),
+      concatMap(doc => this.user$.pipe(
+        map(user => doc.filter(d => d.userEmail.toLowerCase() === user.email.toLowerCase())
+        .sort((a, b) => a.courseType.charCodeAt(0) - b.courseType.charCodeAt(0)))
+      ))
+    );
   }
 
   toggleDay(day: number) {
