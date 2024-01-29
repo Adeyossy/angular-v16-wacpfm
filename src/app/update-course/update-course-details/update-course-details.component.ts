@@ -23,7 +23,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   lecturesSplit: Observable<UpdateCourseLecture[]>[] = [];
   updateCourseId = "";
   openCategoryUI = false;
-  day = 0; // first day (zero-based numbering)
+  day: number[] = []; // first day (zero-based numbering)
   conversionSub = new Subscription();
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
@@ -165,6 +165,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
       concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_RECORDS,
         "updateCourseId", "==", params.get("updateCourseId") as string)),
       map(doc => doc.docs.map(docDoc => {
+        this.day.push(0);
         return docDoc.data() as UpdateCourseRecord;
       })),
       concatMap(doc => this.user$.pipe(
@@ -202,7 +203,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     )
   }
 
-  toggleDay(day: number) {
-    if (this.day !== day) this.day = day;
+  toggleDay(r: number, day: number) {
+    if (this.day[r] !== day) this.day[r] = day;
   }
 }

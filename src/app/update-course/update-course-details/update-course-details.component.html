@@ -94,21 +94,29 @@
           newCourse.totTheme }}
         </h2>
       </div>
+      <br>
+      <button class="wacpfm-primary-button small" disabled>
+        <i class="bi bi-file-earmark-image"></i> Download Certificate
+      </button>
+      <br><br>
+      <button class="small" disabled>
+        <i class="bi bi-file-earmark-ruled"></i> Download CPD Form
+      </button>
     </div>
     <div class="col-lg-6 wacpfm-lecture-table">
-      <div class="wacpfm-lecture-container px-2" *ngFor="let lecture of (lecturesPerRecord$ | async)?.[r]?.[day]; index as i"
+      <div class="wacpfm-lecture-container px-2" *ngFor="let lecture of (lecturesPerRecord$ | async)?.[r]?.[day[r]]; index as i"
         [class.d-none]="lecture.courseType !== record.courseType">
         <div class="container-fluid p-0 wacpfm-lecture-table-head" *ngIf="i === 0">
           <div class="row g-0 px-3 py-2">
             <!-- <div class="col-1"><p class="wacpfm-small-text color-accent">#</p></div> -->
             <div class="offset-1 col-10 px-1">
               <h2 class="wacpfm-smaller-text fw-bold mb-1">LECTURES</h2>
-              <p class="wacpfm-toggle wacpfm-smaller-text d-inline-block py-1" [class.toggled]="day === 0"
-                (click)="toggleDay(0)">
+              <p class="wacpfm-toggle wacpfm-smaller-text d-inline-block py-1" [class.toggled]="day[r] === 0"
+                (click)="toggleDay(r, 0)">
                 Day 1
               </p>
-              <p class="wacpfm-toggle wacpfm-smaller-text d-inline-block py-1" [class.toggled]="day === 1"
-                (click)="toggleDay(1)">
+              <p class="wacpfm-toggle wacpfm-smaller-text d-inline-block py-1" [class.toggled]="day[r] === 1"
+                (click)="toggleDay(r, 1)" [class.d-none]="record.courseType === 'ToT'">
                 Day 2
               </p>
             </div>

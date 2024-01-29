@@ -20,11 +20,6 @@ button {
   text-transform: none;
 }
 
-.wacpfm-category-theme {
-  height: 100%;
-  position: relative;
-}
-
 .wacpfm-category-theme button {
   position: absolute;
   bottom: var(--wacpfm-spacing-small);
