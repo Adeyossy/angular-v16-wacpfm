@@ -131,7 +131,8 @@
               </span>
             </div>
             <div class="col-1 text-end">
-              <i class="bi bi-file-earmark-pdf-fill color-accent" disabled></i>
+              <i class="bi bi-file-earmark-pdf-fill color-accent"
+              [hidden]="!lecture.materialLink "></i>
             </div>
           </div>
         </div>
