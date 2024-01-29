@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'firebase/auth';
-import { Observable, concatMap, map, partition } from 'rxjs';
+import { collection, doc, runTransaction, writeBatch } from 'firebase/firestore';
+import { Observable, Subscription, concatMap, from, map, of, partition } from 'rxjs';
 import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture } from 'src/app/models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
 import { AppUser, USERS } from 'src/app/models/user';
@@ -13,7 +14,7 @@ import { HelperService } from 'src/app/services/helper.service';
   templateUrl: './update-course-details.component.html',
   styleUrls: ['./update-course-details.component.css']
 })
-export class UpdateCourseDetailsComponent implements OnInit {
+export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   ongoing: Observable<UpdateCourse | null> = new Observable();
   courseRecords: Observable<UpdateCourseRecord[]> = new Observable();
   user$: Observable<AppUser> = new Observable();
@@ -22,6 +23,7 @@ export class UpdateCourseDetailsComponent implements OnInit {
   updateCourseId = "";
   openCategoryUI = false;
   day = 0; // first day (zero-based numbering)
+  conversionSub = new Subscription();
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
     public helper: HelperService) { }
@@ -55,8 +57,80 @@ export class UpdateCourseDetailsComponent implements OnInit {
         "updateCourseId", "==", params.get("updateCourseId") as string)),
       map(doc => doc.docs.map(docDoc => {
         return docDoc.data() as UpdateCourseRecord;
-      }))
-    )
+      })),
+      concatMap(doc => this.user$.pipe(
+        map(user => doc.filter(d => d.userEmail.toLowerCase() === user.email.toLowerCase()))
+      ))
+    );
+
+    this.conversionSub = this.user$.pipe(
+      concatMap(appUser => this.ongoing.pipe(
+        concatMap((uCourse) => this.courseRecords.pipe(
+          concatMap(records => {
+            return this.authService.getFirestore$().pipe(
+              concatMap(db => {
+                if (records.length === 0) {
+                  const batch = writeBatch(db);
+                  if (uCourse!.membershipParticipants.find(member =>
+                    member.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
+                    const memberRef = doc(collection(db, UPDATE_COURSES_RECORDS));
+                    batch.set(memberRef, {
+                      userEmail: appUser.email.toLowerCase().trim(),
+                      userId: "",
+                      courseType: "Membership",
+                      paymentId: "",
+                      updateCourseId: uCourse!.updateCourseId,
+                      paymentEvidence: ""
+                    } as UpdateCourseRecord)
+                  }
+
+                  if (uCourse!.fellowshipParticipants.find(fellow =>
+                    fellow.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
+                    const fellowRef = doc(collection(db, UPDATE_COURSES_RECORDS));
+                    batch.set(fellowRef, {
+                      userEmail: appUser.email.toLowerCase().trim(),
+                      userId: "",
+                      courseType: "Fellowship",
+                      paymentId: "",
+                      updateCourseId: uCourse!.updateCourseId,
+                      paymentEvidence: ""
+                    } as UpdateCourseRecord)
+                  }
+
+                  if (uCourse!.totParticipants.find(tot =>
+                    tot.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
+                    const totRef = doc(collection(db, UPDATE_COURSES_RECORDS));
+                    batch.set(totRef, {
+                      userEmail: appUser.email.toLowerCase().trim(),
+                      userId: "",
+                      courseType: "ToT",
+                      paymentId: "",
+                      updateCourseId: uCourse!.updateCourseId,
+                      paymentEvidence: ""
+                    } as UpdateCourseRecord)
+                  }
+
+                  return from(batch.commit());
+                }
+                return of();
+              })
+            )
+          })
+        ))
+      ))
+    ).subscribe({
+      next: _val => {
+        console.log("converted successfully");
+        // this.updateCourseLecture$ = this.updateCourseLecture$.pipe();
+      },
+      error: err => {
+        console.log("error on conversion");
+        console.log(err);
+      },
+      complete: () => {
+        console.log("conversion complete");
+      }
+    })
 
     this.updateCourseLecture$ = this.activatedRoute.paramMap.pipe(
       concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
@@ -67,17 +141,21 @@ export class UpdateCourseDetailsComponent implements OnInit {
     this.lecturesSplit = [
       this.updateCourseLecture$.pipe(
         map(lectures => lectures.filter((lecture, index, array) =>
-          new Date(parseInt(lecture.startTime)).getDay() === 
+          new Date(parseInt(lecture.startTime)).getDay() ===
           new Date(parseInt(array[0].startTime)).getDay())
         )
       ),
       this.updateCourseLecture$.pipe(
         map(lectures => lectures.filter((lecture, index, array) =>
-          new Date(parseInt(lecture.startTime)).getDay() !== 
+          new Date(parseInt(lecture.startTime)).getDay() !==
           new Date(parseInt(array[0].startTime)).getDay())
         )
       )
     ]
+  }
+
+  ngOnDestroy(): void {
+    this.conversionSub.unsubscribe()
   }
 
   getLectureObservable$(updateCourseId: string) {
