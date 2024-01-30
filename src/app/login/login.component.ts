@@ -3,6 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { Subscription } from 'rxjs';
 import { AuthError, AuthErrorCodes } from 'firebase/auth';
 import { Router } from '@angular/router';
+import { FirebaseError } from 'firebase/app';
 
 @Component({
   selector: 'app-login',
@@ -36,6 +37,7 @@ export class LoginComponent implements OnDestroy {
         else throw new Error(AuthErrorCodes.INVALID_EMAIL);
       },
       error: (error: AuthError) => {
+        console.log(error);
         this.isAuthFinished = false;
         this.navText = "Dismiss";
         if (error.code === AuthErrorCodes.INVALID_EMAIL) {
@@ -47,6 +49,12 @@ export class LoginComponent implements OnDestroy {
           this.message = "Sorry! Your email or password is invalid";
           return;
         }
+
+        if (error instanceof FirebaseError && error.message.includes("auth/invalid-credential")) {
+          this.message = "Sorry! Your email or password is invalid";
+          return;
+        }
+        
         this.message = "Sorry! An error occurred. Please try again.";
       },
       complete: () => {
