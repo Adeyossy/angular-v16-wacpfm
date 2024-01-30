@@ -6,11 +6,11 @@
           <img src="../../assets/logo.png" alt="West African College of Physicians logo" class="img-fluid">
         </a>
       </div>
-      <div class="col-5 col-md-3 col-lg-2 px-3">
+      <div class="col-6 col-md-3 col-lg-2 px-3">
         <h1 class="wacpfm-subheading fw-bold">Faculty App</h1>
       </div>
       <div class="col-md-5 col-lg-6 d-none d-md-block"></div>
-      <div class="offset-2 col-3 offset-md-2 col-md-1 col-lg-1">
+      <div class="offset-1 col-3 offset-md-2 col-md-1 col-lg-1">
         <button *ngIf="(user$ | async); else nullUser" class="small wacpfm-smaller-text" (click)="this.signOut()">Logout</button>
         <ng-template #nullUser>
           <button class="wacpfm-primary-button small wacpfm-smaller-text"
