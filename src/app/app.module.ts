@@ -22,6 +22,7 @@ import { UpdateCourseDetailsComponent } from './update-course/update-course-deta
 import { LoadingUiComponent } from './widgets/loading-ui/loading-ui.component';
 import { LoadingCirclesComponent } from './widgets/loading-circles/loading-circles.component';
 import { UpdateCoursePaymentComponent } from './update-course/update-course-payment/update-course-payment.component';
+import { CertificateComponent } from './certificate/certificate.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { UpdateCoursePaymentComponent } from './update-course/update-course-paym
     UpdateCourseDetailsComponent,
     LoadingUiComponent,
     LoadingCirclesComponent,
-    UpdateCoursePaymentComponent
+    UpdateCoursePaymentComponent,
+    CertificateComponent
   ],
   imports: [
     BrowserModule,
