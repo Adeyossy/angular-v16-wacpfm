@@ -65,15 +65,10 @@ export class CertificateComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.certificate);
-    console.log("certificate => ", this.certificate.nativeElement);
     const cert = this.certificate.nativeElement as HTMLCanvasElement;
-    console.log('cert => ', cert);
     const certContext = cert.getContext("2d");
-    console.log('certContext => ', certContext);
     const img = this.img.nativeElement as HTMLImageElement;
     // img.crossOrigin = 'Anonymous';
-    console.log('img => ', this.img.nativeElement);
     // const img = new Image();
     if (certContext) {
       img.onload = () => {
@@ -102,6 +97,6 @@ export class CertificateComponent implements OnInit, AfterViewInit {
 
   downloadCert() {
     // const cert = this.certificate.nativeElement as HTMLCanvasElement;
-    console.log("download url => ", this.downloadUrl);
+    // console.log("download url => ", this.downloadUrl);
   }
 }
