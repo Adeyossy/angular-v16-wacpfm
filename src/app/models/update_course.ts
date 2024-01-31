@@ -6,6 +6,7 @@ export type UpdateCourseDetails = {
   participants: string[];
   lectures: string[];
   certificate: string;
+  cpd: string;
   releaseResources: boolean;
 }
 
@@ -19,16 +20,19 @@ export type UpdateCourse = {
   endDate: number;
   membershipRelease: boolean;
   membershipCertificate: string;
+  membershipCPD: string;
   membershipLectures: string[];
   membershipTheme: string;
   membershipParticipants: string[];
   fellowshipRelease: boolean;
   fellowshipCertificate: string;
+  fellowshipCPD: string;
   fellowshipLectures: string[];
   fellowshipTheme: string;
   fellowshipParticipants: string[];
   totRelease: boolean;
   totCertificate: string;
+  totCPD: string;
   totLectures: string[];
   totTheme: string;
   totParticipants: string[];
