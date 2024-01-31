@@ -14,10 +14,12 @@ import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 export class CertificateComponent implements OnInit, AfterViewInit {
   @ViewChild('certificate') certificate: ElementRef = new ElementRef('canvas');
   @ViewChild('img') img: ElementRef = new ElementRef('img');
+  @ViewChild('container') container: ElementRef = new ElementRef('div');
   user$: Observable<AppUser> = new Observable();
   certificateUrl$: Observable<string> = new Observable();
   records$: Observable<UpdateCourseRecord[]> = new Observable();
   downloadUrl = "";
+  url = "";
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService) { }
 
@@ -36,7 +38,7 @@ export class CertificateComponent implements OnInit, AfterViewInit {
     );
 
     this.records$ = updateCourseId$.pipe(
-      concatMap(id => this.authService.queryCollections$(UPDATE_COURSES_RECORDS, 
+      concatMap(id => this.authService.queryCollections$(UPDATE_COURSES_RECORDS,
         "updateCourseId", "==", id)),
       map(doc => doc.docs.map(d => d.data() as UpdateCourseRecord)),
       concatMap(docs => this.activatedRoute.paramMap.pipe(
@@ -47,7 +49,7 @@ export class CertificateComponent implements OnInit, AfterViewInit {
     this.certificateUrl$ = updateCourse$.pipe(
       concatMap(uCourse => this.records$.pipe(
         map(recs => {
-          if(recs.length) {
+          if (recs.length) {
             const record = recs[0];
             if (record.courseType === 'Membership') return uCourse.membershipCertificate;
             if (record.courseType === 'Fellowship') return uCourse.fellowshipCertificate;
@@ -55,7 +57,11 @@ export class CertificateComponent implements OnInit, AfterViewInit {
           } return "";
         })
       ))
-    )
+    );
+
+    this.certificateUrl$.subscribe({
+      next: url => this.url = url
+    });
   }
 
   ngAfterViewInit(): void {
@@ -66,7 +72,7 @@ export class CertificateComponent implements OnInit, AfterViewInit {
     const certContext = cert.getContext("2d");
     console.log('certContext => ', certContext);
     const img = this.img.nativeElement as HTMLImageElement;
-    img.crossOrigin = 'Anonymous';
+    // img.crossOrigin = 'Anonymous';
     console.log('img => ', this.img.nativeElement);
     // const img = new Image();
     if (certContext) {
@@ -79,12 +85,12 @@ export class CertificateComponent implements OnInit, AfterViewInit {
             const name = `Dr. ${appUser.firstname} ${appUser.middlename} ${appUser.lastname}`;
             certContext.font = `${img.height * 0.042}px Georgia`;
             const namePpties = certContext.measureText(name);
-            certContext.fillText(name, img.width / 2 - (namePpties.width / 2), 
+            certContext.fillText(name, img.width / 2 - (namePpties.width / 2),
               img.height * 0.53);
             certContext.textAlign = "center";
             cert.toBlob(blob => {
               if (blob) this.downloadUrl = window.URL.createObjectURL(blob);
-            });
+            }, "image/png", 1);
           }
         });
       }

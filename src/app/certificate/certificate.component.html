@@ -3,12 +3,12 @@
   <div class="wacpfm-underline"></div>
 </div>
 <br>
-<div class="container-fluid p-0" *ngIf="certificateUrl$ | async as url">
+<div class="container-fluid p-0" #container>
   <div class="row g-0">
     <div class="offset-lg-2 col-lg-8">
       <div class="wacpfm-certificate">
-        <img [class.d-none]="!url" src="{{url}}"
-          alt="Update Course Certificate" #img>
+        <img #img [class.d-none]="!url" src="{{url}}"
+          alt="Update Course Certificate" crossorigin="anonymous">
 
         <div class="wacpfm-padding-default" [class.d-none]="url">
           <app-loading-ui></app-loading-ui>
@@ -21,7 +21,7 @@
       </div>
       <br>
       <a href="{{this.downloadUrl}}" [class.d-none]="!url" download="Certificate.png" (click)="downloadCert()">
-        <button class="wacpfm-primary-button">i.bi.bi-file Download Certificate</button>
+        <button class="wacpfm-primary-button"><i class="bi bi-file-earmark-image"></i> Download Certificate</button>
       </a>
     </div>
   </div>
