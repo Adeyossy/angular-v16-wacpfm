@@ -1,10 +1,100 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, concatMap, map } from 'rxjs';
+import { AppUser } from '../models/user';
+import { AuthService } from '../services/auth.service';
+import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
+import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 
 @Component({
   selector: 'app-certificate',
   templateUrl: './certificate.component.html',
   styleUrls: ['./certificate.component.css']
 })
-export class CertificateComponent {
+export class CertificateComponent implements OnInit, AfterViewInit {
+  @ViewChild('certificate') certificate: ElementRef = new ElementRef('canvas');
+  @ViewChild('img') img: ElementRef = new ElementRef('img');
+  user$: Observable<AppUser> = new Observable();
+  certificateUrl$: Observable<string> = new Observable();
+  records$: Observable<UpdateCourseRecord[]> = new Observable();
+  downloadUrl = "";
 
+  constructor(private activatedRoute: ActivatedRoute, private authService: AuthService) { }
+
+  ngOnInit(): void {
+    const updateCourseId$ = this.activatedRoute.paramMap.pipe(
+      map(params => params.get("updateCourseId") as string)
+    );
+
+    this.user$ = this.authService.getAppUser$();
+    const updateCourse$ = updateCourseId$.pipe(
+      concatMap(id => this.authService.getDoc$(UPDATE_COURSES, id)),
+      map(doc => {
+        if (doc.exists()) return doc.data() as UpdateCourse;
+        throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT)
+      })
+    );
+
+    this.records$ = updateCourseId$.pipe(
+      concatMap(id => this.authService.queryCollections$(UPDATE_COURSES_RECORDS, 
+        "updateCourseId", "==", id)),
+      map(doc => doc.docs.map(d => d.data() as UpdateCourseRecord)),
+      concatMap(docs => this.activatedRoute.paramMap.pipe(
+        map(params => docs.filter(d => d.courseType.toLowerCase() === params.get("courseType")))
+      ))
+    );
+
+    this.certificateUrl$ = updateCourse$.pipe(
+      concatMap(uCourse => this.records$.pipe(
+        map(recs => {
+          if(recs.length) {
+            const record = recs[0];
+            if (record.courseType === 'Membership') return uCourse.membershipCertificate;
+            if (record.courseType === 'Fellowship') return uCourse.fellowshipCertificate;
+            return uCourse.totCertificate;
+          } return "";
+        })
+      ))
+    )
+  }
+
+  ngAfterViewInit(): void {
+    console.log(this.certificate);
+    console.log("certificate => ", this.certificate.nativeElement);
+    const cert = this.certificate.nativeElement as HTMLCanvasElement;
+    console.log('cert => ', cert);
+    const certContext = cert.getContext("2d");
+    console.log('certContext => ', certContext);
+    const img = this.img.nativeElement as HTMLImageElement;
+    img.crossOrigin = 'Anonymous';
+    console.log('img => ', this.img.nativeElement);
+    // const img = new Image();
+    if (certContext) {
+      img.onload = () => {
+        cert.setAttribute("width", img.width.toString());
+        cert.setAttribute("height", img.height.toString());
+        certContext.drawImage(img, 0, 0, img.width, img.height);
+        this.authService.getAppUser$().subscribe({
+          next: (appUser) => {
+            const name = `Dr. ${appUser.firstname} ${appUser.middlename} ${appUser.lastname}`;
+            certContext.font = `${img.height * 0.042}px Georgia`;
+            const namePpties = certContext.measureText(name);
+            certContext.fillText(name, img.width / 2 - (namePpties.width / 2), 
+              img.height * 0.53);
+            certContext.textAlign = "center";
+            cert.toBlob(blob => {
+              if (blob) this.downloadUrl = window.URL.createObjectURL(blob);
+            });
+          }
+        });
+      }
+    }
+    // img.src = "../../assets/artwork.png";
+
+  }
+
+  downloadCert() {
+    // const cert = this.certificate.nativeElement as HTMLCanvasElement;
+    console.log("download url => ", this.downloadUrl);
+  }
 }
