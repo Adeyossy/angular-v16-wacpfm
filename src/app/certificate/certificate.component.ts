@@ -77,21 +77,22 @@ export class CertificateComponent implements OnInit, AfterViewInit {
     // const img = new Image();
     if (certContext) {
       img.onload = () => {
-        cert.setAttribute("width", img.width.toString());
-        cert.setAttribute("height", img.height.toString());
-        certContext.drawImage(img, 0, 0, img.width, img.height);
-        this.authService.getAppUser$().subscribe({
+        // cert.setAttribute("width", img.width.toString());
+        // cert.setAttribute("height", img.height.toString());
+        certContext.drawImage(img, 0, 0, cert.width, cert.height);
+        const sub = this.authService.getAppUser$().subscribe({
           next: (appUser) => {
             const name = `Dr. ${appUser.firstname} ${appUser.middlename} ${appUser.lastname}`;
-            certContext.font = `${img.height * 0.042}px Georgia`;
+            certContext.font = `${cert.height * 0.042}px Georgia`;
             const namePpties = certContext.measureText(name);
-            certContext.fillText(name, img.width / 2 - (namePpties.width / 2),
-              img.height * 0.53);
+            certContext.fillText(name, cert.width / 2 - (namePpties.width / 2),
+              cert.height * 0.53);
             certContext.textAlign = "center";
             cert.toBlob(blob => {
               if (blob) this.downloadUrl = window.URL.createObjectURL(blob);
             }, "image/png", 1);
-          }
+          },
+          complete: () => { sub.unsubscribe() }
         });
       }
     }
