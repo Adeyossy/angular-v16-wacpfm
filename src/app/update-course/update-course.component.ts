@@ -49,19 +49,21 @@ export class UpdateCourseComponent implements OnInit {
             registrationCloseDate: 0,
             startDate: 0,
             endDate: 0,
+            membershipRelease: false,
             membershipCertificate: "",
             membershipLectures: [],
             membershipTheme: "",
             membershipParticipants: [],
+            fellowshipRelease: false,
             fellowshipCertificate: "",
             fellowshipLectures: [],
             fellowshipTheme: "",
             fellowshipParticipants: [],
+            totRelease: false,
             totCertificate: "",
             totLectures: [],
             totTheme: "",
             totParticipants: [],
-            totUpdateParticipants: [],
             resourcePersons: []
           } : result.docs[0].data() as UpdateCourse)
       )

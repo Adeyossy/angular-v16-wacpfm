@@ -27,16 +27,18 @@ export class NewCourseComponent implements OnInit {
     membershipTheme: "",
     fellowshipTheme: "",
     totTheme: "",
+    membershipRelease: false,
     membershipCertificate: "",
     membershipParticipants: [],
+    fellowshipRelease: false,
     fellowshipCertificate: "",
     fellowshipParticipants: [],
+    totRelease: false,
     totCertificate: "",
     totParticipants: [],
     membershipLectures: [],
     fellowshipLectures: [],
     totLectures: [],
-    totUpdateParticipants: [],
     resourcePersons: []
   }
 

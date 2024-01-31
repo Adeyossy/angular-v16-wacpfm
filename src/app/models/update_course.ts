@@ -17,19 +17,21 @@ export type UpdateCourse = {
   registrationCloseDate: number;
   startDate: number;
   endDate: number;
+  membershipRelease: boolean;
   membershipCertificate: string;
   membershipLectures: string[];
   membershipTheme: string;
   membershipParticipants: string[];
+  fellowshipRelease: boolean;
   fellowshipCertificate: string;
   fellowshipLectures: string[];
   fellowshipTheme: string;
   fellowshipParticipants: string[];
+  totRelease: boolean;
   totCertificate: string;
   totLectures: string[];
   totTheme: string;
   totParticipants: string[];
-  totUpdateParticipants: string[];
   resourcePersons: string[];
 }
 
@@ -44,7 +46,6 @@ export type UpdateCourseRev = {
   membership: UpdateCourseDetails;
   fellowship: UpdateCourseDetails;
   tot: UpdateCourseDetails;
-  totUpdateParticipants: string[];
   resourcePersons: string[];
 }
 
