@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from 'firebase/auth';
 import { collection, doc, runTransaction, writeBatch } from 'firebase/firestore';
 import { Observable, Subscription, concatMap, from, map, of, partition } from 'rxjs';
-import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture } from 'src/app/models/update_course';
+import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseDetails, UpdateCourseLecture, UpdateCourseRev } from 'src/app/models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
 import { AppUser, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -15,7 +15,7 @@ import { HelperService } from 'src/app/services/helper.service';
   styleUrls: ['./update-course-details.component.css']
 })
 export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
-  ongoing: Observable<UpdateCourse | null> = new Observable();
+  ongoing: Observable<UpdateCourseRev> = new Observable();
   courseRecords: Observable<UpdateCourseRecord[]> = new Observable();
   user$: Observable<AppUser> = new Observable();
   updateCourseLecture$: Observable<UpdateCourseLecture[]> = new Observable();
@@ -43,6 +43,39 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
       map(doc => {
         if (doc.exists()) return doc.data() as UpdateCourse;
         else throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT);
+      }),
+      map(uCourse => {
+        return {
+          creator: uCourse.creator, endDate: uCourse.endDate, title: uCourse.title,
+          updateCourseId: uCourse.updateCourseId, startDate: uCourse.startDate,
+          registrationOpenDate: uCourse.registrationOpenDate,
+          registrationCloseDate: uCourse.registrationCloseDate,
+          resourcePersons: uCourse.resourcePersons,
+          fellowship: { 
+            certificate: uCourse.fellowshipCertificate,
+            cpd: uCourse.fellowshipCPD,
+            lectures: uCourse.fellowshipLectures,
+            participants: uCourse.fellowshipParticipants,
+            releaseResources: uCourse.fellowshipRelease,
+            theme: uCourse.fellowshipTheme
+          },
+          membership: { 
+            certificate: uCourse.membershipCertificate,
+            cpd: uCourse.membershipCPD,
+            lectures: uCourse.membershipLectures,
+            participants: uCourse.membershipParticipants,
+            releaseResources: uCourse.membershipRelease,
+            theme: uCourse.membershipTheme
+          },
+          tot: { 
+            certificate: uCourse.totCertificate,
+            cpd: uCourse.totCPD,
+            lectures: uCourse.totLectures,
+            participants: uCourse.totParticipants,
+            releaseResources: uCourse.totRelease,
+            theme: uCourse.totTheme
+          }
+        };
       })
     );
 
@@ -82,10 +115,11 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
               concatMap(db => {
                 if (records.length === 0) {
                   const batch = writeBatch(db);
-                  if (uCourse!.membershipParticipants.find(member =>
+                  if (uCourse!.membership.participants.find(member =>
                     member.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
                     const memberRef = doc(collection(db, UPDATE_COURSES_RECORDS));
                     batch.set(memberRef, {
+                      id: memberRef.id,
                       userEmail: appUser.email.toLowerCase().trim(),
                       userId: "",
                       courseType: "Membership",
@@ -95,10 +129,11 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
                     } as UpdateCourseRecord)
                   }
 
-                  if (uCourse!.fellowshipParticipants.find(fellow =>
+                  if (uCourse!.fellowship.participants.find(fellow =>
                     fellow.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
                     const fellowRef = doc(collection(db, UPDATE_COURSES_RECORDS));
                     batch.set(fellowRef, {
+                      id: fellowRef.id,
                       userEmail: appUser.email.toLowerCase().trim(),
                       userId: "",
                       courseType: "Fellowship",
@@ -108,10 +143,11 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
                     } as UpdateCourseRecord)
                   }
 
-                  if (uCourse!.totParticipants.find(tot =>
+                  if (uCourse!.tot.participants.find(tot =>
                     tot.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
                     const totRef = doc(collection(db, UPDATE_COURSES_RECORDS));
                     batch.set(totRef, {
+                      id: totRef.id,
                       userEmail: appUser.email.toLowerCase().trim(),
                       userId: "",
                       courseType: "ToT",
@@ -166,7 +202,9 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
         "updateCourseId", "==", params.get("updateCourseId") as string)),
       map(doc => doc.docs.map(docDoc => {
         this.day.push(0);
-        return docDoc.data() as UpdateCourseRecord;
+        const data = docDoc.data() as UpdateCourseRecord;
+        if(!Object.hasOwn(data, 'id') || !data.id) data.id = docDoc.id;
+        return data;
       })),
       concatMap(doc => this.user$.pipe(
         map(user => doc.filter(d => d.userEmail.toLowerCase() === user.email.toLowerCase())
@@ -205,5 +243,9 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
   toggleDay(r: number, day: number) {
     if (this.day[r] !== day) this.day[r] = day;
+  }
+
+  getCourseTypeDeets(obj: UpdateCourseRev, property: "Membership" | "Fellowship" | "ToT") {
+    return obj[property.toLowerCase() as "membership" | "fellowship" | "tot"]
   }
 }
