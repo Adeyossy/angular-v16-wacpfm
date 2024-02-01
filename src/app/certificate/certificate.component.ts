@@ -17,7 +17,7 @@ export class CertificateComponent implements OnInit, AfterViewInit {
   @ViewChild('container') container: ElementRef = new ElementRef('div');
   user$: Observable<AppUser> = new Observable();
   certificateUrl$: Observable<string> = new Observable();
-  records$: Observable<UpdateCourseRecord[]> = new Observable();
+  records$: Observable<UpdateCourseRecord> = new Observable();
   downloadUrl = "";
   url = "";
 
@@ -29,6 +29,7 @@ export class CertificateComponent implements OnInit, AfterViewInit {
     );
 
     this.user$ = this.authService.getAppUser$();
+
     const updateCourse$ = updateCourseId$.pipe(
       concatMap(id => this.authService.getDoc$(UPDATE_COURSES, id)),
       map(doc => {
@@ -37,20 +38,16 @@ export class CertificateComponent implements OnInit, AfterViewInit {
       })
     );
 
-    this.records$ = updateCourseId$.pipe(
-      concatMap(id => this.authService.queryCollections$(UPDATE_COURSES_RECORDS,
-        "updateCourseId", "==", id)),
-      map(doc => doc.docs.map(d => d.data() as UpdateCourseRecord)),
-      concatMap(docs => this.activatedRoute.paramMap.pipe(
-        map(params => docs.filter(d => d.courseType.toLowerCase() === params.get("courseType")))
-      ))
+    this.records$ = this.activatedRoute.paramMap.pipe(
+      concatMap(params => this.authService.getDoc$(UPDATE_COURSES_RECORDS,
+        params.get("recordId") as string)),
+      map(doc => doc.data() as UpdateCourseRecord)
     );
 
     this.certificateUrl$ = updateCourse$.pipe(
       concatMap(uCourse => this.records$.pipe(
-        map(recs => {
-          if (recs.length) {
-            const record = recs[0];
+        map(record => {
+          if (record) {
             if (record.courseType === 'Membership') return uCourse.membershipCertificate;
             if (record.courseType === 'Fellowship') return uCourse.fellowshipCertificate;
             return uCourse.totCertificate;
