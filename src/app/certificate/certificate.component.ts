@@ -74,7 +74,10 @@ export class CertificateComponent implements OnInit, AfterViewInit {
         certContext.drawImage(img, 0, 0, cert.width, cert.height);
         const sub = this.authService.getAppUser$().subscribe({
           next: (appUser) => {
-            const name = `Dr. ${appUser.firstname} ${appUser.middlename} ${appUser.lastname}`;
+            const nil = ["nil", "none", "not applicable", "-", "_", " ", "", "."];
+            const middlename = nil.find(n => appUser.middlename.toLowerCase().trim() === n.trim()) ? 
+            '' : ' '+appUser.middlename;
+            const name = `Dr. ${appUser.firstname}${middlename} ${appUser.lastname}`;
             certContext.font = `${cert.height * 0.042}px Georgia`;
             const namePpties = certContext.measureText(name);
             certContext.fillText(name, cert.width / 2 - (namePpties.width / 2),
