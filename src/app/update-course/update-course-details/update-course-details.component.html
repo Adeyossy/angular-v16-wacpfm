@@ -137,7 +137,7 @@
             <div class="col-1">
               <p class="wacpfm-small-text color-accent">{{ i + 1 }}.</p>
             </div>
-            <div class="col-10 px-1">
+            <div class="col-9 px-1">
               <p class="wacpfm-lecture-title">{{ lecture.lectureTitle }}</p>
               <span class="wacpfm-smaller-text opacity-75 pe-2">{{ lecture.lecturerName }}</span>
               <i class="bi bi-three-dots-vertical color-accent wacpfm-smaller-text"></i>
@@ -145,8 +145,11 @@
                 {{ helper.millisToHour(lecture.startTime) }}
               </span>
             </div>
-            <div class="col-1 text-end">
-              <i class="bi bi-file-earmark-pdf-fill color-accent" [hidden]="!lecture.materialLink "></i>
+            <div class="col-1 text-end" *ngFor="let link of lecture.materialLink">
+              <a [href]="link" [download]="'Update.Course.Lecture.' + (i + 1) + '.pdf'" type="application/pdf"
+                target="_blank">
+                <i class="bi bi-file-earmark-pdf-fill color-accent"></i>
+              </a>
             </div>
           </div>
         </div>
