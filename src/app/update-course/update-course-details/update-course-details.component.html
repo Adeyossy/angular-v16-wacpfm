@@ -80,7 +80,7 @@
 </div>
 <br><br>
 <div class="container-fluid p-0" *ngIf="ongoing | async as newCourse">
-  <div class="row g-0 wacpfm-card p-0 wacpfm-course-details mb-5" 
+  <div class="row g-0 wacpfm-card p-0 wacpfm-course-details mb-5"
     *ngFor="let record of courseRecords | async; index as r">
     <div class="col-lg-6 wacpfm-padding-default">
       <div class="wacpfm-heading-underline">
@@ -91,24 +91,26 @@
       <div class="wacpfm-category-theme" id="tot">
         <h1 class="wacpfm-small-text wacpfm-heading-primary fw-bold mb-1">THEME</h1>
         <h2 class="wacpfm-subheading fw-bold">
-          {{ record.courseType === 'Membership' ? newCourse.membershipTheme :
-          record.courseType === 'Fellowship' ? newCourse.fellowshipTheme :
-          newCourse.totTheme }}
+          {{ getCourseTypeDeets(newCourse, record.courseType).theme }}
         </h2>
       </div>
       <br>
-      <button class="wacpfm-primary-button small" 
-        routerLink="./certificate/{{record.courseType.toLowerCase()}}" 
-        [disabled]="record.courseType !== 'Membership'">
+      <button class="wacpfm-primary-button small" routerLink="./certificate/{{record.id}}"
+        [disabled]="!getCourseTypeDeets(newCourse, record.courseType).releaseResources">
         <i class="bi bi-file-earmark-image"></i> Download Certificate
       </button>
       <br><br>
-      <button class="small" disabled>
-        <i class="bi bi-file-earmark-ruled"></i> Download CPD Form
-      </button>
+      <a href="{{getCourseTypeDeets(newCourse, record.courseType).cpd}}" 
+        type="application/pdf" [download]="'CPD.'.concat(record.courseType,'.', 
+        helper.getDateString(newCourse.startDate).replaceAll('-', '.'), '.pdf')" target="_blank">
+        <button class="small" [disabled]="!getCourseTypeDeets(newCourse, record.courseType).releaseResources">
+          <i class="bi bi-file-earmark-ruled"></i> Download CPD Form
+        </button>
+      </a>
     </div>
     <div class="col-lg-6 wacpfm-lecture-table">
-      <div class="wacpfm-lecture-container px-2" *ngFor="let lecture of (lecturesPerRecord$ | async)?.[r]?.[day[r]]; index as i"
+      <div class="wacpfm-lecture-container px-2"
+        *ngFor="let lecture of (lecturesPerRecord$ | async)?.[r]?.[day[r]]; index as i"
         [class.d-none]="lecture.courseType !== record.courseType">
         <div class="container-fluid p-0 wacpfm-lecture-table-head" *ngIf="i === 0">
           <div class="row g-0 px-3 py-2">
@@ -144,8 +146,7 @@
               </span>
             </div>
             <div class="col-1 text-end">
-              <i class="bi bi-file-earmark-pdf-fill color-accent"
-              [hidden]="!lecture.materialLink "></i>
+              <i class="bi bi-file-earmark-pdf-fill color-accent" [hidden]="!lecture.materialLink "></i>
             </div>
           </div>
         </div>
