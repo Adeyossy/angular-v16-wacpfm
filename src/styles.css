@@ -17,8 +17,8 @@
   --wacpfm-border-radius: 8px;
   --wacpfm-text-colour: black;
   --wacpfm-spacing-large: 48px;
-  --wacpfm-spacing-medium: 40px;
-  --wacpfm-spacing-default: 30px;
+  --wacpfm-spacing-medium: 36px;
+  --wacpfm-spacing-default: 24px;
   --wacpfm-spacing-small: 24px;
   --wacpfm-spacing-nav: 8vh;
   --wacpfm-three-colours: linear-gradient(to right, var(--wacpfm-accent-colour-red) 0%, 
