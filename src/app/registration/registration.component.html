@@ -25,7 +25,7 @@
                 placeholder="hint: what your friends call you" [(ngModel)]="this.user.firstname" autocomplete="off">
               <br><br>
               <label for="wacpfm-profile-middlename"><i class="bi bi-file-person-fill"></i> Middlename</label>
-              <input type="text" name="wacpfm-profile-middlename" id="wacpfm-profile-middlename" required
+              <input type="text" name="wacpfm-profile-middlename" id="wacpfm-profile-middlename"
                 placeholder="hint: your least-known name" [(ngModel)]="this.user.middlename" autocomplete="off">
               <br><br>
               <label for="wacpfm-profile-lastname"><i class="bi bi-person-vcard-fill"></i> Lastname</label>
@@ -85,7 +85,7 @@
               <p class="wacpfm-small-text">Click the button below to update your profile on the Faculty App.</p>
               <br><br>
               <button class="wacpfm-primary-button" [disabled]="!this.user.country || !this.user.email || 
-                !this.user.firstname || !this.user.gender || !this.user.lastname || !this.user.middlename ||
+                !this.user.firstname || !this.user.gender || !this.user.lastname ||
                 !this.user.phoneNumber || !this.user.userId || !this.user.whatsapp || !this.user.zip ||
                 !this.user.college || !this.user.practicePlace || !this.user.designation"
                 (click)="updateProfile()">Update Profile</button>
