@@ -35,7 +35,7 @@ const routes: Routes = [
       { path: "updatecourse/:updateCourseId/details", component: UpdateCourseDetailsComponent },
       { path: "updatecourse/:updateCourseId/details/payment/:category", component: UpdateCoursePaymentComponent },
       { path: "updatecourse/:updateCourseId/details/edit", component: NewCourseComponent },
-      { path: "updatecourse/:updateCourseId/details/certificate/:courseType", component: CertificateComponent }
+      { path: "updatecourse/:updateCourseId/details/certificate/:recordId", component: CertificateComponent }
     ]
   },
   {
