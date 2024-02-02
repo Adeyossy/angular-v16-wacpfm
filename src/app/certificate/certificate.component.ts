@@ -87,7 +87,10 @@ export class CertificateComponent implements OnInit, AfterViewInit {
               if (blob) this.downloadUrl = window.URL.createObjectURL(blob);
             }, "image/png", 1);
           },
-          complete: () => { sub.unsubscribe() }
+          complete: () => { 
+            console.log("unsubscribed from certificate component")
+            sub.unsubscribe() 
+          }
         });
       }
     }
