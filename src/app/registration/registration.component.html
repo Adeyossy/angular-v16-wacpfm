@@ -30,7 +30,7 @@
               <br><br>
               <label for="wacpfm-profile-lastname"><i class="bi bi-person-vcard-fill"></i> Lastname</label>
               <input type="text" name="wacpfm-profile-lastname" id="wacpfm-profile-lastname" required
-                placeholder="hint: what your colleagues call you" [(ngModel)]="this.user.lastname" autocomplete="off">
+                placeholder="hint: also known as your surname" [(ngModel)]="this.user.lastname" autocomplete="off">
               <br><br>
               <label for="wacpfm-profile-gender"><i class="bi bi-emoji-neutral-fill"></i> Gender</label>
               <app-select mode="single" [items]="['Male', 'Female']" (emitItems)="updateGender($event)"></app-select>
