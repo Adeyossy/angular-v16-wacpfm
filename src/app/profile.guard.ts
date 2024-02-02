@@ -8,6 +8,9 @@ export const profileGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
   return authService.getDocByUserId$(USERS).pipe(
-    map(doc => doc.exists() ? true : router.parseUrl('/profile/registration'))
+    map(doc => {
+      console.log("in profile guard");
+      return doc.exists() ? true : router.parseUrl('/profile/registration')
+    })
   )
 };

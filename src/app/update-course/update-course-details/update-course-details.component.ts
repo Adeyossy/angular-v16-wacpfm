@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'firebase/auth';
 import { collection, doc, runTransaction, writeBatch } from 'firebase/firestore';
-import { Observable, Subscription, concatMap, from, map, of, partition } from 'rxjs';
+import { AsyncSubject, Observable, Subscription, concatMap, from, iif, map, of, partition } from 'rxjs';
 import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseDetails, UpdateCourseLecture, UpdateCourseRev } from 'src/app/models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
 import { AppUser, USERS } from 'src/app/models/user';
@@ -20,6 +20,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   user$: Observable<AppUser> = new Observable();
   updateCourseLecture$: Observable<UpdateCourseLecture[]> = new Observable();
   lecturesPerRecord$: Observable<UpdateCourseLecture[][][]> = new Observable();
+  lecturesPerRecordAsync: AsyncSubject<UpdateCourseLecture[][][]> = new AsyncSubject();
   lecturesSplit: Observable<UpdateCourseLecture[]>[] = [];
   updateCourseId = "";
   openCategoryUI = false;
@@ -27,13 +28,14 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   conversionSub = new Subscription();
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
-    public helper: HelperService) { }
+    public helper: HelperService) {
+      this.lecturesPerRecord$.subscribe(this.lecturesPerRecordAsync);
+    }
 
   ngOnInit(): void {
     this.ongoing = this.activatedRoute.paramMap.pipe(
       map(params => {
         const updateCourseId = params.get("updateCourseId");
-        console.log(updateCourseId);
         if (updateCourseId) return updateCourseId;
         else throw new Error("Route does not exist");
       }),
@@ -86,82 +88,18 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.courseRecords = this.getCourseRecords();
+    // this.courseRecords = this.getCourseRecords();
 
     this.updateCourseLecture$ = this.getCourseLectures();
 
     this.lecturesPerRecord$ = this.getLecturesPerRecord();
 
-    this.lecturesSplit = [
-      this.updateCourseLecture$.pipe(
-        map(lectures => lectures.filter((lecture, index, array) =>
-          new Date(parseInt(lecture.startTime)).getDay() ===
-          new Date(parseInt(array[0].startTime)).getDay())
-        )
-      ),
-      this.updateCourseLecture$.pipe(
-        map(lectures => lectures.filter((lecture, index, array) =>
-          new Date(parseInt(lecture.startTime)).getDay() !==
-          new Date(parseInt(array[0].startTime)).getDay())
-        )
-      )
-    ]
-
     this.conversionSub = this.user$.pipe(
       concatMap(appUser => this.ongoing.pipe(
-        concatMap((uCourse) => this.courseRecords.pipe(
+        concatMap((uCourse) => this.getCourseRecords().pipe(
           concatMap(records => {
-            return this.authService.getFirestore$().pipe(
-              concatMap(db => {
-                if (records.length === 0) {
-                  const batch = writeBatch(db);
-                  if (uCourse!.membership.participants.find(member =>
-                    member.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
-                    const memberRef = doc(collection(db, UPDATE_COURSES_RECORDS));
-                    batch.set(memberRef, {
-                      id: memberRef.id,
-                      userEmail: appUser.email.toLowerCase().trim(),
-                      userId: "",
-                      courseType: "Membership",
-                      paymentId: "",
-                      updateCourseId: uCourse!.updateCourseId,
-                      paymentEvidence: ""
-                    } as UpdateCourseRecord)
-                  }
-
-                  if (uCourse!.fellowship.participants.find(fellow =>
-                    fellow.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
-                    const fellowRef = doc(collection(db, UPDATE_COURSES_RECORDS));
-                    batch.set(fellowRef, {
-                      id: fellowRef.id,
-                      userEmail: appUser.email.toLowerCase().trim(),
-                      userId: "",
-                      courseType: "Fellowship",
-                      paymentId: "",
-                      updateCourseId: uCourse!.updateCourseId,
-                      paymentEvidence: ""
-                    } as UpdateCourseRecord)
-                  }
-
-                  if (uCourse!.tot.participants.find(tot =>
-                    tot.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
-                    const totRef = doc(collection(db, UPDATE_COURSES_RECORDS));
-                    batch.set(totRef, {
-                      id: totRef.id,
-                      userEmail: appUser.email.toLowerCase().trim(),
-                      userId: "",
-                      courseType: "ToT",
-                      paymentId: "",
-                      updateCourseId: uCourse!.updateCourseId,
-                      paymentEvidence: ""
-                    } as UpdateCourseRecord)
-                  }
-
-                  return from(batch.commit());
-                }
-                return of();
-              })
-            )
+            return iif(() => records.length > 0, of(null), 
+              this.batchWriteRecords(uCourse, appUser))             
           })
         ))
       ))
@@ -173,6 +111,9 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
         );
         this.updateCourseLecture$ = this.getCourseLectures();
         this.lecturesPerRecord$ = this.getLecturesPerRecord();
+        const lprAsync = new AsyncSubject<UpdateCourseLecture[][][]>();
+        this.lecturesPerRecord$.subscribe(lprAsync);
+        this.lecturesPerRecordAsync = lprAsync;
       },
       error: err => {
         console.log("error on conversion");
@@ -186,14 +127,6 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.conversionSub.unsubscribe()
-  }
-
-  getLectureObservable$(updateCourseId: string) {
-    return this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
-      "==", updateCourseId).pipe(
-        map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)
-          .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime)))
-      )
   }
 
   getCourseRecords() {
@@ -223,13 +156,16 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
   getLecturesPerRecord() {
     return this.updateCourseLecture$.pipe(
-      concatMap(lectures => this.courseRecords.pipe(
-        map(records =>
-          records.map(record =>
-            lectures.filter(lect => lect.courseType === record.courseType)
+      concatMap(lectures => {
+        // console.log("piping lpr");
+        return this.courseRecords.pipe(
+          map(records =>
+            records.map(record =>
+              lectures.filter(lect => lect.courseType === record.courseType)
+            )
           )
         )
-      )),
+      }),
       map(lecturess => lecturess.map(lectures => [
         lectures.filter((lecture, index, array) =>
           new Date(parseInt(lecture.startTime)).getDay() ===
@@ -247,5 +183,48 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
   getCourseTypeDeets(obj: UpdateCourseRev, property: "Membership" | "Fellowship" | "ToT") {
     return obj[property.toLowerCase() as "membership" | "fellowship" | "tot"]
+  }
+
+  createNewRecord(refId: string, uCourse: UpdateCourseRev, appUser: AppUser, 
+    courseType: "Membership" | "Fellowship" | "ToT") {
+    return {
+      id: refId,
+      userEmail: appUser.email.toLowerCase().trim(),
+      userId: appUser.userId,
+      courseType: courseType,
+      paymentId: "",
+      updateCourseId: uCourse!.updateCourseId,
+      paymentEvidence: ""
+    } as UpdateCourseRecord
+  }
+
+  batchWriteRecords(uCourse: UpdateCourseRev, appUser: AppUser) {
+    return this.authService.getFirestore$().pipe(
+      concatMap(db => {
+          const batch = writeBatch(db);
+          if (uCourse!.membership.participants.find(member =>
+            member.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
+            const memberRef = doc(collection(db, UPDATE_COURSES_RECORDS));
+            batch.set(memberRef, 
+              this.createNewRecord(memberRef.id, uCourse, appUser, "Membership"))
+          }
+
+          if (uCourse!.fellowship.participants.find(fellow =>
+            fellow.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
+            const fellowRef = doc(collection(db, UPDATE_COURSES_RECORDS));
+            batch.set(fellowRef, 
+              this.createNewRecord(fellowRef.id, uCourse, appUser, "Fellowship"))
+          }
+
+          if (uCourse!.tot.participants.find(tot =>
+            tot.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
+            const totRef = doc(collection(db, UPDATE_COURSES_RECORDS));
+            batch.set(totRef, 
+              this.createNewRecord(totRef.id, uCourse, appUser, "ToT"))
+          }
+
+          return from(batch.commit());        
+      })
+    )
   }
 }
