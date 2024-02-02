@@ -39,7 +39,7 @@ export class UpdateCourseComponent implements OnInit {
     // pipe an observable of Update Courses that has not ended
     // the user may or may not have registered
     this.ongoing = this.authService
-      .queryCollections$(UPDATE_COURSES, "endDate", ">=", Date.now()).pipe(
+      .queryCollections$(UPDATE_COURSES, "endDate", ">=", Date.now() - (7*24*60*60*1000)).pipe(
         map(result => result.empty ?
           {
             updateCourseId: "",
