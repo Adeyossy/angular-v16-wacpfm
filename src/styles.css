@@ -177,6 +177,13 @@ a.wacpfm-link-decorated {
   box-shadow: 0px 2px var(--wacpfm-primary-colour);
 }
 
+a.wacpfm-link-card {
+  background-color: var(--wacpfm-background-colour-lighter);
+  padding: 8px 12px;
+  border: 2px solid var(--wacpfm-primary-shadow);
+  border-radius: 16px;
+}
+
 i.bi {
   margin-right: 4px;
 }
