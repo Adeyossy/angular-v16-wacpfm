@@ -90,7 +90,9 @@ export class AuthService {
 
   resetPassword$(email: string) {
     return this.getFirebaseAuth$().pipe(
-      concatMap(auth => sendPasswordResetEmail(auth, email))
+      concatMap(auth => sendPasswordResetEmail(auth, email, {
+        url: `${window.location.origin}/access/login`
+      }))
     )
   }
 
@@ -143,7 +145,7 @@ export class AuthService {
   getDoc$(collectionName: string, docId: string) {
     return this.getFirestore$().pipe(
       concatMap(db => getDoc(doc(db, collectionName, docId)))
-    );
+    )
   }
 
   getDocByUserId$(collectionName: string) {
