@@ -15,6 +15,7 @@ import { accessGuard } from './access.guard';
 import { profileGuard } from './profile.guard';
 import { emailGuard } from './email.guard';
 import { CertificateComponent } from './certificate/certificate.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
@@ -23,7 +24,8 @@ const routes: Routes = [
     children: [
       { path: "register", component: RegisterComponent },
       { path: "register/verifyemail", component: VerifyEmailComponent, canActivate: [accessGuard] },
-      { path: "login", component: LoginComponent }
+      { path: "login", component: LoginComponent },
+      { path: "login/reset-password", component: ResetPasswordComponent }
     ]
   },
   {
