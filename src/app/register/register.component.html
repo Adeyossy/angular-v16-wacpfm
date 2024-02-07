@@ -33,7 +33,7 @@
       confirmPasswordFeedback }}
     </p>
     <br>
-    <a routerLink="/access/login">Login here if you already have an account</a>
+    <a routerLink="/access/login" class="wacpfm-link-card wacpfm-smaller-text">Login here if you already have an account</a>
     <br><br><br>
     <button class="wacpfm-primary-button" (click)="signUp()"
       [disabled]="!emailCorrect || !passwordCorrect || !confirmPasswordCorrect">Create Account</button>
