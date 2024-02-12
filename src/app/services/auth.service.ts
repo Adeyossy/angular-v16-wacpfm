@@ -196,4 +196,13 @@ export class AuthService {
       })
     );
   }
+
+  queryByUserEmail$(collectionName: string) {
+    return this.getFirebaseUser$().pipe(
+      concatMap(user => {
+        if (user) return this.queryCollections$(collectionName, "userEmail", "==", user.email!);
+        else throw new Error(AuthErrorCodes.NULL_USER);
+      })
+    );
+  }
 }
