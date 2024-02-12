@@ -24,9 +24,9 @@ export class UpdateCourseComponent implements OnInit {
       map(val => val.exists() ? val.data() as AppUser : null)
     );
 
-    this.previousCourses = this.authService.queryByUserId$(UPDATE_COURSES_RECORDS).pipe(
-      map(value => value.docs as QueryDocumentSnapshot<UpdateCourseRecord>[]),
-      map(docs => docs.map(doc => doc.data().updateCourseId)),
+    this.previousCourses = this.authService.queryByUserEmail$(UPDATE_COURSES_RECORDS).pipe(
+      map(value => value.docs.map(doc => (doc.data() as UpdateCourseRecord).updateCourseId)
+                  .sort().filter((id, i, arr) => i > 0 ? id !== arr[i - 1] : true)),
       map(courseIds => courseIds.map(courseId => this.authService.getDoc$(UPDATE_COURSES, courseId).pipe(
         map(uCourse => {
           if (uCourse.exists()) return uCourse.data() as UpdateCourse;

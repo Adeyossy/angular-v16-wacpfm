@@ -61,12 +61,14 @@
     </div>
   </div>
   <br>
-  <div class="row g-0" *ngIf="(previousCourses | async) as results">
+  <div class="row" *ngIf="(previousCourses | async) as results">
     <div class="col-lg-6" *ngFor="let result of results">
-      <div class="wacpfm-card" *ngIf="result | async as course">
+      <div class="wacpfm-card" *ngIf="result | async as course" 
+      routerLink="./{{course.updateCourseId}}/details">
         <p>{{ course.title }}</p>
         <div class="wacpfm-page-divider"></div>
-        <p class="wacpfm-small-text">{{ course.startDate }}</p>
+        <br>
+        <p class="wacpfm-small-text">{{ getDate(course.startDate) }}</p>
       </div>
     </div>
   </div>
