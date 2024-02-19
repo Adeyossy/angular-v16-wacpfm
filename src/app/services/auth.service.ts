@@ -188,6 +188,14 @@ export class AuthService {
     );
   }
 
+  querySubCollection$(property: string, comparator: WhereFilterOp, value: string,
+    path: string[]) {
+      return this.getFirestore$().pipe(
+        concatMap(db => getDocs(query(collection(db, path[0], path[1], path[2]),
+          where(property, comparator, value))))
+      );
+    }
+
   queryByUserId$(collectionName: string) {
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
