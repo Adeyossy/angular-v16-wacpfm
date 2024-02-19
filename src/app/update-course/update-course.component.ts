@@ -32,14 +32,14 @@ export class UpdateCourseComponent implements OnInit {
           if (uCourse.exists()) return uCourse.data() as UpdateCourse;
           else throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT)
         }),
-        filter(uCourseRecord => Date.now() > uCourseRecord.endDate + (7*24*60*60*1000))
+        filter(uCourseRecord => Date.now() > uCourseRecord.endDate + (4*7*24*60*60*1000))
       )))
     );
 
     // pipe an observable of Update Courses that has not ended
     // the user may or may not have registered
     this.ongoing = this.authService
-      .queryCollections$(UPDATE_COURSES, "endDate", ">=", Date.now() - (7*24*60*60*1000)).pipe(
+      .queryCollections$(UPDATE_COURSES, "endDate", ">=", Date.now() - (4*7*24*60*60*1000)).pipe(
         map(result => result.empty ?
           {
             updateCourseId: "",
