@@ -26,6 +26,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   openCategoryUI = false;
   day: number[] = []; // first day (zero-based numbering)
   conversionSub = new Subscription();
+  pattern = /-/g;
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
     public helper: HelperService) {
@@ -136,7 +137,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
       map(doc => doc.docs.map(docDoc => {
         this.day.push(0);
         const data = docDoc.data() as UpdateCourseRecord;
-        if(!Object.hasOwn(data, 'id') || !data.id) data.id = docDoc.id;
+        if(!data.hasOwnProperty('id') || !data.id) data.id = docDoc.id;
         return data;
       })),
       concatMap(doc => this.user$.pipe(
