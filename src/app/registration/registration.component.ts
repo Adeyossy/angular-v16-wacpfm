@@ -48,7 +48,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     sierra_leone: "+232", togo: "+216"
   }
 
-  chapters: any = {
+  chapters = {
     benin: "WACP-BEN", burkina_faso: "WACP-BFA", gambia: "WACP-GMB", ghana: "WACP-GHA", guinea: "WACP-GIN",
     ivory_coast: "WACP-CIV", liberia: "WACP-LBR", niger: "WACP-NER", nigeria: "WACP-NGA", senegal: "WACP-SEN",
     sierra_leone: "WACP-SLE", togo: "WACP-TGO", npmcn: "NPMCN", both: "NPMCN & WACP", 
@@ -100,7 +100,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     if (value.length) {
       this.user.country = value[0];
       const countryAsProp = this.user.country.replace(" ", "_").toLowerCase();
-      if (Object.hasOwn(this.chapters, countryAsProp)) {
+      if (this.chapters.hasOwnProperty(countryAsProp)) {
         //  this.user.college = this.chapters[countryAsProp];
       }
     }
@@ -111,7 +111,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.user.zip = this.countryCodes[code];
     // this.user.phoneNumber = this.user.zip.concat(this.user.phoneNumber);
     // this.user.whatsapp = this.user.zip.concat(this.user.whatsapp);
-    // if (Object.hasOwn(this.countries, code))
     return this.user.zip;
   }
 
