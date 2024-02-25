@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AsyncSubject, Observable, concatMap, from, map, of } from 'rxjs';
+import { AsyncSubject, NEVER, Observable, concatMap, from, map, of } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
 import { DocumentReference, Firestore, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from 'firebase/firestore';
@@ -142,9 +142,13 @@ export class AuthService {
     );
   }
 
-  getDoc$(collectionName: string, docId: string) {
+  getDoc$<Type>(collectionName: string, docId: string) {
     return this.getFirestore$().pipe(
-      concatMap(db => getDoc(doc(db, collectionName, docId)))
+      concatMap(db => getDoc(doc(db, collectionName, docId))),
+      map(doc => {
+        if(doc.exists()) return doc.data() as Type;
+        else throw new Error(this.FIRESTORE_NULL_DOCUMENT);
+      })
     )
   }
 

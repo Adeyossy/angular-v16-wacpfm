@@ -31,17 +31,12 @@ export class CertificateComponent implements OnInit, AfterViewInit {
     this.user$ = this.authService.getAppUser$();
 
     const updateCourse$ = updateCourseId$.pipe(
-      concatMap(id => this.authService.getDoc$(UPDATE_COURSES, id)),
-      map(doc => {
-        if (doc.exists()) return doc.data() as UpdateCourse;
-        throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT)
-      })
+      concatMap(id => this.authService.getDoc$<UpdateCourse>(UPDATE_COURSES, id))
     );
 
     this.records$ = this.activatedRoute.paramMap.pipe(
-      concatMap(params => this.authService.getDoc$(UPDATE_COURSES_RECORDS,
-        params.get("recordId") as string)),
-      map(doc => doc.data() as UpdateCourseRecord)
+      concatMap(params => this.authService.getDoc$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
+        params.get("recordId") as string))
     );
 
     this.certificateUrl$ = updateCourse$.pipe(

@@ -26,20 +26,19 @@ export class UpdateCourseComponent implements OnInit {
 
     this.previousCourses = this.authService.queryByUserEmail$(UPDATE_COURSES_RECORDS).pipe(
       map(value => value.docs.map(doc => (doc.data() as UpdateCourseRecord).updateCourseId)
-                  .sort().filter((id, i, arr) => i > 0 ? id !== arr[i - 1] : true)),
-      map(courseIds => courseIds.map(courseId => this.authService.getDoc$(UPDATE_COURSES, courseId).pipe(
-        map(uCourse => {
-          if (uCourse.exists()) return uCourse.data() as UpdateCourse;
-          else throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT)
-        }),
-        filter(uCourseRecord => Date.now() > uCourseRecord.endDate + (4*7*24*60*60*1000))
-      )))
+        .sort().filter((id, i, arr) => i > 0 ? id !== arr[i - 1] : true)),
+      map(courseIds =>
+        courseIds.map(courseId =>
+          this.authService.getDoc$<UpdateCourse>(UPDATE_COURSES, courseId).pipe(
+            filter(uCourseRecord =>
+              Date.now() > uCourseRecord.endDate + (4 * 7 * 24 * 60 * 60 * 1000))
+          )))
     );
 
     // pipe an observable of Update Courses that has not ended
     // the user may or may not have registered
     this.ongoing = this.authService
-      .queryCollections$(UPDATE_COURSES, "endDate", ">=", Date.now() - (4*7*24*60*60*1000)).pipe(
+      .queryCollections$(UPDATE_COURSES, "endDate", ">=", Date.now() - (4 * 7 * 24 * 60 * 60 * 1000)).pipe(
         map(result => result.empty ?
           {
             updateCourseId: "",

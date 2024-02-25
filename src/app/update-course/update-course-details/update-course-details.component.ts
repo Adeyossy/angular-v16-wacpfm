@@ -41,11 +41,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
         else throw new Error("Route does not exist");
       }),
       concatMap(updateCourseId => {
-        return this.authService.getDoc$(UPDATE_COURSES, updateCourseId);
-      }),
-      map(doc => {
-        if (doc.exists()) return doc.data() as UpdateCourse;
-        else throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT);
+        return this.authService.getDoc$<UpdateCourse>(UPDATE_COURSES, updateCourseId);
       }),
       map(uCourse => {
         return {
