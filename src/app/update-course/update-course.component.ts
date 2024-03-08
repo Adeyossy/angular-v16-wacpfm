@@ -31,14 +31,14 @@ export class UpdateCourseComponent implements OnInit {
         courseIds.map(courseId =>
           this.authService.getDoc$<UpdateCourse>(UPDATE_COURSES, courseId).pipe(
             filter(uCourseRecord =>
-              Date.now() > uCourseRecord.endDate + (4 * 7 * 24 * 60 * 60 * 1000))
+              Date.now() > uCourseRecord.endDate + (6 * 7 * 24 * 60 * 60 * 1000))
           )))
     );
 
     // pipe an observable of Update Courses that has not ended
     // the user may or may not have registered
     this.ongoing = this.authService
-      .queryCollections$(UPDATE_COURSES, "endDate", ">=", Date.now() - (4 * 7 * 24 * 60 * 60 * 1000)).pipe(
+      .queryCollections$(UPDATE_COURSES, "endDate", ">=", Date.now() - (6 * 7 * 24 * 60 * 60 * 1000)).pipe(
         map(result => result.empty ?
           {
             updateCourseId: "",
