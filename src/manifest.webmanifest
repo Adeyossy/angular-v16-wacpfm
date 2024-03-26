@@ -1,8 +1,8 @@
 {
-  "name": "wacpfm",
-  "short_name": "wacpfm",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "WACP Faculty of Family Medicine App",
+  "short_name": "WACP-FM App",
+  "theme_color": "#003CB2",
+  "background_color": "#F5F7FA",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
