@@ -40,7 +40,7 @@ button.wacpfm-activity-button {
 }
 
 .wacpfm-home-first-artwork {
-  background: url('assets/spaced.artwork.png');
+  background: url('/assets/spaced.artwork.png');
   background-size: cover;
   background-position: 25% center;
 }
