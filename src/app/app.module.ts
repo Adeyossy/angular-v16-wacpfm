@@ -24,6 +24,7 @@ import { LoadingCirclesComponent } from './widgets/loading-circles/loading-circl
 import { UpdateCoursePaymentComponent } from './update-course/update-course-payment/update-course-payment.component';
 import { CertificateComponent } from './certificate/certificate.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { InputComponent } from './widgets/input/input.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     LoadingCirclesComponent,
     UpdateCoursePaymentComponent,
     CertificateComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    InputComponent
   ],
   imports: [
     BrowserModule,
