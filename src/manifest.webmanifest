@@ -1,5 +1,5 @@
 {
-  "name": "WACP Faculty of Family Medicine App",
+  "name": "FFM-WACP",
   "short_name": "WACP-FM App",
   "theme_color": "#003CB2",
   "background_color": "#F5F7FA",
@@ -55,5 +55,15 @@
       "type": "image/png",
       "purpose": "maskable any"
     }
-  ]
+  ],
+  "description": "Faculty of Family Medicine WACP App",
+  "screenshots": [
+    {
+      "src": "assets/screenshots/dashboard-390x967.png",
+      "sizes": "390x967",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": "education"
 }
