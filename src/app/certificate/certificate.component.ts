@@ -89,7 +89,7 @@ export class CertificateComponent implements OnInit, AfterViewInit {
         });
       }
     }
-    // img.src = "../../assets/artwork.png";
+    // img.src = "assets/artwork.png";
 
   }
 
