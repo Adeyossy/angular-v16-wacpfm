@@ -1,1 +1,4 @@
-<p>input works!</p>
+<label [for]="attributes.name"><i class="bi bi-{{attributes.icon}}"></i> {{attributes.label}}</label>
+<input [type]="attributes.type" [name]="attributes.name" [id]="attributes.name" [placeholder]="attributes.placeholder"
+  [ngModel]="attributes.value" autocomplete="off" (ngModelChange)="emitValue.emit($event)" required>
+<br><br>
