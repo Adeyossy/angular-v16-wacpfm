@@ -4,6 +4,7 @@
   "theme_color": "#002060",
   "background_color": "#F5F7FA",
   "display": "standalone",
+  "display_override": ["window-controls-overlay"],
   "scope": "./",
   "start_url": "./",
   "icons": [
@@ -107,8 +108,8 @@
   "description": "Faculty of Family Medicine WACP App",
   "screenshots": [
     {
-      "src": "assets/screenshots/dashboard-390x967.png",
-      "sizes": "390x967",
+      "src": "assets/screenshots/dashboard-390x862.png",
+      "sizes": "390x862",
       "type": "image/png",
       "form_factor": "narrow"
     },
