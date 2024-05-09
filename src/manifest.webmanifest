@@ -6,6 +6,7 @@
   "display": "standalone",
   "display_override": ["window-controls-overlay"],
   "scope": "./",
+  "id": "/",
   "start_url": "./",
   "icons": [
     {
