@@ -20,7 +20,7 @@
   --wacpfm-spacing-medium: 36px;
   --wacpfm-spacing-default: 24px;
   --wacpfm-spacing-small: 24px;
-  --wacpfm-spacing-nav: 8vh;
+  --wacpfm-spacing-nav: 74px;
   --wacpfm-three-colours: linear-gradient(to right, var(--wacpfm-accent-colour-red) 0%, 
                                           var(--wacpfm-accent-colour-red) 33.33%, 
                                           var(--wacpfm-accent-colour-orange) 33.33%,
@@ -411,6 +411,7 @@ button:active {
     --wacpfm-spacing-large: 80px;
     --wacpfm-spacing-default: 48px;
     --wacpfm-spacing-small: 30px;
+    --wacpfm-spacing-nav: 80px;
     --wacpfm-font-big: 60px;
     --wacpfm-font-medium: 48px;
     --wacpfm-font-small: 28px;
