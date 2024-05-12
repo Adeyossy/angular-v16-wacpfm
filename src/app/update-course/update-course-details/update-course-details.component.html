@@ -14,13 +14,13 @@
       <!-- <div class="wacpfm-page-divider my-3"></div> -->
       <br>
       <!-- The lower block of commented code should be uncommented ahead of next course -->
-      <!-- <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
+      <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
         <div class="row g-0">
           <div class="col-6 col-md-6 col-lg-4 py-2">
             <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true" 
-            *ngIf="!newCourse.totParticipants.includes(user!.email) ||
-                   !newCourse.fellowshipParticipants.includes(user!.email) ||
-                   !newCourse.membershipParticipants.includes(user!.email)">Register</button>
+            *ngIf="!newCourse.tot.participants.includes(user!.email) ||
+                   !newCourse.fellowship.participants.includes(user!.email) ||
+                   !newCourse.membership.participants.includes(user!.email)">Register</button>
           </div>
           <div class="offset-1 col-5 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3 py-2 text-end"
             *ngIf="user?.updateCourseRole === 'admin'">
@@ -29,7 +29,7 @@
             </a>
           </div>
         </div>
-      </div> -->
+      </div>
       <ng-template #loadingCircles>
         <app-loading-circles></app-loading-circles>
       </ng-template>
@@ -67,7 +67,7 @@
           <a routerLink="./payment/tot"><button class="small">ToT</button></a>
         </div>
         <div class="col-8 col-lg-6 p-2">
-          <a routerLink="./payment/tot-update"><button class="small">ToT & Update</button></a>
+          <a routerLink="./payment/tot-resident"><button class="small">ToT & Resident</button></a>
         </div>
       </div>
       <div class="row g-0 justify-content-end">
