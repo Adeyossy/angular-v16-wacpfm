@@ -12,9 +12,11 @@ import { AppUser, USERS } from '../models/user';
   styleUrls: ['./update-course.component.css']
 })
 export class UpdateCourseComponent implements OnInit {
-  previousCourses = new Observable<Observable<UpdateCourse>[]>();
+  previousCourses = new Observable<UpdateCourse[]>();
   ongoing = new Observable<UpdateCourse>();
   user$ = new Observable<AppUser | null>();
+
+  private readonly twoWeeks = 2 * 7 * 24 * 60 * 60 * 1000;
 
   constructor(private authService: AuthService) {
   }
@@ -24,16 +26,19 @@ export class UpdateCourseComponent implements OnInit {
       map(val => val.exists() ? val.data() as AppUser : null)
     );
 
-    this.previousCourses = this.authService.queryByUserEmail$(UPDATE_COURSES_RECORDS).pipe(
-      map(value => value.docs.map(doc => (doc.data() as UpdateCourseRecord).updateCourseId)
-        .sort().filter((id, i, arr) => i > 0 ? id !== arr[i - 1] : true)),
-      map(courseIds =>
-        courseIds.map(courseId =>
-          this.authService.getDoc$<UpdateCourse>(UPDATE_COURSES, courseId).pipe(
-            filter(uCourseRecord =>
-              Date.now() > uCourseRecord.endDate + (2 * 7 * 24 * 60 * 60 * 1000))
-          )))
-    );
+    // this.previousCourses = this.authService.queryByUserEmail$(UPDATE_COURSES_RECORDS).pipe(
+    //   map(value => value.docs.map(doc => (doc.data() as UpdateCourseRecord).updateCourseId)
+    //     .sort().filter((id, i, arr) => i > 0 ? id !== arr[i - 1] : true)),
+    //   map(courseIds =>
+    //     courseIds.map(courseId =>
+    //       this.authService.getDoc$<UpdateCourse>(UPDATE_COURSES, courseId).pipe(
+    //         filter(uCourseRecord =>
+    //           Date.now() > uCourseRecord.endDate + this.twoWeeks)
+    //       )))
+    // );
+
+    this.previousCourses = this.authService.queryCollections$(UPDATE_COURSES, "endDate", "<", 
+      Date.now() - this.twoWeeks).pipe(map(q => q.docs.map(doc => doc.data() as UpdateCourse)));
 
     // pipe an observable of Update Courses that has not ended
     // the user may or may not have registered
