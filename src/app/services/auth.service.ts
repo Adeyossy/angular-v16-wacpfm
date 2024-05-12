@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { AsyncSubject, NEVER, Observable, concatMap, from, map, of } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
-import { DocumentReference, Firestore, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { DocumentReference, Firestore, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { AppUser, USERS } from '../models/user';
 import { UpdateCourse } from '../models/update_course';
 
@@ -142,6 +143,20 @@ export class AuthService {
     );
   }
 
+  addDocsInBulk$<Type>(docs: Type[], collectionName: string) {
+    return this.getFirestore$().pipe(
+      concatMap(db => {
+        const batch = writeBatch(db);
+        docs.forEach(d => {
+          let docRef = doc(collection(db, collectionName));
+          batch.set(docRef, d as any);
+        });
+        return batch.commit();
+      }),
+      map(_void => "done")
+    )
+  }
+
   getDoc$<Type>(collectionName: string, docId: string) {
     return this.getFirestore$().pipe(
       concatMap(db => getDoc(doc(db, collectionName, docId))),
@@ -216,5 +231,18 @@ export class AuthService {
         else throw new Error(AuthErrorCodes.NULL_USER);
       })
     );
+  }
+
+  uploadFile$(folderName: string, file: File, userId: string) {
+    return this.getFirebaseApp$().pipe(
+      map(app => getStorage(app)),
+      map(str => ref(str, `${folderName}/${userId}/${Date.now()}-${file.name}`)),
+      concatMap(strRef => uploadBytes(strRef, file)),
+      concatMap(result => getDownloadURL(result.ref))
+    )
+  }
+
+  UploadFileResumably$(file: File) {
+    // Use this for the lecturer's contents
   }
 }
