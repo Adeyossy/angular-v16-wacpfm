@@ -17,6 +17,7 @@ import { HelperService } from 'src/app/services/helper.service';
 export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   ongoing: Observable<UpdateCourseRev> = new Observable();
   courseRecords: Observable<UpdateCourseRecord[]> = new Observable();
+  paid$: Observable<boolean> = new Observable();
   user$: Observable<AppUser> = new Observable();
   updateCourseLecture$: Observable<UpdateCourseLecture[]> = new Observable();
   lecturesPerRecord$: Observable<UpdateCourseLecture[][][]> = new Observable();
@@ -84,6 +85,14 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
         else throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT);
       })
     );
+
+    this.paid$ = this.ongoing.pipe(
+      concatMap(course => this.user$.pipe(
+        map(user => course.membership.participants.includes(user.email) ||
+            course.fellowship.participants.includes(user.email) || 
+            course.tot.participants.includes(user.email))
+      ))
+    )
 
     // this.courseRecords = this.getCourseRecords();
 
@@ -196,6 +205,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   }
 
   batchWriteRecords(uCourse: UpdateCourseRev, appUser: AppUser) {
+    console.log("batch writing records");
     return this.authService.getFirestore$().pipe(
       concatMap(db => {
           const batch = writeBatch(db);
