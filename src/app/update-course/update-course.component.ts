@@ -58,19 +58,19 @@ export class UpdateCourseComponent implements OnInit {
             membershipCPD: "",
             membershipLectures: [],
             membershipTheme: "",
-            membershipParticipants: [],
+            membershipParticipants: "",
             fellowshipRelease: false,
             fellowshipCertificate: "",
             fellowshipCPD: "",
             fellowshipLectures: [],
             fellowshipTheme: "",
-            fellowshipParticipants: [],
+            fellowshipParticipants: "",
             totRelease: false,
             totCertificate: "",
             totCPD: "",
             totLectures: [],
             totTheme: "",
-            totParticipants: [],
+            totParticipants: "",
             resourcePersons: []
           } : result.docs[0].data() as UpdateCourse)
       )

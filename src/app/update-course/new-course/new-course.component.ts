@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthErrorCodes } from 'firebase/auth';
 import { DocumentReference } from 'firebase/firestore';
 import { Observable, Subscription, concatMap, map } from 'rxjs';
@@ -23,29 +24,30 @@ export class NewCourseComponent implements OnInit {
     registrationOpenDate: Date.now(),
     registrationCloseDate: Date.now(),
     startDate: Date.now(),
-    endDate: Date.now() + (4*24*60*60*1000),
+    endDate: Date.now() + (4 * 24 * 60 * 60 * 1000),
     membershipTheme: "",
     fellowshipTheme: "",
     totTheme: "",
     membershipRelease: false,
     membershipCertificate: "",
     membershipCPD: "",
-    membershipParticipants: [],
+    membershipParticipants: "",
     fellowshipRelease: false,
     fellowshipCertificate: "",
     fellowshipCPD: "",
-    fellowshipParticipants: [],
+    fellowshipParticipants: "",
     totRelease: false,
     totCertificate: "",
     totCPD: "",
-    totParticipants: [],
+    totParticipants: "",
     membershipLectures: [],
     fellowshipLectures: [],
     totLectures: [],
     resourcePersons: []
   }
 
-  constructor(private authService: AuthService, public helper: HelperService) {
+  constructor(private authService: AuthService, public helper: HelperService,
+    private router: Router) {
     console.log("Today's date => ", helper.getTodaysDate());
   }
 
@@ -74,7 +76,7 @@ export class NewCourseComponent implements OnInit {
 
   updateAnyDate(value: string, property: "registrationOpenDate" | "registrationCloseDate" | "startDate" | "endDate") {
     console.log("date from html => ", value);
-    if(value) {
+    if (value) {
       this.updateCourse[property] = new Date(value).getTime();
     }
   }
@@ -87,6 +89,7 @@ export class NewCourseComponent implements OnInit {
     ).subscribe({
       next: _docRef => {
         console.log("Upload Successful");
+        this.router.navigateByUrl("/dashboard/updatecourse")
       },
       error: err => {
         console.log("Error uploading update course => ", err);
