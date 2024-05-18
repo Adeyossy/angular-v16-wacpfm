@@ -54,7 +54,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             certificate: uCourse.fellowshipCertificate,
             cpd: uCourse.fellowshipCPD,
             lectures: uCourse.fellowshipLectures,
-            participants: uCourse.fellowshipParticipants,
+            participants: uCourse.fellowshipParticipants.split(", "),
             releaseResources: uCourse.fellowshipRelease,
             theme: uCourse.fellowshipTheme
           },
@@ -62,7 +62,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             certificate: uCourse.membershipCertificate,
             cpd: uCourse.membershipCPD,
             lectures: uCourse.membershipLectures,
-            participants: uCourse.membershipParticipants,
+            participants: uCourse.membershipParticipants.split(", "),
             releaseResources: uCourse.membershipRelease,
             theme: uCourse.membershipTheme
           },
@@ -70,7 +70,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             certificate: uCourse.totCertificate,
             cpd: uCourse.totCPD,
             lectures: uCourse.totLectures,
-            participants: uCourse.totParticipants,
+            participants: uCourse.totParticipants.split(", "),
             releaseResources: uCourse.totRelease,
             theme: uCourse.totTheme
           }

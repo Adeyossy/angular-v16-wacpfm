@@ -11,6 +11,11 @@
   background-color: var(--wacpfm-background-colour-darker);
 }
 
+.wacpfm-ongoing-course-preview h1 {
+  line-height: 2rem;
+  min-height: 6rem;
+}
+
 i {
   color: var(--wacpfm-accent-colour-orange);
   line-height: 1;
