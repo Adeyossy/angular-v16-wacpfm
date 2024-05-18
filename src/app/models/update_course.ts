@@ -1,4 +1,6 @@
-export const UPDATE_COURSES = "update_courses";
+import { environment } from "src/environments/environment";
+
+export const UPDATE_COURSES = environment.updateCourse;
 export const UPDATE_COURSES_LECTURES = "update_course_lectures";
 
 export type UpdateCourseDetails = {
@@ -23,19 +25,19 @@ export type UpdateCourse = {
   membershipCPD: string;
   membershipLectures: string[];
   membershipTheme: string;
-  membershipParticipants: string[];
+  membershipParticipants: string;
   fellowshipRelease: boolean;
   fellowshipCertificate: string;
   fellowshipCPD: string;
   fellowshipLectures: string[];
   fellowshipTheme: string;
-  fellowshipParticipants: string[];
+  fellowshipParticipants: string;
   totRelease: boolean;
   totCertificate: string;
   totCPD: string;
   totLectures: string[];
   totTheme: string;
-  totParticipants: string[];
+  totParticipants: string;
   resourcePersons: string[];
 }
 
