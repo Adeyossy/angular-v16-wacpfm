@@ -4,40 +4,69 @@
     <div class="wacpfm-underline"></div>
   </div>
   <br>
-  <h1 class="wacpfm-subheading">How would you like to pay?</h1>
-  <br>
-  <div class="container-fluid p-0">
-    <div class="row g-0">
-      <div class="col-lg-6 p-2">
-        <button (click)="uploadChosen = true"><i class="bi bi-cloud-arrow-up-fill color-accent"></i> Upload
-          Receipt</button>
-      </div>
-      <div class="col-lg-6 p-2">
-        <button disabled><i class="bi bi-credit-card-fill color-accent"></i> Pay Now</button>
+  <div *ngIf="courseRecords$ | async as courseRecords; else loading">
+    <div class="container-fluid p-0" *ngIf="courseRecords.length > 0; else uploadView">
+      <div class="row wacpfm-card">
+        <div class="col-lg-6">
+          <img [src]="courseRecords[0].paymentEvidence" alt="Payment receipt for this update course" class="img-fluid">
+        </div>
+        <div class="col-lg-6">
+          <div class="wacpfm-heading-underline">
+            <h1 class="wacpfm-subheading fw-bold">Payment Details</h1>
+            <div class="wacpfm-underline"></div>
+          </div>
+          <br>
+          <h2 class="wacpfm-smaller-text fw-bold mb-1">IN PAYMENT FOR:</h2>
+          <p *ngFor="let courseRecord of courseRecords">{{ courseRecord.courseType }} Update Course</p>
+          <br>
+          <button>Change Receipt</button>
+        </div>
       </div>
     </div>
+    <ng-template #uploadView>
+      <h1 class="wacpfm-subheading">How would you like to pay?</h1>
+      <br>
+      <div class="container-fluid p-0">
+        <div class="row g-0">
+          <div class="col-lg-6 p-2">
+            <button (click)="uploadChosen = true"><i class="bi bi-cloud-arrow-up-fill color-accent"></i> Upload
+              Receipt</button>
+          </div>
+          <div class="col-lg-6 p-2">
+            <button disabled><i class="bi bi-credit-card-fill color-accent"></i> Pay Now</button>
+          </div>
+        </div>
+      </div>
+      <br><br>
+      <div class="wacpfm-upload-receipt" *ngIf="uploadChosen">
+        <div class="wacpfm-heading-underline">
+          <h1 class="fw-bold wacpfm-subheading">Upload Your Receipt</h1>
+          <div class="wacpfm-underline"></div>
+        </div>
+        <br>
+        <img *ngIf="receiptURL" [src]="receiptURL" alt="Receipt Upload" class="img-fluid w-100">
+        <br>
+        <label for="wacpfm-receipt" class="label-as-input w-50 text-center">
+          <i class="bi bi-cloud-arrow-up-fill"></i> Choose a File
+        </label>
+        <input #receipt type="file" name="wacpfm-receipt" id="wacpfm-receipt" placeholder="Choose a file" class="d-none"
+          accept=".png, .jpg, .jpeg" [ngModel]="what" (ngModelChange)="onChange($event)" required>
+        <br>
+        <button *ngIf="receiptURL" class="wacpfm-primary-button w-100" (click)="uploadReceipt()">Upload Receipt</button>
+      </div>
+      <div class="wacpfm-overlay-container" *ngIf="paymentSub$ | async as pay">
+        <app-overlay [title]="pay === 'done' ? 'Done' : 'Uploading'"
+          [description]="pay === 'done' ? 'Upload Complete' : 'Uploading your receipt...'"
+          bi="bi-gear-wide wacpfm-loading" (clickEmitter)="dismissOverlay(pay)"
+          [navText]="pay === 'done' ? 'Continue': 'Please wait'" [done]="pay === 'done'"></app-overlay>
+      </div>
+    </ng-template>
   </div>
-  <br><br>
-  <div class="wacpfm-upload-receipt" *ngIf="uploadChosen">
-    <div class="wacpfm-heading-underline">
-      <h1 class="fw-bold wacpfm-subheading">Upload Your Receipt</h1>
-      <div class="wacpfm-underline"></div>
-    </div>
+  <ng-template #loading>
+    <app-loading-ui></app-loading-ui>
     <br>
-    <img *ngIf="receiptURL" [src]="receiptURL" alt="Receipt Upload" class="img-fluid w-100">
+    <app-loading-ui></app-loading-ui>
     <br>
-    <label for="wacpfm-receipt" class="label-as-input w-50 text-center">
-      <i class="bi bi-cloud-arrow-up-fill"></i> Choose a File
-    </label>
-    <input #receipt type="file" name="wacpfm-receipt" id="wacpfm-receipt" placeholder="Choose a file" class="d-none"
-      accept=".png, .jpg, .jpeg" [ngModel]="what" (ngModelChange)="onChange($event)" required>
-    <br>
-    <button *ngIf="receiptURL" class="wacpfm-primary-button w-100" (click)="uploadReceipt()">Upload Receipt</button>
-  </div>
-  <div class="wacpfm-overlay-container" *ngIf="uploadStarted">
-    <app-overlay *ngIf="paymentSub$ | async as pay" [title]="pay === 'done' ? 'Done' : 'Uploading'"
-      [description]="pay === 'done' ? 'Upload Complete' : 'Uploading your receipt...'" bi="bi-gear-wide wacpfm-loading"
-      (clickEmitter)="dismissOverlay(pay)" [navText]="pay === 'done' ? 'Continue': 'Please wait'"
-      [done]="pay === 'done'"></app-overlay>
-  </div>
+    <app-loading-ui></app-loading-ui>
+  </ng-template>
 </div>

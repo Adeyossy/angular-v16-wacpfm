@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthErrorCodes, User } from 'firebase/auth';
 import { UploadResult } from 'firebase/storage';
-import { NEVER, Observable, Subscription, concatMap, map } from 'rxjs';
+import { NEVER, Observable, Subscription, catchError, concatMap, map, timeout } from 'rxjs';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -27,7 +27,9 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     userEmail: "",
     userId: "",
     paymentEvidence: ""
-  }
+  };
+
+  courseRecords$: Observable<UpdateCourseRecord[]> = new Observable();
 
   uploadStarted = false;
 
@@ -37,9 +39,19 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   ngOnInit(): void {
-    this.routeSub = this.activatedRoute.paramMap.subscribe({
-      next: params => { }
-    })
+    this.courseRecords$ = this.activatedRoute.paramMap.pipe(
+      map(params => {
+        const id = params.get("updateCourseId");
+        if (id !== null) return id;
+        throw "Param does not exist";
+      }),
+      concatMap(id => this.authService.queryCollections$(UPDATE_COURSES_RECORDS,
+        "updateCourseId", "==", id)),
+      map(res => res.docs.map(doc => doc.data() as UpdateCourseRecord)
+        .filter(rec => rec.paymentEvidence))
+      // timeout({ first: 10000, with: () => NEVER }),
+      // catchError((err, caught) => { console.log("error => ", err); return NEVER }),
+    )
   }
 
   ngAfterViewInit(): void {
@@ -105,20 +117,20 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
               switch (params.category) {
                 case "jnr":
                   return this.addNewRecord("Membership", params.uCourseId, params.user, result);
-  
+
                 case "snr":
                   return this.addNewRecord("Fellowship", params.uCourseId, params.user, result);
-  
+
                 case "tot":
                   return this.addNewRecord("ToT", params.uCourseId, params.user, result);
-  
+
                 case "tot-resident":
                   return this.authService.addDocsInBulk$([
                     this.create("Membership", params.uCourseId, params.user, result),
                     this.create("Fellowship", params.uCourseId, params.user, result),
                     this.create("ToT", params.uCourseId, params.user, result),
                   ], UPDATE_COURSES_RECORDS);
-  
+
                 default:
                   throw new Error("Error Uploading");
               }
