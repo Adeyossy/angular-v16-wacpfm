@@ -50,7 +50,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       map(res => res.docs.map(doc => doc.data() as UpdateCourseRecord)
         .filter(rec => rec.paymentEvidence)),
       concatMap(res => this.authService.getFirebaseUser$().pipe(
-        map(user => res.filter(r => r.userEmail === user!.email))
+        map(user => res.filter(r => r.userEmail.toLowerCase() === user!.email?.toLowerCase()))
       ))
       // timeout({ first: 10000, with: () => NEVER }),
       // catchError((err, caught) => { console.log("error => ", err); return NEVER }),
