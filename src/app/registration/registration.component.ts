@@ -51,7 +51,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   chapters = {
     benin: "WACP-BEN", burkina_faso: "WACP-BFA", gambia: "WACP-GMB", ghana: "WACP-GHA", guinea: "WACP-GIN",
     ivory_coast: "WACP-CIV", liberia: "WACP-LBR", niger: "WACP-NER", nigeria: "WACP-NGA", senegal: "WACP-SEN",
-    sierra_leone: "WACP-SLE", togo: "WACP-TGO", npmcn: "NPMCN", both: "NPMCN & WACP", 
+    sierra_leone: "WACP-SLE", togo: "WACP-TGO", npmcn: "NPMCN", both: "NPMCN & WACP", guests: "Guests"
   }
 
   phoneToggle = false;
