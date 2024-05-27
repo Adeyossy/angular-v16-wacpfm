@@ -1,22 +1,32 @@
 <nav>
   <div class="container-fluid p-0">
     <div class="row g-0 align-items-center">
+      <div class="col-2 col-md-1"></div>
       <div class="col-2 col-md-1 d-flex justify-content-center">
         <a routerLink="/" class="wacpfm-normal-link">
           <img src="assets/icons-maskable/icon-72x72.png" alt="West African College of Physicians logo" class="img-fluid">
         </a>
       </div>
-      <div class="col-6 col-md-3 col-lg-2 px-3">
-        <h1 class="wacpfm-subheading fw-bold">Faculty App</h1>
+      <div class="col-4 col-md-3 col-lg-2 ps-2">
+        <h1 class="wacpfm-small-text wacpfm-heading-primary fw-bold">Faculty App</h1>
       </div>
-      <div class="col-md-5 col-lg-6 d-none d-md-block"></div>
-      <div class="offset-1 col-3 offset-md-2 col-md-1 col-lg-1">
-        <button *ngIf="(user$ | async); else nullUser" class="small wacpfm-smaller-text" (click)="this.signOut()">Logout</button>
+      <div class="col-md-4 col-lg-5 d-none d-md-block"></div>
+      <div class="offset-1 col-3 offset-md-2 col-md-1 col-lg-1" *ngIf="user$ | async as user; else loading">
+        <button *ngIf="user; else nullUser" class="small wacpfm-smaller-text" (click)="this.signOut()">Logout</button>
         <ng-template #nullUser>
           <button class="wacpfm-primary-button small wacpfm-smaller-text"
           routerLink="/access/login">Login</button>
         </ng-template>
       </div>
+      <ng-template #loading>
+        <div class="offset-1 col-3 offset-md-2 col-md-1 col-lg-1 text-center">
+          <button class="small wacpfm-smaller-text">
+            <span class="wacpfm-loading d-inline-block">
+              <i class="bi bi-gear-fill fitted"></i>
+            </span>
+          </button>
+        </div>
+      </ng-template>
     </div>
   </div>
 </nav>
