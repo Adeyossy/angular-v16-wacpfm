@@ -3,6 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { Observable } from 'rxjs';
 import { User } from 'firebase/auth';
 import { Router } from '@angular/router';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-nav',
@@ -11,8 +12,10 @@ import { Router } from '@angular/router';
 })
 export class NavComponent {
   user$ = new Observable<User | null>();
+  declare isDashboard: boolean;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, 
+    public helper: HelperService) {
     this.user$ = authService.getFirebaseUser$();
   }
 
