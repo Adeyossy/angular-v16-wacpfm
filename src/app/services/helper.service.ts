@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class HelperService {
+  showSidebarOnMobile = true;
+  isDashboard = false;
 
   constructor() { }
 
@@ -30,5 +32,13 @@ export class HelperService {
 
   millisToHour(millis: string) {
     return new Date(parseInt(millis)).getHours().toString().concat(":00");
+  }
+
+  toggleDashboard(state: boolean) {
+    this.isDashboard = state;
+  }
+
+  toggleSidebar(state: boolean) {
+    this.showSidebarOnMobile = state;
   }
 }
