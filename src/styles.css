@@ -31,6 +31,7 @@
   --wacpfm-font-small: 21px;
   --wacpfm-font-subheading: 18px;
   --wacpfm-font-text: 16px;
+  --wacpfm-font-text-small: 12px;
 }
 
 body {
@@ -83,7 +84,7 @@ h1.wacpfm-heading-avantgarde {
   font-size: var(--wacpfm-font-small);
 }
 
-.wacpfm-heading-primary {
+.wacpfm-heading-primary, .wacpfm-text-primary {
   color: var(--wacpfm-primary-colour);
 }
 
@@ -97,7 +98,7 @@ h1.wacpfm-heading-avantgarde {
 }
 
 .wacpfm-smaller-text {
-  font-size: 14px;
+  font-size: var(--wacpfm-font-text-small);
 }
 
 .wacpfm-padding-default {
@@ -184,12 +185,15 @@ a.wacpfm-link-card {
   border-radius: 16px;
 }
 
-i.bi {
-  margin-right: 4px;
-}
-
 .color-accent {
   color: var(--wacpfm-accent-colour-orange);
+}
+
+i.fitted {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
 }
 
 label > i.bi {
