@@ -10,7 +10,7 @@
         <div class="col-lg-6">
           <img [src]="courseRecords[0].paymentEvidence" alt="Payment receipt for this update course" class="img-fluid">
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 py-2">
           <div class="wacpfm-heading-underline">
             <h1 class="wacpfm-subheading fw-bold">Payment Details</h1>
             <div class="wacpfm-underline"></div>
@@ -46,19 +46,20 @@
         <br>
         <img *ngIf="receiptURL" [src]="receiptURL" alt="Receipt Upload" class="img-fluid w-100">
         <br>
-        <label for="wacpfm-receipt" class="label-as-input w-50 text-center">
-          <i class="bi bi-cloud-arrow-up-fill"></i> Choose a File
-        </label>
-        <input #receipt type="file" name="wacpfm-receipt" id="wacpfm-receipt" placeholder="Choose a file" class="d-none"
-          accept=".png, .jpg, .jpeg" [ngModel]="what" (ngModelChange)="onChange($event)" required>
-        <br>
-        <button *ngIf="receiptURL" class="wacpfm-primary-button w-100" (click)="uploadReceipt()">Upload Receipt</button>
-      </div>
-      <div class="wacpfm-overlay-container" *ngIf="paymentSub$ | async as pay">
-        <app-overlay [title]="pay === 'done' ? 'Done' : 'Uploading'"
-          [description]="pay === 'done' ? 'Upload Complete' : 'Uploading your receipt...'"
-          bi="bi-gear-wide wacpfm-loading" (clickEmitter)="dismissOverlay(pay)"
-          [navText]="pay === 'done' ? 'Continue': 'Please wait'" [done]="pay === 'done'"></app-overlay>
+        <div class="container-fluid p-0">
+          <div class="row g-0">
+            <div class="col-lg-6">
+              <label for="wacpfm-receipt" class="label-as-input w-50 text-center">
+                <i class="bi bi-cloud-arrow-up-fill"></i> Choose a File
+              </label>
+              <input #receipt type="file" name="wacpfm-receipt" id="wacpfm-receipt" placeholder="Choose a file" class="d-none"
+                accept=".png, .jpg, .jpeg" [ngModel]="what" (ngModelChange)="onChange($event)" required>
+            </div>
+            <div class="col-lg-6">
+              <button *ngIf="receiptURL" class="wacpfm-primary-button w-100" (click)="uploadReceipt()">Upload Receipt</button>
+            </div>
+          </div>
+        </div>
       </div>
     </ng-template>
   </div>

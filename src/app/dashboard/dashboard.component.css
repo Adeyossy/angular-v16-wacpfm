@@ -1,0 +1,6 @@
+.wacpfm-leftbar {
+  height: 100%;
+  z-index: 2;
+  background-color: var(--wacpfm-background-colour);
+  animation: slideLefttoRight 200ms ease-in 0ms 1;
+}

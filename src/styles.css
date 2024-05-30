@@ -31,6 +31,7 @@
   --wacpfm-font-small: 21px;
   --wacpfm-font-subheading: 18px;
   --wacpfm-font-text: 16px;
+  --wacpfm-font-text-small: 12px;
 }
 
 body {
@@ -39,12 +40,13 @@ body {
 
 header {
   width: 100%;
-  position: absolute;
+  position: fixed;
   z-index: 3;
   top: 0; left: 0;
 }
 
 .main {
+  position: relative;
   padding-top: var(--wacpfm-spacing-nav);
 }
 
@@ -83,7 +85,7 @@ h1.wacpfm-heading-avantgarde {
   font-size: var(--wacpfm-font-small);
 }
 
-.wacpfm-heading-primary {
+.wacpfm-heading-primary, .wacpfm-text-primary {
   color: var(--wacpfm-primary-colour);
 }
 
@@ -97,7 +99,7 @@ h1.wacpfm-heading-avantgarde {
 }
 
 .wacpfm-smaller-text {
-  font-size: 14px;
+  font-size: var(--wacpfm-font-text-small);
 }
 
 .wacpfm-padding-default {
@@ -184,12 +186,15 @@ a.wacpfm-link-card {
   border-radius: 16px;
 }
 
-i.bi {
-  margin-right: 4px;
-}
-
 .color-accent {
   color: var(--wacpfm-accent-colour-orange);
+}
+
+i.fitted, span.fitted {
+  display: inline-block;
+  width: var(--wacpfm-font-text-small);
+  height: var(--wacpfm-font-text-small);
+  line-height: var(--wacpfm-font-text-small);
 }
 
 label > i.bi {
@@ -235,6 +240,10 @@ button:active {
   height: 100dvh;
   z-index: 2;
   top: 0;
+}
+.wacpfm-overlay-visible {
+  height: 100vh;
+  overflow-y: hidden;
 }
 
 .wacpfm-full-height {
@@ -335,6 +344,30 @@ button:active {
 
 .wacpfm-border-tot {
   border-color: var(--wacpfm-primary-colour);
+}
+
+@keyframes slideLefttoRight {
+  from {
+    opacity: 0.5;
+    transform: translateX(-50%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0.5;
+    transform: translateY(50%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
 }
 
 @keyframes rotate {

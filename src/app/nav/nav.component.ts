@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { User } from 'firebase/auth';
 import { Router } from '@angular/router';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-nav',
@@ -10,10 +11,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent {
-  user$ = new Observable<User | null>();
+  user$ = new Observable<number>();
+  declare isDashboard: boolean;
 
-  constructor(private authService: AuthService, private router: Router) {
-    this.user$ = authService.getFirebaseUser$();
+  constructor(private authService: AuthService, private router: Router, 
+    public helper: HelperService) {
+    this.user$ = authService.getFirebaseUser$().pipe(
+      map(user => user ? 1 : -1)
+    );
   }
 
   signOut() {

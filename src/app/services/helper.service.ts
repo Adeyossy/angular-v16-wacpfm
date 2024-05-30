@@ -4,6 +4,14 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class HelperService {
+  showSidebarOnMobile = false;
+  isDashboard = false;
+  isDialogShown = false;
+  dialog = {
+    title: "",
+    message: "",
+    buttonText: ""
+  }
 
   constructor() { }
 
@@ -30,5 +38,21 @@ export class HelperService {
 
   millisToHour(millis: string) {
     return new Date(parseInt(millis)).getHours().toString().concat(":00");
+  }
+
+  toggleDashboard(state: boolean) {
+    this.isDashboard = state;
+  }
+
+  toggleSidebar(state: boolean) {
+    this.showSidebarOnMobile = state;
+  }
+
+  toggleDialog(state: boolean) {
+    this.isDialogShown = state;
+  }
+
+  setDialog(dialog: {title: string, message: string, buttonText: string}) {
+    this.dialog = dialog;
   }
 }

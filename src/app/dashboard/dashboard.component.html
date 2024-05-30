@@ -1,20 +1,20 @@
-<div class="container-fluid px-0 main">
+<div class="container-fluid px-0">
   <div class="row g-0">
-    <div class="col-lg-3 d-lg-block" [ngClass]="showOnMobile ? 'd-block' : 'd-none'">
+    <div class="col-lg-3 wacpfm-leftbar main position-fixed d-lg-block"
+    [ngClass]="helper.showSidebarOnMobile ? 'd-block' : 'd-none'">
       <app-leftbar></app-leftbar>
     </div>
-    <div class="col-lg-9 col-xl-8 position-relative">
-      <div class="wacpfm-dashboard wacpfm-padding-default">
-        <router-outlet></router-outlet>
-        <!-- <app-input [attributes]="{type: 'text', name: 'input-test', label: 'Input Test', 
-          placeholder: 'e.g input', required: true, disabled: false, icon: 'circle-fill',
-          value: '' }"></app-input>
-        <app-input [attributes]="{type: 'text', name: 'input-test', label: 'Input Test', 
-          placeholder: 'e.g input', required: true, disabled: false, icon: 'circle-fill',
-          value: '' }"></app-input>
-        <app-input [attributes]="{type: 'text', name: 'input-test', label: 'Input Test', 
-          placeholder: 'e.g input', required: true, disabled: false, icon: 'circle-fill',
-          value: '' }"></app-input> -->
+    <div class="col-lg-9 offset-lg-3 position-relative" [ngClass]="helper.showSidebarOnMobile ? 'offset-lg-3' : ''">
+      <div class="main">
+        <div class="wacpfm-dashboard wacpfm-padding-default">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+      <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown">
+        <app-overlay [title]="helper.dialog.title" [description]="helper.dialog.message" 
+          bi="bi-gear-wide wacpfm-loading" [navText]="helper.dialog.buttonText"
+          (clickEmitter)="helper.toggleDialog(false)">
+        </app-overlay>
       </div>
     </div>
     <div class="col-xl-1 d-none d-lg-block"></div>
