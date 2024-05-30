@@ -2,9 +2,10 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthErrorCodes, User } from 'firebase/auth';
 import { UploadResult } from 'firebase/storage';
-import { NEVER, Observable, Subscription, catchError, concatMap, map, timeout } from 'rxjs';
+import { NEVER, Observable, Subscription, catchError, concatMap, map, of, timeout } from 'rxjs';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
 import { AuthService } from 'src/app/services/auth.service';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-update-course-payment',
@@ -34,8 +35,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   uploadStarted = false;
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
-    private router: Router
-  ) {
+    private router: Router, public helper: HelperService) {
   }
 
   ngOnInit(): void {
@@ -85,9 +85,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
 
   addNewRecord(courseType: UpdateCourseType, uCourseId: string, user: User, downloadURL: string) {
     return this.authService.addDoc$(UPDATE_COURSES_RECORDS,
-      this.create(courseType, uCourseId, user, downloadURL)).pipe(
-        map(doc => "done")
-      )
+      this.create(courseType, uCourseId, user, downloadURL))
   }
 
   // addMultipleRecords(uCourseId)
@@ -96,6 +94,14 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     // Use transactions for multiple uploads
     // When payment receipt upload is done
     this.uploadStarted = true;
+    this.helper.toggleDialog(true);
+    
+    this.helper.setDialog({
+      title: "Uploading...", 
+      message: "Your receipt is being uploaded", 
+      buttonText: "Please wait"
+    });
+
     if (this.receiptFile) {
       this.paymentSub$ = this.authService.getFirebaseUser$().pipe(
         map(user => {
@@ -140,7 +146,12 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
               }
             })
           ))
-        ))
+        )),
+        map(res => {
+          this.router.navigateByUrl("/dashboard/updatecourse");
+          this.helper.isDialogShown = false;
+          return "done"
+        })
       );
     }
   }
