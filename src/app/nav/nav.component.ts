@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { User } from 'firebase/auth';
 import { Router } from '@angular/router';
 import { HelperService } from '../services/helper.service';
@@ -11,12 +11,14 @@ import { HelperService } from '../services/helper.service';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent {
-  user$ = new Observable<User | null>();
+  user$ = new Observable<number>();
   declare isDashboard: boolean;
 
   constructor(private authService: AuthService, private router: Router, 
     public helper: HelperService) {
-    this.user$ = authService.getFirebaseUser$();
+    this.user$ = authService.getFirebaseUser$().pipe(
+      map(user => user ? 1 : -1)
+    );
   }
 
   signOut() {

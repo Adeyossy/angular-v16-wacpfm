@@ -4,8 +4,14 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class HelperService {
-  showSidebarOnMobile = true;
+  showSidebarOnMobile = false;
   isDashboard = false;
+  isDialogShown = false;
+  dialog = {
+    title: "",
+    message: "",
+    buttonText: ""
+  }
 
   constructor() { }
 
@@ -40,5 +46,13 @@ export class HelperService {
 
   toggleSidebar(state: boolean) {
     this.showSidebarOnMobile = state;
+  }
+
+  toggleDialog(state: boolean) {
+    this.isDialogShown = state;
+  }
+
+  setDialog(dialog: {title: string, message: string, buttonText: string}) {
+    this.dialog = dialog;
   }
 }
