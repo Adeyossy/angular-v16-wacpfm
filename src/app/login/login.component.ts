@@ -1,16 +1,17 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Subscription } from 'rxjs';
 import { AuthError, AuthErrorCodes } from 'firebase/auth';
 import { Router } from '@angular/router';
 import { FirebaseError } from 'firebase/app';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
   email = "";
   password = "";
 
@@ -22,7 +23,12 @@ export class LoginComponent implements OnDestroy {
   navLink = "";
   navText = "Loading...";
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router,
+    public helper: HelperService) {}
+
+  ngOnInit(): void {
+    this.helper.toggleDialog(false);
+  }
 
   ngOnDestroy(): void {
     this.loginSubscription.unsubscribe();
@@ -30,6 +36,7 @@ export class LoginComponent implements OnDestroy {
   
   login() {
     this.hasAuthStarted = true;
+    this.helper.toggleDialog(true);
     this.loginSubscription = this.authService.login$(this.email, this.password).subscribe({
       next: userCredential => {
         const userEmail = userCredential.user.email;
@@ -67,6 +74,7 @@ export class LoginComponent implements OnDestroy {
 
   dismissOverlay() {
     this.hasAuthStarted = false;
+    this.helper.toggleDialog(false);
     if (this.isAuthFinished) this.router.navigateByUrl("/dashboard/updatecourse");
     this.loginSubscription.unsubscribe();
   }
