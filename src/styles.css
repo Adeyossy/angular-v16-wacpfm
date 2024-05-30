@@ -40,12 +40,13 @@ body {
 
 header {
   width: 100%;
-  position: absolute;
+  position: fixed;
   z-index: 3;
   top: 0; left: 0;
 }
 
 .main {
+  position: relative;
   padding-top: var(--wacpfm-spacing-nav);
 }
 
@@ -189,11 +190,11 @@ a.wacpfm-link-card {
   color: var(--wacpfm-accent-colour-orange);
 }
 
-i.fitted {
+i.fitted, span.fitted {
   display: inline-block;
-  width: 16px;
-  height: 16px;
-  line-height: 16px;
+  width: var(--wacpfm-font-text-small);
+  height: var(--wacpfm-font-text-small);
+  line-height: var(--wacpfm-font-text-small);
 }
 
 label > i.bi {
@@ -239,6 +240,10 @@ button:active {
   height: 100dvh;
   z-index: 2;
   top: 0;
+}
+.wacpfm-overlay-visible {
+  height: 100vh;
+  overflow-y: hidden;
 }
 
 .wacpfm-full-height {
@@ -356,7 +361,7 @@ button:active {
 @keyframes slideUp {
   from {
     opacity: 0.5;
-    transform: translateY(-50%);
+    transform: translateY(50%);
   }
 
   to {

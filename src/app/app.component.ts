@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HelperService } from './services/helper.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'wacpfm';
+  constructor(public helper: HelperService) {}
 }

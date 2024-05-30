@@ -2,6 +2,6 @@
   <app-nav></app-nav>
   <div class="wacpfm-page-divider"></div>
 </header>
-<main>
+<main [class.wacpfm-overlay-visible]="helper.isDialogShown">
   <router-outlet></router-outlet>
 </main>
