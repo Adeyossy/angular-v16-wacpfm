@@ -25,6 +25,7 @@
     </div>
     <ng-template #uploadView>
       <h1 class="wacpfm-subheading">How would you like to pay?</h1>
+      <p class="wacpfm-small-text">Uploading proof of payment is the only option available for this current Update Course</p>
       <br>
       <div class="container-fluid p-0">
         <div class="row g-0">
@@ -38,6 +39,10 @@
         </div>
       </div>
       <br><br>
+      <div *ngIf="paymentSub$ | async">
+        <app-loading-circles></app-loading-circles>
+        <br><br>
+      </div>
       <div class="wacpfm-upload-receipt" *ngIf="uploadChosen">
         <div class="wacpfm-heading-underline">
           <h1 class="fw-bold wacpfm-subheading">Upload Your Receipt</h1>
