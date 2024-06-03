@@ -167,11 +167,15 @@ export class AuthService {
     )
   }
 
-  getDocByUserId$(collectionName: string) {
+  getDocByUserId$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
         if (user) return this.getFirestore$().pipe(
-          concatMap(db => getDoc(doc(db, collectionName, user.uid)))
+          concatMap(db => getDoc(doc(db, collectionName, user.uid))),
+          map(doc => {
+            if(doc.exists()) return doc.data() as Type;
+            else throw AuthErrorCodes.NULL_USER}
+          )
         );
         else throw new Error(AuthErrorCodes.NULL_USER);
       })
@@ -179,12 +183,7 @@ export class AuthService {
   }
 
   getAppUser$() {
-    return this.getDocByUserId$(USERS).pipe(
-      map(doc => {
-        if (doc.exists()) return doc.data() as AppUser;
-        else throw new Error(this.FIRESTORE_NULL_DOCUMENT);
-      })
-    );
+    return this.getDocByUserId$<AppUser>(USERS);
   }
 
   updateDoc$(collectionName: string, docId: string, delta: any) {
@@ -199,11 +198,12 @@ export class AuthService {
     );
   }
 
-  queryCollections$(collectionName: string, property: string,
+  queryCollections$<Type>(collectionName: string, property: string,
     comparator: WhereFilterOp, value: string | boolean | number) {
     return this.getFirestore$().pipe(
       concatMap(db => getDocs(query(collection(db, collectionName),
-        where(property, comparator, value))))
+        where(property, comparator, value)))),
+      map(docs => docs.docs.map(doc => doc.data() as Type))
     );
   }
 

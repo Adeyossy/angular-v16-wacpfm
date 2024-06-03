@@ -45,10 +45,9 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
         if (id !== null) return id;
         throw "Param does not exist";
       }),
-      concatMap(id => this.authService.queryCollections$(UPDATE_COURSES_RECORDS,
+      concatMap(id => this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
         "updateCourseId", "==", id)),
-      map(res => res.docs.map(doc => doc.data() as UpdateCourseRecord)
-        .filter(rec => rec.paymentEvidence)),
+      map(res => res.filter(rec => rec.paymentEvidence)),
       concatMap(res => this.authService.getFirebaseUser$().pipe(
         map(user => res.filter(r => r.userEmail.toLowerCase().trim() === 
         user!.email?.toLowerCase().trim()))

@@ -1,0 +1,27 @@
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small fw-bold">Admin Panel</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+<br>
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <div class="col-12">
+      <div class="wacpfm-card">
+        <h1 class="wacpfm-subheading">Payments</h1>
+        <p class="wacpfm-small-text">Manage payments for Update Course here</p>
+        <hr>
+        <div *ngIf="list$ | async as lists; else loading">
+          <app-card-list *ngFor="let list of lists; index as i" 
+          [item]="list" [index]="i"></app-card-list>
+        </div>
+        <ng-template #loading>
+          <app-loading-ui></app-loading-ui>
+          <br>
+          <app-loading-ui></app-loading-ui>
+          <br>
+          <app-loading-ui></app-loading-ui>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
