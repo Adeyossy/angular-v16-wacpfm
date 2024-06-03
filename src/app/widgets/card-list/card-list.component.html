@@ -1,0 +1,18 @@
+<div *ngFor="let item of items; index as i">
+  <div class="container-fluid px-3 py-3 wacpfm-lecture">
+    <div class="row g-0">
+      <div class="col-1">
+        <p class="wacpfm-small-text color-accent">{{ i + 1 }}.</p>
+      </div>
+      <div class="col-9 px-1">
+        <p class="wacpfm-lecture-title">{{ item.title }}</p>
+        <span class="wacpfm-smaller-text opacity-75 pe-2">{{ item.subtitle }}</span>
+        <i class="bi bi-three-dots-vertical color-accent wacpfm-smaller-text"></i>
+        <span class="wacpfm-smaller-text fw-bold opacity-75">
+          {{ item.text }}
+        </span>
+      </div>
+      <div class="col-2"></div>
+    </div>
+  </div>
+</div>

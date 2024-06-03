@@ -27,6 +27,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { InputComponent } from './widgets/input/input.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { AdminComponent } from './admin/admin.component';
+import { CardListComponent } from './widgets/card-list/card-list.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { AdminComponent } from './admin/admin.component';
     CertificateComponent,
     ResetPasswordComponent,
     InputComponent,
-    AdminComponent
+    AdminComponent,
+    CardListComponent
   ],
   imports: [
     BrowserModule,
