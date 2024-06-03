@@ -79,12 +79,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.user$ = this.authService.getDocByUserId$(USERS).pipe(
-      map(doc => {
-        if (doc.exists()) return doc.data() as AppUser;
-        else throw new Error(this.authService.FIRESTORE_NULL_DOCUMENT);
-      })
-    );
+    this.user$ = this.authService.getDocByUserId$<AppUser>(USERS);
 
     this.paid$ = this.ongoing.pipe(
       concatMap(course => this.user$.pipe(

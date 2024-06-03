@@ -22,9 +22,7 @@ export class UpdateCourseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user$ = this.authService.getDocByUserId$(USERS).pipe(
-      map(val => val.exists() ? val.data() as AppUser : null)
-    );
+    this.user$ = this.authService.getDocByUserId$<AppUser>(USERS);
 
     // this.previousCourses = this.authService.queryByUserEmail$(UPDATE_COURSES_RECORDS).pipe(
     //   map(value => value.docs.map(doc => (doc.data() as UpdateCourseRecord).updateCourseId)
