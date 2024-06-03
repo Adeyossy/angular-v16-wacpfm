@@ -12,5 +12,6 @@ export interface CardList {
   styleUrls: ['./card-list.component.css']
 })
 export class CardListComponent {
-  @Input() items: Array<CardList> = []
+  @Input() item: CardList = {title: "", subtitle: "", text: "" }
+  @Input() index: number = -1;
 }
