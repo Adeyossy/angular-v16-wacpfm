@@ -132,13 +132,12 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
   getCourseRecords() {
     return this.activatedRoute.paramMap.pipe(
-      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_RECORDS,
+      concatMap(params => this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
         "updateCourseId", "==", params.get("updateCourseId") as string)),
-      map(doc => doc.docs.map(docDoc => {
+      map(docs => docs.map(doc => {
         this.day.push(0);
-        const data = docDoc.data() as UpdateCourseRecord;
-        if(!data.hasOwnProperty('id') || !data.id) data.id = docDoc.id;
-        return data;
+        if(!doc.hasOwnProperty('id') || !doc.id) doc.id = doc.id;
+        return doc;
       })),
       concatMap(doc => this.user$.pipe(
         map(user => doc.filter(d => d.userEmail.toLowerCase() === user.email.toLowerCase())
@@ -149,10 +148,9 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
   getCourseLectures() {
     return this.activatedRoute.paramMap.pipe(
-      concatMap(params => this.authService.queryCollections$(UPDATE_COURSES_LECTURES, "updateCourseId",
-        "==", params.get("updateCourseId") as string)),
-      map(doc => doc.docs.map(docDoc => docDoc.data() as UpdateCourseLecture)
-        .sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))));
+      concatMap(params => this.authService.queryCollections$<UpdateCourseLecture>
+        (UPDATE_COURSES_LECTURES, "updateCourseId", "==", params.get("updateCourseId") as string)),
+      map(docs => docs.sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))));
   }
 
   getLecturesPerRecord() {

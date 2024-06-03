@@ -36,13 +36,13 @@ export class UpdateCourseComponent implements OnInit {
     // );
 
     this.previousCourses = this.authService.queryCollections$(UPDATE_COURSES, "endDate", "<", 
-      Date.now() - this.twoWeeks).pipe(map(q => q.docs.map(doc => doc.data() as UpdateCourse)));
+      Date.now() - this.twoWeeks);
 
     // pipe an observable of Update Courses that has not ended
     // the user may or may not have registered
-    this.ongoing = this.authService
-      .queryCollections$(UPDATE_COURSES, "endDate", ">=", Date.now() - (2 * 7 * 24 * 60 * 60 * 1000)).pipe(
-        map(result => result.empty ?
+    this.ongoing = this.authService.queryCollections$<UpdateCourse>
+    (UPDATE_COURSES, "endDate", ">=", Date.now() - (2 * 7 * 24 * 60 * 60 * 1000)).pipe(
+        map(result => result.length === 0 ?
           {
             updateCourseId: "",
             title: "",
@@ -70,7 +70,7 @@ export class UpdateCourseComponent implements OnInit {
             totTheme: "",
             totParticipants: "",
             resourcePersons: []
-          } : result.docs[0].data() as UpdateCourse)
+          } : result[0])
       )
   }
 
