@@ -33,10 +33,10 @@ export class AdminComponent implements OnInit {
           if (existingIndex >= 0) {
             newRecs[existingIndex].subtitle += `, ${rec.courseType}`;
             newRecs[existingIndex].subtitle = newRecs[existingIndex].subtitle.split(", ")
-            .sort().join(", ");
+              .sort().join(", ");
           } else {
             if (rec.userEmail === "adeyossy1@gmail.com") continue;
-            newRecs.push({title: rec.userEmail, subtitle: rec.courseType, text: ""})
+            newRecs.push({ title: rec.userEmail, subtitle: rec.courseType, text: "" })
           }
         }
         return newRecs;
@@ -62,5 +62,30 @@ export class AdminComponent implements OnInit {
   setToPayment() {
     this.level = 2;
     this.sublevel = 0;
+    this.records$ = this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
+      "updateCourseId", "==", this.currentCourse?.updateCourseId!);
+
+    this.list$ = this.records$.pipe(
+      map(records => {
+        const newRecs: CardList[] = [];
+        for (let i = 0; i < records.length; i++) {
+          let rec = records[i];
+          let existingIndex = newRecs.findIndex(c => c.title === rec.userEmail);
+          if (existingIndex >= 0) {
+            newRecs[existingIndex].subtitle += `, ${rec.courseType}`;
+            newRecs[existingIndex].subtitle = newRecs[existingIndex].subtitle.split(", ")
+              .sort().join(", ");
+          } else {
+            if (rec.userEmail === "adeyossy1@gmail.com") continue;
+            newRecs.push({ title: rec.userEmail, subtitle: rec.courseType, text: "" })
+          }
+        }
+        return newRecs;
+      })
+    );
+  }
+
+  paymentToCardList(record: UpdateCourseRecord) {
+    
   }
 }
