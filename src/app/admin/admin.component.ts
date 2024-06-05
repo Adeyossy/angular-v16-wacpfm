@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Observable, map } from 'rxjs';
+import { NEVER, Observable, map } from 'rxjs';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
 import { CardList } from '../widgets/card-list/card-list.component';
+import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 
 @Component({
   selector: 'app-admin',
@@ -10,8 +11,12 @@ import { CardList } from '../widgets/card-list/card-list.component';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-  records$: Observable<UpdateCourseRecord[]> = new Observable();
+  courses$: Observable<UpdateCourse[]> = NEVER;
+  records$: Observable<UpdateCourseRecord[]> = NEVER;
   list$: Observable<CardList[]> = new Observable();
+  level = 0;
+  sublevel = 0;
+  currentCourse: UpdateCourse | null = null;
 
   constructor(private authService: AuthService) { }
 
@@ -36,6 +41,26 @@ export class AdminComponent implements OnInit {
         }
         return newRecs;
       })
-    )
+    );
+
+    this.courses$ = this.authService.getCollection$(UPDATE_COURSES);
+  }
+
+  courseToCardList(course: UpdateCourse) {
+    return {
+      title: course.title,
+      subtitle: Intl.DateTimeFormat("en-NG").format(course.startDate),
+      text: Date.now() > course.endDate ? "Ended" : "In Progress"
+    }
+  }
+
+  setCourse(course: UpdateCourse) {
+    this.currentCourse = course;
+    this.level = 1;
+  }
+
+  setToPayment() {
+    this.level = 2;
+    this.sublevel = 0;
   }
 }

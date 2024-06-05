@@ -4,15 +4,54 @@
 </div>
 <br>
 <div class="container-fluid p-0">
-  <div class="row g-0">
-    <div class="col-12">
+  <div class="row wacpfm-card" *ngIf="level === 0">
+    <div class="col-lg-6">
+      <div class="wacpfm-heading-underline">
+        <h1 class="wacpfm-heading-small wacpfm-heading-primary fw-bold">Update Courses</h1>
+        <div class="wacpfm-underline subheading"></div>
+      </div>
+      <br>
+      <p class="wacpfm-small-text">Manage registrations, payments, participants and resource persons
+        for Update Courses. Click on any of the courses listed next for more.
+      </p>
+    </div>
+    <div class="col-lg-6">
+      <app-card-list *ngFor="let course of courses$ | async; index as i" [item]="courseToCardList(course)"
+        [index]="i" (click)="setCourse(course)"></app-card-list>
+    </div>
+  </div>
+  <div class="row" *ngIf="level === 1">
+    <div class="col-lg-6">
       <div class="wacpfm-card">
-        <h1 class="wacpfm-subheading">Payments</h1>
+        <h1 class="wacpfm-subheading fw-bold">Payments</h1>
+        <br>
+        <p class="wacpfm-small-text">
+          Review and approve payments made for update courses for each category.
+        </p>
+        <br>
+        <button class="wacpfm-primary-button" (click)="setToPayment()">GO TO PAYMENTS</button>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="wacpfm-card">
+        <h1 class="wacpfm-subheading fw-bold">Resource Persons</h1>
+        <br>
+        <p class="wacpfm-small-text">
+          Manage details of resource persons including lectures and bank details here.
+        </p>
+        <br>
+        <button class="wacpfm-primary-button" disabled>GO TO RESOURCE PERSONS</button>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="level === 2">
+    <div class="col-12" *ngIf="sublevel === 0">
+      <div class="wacpfm-card">
+        <h1 class="wacpfm-subheading fw-bold">Payments</h1>
         <p class="wacpfm-small-text">Manage payments for Update Course here</p>
         <hr>
         <div *ngIf="list$ | async as lists; else loading">
-          <app-card-list *ngFor="let list of lists; index as i" 
-          [item]="list" [index]="i"></app-card-list>
+          <app-card-list *ngFor="let list of lists; index as i" [item]="list" [index]="i"></app-card-list>
         </div>
         <ng-template #loading>
           <app-loading-ui></app-loading-ui>
