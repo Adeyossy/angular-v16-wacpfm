@@ -245,4 +245,11 @@ export class AuthService {
   UploadFileResumably$(file: File) {
     // Use this for the lecturer's contents
   }
+  
+  getCollection$<Type>(collectionName: string): Observable<Type[]> {
+    return this.getFirestore$().pipe(
+      concatMap(db => getDocs(collection(db, collectionName))),
+      map(collection => collection.docs.map(doc => doc.data()) as Type[])
+    )
+  }
 }
