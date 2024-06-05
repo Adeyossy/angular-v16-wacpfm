@@ -1,0 +1,8 @@
+.wacpfm-card-item {
+  transition: background-color 200ms ease-in;
+}
+
+.wacpfm-card-item:hover {
+  cursor: pointer;
+  background-color: var(--wacpfm-background-colour);
+}
