@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
 import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-leftbar',
@@ -10,7 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LeftbarComponent {
   appUser$: Observable<boolean> = of(false);
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, public helper: HelperService) {
     this.appUser$ = authService.getAppUser$().pipe(
       map(appUser => appUser.updateCourseRole === "admin")
     );

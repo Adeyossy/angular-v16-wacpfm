@@ -3,11 +3,13 @@
     <h1 class="wacpfm-subheading text-white">Dashboard</h1>
   </div> -->
   <div class="wacpfm-leftbar-item wacpfm-leftbar-link" *ngIf="appUser$|async"
-    routerLink="/dashboard/admin" routerLinkActive="active">
+    routerLink="/dashboard/admin" routerLinkActive="active"
+    (click)="helper.toggleSidebar(false)">
     <i class="bi bi-gear-wide-connected"></i> <span>Admin</span>
   </div>
   <div class="wacpfm-leftbar-item wacpfm-leftbar-link" 
-    routerLink="/dashboard/updatecourse" routerLinkActive="active">
+    routerLink="/dashboard/updatecourse" routerLinkActive="active"
+    (click)="helper.toggleSidebar(false)">
     <i class="bi bi-mortarboard-fill"></i> <span>Update Course</span>
   </div>
   <div class="wacpfm-leftbar-item wacpfm-leftbar-link opacity-50" disabled
