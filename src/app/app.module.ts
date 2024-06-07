@@ -28,6 +28,7 @@ import { InputComponent } from './widgets/input/input.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { AdminComponent } from './admin/admin.component';
 import { CardListComponent } from './widgets/card-list/card-list.component';
+import { ComponentOverlayComponent } from './component-overlay/component-overlay.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { CardListComponent } from './widgets/card-list/card-list.component';
     ResetPasswordComponent,
     InputComponent,
     AdminComponent,
-    CardListComponent
+    CardListComponent,
+    ComponentOverlayComponent
   ],
   imports: [
     BrowserModule,
