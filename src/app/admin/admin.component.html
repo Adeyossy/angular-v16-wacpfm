@@ -91,7 +91,7 @@
           <br>
           <hr><br>
           <app-card-list *ngFor="let lecture of courseTypeOnly(lectures, courseType); index as i"
-            [item]="convertToCardList(lecture.lectureTitle, lecture.lecturerName, lecture.courseType)"
+            [item]="convertToCardList(lecture.lectureTitle, lecture.lecturerEmail, lecture.courseType)"
             [index]="i"></app-card-list>
         </div>
       </div>
