@@ -1,1 +1,13 @@
-<p>update-course-lecture works!</p>
+<div>
+  <label for="wacpfm-lecture-title">Lecture Title</label>
+  <input type="text" name="wacpfm-lecture-title" id="wacpfm-lecture-title" 
+    [(ngModel)]="lecture.lectureTitle" placeholder="i.e the title of the lecture" required>
+   <br><br>
+  <label for="wacpfm-lecture-title">Resource Person's Email</label>
+  <input type="email" name="wacpfm-lecture-title" id="wacpfm-lecture-title" 
+    [(ngModel)]="lecture.lecturerEmail" placeholder="i.e resource person's email used to register" required>
+   <br><br>
+  <label for="wacpfm-lecture-title">Update Course Type</label>
+  <app-select mode="single" [items]="courseTypes" (emitItems)="setCourseType($event)"></app-select>
+   <br><br>
+</div>
