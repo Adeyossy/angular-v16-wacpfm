@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public helper: HelperService) {}
 
   ngOnInit(): void {
-    this.helper.toggleDialog(false);
+    this.helper.toggleDialog(-1);
   }
 
   ngOnDestroy(): void {
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   
   login() {
     this.hasAuthStarted = true;
-    this.helper.toggleDialog(true);
+    this.helper.toggleDialog(0);
     this.loginSubscription = this.authService.login$(this.email, this.password).subscribe({
       next: userCredential => {
         const userEmail = userCredential.user.email;
@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   dismissOverlay() {
     this.hasAuthStarted = false;
-    this.helper.toggleDialog(false);
+    this.helper.toggleDialog(-1);
     if (this.isAuthFinished) this.router.navigateByUrl("/dashboard/updatecourse");
     this.loginSubscription.unsubscribe();
   }

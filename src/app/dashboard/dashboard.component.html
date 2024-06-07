@@ -10,10 +10,10 @@
           <router-outlet></router-outlet>
         </div>
       </div>
-      <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown">
+      <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown > -1">
         <app-overlay [title]="helper.dialog.title" [description]="helper.dialog.message" 
           bi="bi-gear-wide wacpfm-loading" [navText]="helper.dialog.buttonText"
-          (clickEmitter)="helper.toggleDialog(false)">
+          (clickEmitter)="helper.toggleDialog(-1)" *ngIf="helper.isDialogShown === 0">
         </app-overlay>
       </div>
     </div>

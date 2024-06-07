@@ -93,7 +93,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     // Use transactions for multiple uploads
     // When payment receipt upload is done
     this.uploadStarted = true;
-    this.helper.toggleDialog(true);
+    this.helper.toggleDialog(0);
     
     this.helper.setDialog({
       title: "Uploading...", 
@@ -148,7 +148,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
         )),
         map(res => {
           this.router.navigateByUrl("/dashboard/updatecourse");
-          this.helper.isDialogShown = false;
+          this.helper.toggleDialog(-1);
           return "done"
         })
       );

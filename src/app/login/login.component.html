@@ -22,7 +22,7 @@
   <br><br>
   <button class="wacpfm-primary-button" (click)="login()" [disabled]="!email || !password">Login</button>
 </div>
-<div class="wacpfm-overlay-container" *ngIf="helper.isDialogShown">
+<div class="wacpfm-overlay-container" *ngIf="helper.isDialogShown === 0">
   <app-overlay title="Signing In" [description]="message" bi="bi-gear-wide wacpfm-loading"
     (clickEmitter)="dismissOverlay()" [navText]="navText" [done]="isAuthFinished" [narrow]="true"></app-overlay>
 </div>

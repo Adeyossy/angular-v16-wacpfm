@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class HelperService {
   showSidebarOnMobile = false;
   isDashboard = false;
-  isDialogShown = false;
+  isDialogShown = -1;
   dialog = {
     title: "",
     message: "",
@@ -48,7 +48,7 @@ export class HelperService {
     this.showSidebarOnMobile = state;
   }
 
-  toggleDialog(state: boolean) {
+  toggleDialog(state: number) {
     this.isDialogShown = state;
   }
 
