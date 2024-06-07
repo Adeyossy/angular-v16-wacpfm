@@ -16,8 +16,8 @@
       </p>
     </div>
     <div class="col-lg-6">
-      <app-card-list *ngFor="let course of courses$ | async; index as i" [item]="courseToCardList(course)"
-        [index]="i" (click)="setCourse(course)"></app-card-list>
+      <app-card-list *ngFor="let course of courses$ | async; index as i" [item]="courseToCardList(course)" [index]="i"
+        (click)="setCourse(course)"></app-card-list>
     </div>
   </div>
   <div class="row" *ngIf="level === 1">
@@ -34,6 +34,17 @@
     </div>
     <div class="col-lg-6">
       <div class="wacpfm-card">
+        <h1 class="wacpfm-subheading fw-bold">Lectures</h1>
+        <br>
+        <p class="wacpfm-small-text">
+          View and edit details of Update Course lectures.
+        </p>
+        <br>
+        <button class="wacpfm-primary-button" (click)="setToLectures()">GO TO LECTURES</button>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="wacpfm-card">
         <h1 class="wacpfm-subheading fw-bold">Resource Persons</h1>
         <br>
         <p class="wacpfm-small-text">
@@ -44,23 +55,53 @@
       </div>
     </div>
   </div>
-  <div class="row" *ngIf="level === 2">
+  <div class="row" *ngIf="level === 2 && sublevel === 0">
     <div class="col-12" *ngIf="sublevel === 0">
       <div class="wacpfm-card">
-        <h1 class="wacpfm-subheading fw-bold">Payments</h1>
-        <p class="wacpfm-small-text">Manage payments for Update Course here</p>
-        <hr>
-        <div *ngIf="list$ | async as lists; else loading">
-          <app-card-list *ngFor="let list of lists; index as i" [item]="list" [index]="i"></app-card-list>
+        <h1 class="wacpfm-heading-small fw-bold">Payments</h1>
+        <p class="wacpfm-subheading">Manage payments for Update Course here</p>
+      </div>
+    </div>
+    <div class="col-12"><br></div>
+    <div class="col-12" *ngIf="records$ | async as records; else loading">
+      <div *ngFor="let courseType of courseTypes">
+        <div class="wacpfm-card">
+          <h1 class="wacpfm-subheading fw-bold">{{ courseType }}</h1>
+          <br>
+          <hr><br>
+          <app-card-list *ngFor="let list of courseTypeOnly(records, courseType); index as i"
+            [item]="paymentToCardList(list)" [index]="i"></app-card-list>
         </div>
-        <ng-template #loading>
-          <app-loading-ui></app-loading-ui>
+        <br>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="level === 2 && sublevel === 1">
+    <div class="col-12">
+      <div class="wacpfm-card">
+        <h1 class="wacpfm-heading-small fw-bold">Lectures</h1>
+        <p class="wacpfm-subheading">View and edit details of Update Course lectures</p>
+      </div>
+    </div>
+    <div class="col-12"><br></div>
+    <div class="col-12" *ngIf="lectures$ | async as lectures; else loading">
+      <div *ngFor="let courseType of courseTypes">
+        <div class="wacpfm-card">
+          <h1 class="wacpfm-subheading fw-bold">{{ courseType }}</h1>
           <br>
-          <app-loading-ui></app-loading-ui>
-          <br>
-          <app-loading-ui></app-loading-ui>
-        </ng-template>
+          <hr><br>
+          <app-card-list *ngFor="let lecture of courseTypeOnly(lectures, courseType); index as i"
+            [item]="convertToCardList(lecture.lectureTitle, lecture.lecturerName, lecture.courseType)"
+            [index]="i"></app-card-list>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<ng-template #loading>
+  <app-loading-ui></app-loading-ui>
+  <br>
+  <app-loading-ui></app-loading-ui>
+  <br>
+  <app-loading-ui></app-loading-ui>
+</ng-template>

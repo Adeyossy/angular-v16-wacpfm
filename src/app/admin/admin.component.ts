@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { NEVER, Observable, map } from 'rxjs';
-import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
+import { UPDATE_COURSES_RECORDS, UPDATE_COURSE_TYPES, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
 import { CardList } from '../widgets/card-list/card-list.component';
-import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
+import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture } from '../models/update_course';
 
 @Component({
   selector: 'app-admin',
@@ -17,31 +17,33 @@ export class AdminComponent implements OnInit {
   level = 0;
   sublevel = 0;
   currentCourse: UpdateCourse | null = null;
+  courseTypes = UPDATE_COURSE_TYPES;
+  lectures$: Observable<UpdateCourseLecture[]> = NEVER;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.records$ = this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
-      "updateCourseId", "==", "rQ8gxQlr1iozMdlB1V5W");
+    // this.records$ = this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
+    //   "updateCourseId", "==", "rQ8gxQlr1iozMdlB1V5W");
 
-    this.list$ = this.records$.pipe(
-      map(records => {
-        const newRecs: CardList[] = [];
-        for (let i = 0; i < records.length; i++) {
-          let rec = records[i];
-          let existingIndex = newRecs.findIndex(c => c.title === rec.userEmail);
-          if (existingIndex >= 0) {
-            newRecs[existingIndex].subtitle += `, ${rec.courseType}`;
-            newRecs[existingIndex].subtitle = newRecs[existingIndex].subtitle.split(", ")
-              .sort().join(", ");
-          } else {
-            if (rec.userEmail === "adeyossy1@gmail.com") continue;
-            newRecs.push({ title: rec.userEmail, subtitle: rec.courseType, text: "" })
-          }
-        }
-        return newRecs;
-      })
-    );
+    // this.list$ = this.records$.pipe(
+    //   map(records => {
+    //     const newRecs: CardList[] = [];
+    //     for (let i = 0; i < records.length; i++) {
+    //       let rec = records[i];
+    //       let existingIndex = newRecs.findIndex(c => c.title === rec.userEmail);
+    //       if (existingIndex >= 0) {
+    //         newRecs[existingIndex].subtitle += `, ${rec.courseType}`;
+    //         newRecs[existingIndex].subtitle = newRecs[existingIndex].subtitle.split(", ")
+    //           .sort().join(", ");
+    //       } else {
+    //         if (rec.userEmail === "adeyossy1@gmail.com") continue;
+    //         newRecs.push({ title: rec.userEmail, subtitle: rec.courseType, text: "" })
+    //       }
+    //     }
+    //     return newRecs;
+    //   })
+    // );
 
     this.courses$ = this.authService.getCollection$(UPDATE_COURSES);
   }
@@ -59,11 +61,26 @@ export class AdminComponent implements OnInit {
     this.level = 1;
   }
 
+  hybridize(records: UpdateCourseRecord[]) {
+    for (let i = 0; i < records.length; i++) {
+      let currentRecord = records[i];
+      for (let j = i + 1; j < records.length; j++) {
+        let nextRecord = records[j];
+        if (currentRecord.userEmail === nextRecord.userEmail) {
+          if (currentRecord.courseType !== nextRecord.courseType) {
+            currentRecord.courseType += `, ${nextRecord.courseType}`
+          }
+        }
+      }
+    }
+    return records;
+  }
+
   setToPayment() {
     this.level = 2;
     this.sublevel = 0;
     this.records$ = this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
-      "updateCourseId", "==", this.currentCourse?.updateCourseId!);
+      "updateCourseId", "==", this.currentCourse?.updateCourseId!).pipe(map(this.hybridize));
 
     this.list$ = this.records$.pipe(
       map(records => {
@@ -85,7 +102,33 @@ export class AdminComponent implements OnInit {
     );
   }
 
+  setToLectures() {
+    this.level = 2;
+    this.sublevel = 1;
+    this.lectures$ = this.authService.queryCollections$<UpdateCourseLecture>(UPDATE_COURSES_LECTURES,
+      "updateCourseId", "==", this.currentCourse!.updateCourseId);
+  }
+
+  setToResourcePersons() {
+    this.level = 2;
+    this.sublevel = 2;
+    this.lectures$ = this.authService.queryCollections$<UpdateCourseLecture>(UPDATE_COURSES_LECTURES,
+      "updateCourseId", "==", this.currentCourse!.updateCourseId);
+  }
+
+  convertToCardList(title: string, subtitle: string, text: string) {
+    return { title, subtitle, text }
+  }
+
   paymentToCardList(record: UpdateCourseRecord) {
-    
+    return {
+      title: record.userEmail,
+      subtitle: record.courseType,
+      text: ""
+    }
+  }
+
+  courseTypeOnly<Type extends {courseType: UpdateCourseType}>(records: Type[], courseType: UpdateCourseType) {
+    return records.filter(record => record.courseType === courseType)
   }
 }
