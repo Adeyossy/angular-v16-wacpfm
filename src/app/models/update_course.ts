@@ -60,8 +60,8 @@ export type UpdateCourseLecture = {
   courseType: "Membership" | "Fellowship" | "ToT"
   lectureId: string;
   lectureTitle: string;
-  lecturerName: string;
   lecturerId: string;
+  lecturerEmail: string;
   startTime: string;
   endTime: string;
   materialLink: string[];
