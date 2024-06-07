@@ -29,6 +29,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { AdminComponent } from './admin/admin.component';
 import { CardListComponent } from './widgets/card-list/card-list.component';
 import { ComponentOverlayComponent } from './component-overlay/component-overlay.component';
+import { UpdateCourseLectureComponent } from './update-course/update-course-lecture/update-course-lecture.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { ComponentOverlayComponent } from './component-overlay/component-overlay
     InputComponent,
     AdminComponent,
     CardListComponent,
-    ComponentOverlayComponent
+    ComponentOverlayComponent,
+    UpdateCourseLectureComponent
   ],
   imports: [
     BrowserModule,
