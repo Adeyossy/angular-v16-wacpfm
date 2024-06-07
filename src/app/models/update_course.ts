@@ -57,7 +57,7 @@ export type UpdateCourseRev = {
 
 export type UpdateCourseLecture = {
   updateCourseId: string;
-  courseType: "Membership" | "Fellowship" | "ToT" | "Hybrid"
+  courseType: "Membership" | "Fellowship" | "ToT"
   lectureId: string;
   lectureTitle: string;
   lecturerName: string;
