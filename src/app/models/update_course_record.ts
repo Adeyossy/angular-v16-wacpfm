@@ -2,6 +2,7 @@ import { environment } from "src/environments/environment";
 import { Payment } from "./payment";
 
 export const UPDATE_COURSES_RECORDS = environment.updateCourseRecord;
+export const UPDATE_COURSE_TYPES = ["Membership", "Fellowship", "ToT"] as const;
 
 export type UpdateCourseType = "Membership" | "Fellowship" | "ToT";
 
