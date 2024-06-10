@@ -1,7 +1,7 @@
 <div class="container-fluid px-0">
   <div class="row g-0">
     <div class="col-lg-3 wacpfm-leftbar main position-fixed d-lg-block"
-    [ngClass]="helper.showSidebarOnMobile ? 'd-block' : 'd-none'">
+      [ngClass]="helper.showSidebarOnMobile ? 'd-block' : 'd-none'">
       <app-leftbar></app-leftbar>
     </div>
     <div class="col-lg-9 offset-lg-3 position-relative" [ngClass]="helper.showSidebarOnMobile ? 'offset-lg-3' : ''">
@@ -10,10 +10,17 @@
           <router-outlet></router-outlet>
         </div>
       </div>
-      <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown > -1">
-        <app-overlay [title]="helper.dialog.title" [description]="helper.dialog.message" 
-          bi="bi-gear-wide wacpfm-loading" [navText]="helper.dialog.buttonText"
-          (clickEmitter)="helper.toggleDialog(-1)" *ngIf="helper.isDialogShown === 0">
+      <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown === 1">
+        <app-component-overlay title="Edit" [component]="helper.getDialogComponent('lecture')" [narrow]="true"
+        navText="Update Lecture">
+          <app-update-course-lecture *ngIf="helper.data.lecture.updateCourseId === helper.data.courseId"
+           [lecture]="helper.data.lecture"></app-update-course-lecture>
+        </app-component-overlay>
+      </div>
+      <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown === 0">
+        <app-overlay [title]="helper.dialog.title" [description]="helper.dialog.message"
+          bi="bi-gear-wide wacpfm-loading" [navText]="helper.dialog.buttonText" 
+          (clickEmitter)="helper.toggleDialog(-1)">
         </app-overlay>
       </div>
     </div>

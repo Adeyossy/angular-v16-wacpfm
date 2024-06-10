@@ -61,9 +61,24 @@ export type UpdateCourseLecture = {
   lectureId: string;
   lectureTitle: string;
   lecturerId: string;
+  lecturerName: string;
   lecturerEmail: string;
   startTime: string;
   endTime: string;
   materialLink: string[];
   videoLink: string;
+}
+
+export const DEFAULT_LECTURE: UpdateCourseLecture = {
+  courseType: "Membership",
+  lectureId: "",
+  lecturerId: "",
+  lecturerEmail: "",
+  lecturerName: "",
+  lectureTitle: "",
+  updateCourseId: "",
+  startTime: Date.now().toString(),
+  endTime: String(Date.now() + (60 * 60)),
+  materialLink: [],
+  videoLink: ""
 }

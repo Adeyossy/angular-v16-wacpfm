@@ -3,7 +3,8 @@ import { AuthService } from '../services/auth.service';
 import { NEVER, Observable, map } from 'rxjs';
 import { UPDATE_COURSES_RECORDS, UPDATE_COURSE_TYPES, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
 import { CardList } from '../widgets/card-list/card-list.component';
-import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture } from '../models/update_course';
+import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture, DEFAULT_LECTURE } from '../models/update_course';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-admin',
@@ -20,7 +21,7 @@ export class AdminComponent implements OnInit {
   courseTypes = UPDATE_COURSE_TYPES;
   lectures$: Observable<UpdateCourseLecture[]> = NEVER;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private helper: HelperService) { }
 
   ngOnInit(): void {
     // this.records$ = this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
@@ -105,8 +106,14 @@ export class AdminComponent implements OnInit {
   setToLectures() {
     this.level = 2;
     this.sublevel = 1;
-    this.lectures$ = this.authService.queryCollections$<UpdateCourseLecture>(UPDATE_COURSES_LECTURES,
-      "updateCourseId", "==", this.currentCourse!.updateCourseId);
+    this.lectures$ = this.authService.queryCollectionsUnTyped$(UPDATE_COURSES_LECTURES,
+      "updateCourseId", "==", this.currentCourse!.updateCourseId).pipe(
+        map(snapshot => snapshot.docs.map(doc => {
+          const lecture = doc.data() as UpdateCourseLecture;
+          if(lecture.lectureId !== doc.id) lecture.lectureId = doc.id;
+          return lecture;
+        }))
+      );
   }
 
   setToResourcePersons() {
@@ -130,5 +137,15 @@ export class AdminComponent implements OnInit {
 
   courseTypeOnly<Type extends {courseType: UpdateCourseType}>(records: Type[], courseType: UpdateCourseType) {
     return records.filter(record => record.courseType === courseType)
+  }
+
+  showLecture(lecture: UpdateCourseLecture) {
+    this.helper.setComponentDialogData({ 
+      courseId: this.currentCourse!.updateCourseId,
+      lecture,
+      payment: null
+    });
+    
+    this.helper.toggleDialog(1);
   }
 }

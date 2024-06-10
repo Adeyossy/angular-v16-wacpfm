@@ -1,13 +1,34 @@
 <div>
   <label for="wacpfm-lecture-title">Lecture Title</label>
-  <input type="text" name="wacpfm-lecture-title" id="wacpfm-lecture-title" 
-    [(ngModel)]="lecture.lectureTitle" placeholder="i.e the title of the lecture" required>
-   <br><br>
-  <label for="wacpfm-lecture-title">Resource Person's Email</label>
-  <input type="email" name="wacpfm-lecture-title" id="wacpfm-lecture-title" 
-    [(ngModel)]="lecture.lecturerEmail" placeholder="i.e resource person's email used to register" required>
-   <br><br>
+  <input type="text" name="wacpfm-lecture-title" id="wacpfm-lecture-title" [(ngModel)]="lecture.lectureTitle"
+    placeholder="i.e the title of the lecture" required>
+  <br><br>
+  <label for="wacpfm-lecture-start-time">Lecture Start Time</label>
+  <input type="datetime-local" name="wacpfm-lecture-start-time" id="wacpfm-lecture-start-time"
+    [ngModel]="dateToTemplate(lecture.startTime)" (ngModelChange)="templateToDate($event, 'startTime')"
+    placeholder="i.e the title of the lecture" required>
+  <br><br>
+  <label for="wacpfm-lecture-end-time">Lecture End Time</label>
+  <input type="datetime-local" name="wacpfm-lecture-end-time" id="wacpfm-lecture-end-time"
+    [ngModel]="dateToTemplate(lecture.endTime)" (ngModelChange)="templateToDate($event, 'endTime')"
+    placeholder="i.e the title of the lecture" required>
+  <br><br>
+  <label for="wacpfm-lecture-name">Resource Person's Email</label>
+  <input type="text" name="wacpfm-lecturer-name" id="wacpfm-lecturer-name" [(ngModel)]="lecture.lecturerName"
+    placeholder="i.e resource person's email used to register" required>
+  <br><br>
   <label for="wacpfm-lecture-title">Update Course Type</label>
-  <app-select mode="single" [items]="courseTypes" (emitItems)="setCourseType($event)"></app-select>
-   <br><br>
+  <app-select mode="single" [itemsSelectionState]="courseTypes.map(toSelection)" [items]="courseTypes"
+    (emitItems)="setCourseType($event)" [noOfClicks]="1"></app-select>
+  <br><br>
+  <button class="wacpfm-primary-button" *ngIf="updateState$ === null; else update"
+  (click)="updateLecture()">Update Lecture</button>
+  <ng-template #update>
+    <div *ngIf="updateState$! | async as update; else loading">
+      <button class="wacpfm-primary-button" (click)="helper.toggleDialog(-1)">Continue</button>
+    </div>
+    <ng-template #loading>
+      <app-loading-circles></app-loading-circles>
+    </ng-template>
+  </ng-template>
 </div>
