@@ -156,10 +156,10 @@
               </div>
               <div class="col-9 px-1">
                 <p class="wacpfm-lecture-title">{{ lecture.lectureTitle }}</p>
-                <span class="wacpfm-smaller-text opacity-75 pe-2">{{ lecture.lecturerName }}</span>
+                <span class="wacpfm-smaller-text opacity-75 pe-2">{{ helper.millisToHour(lecture.startTime) }}</span>
                 <i class="bi bi-three-dots-vertical color-accent wacpfm-smaller-text"></i>
                 <span class="wacpfm-smaller-text fw-bold opacity-75">
-                  {{ helper.millisToHour(lecture.startTime) }}
+                  {{ helper.millisToHour(lecture.endTime) }}
                 </span>
               </div>
               <div class="col-1 text-end" *ngFor="let link of lecture.materialLink">
