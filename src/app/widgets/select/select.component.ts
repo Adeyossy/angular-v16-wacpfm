@@ -8,13 +8,13 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 export class SelectComponent implements OnInit {
   @Input() mode = "";
   @Input() items: string[] = [];
-  itemsSelectionState: boolean[] = [];
+  @Input() itemsSelectionState: boolean[] = [];
   overallState = false;
-  noOfClicks = 0;
+  @Input() noOfClicks = 0;
   @Output() emitItems = new EventEmitter<string[]>();
 
   ngOnInit(): void {
-    this.itemsSelectionState = this.items.map(_item => false);
+    if(this.itemsSelectionState.length === 0) this.itemsSelectionState = this.items.map(_item => false);
   }
 
   toggleItem(index: number) {
