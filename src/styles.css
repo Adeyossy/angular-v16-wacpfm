@@ -252,6 +252,10 @@ button:active {
   overflow-y: hidden;
 }
 
+.wacpfm-match-height {
+  height: 100%;
+}
+
 .wacpfm-design-block {
   background: url("/assets/kwanzaa.png");
   background-size: 100% auto;

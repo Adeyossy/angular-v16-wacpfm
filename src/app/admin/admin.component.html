@@ -21,8 +21,8 @@
     </div>
   </div>
   <div class="row" *ngIf="level === 1">
-    <div class="col-lg-6">
-      <div class="wacpfm-card">
+    <div class="col-lg-6 py-3">
+      <div class="wacpfm-card wacpfm-match-height">
         <h1 class="wacpfm-subheading fw-bold">Payments</h1>
         <br>
         <p class="wacpfm-small-text">
@@ -32,8 +32,8 @@
         <button class="wacpfm-primary-button" (click)="setToPayment()">GO TO PAYMENTS</button>
       </div>
     </div>
-    <div class="col-lg-6">
-      <div class="wacpfm-card">
+    <div class="col-lg-6 py-3">
+      <div class="wacpfm-card wacpfm-match-height">
         <h1 class="wacpfm-subheading fw-bold">Lectures</h1>
         <br>
         <p class="wacpfm-small-text">
@@ -43,8 +43,8 @@
         <button class="wacpfm-primary-button" (click)="setToLectures()">GO TO LECTURES</button>
       </div>
     </div>
-    <div class="col-lg-6">
-      <div class="wacpfm-card">
+    <div class="col-lg-6 py-3">
+      <div class="wacpfm-card wacpfm-match-height">
         <h1 class="wacpfm-subheading fw-bold">Resource Persons</h1>
         <br>
         <p class="wacpfm-small-text">
@@ -57,7 +57,7 @@
   </div>
   <div class="row" *ngIf="level === 2 && sublevel === 0">
     <div class="col-12" *ngIf="sublevel === 0">
-      <div class="wacpfm-card">
+      <div class="wacpfm-card wacpfm-match-height">
         <h1 class="wacpfm-heading-small fw-bold">Payments</h1>
         <p class="wacpfm-subheading">Manage payments for Update Course here</p>
       </div>
@@ -65,7 +65,7 @@
     <div class="col-12"><br></div>
     <div class="col-12" *ngIf="records$ | async as records; else loading">
       <div *ngFor="let courseType of courseTypes">
-        <div class="wacpfm-card">
+        <div class="wacpfm-card wacpfm-match-height">
           <h1 class="wacpfm-subheading fw-bold">{{ courseType }}</h1>
           <br>
           <hr><br>
@@ -78,21 +78,23 @@
   </div>
   <div class="row" *ngIf="level === 2 && sublevel === 1">
     <div class="col-12">
-      <div class="wacpfm-card">
-        <h1 class="wacpfm-heading-small fw-bold">Lectures</h1>
+      <div class="wacpfm-card wacpfm-match-height">
+        <h1 class="wacpfm-heading-small fw-bold mb-2">Lectures</h1>
         <p class="wacpfm-subheading">View and edit details of Update Course lectures</p>
+        <br>
+        <button class="wacpfm-primary-button small w-50">+ NEW LECTURE</button>
       </div>
     </div>
     <div class="col-12"><br></div>
     <div class="col-12" *ngIf="lectures$ | async as lectures; else loading">
       <div *ngFor="let courseType of courseTypes">
-        <div class="wacpfm-card">
+        <div class="wacpfm-card wacpfm-match-height">
           <h1 class="wacpfm-subheading fw-bold">{{ courseType }}</h1>
           <br>
           <hr><br>
           <app-card-list *ngFor="let lecture of courseTypeOnly(lectures, courseType); index as i"
             [item]="convertToCardList(lecture.lectureTitle, lecture.lecturerEmail, lecture.courseType)"
-            [index]="i"></app-card-list>
+            [index]="i" (click)="showLecture(lecture)"></app-card-list>
         </div>
       </div>
     </div>
