@@ -167,6 +167,12 @@ export class AuthService {
     )
   }
 
+  getDocUpdateId$(collectionName: string, docId: string) {
+    return this.getFirestore$().pipe(
+      concatMap(db => getDoc(doc(db, collectionName, docId)))
+    )
+  }
+
   getDocByUserId$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
@@ -195,6 +201,14 @@ export class AuthService {
   deleteDoc$(collectionName: string, docId: string) {
     return this.getFirestore$().pipe(
       concatMap(db => deleteDoc(doc(db, collectionName, docId)))
+    );
+  }
+
+  queryCollectionsUnTyped$(collectionName: string, property: string,
+    comparator: WhereFilterOp, value: string | boolean | number) {
+    return this.getFirestore$().pipe(
+      concatMap(db => getDocs(query(collection(db, collectionName),
+        where(property, comparator, value))))
     );
   }
 
