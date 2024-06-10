@@ -1,4 +1,19 @@
 import { Injectable } from '@angular/core';
+import { UpdateCourseLectureComponent } from '../update-course/update-course-lecture/update-course-lecture.component';
+import { DEFAULT_LECTURE, UpdateCourseLecture } from '../models/update_course';
+import { UpdateCourseRecord } from '../models/update_course_record';
+
+export interface ComponentDialogInfo {
+  type: string,
+  data: UpdateCourseLecture | UpdateCourseRecord | null,
+  courseId: string
+}
+
+export interface ComponentDialogData {
+  courseId: string,
+  lecture: UpdateCourseLecture,
+  payment: UpdateCourseRecord | null
+}
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +22,14 @@ export class HelperService {
   showSidebarOnMobile = false;
   isDashboard = false;
   isDialogShown = -1;
+  componentDialogType = "";
+
+  data: ComponentDialogData = {
+    courseId: "",
+    lecture: Object.assign({}, DEFAULT_LECTURE),
+    payment: null
+  }
+
   dialog = {
     title: "",
     message: "",
@@ -54,5 +77,21 @@ export class HelperService {
 
   setDialog(dialog: {title: string, message: string, buttonText: string}) {
     this.dialog = dialog;
+  }
+
+  getDialogComponent(type: string) {
+    if (type === "lecture") {
+      return UpdateCourseLectureComponent;
+    }
+
+    // if (this.componentDialogType === "payment") {
+    //   return 
+    // }
+
+    return null;
+  }
+
+  setComponentDialogData(data: ComponentDialogData) {
+    this.data = data;
   }
 }

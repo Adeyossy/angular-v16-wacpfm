@@ -1,20 +1,23 @@
 <div class="container-fluid p-0">
   <div class="row g-0">
-    <div class="wacpfm-overlay d-flex flex-column justify-content-end offset-md-2 col-md-8"
-      [ngClass]="narrow ? 'col-lg-12 offset-xl-1 col-xl-10' : 'offset-lg-3 col-lg-6'">
-      <div class="wacpfm-overlay-dialog">
+    <div class="wacpfm-overlay d-flex flex-column justify-content-end"
+      [ngClass]="narrow ? 'col-lg-12 offset-xl-1 col-xl-10' : ' offset-md-2 col-md-8 offset-lg-3 col-lg-6'">
+      <div class="wacpfm-overlay-dialog position-relative">
         <div class="wacpfm-page-divider"></div>
         <div class="wacpfm-overlay-dialog-header wacpfm-overlay-dialog-spaced w-100">
           <h1 class="wacpfm-overlay-dialog-title wacpfm-subheading fw-bold">{{ title }}</h1>
         </div>
         <div class="wacpfm-overlay-dialog-description wacpfm-overlay-dialog-spaced">
-          <ng-container *ngComponentOutlet="component"></ng-container>
+          <ng-content></ng-content>
         </div>
         <!-- <br> -->
-        <div class="p-1">
+        <!-- <div class="p-1">
           <button class="wacpfm-overlay-dialog-button wacpfm-primary-button" (click)="emitClick()"
             [disabled]="navText === 'Loading...'">{{ navText }}</button>
-        </div>
+        </div> -->
+        <h1 class="d-inline-block wacpfm-icon-close wacpfm-heading-medium" (click)="closeDialog()">
+          <i class="bi bi-x-circle-fill"></i>
+        </h1>
       </div>
     </div>
   </div>
