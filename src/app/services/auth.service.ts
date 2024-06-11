@@ -122,7 +122,8 @@ export class AuthService {
    * @param data - an object representing the data to be stored
    * @returns Observable<void>
    */
-  addDocWithID$(collectionName: string, docId: string, data: AppUser, merge=false) {
+  addDocWithID$<Type extends { [x: string]: any }>(collectionName: string, docId: string, 
+    data: Type, merge=false) {
     return merge ? this.getFirestore$().pipe(
       concatMap(db => setDoc(doc(db, collectionName, docId), data, { merge: true }))
     ) : 
