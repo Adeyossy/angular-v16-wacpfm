@@ -32,7 +32,7 @@ const routes: Routes = [
   },
   {
     path: "dashboard", component: DashboardComponent, title: "Dashboard | Faculty of Family Medicine App",
-    canActivate: [profileGuard],
+    canActivate: [profileGuard], canActivateChild: [profileGuard],
     children: [
       { path: "updatecourse", component: UpdateCourseComponent },
       { path: "updatecourse/new", component: NewCourseComponent },
