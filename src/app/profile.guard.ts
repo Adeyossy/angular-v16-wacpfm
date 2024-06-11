@@ -1,10 +1,10 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 import { concatMap, map } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { AppUser, USERS } from './models/user';
 
-export const profileGuard: CanActivateFn = (route, state) => {
+export function profileGuardFunction(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
   const router = inject(Router);
   const authService = inject(AuthService);
   return authService.getDocByUserId$<AppUser>(USERS).pipe(
@@ -13,4 +13,8 @@ export const profileGuard: CanActivateFn = (route, state) => {
       return doc ? true : router.parseUrl('/profile/registration')
     })
   )
+}
+
+export const profileGuard: CanActivateFn = (route, state) => {
+  return profileGuardFunction(route, state);
 };
