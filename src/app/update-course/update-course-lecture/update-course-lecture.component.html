@@ -13,11 +13,29 @@
     [ngModel]="dateToTemplate(lecture.endTime)" (ngModelChange)="templateToDate($event, 'endTime')"
     placeholder="i.e the title of the lecture" required>
   <br><br>
-  <label for="wacpfm-lecture-name">Resource Person's Email</label>
-  <input type="text" name="wacpfm-lecturer-name" id="wacpfm-lecturer-name" [(ngModel)]="lecture.lecturerName"
-    placeholder="i.e resource person's email used to register" required>
+  <label for="wacpfm-lecturer-email">Resource Person's Email</label>
+  <input type="text" name="wacpfm-lecturer-email" id="wacpfm-lecturer-email" [(ngModel)]="lecture.lecturerEmail"
+  (blur)="findResourcePerson()" placeholder="i.e resource person's email used to register" required>
   <br><br>
-  <label for="wacpfm-lecture-title">Update Course Type</label>
+  <div *ngIf="resourcePerson$ | async as lecturers; else loading">
+    <div *ngIf="lecturers.length > 0; else sendEmail">
+      <div class="p-2" *ngFor="let lecturer of lecturers">
+        <p class="wacpfm-small-text">{{ lecturer.title + " " + (getName$() | async) }}</p>
+      </div>
+    </div>
+    <ng-template #sendEmail>
+      <a href="mailto:{{lecture.lecturerEmail}}" class="wacpfm-link-card wacpfm-smaller-text"></a>
+    </ng-template>
+    <br><br>
+  </div>
+  <ng-template #loading>
+    <app-loading-circles></app-loading-circles>
+  </ng-template>
+  <label for="wacpfm-lecturer-name">Tentative Resource Person's Name</label>
+  <input type="text" name="wacpfm-lecturer-name" id="wacpfm-lecturer-name" [(ngModel)]="lecture.lecturerName"
+    placeholder="i.e name to use if resource person isn't yet registered" required>
+  <br><br>
+  <label for="wacpfm-course-type">Update Course Type</label>
   <app-select mode="single" [itemsSelectionState]="courseTypes.map(toSelection)" [items]="courseTypes"
     (emitItems)="setCourseType($event)" [noOfClicks]="1"></app-select>
   <br><br>

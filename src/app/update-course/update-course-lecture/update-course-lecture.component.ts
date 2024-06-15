@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { NEVER, Observable, map } from 'rxjs';
 import { DEFAULT_LECTURE, UPDATE_COURSES_LECTURES, UpdateCourseLecture } from 'src/app/models/update_course';
 import { UPDATE_COURSE_TYPES, UpdateCourseType } from 'src/app/models/update_course_record';
+import { RESOURCE_PERSONS, ResourcePerson } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 
@@ -14,6 +15,7 @@ export class UpdateCourseLectureComponent {
   @Input() updateCourseId = "";
   @Input() lecture: UpdateCourseLecture = Object.assign({}, DEFAULT_LECTURE);
   @Input() updateState$: Observable<boolean> | null = null;
+  resourcePerson$: Observable<ResourcePerson[]> = NEVER;
 
   courseTypes = UPDATE_COURSE_TYPES.slice();
 
@@ -41,7 +43,17 @@ export class UpdateCourseLectureComponent {
   }
 
   updateLecture() {
-    this.updateState$ = this.authService.updateDoc$(UPDATE_COURSES_LECTURES, this.lecture.lectureId, 
+      this.updateState$ = this.authService.addDocWithID$(UPDATE_COURSES_LECTURES, this.lecture.lectureId, 
       this.lecture).pipe(map(_update => true));
+  }
+
+  findResourcePerson() {
+    this.resourcePerson$ = this.authService.queryByUserEmail$(RESOURCE_PERSONS);
+  }
+
+  getName$() {
+    return this.authService.getAppUser$().pipe(
+      map(appUser => `${appUser.firstname} ${appUser.lastname}`)
+    )
   }
 }
