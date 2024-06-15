@@ -30,6 +30,7 @@ import { AdminComponent } from './admin/admin.component';
 import { CardListComponent } from './widgets/card-list/card-list.component';
 import { ComponentOverlayComponent } from './component-overlay/component-overlay.component';
 import { UpdateCourseLectureComponent } from './update-course/update-course-lecture/update-course-lecture.component';
+import { ResourcePersonComponent } from './update-course/resource-person/resource-person.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { UpdateCourseLectureComponent } from './update-course/update-course-lect
     AdminComponent,
     CardListComponent,
     ComponentOverlayComponent,
-    UpdateCourseLectureComponent
+    UpdateCourseLectureComponent,
+    ResourcePersonComponent
   ],
   imports: [
     BrowserModule,
