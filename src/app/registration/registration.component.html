@@ -78,6 +78,10 @@
               <app-select mode="single" [items]="getChapters()"
                 (emitItems)="updateField('college', $event)"></app-select>
               <br><br>
+              <label for="wacpfm-profile-role"><i class="bi bi-role"></i> Are you going to be teaching in this course?</label>
+              <app-select mode="single" [items]="['Learning', 'Teaching']" 
+                (emitItems)="updateRole($event)"></app-select>
+              <br><br>
               <label for="wacpfm-profile-practice"><i class="bi bi-hospital"></i> Institution/Hospital of Practice</label>
               <input type="text" name="wacpfm-profile-practice" id="wacpfm-profile-practice" required
                 placeholder="e.g. COMUI" [(ngModel)]="this.user.practicePlace">

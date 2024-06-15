@@ -32,7 +32,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     dateOfRegistration: serverTimestamp(),
     examinationRecords: [],
     updateCourseRecords: [],
-    updateCourseRole: "",
+    updateCourseRole: "participant",
     examinationRole: ""
   }
 
@@ -103,6 +103,13 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       if (this.chapters.hasOwnProperty(countryAsProp)) {
         //  this.user.college = this.chapters[countryAsProp];
       }
+    }
+  }
+
+  updateRole(value: string[]) {
+    if (value.length) {
+      const role = value[0];
+      if (role === 'Teaching') this.user.updateCourseRole = 'resource_person';
     }
   }
 
