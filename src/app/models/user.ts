@@ -25,10 +25,12 @@ export type AppUser = {
 }
 
 export type ResourcePerson = {
+  title: "Prof." | "Dr.",
   userId: string;
   userEmail: string;
   accountNumber: number;
   accountName: string;
   bankName: string;
   lectureId: string; // ids of the lecture from the update course lecture collection
+  updateCourseId: string; // id of the update course being registered for
 };
