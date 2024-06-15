@@ -230,19 +230,19 @@ export class AuthService {
       );
     }
 
-  queryByUserId$(collectionName: string) {
+  queryByUserId$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
-        if (user) return this.queryCollections$(collectionName, "userId", "==", user.uid);
+        if (user) return this.queryCollections$<Type>(collectionName, "userId", "==", user.uid);
         else throw new Error(AuthErrorCodes.NULL_USER);
       })
     );
   }
 
-  queryByUserEmail$(collectionName: string) {
+  queryByUserEmail$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
-        if (user) return this.queryCollections$(collectionName, "userEmail", "==", user.email!);
+        if (user) return this.queryCollections$<Type>(collectionName, "userEmail", "==", user.email!);
         else throw new Error(AuthErrorCodes.NULL_USER);
       })
     );
