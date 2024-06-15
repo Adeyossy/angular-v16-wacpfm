@@ -1,6 +1,7 @@
 import { FieldValue } from "firebase/firestore";
 
 export const USERS = "users";
+export const RESOURCE_PERSONS = "resource_persons";
 
 export type AppUser = {
   userId: string; // corresponds to Firebase UserId
@@ -24,8 +25,10 @@ export type AppUser = {
 }
 
 export type ResourcePerson = {
+  userId: string;
+  userEmail: string;
   accountNumber: number;
   accountName: string;
   bankName: string;
-  updateCourseLectureId: string; //id of the lecture from the update course lecture collection
-} & AppUser;
+  lectureId: string; // ids of the lecture from the update course lecture collection
+};
