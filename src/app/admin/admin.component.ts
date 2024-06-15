@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { NEVER, Observable, map } from 'rxjs';
+import { NEVER, Observable, concatMap, map, timer } from 'rxjs';
 import { UPDATE_COURSES_RECORDS, UPDATE_COURSE_TYPES, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
 import { CardList } from '../widgets/card-list/card-list.component';
 import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture, DEFAULT_LECTURE } from '../models/update_course';
@@ -19,6 +19,7 @@ export class AdminComponent implements OnInit {
   sublevel = 0;
   currentCourse: UpdateCourse | null = null;
   courseTypes = UPDATE_COURSE_TYPES;
+  newLecture$: Observable<UpdateCourseLecture> = NEVER;
   lectures$: Observable<UpdateCourseLecture[]> = NEVER;
 
   constructor(private authService: AuthService, private helper: HelperService) { }
@@ -47,6 +48,7 @@ export class AdminComponent implements OnInit {
     // );
 
     this.courses$ = this.authService.getCollection$(UPDATE_COURSES);
+    this.createNewLecture();
   }
 
   courseToCardList(course: UpdateCourse) {
@@ -116,6 +118,19 @@ export class AdminComponent implements OnInit {
       );
   }
 
+  createNewLecture() {
+    this.newLecture$ = this.authService.getDocId$(UPDATE_COURSES_LECTURES).pipe(
+      map(ref => {
+        const lecture = Object.assign({}, DEFAULT_LECTURE);
+        lecture.lectureId = ref.id;
+        lecture.updateCourseId = this.currentCourse!.updateCourseId;
+        lecture.startTime = this.currentCourse!.startDate.toString();
+        lecture.endTime = String(parseInt(lecture.startTime) + (60 * 60));
+        return lecture;
+      })
+    );
+  }
+
   setToResourcePersons() {
     this.level = 2;
     this.sublevel = 2;
@@ -147,5 +162,6 @@ export class AdminComponent implements OnInit {
     });
     
     this.helper.toggleDialog(1);
+    this.createNewLecture();
   }
 }

@@ -82,7 +82,11 @@
         <h1 class="wacpfm-heading-small fw-bold mb-2">Lectures</h1>
         <p class="wacpfm-subheading">View and edit details of Update Course lectures</p>
         <br>
-        <button class="wacpfm-primary-button small w-50">+ NEW LECTURE</button>
+        <button *ngIf="newLecture$ | async as lecture; else loading" class="wacpfm-primary-button small w-50" 
+          (click)="showLecture(lecture)">+ NEW LECTURE</button>
+        <ng-template #loading>
+          <app-loading-circles></app-loading-circles>
+        </ng-template>
       </div>
     </div>
     <div class="col-12"><br></div>
