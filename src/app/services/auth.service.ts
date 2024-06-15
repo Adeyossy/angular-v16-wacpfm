@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AsyncSubject, NEVER, Observable, concatMap, from, map, of } from 'rxjs';
-import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut } from 'firebase/auth';
+import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
 import { DocumentReference, Firestore, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
@@ -101,6 +101,17 @@ export class AuthService {
     return this.getFirebaseAuth$().pipe(
       concatMap(auth => signOut(auth))
     );
+  }
+
+  updateUserName(userName: string) {
+    return this.getFirebaseUser$().pipe(
+      concatMap(user => {
+        if(user) {
+          return updateProfile(user, {displayName: userName})
+        }
+        throw AuthErrorCodes.NULL_USER;
+      })
+    )
   }
 
   getDocId$(collectionName: string) {

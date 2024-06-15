@@ -142,7 +142,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   updateProfile() {
     this.uploadStarted = true;
     this.profileSubscription = this.authService.addDocWithID$(USERS, this.user.userId, this.user, true)
-    .subscribe({
+    .pipe(concatMap(_void => this.authService.updateUserName(
+      `${this.user.firstname} ${this.user.middlename} ${this.user.lastname}`
+    ))).subscribe({
       next: value => {
         console.log("Successful! Received void");
         this.message = "Your profile was saved successfully. Click the button below to continue";
