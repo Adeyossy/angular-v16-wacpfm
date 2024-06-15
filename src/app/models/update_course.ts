@@ -1,7 +1,7 @@
 import { environment } from "src/environments/environment";
 
 export const UPDATE_COURSES = environment.updateCourse;
-export const UPDATE_COURSES_LECTURES = "update_course_lectures";
+export const UPDATE_COURSES_LECTURES = environment.updateCourseLecture;
 
 export type UpdateCourseDetails = {
   theme: string;

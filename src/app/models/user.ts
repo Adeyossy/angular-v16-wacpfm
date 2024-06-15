@@ -1,7 +1,8 @@
 import { FieldValue } from "firebase/firestore";
+import { environment } from "src/environments/environment";
 
 export const USERS = "users";
-export const RESOURCE_PERSONS = "resource_persons";
+export const RESOURCE_PERSONS = environment.resourcePersons;
 
 export type AppUser = {
   userId: string; // corresponds to Firebase UserId
