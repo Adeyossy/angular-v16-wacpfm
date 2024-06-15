@@ -14,7 +14,7 @@
     placeholder="i.e the title of the lecture" required>
   <br><br>
   <label for="wacpfm-lecturer-email">Resource Person's Email</label>
-  <input type="text" name="wacpfm-lecturer-email" id="wacpfm-lecturer-email" [(ngModel)]="lecture.lecturerEmail"
+  <input #email="ngModel" type="text" name="wacpfm-lecturer-email" id="wacpfm-lecturer-email" [(ngModel)]="lecture.lecturerEmail"
   (blur)="findResourcePerson()" placeholder="i.e resource person's email used to register" required>
   <br><br>
   <div *ngIf="resourcePerson$ | async as lecturers; else loading">
@@ -24,7 +24,10 @@
       </div>
     </div>
     <ng-template #sendEmail>
-      <a href="mailto:{{lecture.lecturerEmail}}" class="wacpfm-link-card wacpfm-smaller-text"></a>
+      <a *ngIf="email.valid" href="mailto:{{lecture.lecturerEmail}}" 
+      class="wacpfm-link-card wacpfm-smaller-text">
+        Send them an email
+      </a>
     </ng-template>
     <br><br>
   </div>

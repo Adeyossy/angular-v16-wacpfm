@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { NEVER, Observable, map } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { NEVER, Observable, map, of } from 'rxjs';
 import { DEFAULT_LECTURE, UPDATE_COURSES_LECTURES, UpdateCourseLecture } from 'src/app/models/update_course';
 import { UPDATE_COURSE_TYPES, UpdateCourseType } from 'src/app/models/update_course_record';
 import { RESOURCE_PERSONS, ResourcePerson } from 'src/app/models/user';
@@ -11,15 +11,22 @@ import { HelperService } from 'src/app/services/helper.service';
   templateUrl: './update-course-lecture.component.html',
   styleUrls: ['./update-course-lecture.component.css']
 })
-export class UpdateCourseLectureComponent {
+export class UpdateCourseLectureComponent implements OnInit {
   @Input() updateCourseId = "";
   @Input() lecture: UpdateCourseLecture = Object.assign({}, DEFAULT_LECTURE);
   @Input() updateState$: Observable<boolean> | null = null;
-  resourcePerson$: Observable<ResourcePerson[]> = NEVER;
+  resourcePerson$: Observable<ResourcePerson[]> = of([]);
 
   courseTypes = UPDATE_COURSE_TYPES.slice();
 
   constructor(private authService: AuthService, public helper: HelperService) {}
+
+  ngOnInit(): void {
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    if (this.lecture.lecturerEmail && emailRegex.test(this.lecture.lecturerEmail)) {
+      this.resourcePerson$ = this.authService.queryByUserEmail$(RESOURCE_PERSONS);
+    }
+  }
 
   setCourseType(value: string[]) {
     if(value.length) {
