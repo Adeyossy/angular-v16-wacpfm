@@ -25,7 +25,7 @@
       <div class="wacpfm-card wacpfm-match-height">
         <h1 class="wacpfm-subheading fw-bold">Payments</h1>
         <br>
-        <p class="wacpfm-small-text">
+        <p class="wacpfm-small-text wacpfm-lines">
           Review and approve payments made for update courses for each category.
         </p>
         <br>
@@ -36,7 +36,7 @@
       <div class="wacpfm-card wacpfm-match-height">
         <h1 class="wacpfm-subheading fw-bold">Lectures</h1>
         <br>
-        <p class="wacpfm-small-text">
+        <p class="wacpfm-small-text wacpfm-lines">
           View and edit details of Update Course lectures.
         </p>
         <br>
@@ -47,7 +47,7 @@
       <div class="wacpfm-card wacpfm-match-height">
         <h1 class="wacpfm-subheading fw-bold">Resource Persons</h1>
         <br>
-        <p class="wacpfm-small-text">
+        <p class="wacpfm-small-text wacpfm-lines">
           Manage details of resource persons including lectures and bank details here.
         </p>
         <br>
@@ -82,7 +82,7 @@
         <h1 class="wacpfm-heading-small fw-bold mb-2">Lectures</h1>
         <p class="wacpfm-subheading">View and edit details of Update Course lectures</p>
         <br>
-        <button *ngIf="newLecture$ | async as lecture; else loading" class="wacpfm-primary-button small w-50" 
+        <button *ngIf="newLecture$ | async as lecture; else loading" class="wacpfm-primary-button small w-auto" 
           (click)="showLecture(lecture)">+ NEW LECTURE</button>
         <ng-template #loading>
           <app-loading-circles></app-loading-circles>
@@ -100,7 +100,16 @@
             [item]="convertToCardList(lecture.lectureTitle, lecture.lecturerEmail, lecture.courseType)"
             [index]="i" (click)="showLecture(lecture)"></app-card-list>
         </div>
+        <br>
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4 col-xl-3">
+      <br><br>
+      <button *ngIf="level > 0" (click)="level = level - 1">
+        <i class="bi bi-arrow-left-circle"></i> Back
+      </button>
     </div>
   </div>
 </div>
