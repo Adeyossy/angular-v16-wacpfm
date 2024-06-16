@@ -1,1 +1,39 @@
-<p>resource-person works!</p>
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small fw-bold">Resource Person</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+<br>
+<div>
+  <label for="wacpfm-lecturer-email">Email</label>
+  <input type="email" name="wacpfm-lecturer-email" id="wacpfm-lecturer-email" [(ngModel)]="resourcePerson.userEmail"
+    placeholder="i.e your email" required>
+  <br><br>
+  <label for="wacpfm-lecturer-title">Title</label>
+  <app-select mode="single" [itemsSelectionState]="selection" [items]="titles.slice()" (emitItems)="setTitle($event)"
+    [noOfClicks]="1"></app-select>
+  <label for="wacpfm-lecturer-bank-name">Bank Name</label>
+  <input type="text" name="wacpfm-lecturer-bank-name" id="wacpfm-lecturer-bank-name"
+    [(ngModel)]="resourcePerson.bankName" placeholder="i.e. name of your bank" required>
+  <br><br>
+  <label for="wacpfm-lecturer-account-number">Account Number</label>
+  <input type="text" inputMode="numeric" name="wacpfm-lecturer-account-number" id="wacpfm-lecturer-account-number"
+  [(ngModel)]="resourcePerson.accountNumber" placeholder="i.e. your bank account number" required>
+  <br><br>
+  <label for="wacpfm-lecturer-account-name">Account Name</label>
+  <input type="text" name="wacpfm-lecturer-account-name" id="wacpfm-lecturer-account-name"
+    [(ngModel)]="resourcePerson.accountName" placeholder="i.e. name associated with your account" required>
+  <br><br>
+</div>
+<div class="container-fluid wacpfm-card">
+  <div class="row">
+    <div class="col-lg-6">
+      <h1 class="wacpfm-subheading fw-bold mb-2">Lectures</h1>
+      <h1 class="wacpfm-small-text">Your lectures will appear here.</h1>
+      <button class="small w-50"><i class="bi bi-plus-circle-fill"></i> New Lecture</button>
+    </div>
+    <div class="col-lg-6 py-3">
+      <app-card-list *ngFor="let lecture of lectures$ | async; index as i" [item]="lectureToCardList(lecture)" 
+      [index]="i" (click)="showLecture(lecture)"></app-card-list>
+    </div>
+  </div>
+</div>
