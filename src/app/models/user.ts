@@ -25,6 +25,8 @@ export type AppUser = {
   examinationRole: "candidate" | "examiner" | "chief_examiner" | "";
 }
 
+export const RESOURCE_PERSON_TITLES = ["Prof.", "Dr."] as const;
+
 export type ResourcePerson = {
   title: "Prof." | "Dr.",
   userId: string;
