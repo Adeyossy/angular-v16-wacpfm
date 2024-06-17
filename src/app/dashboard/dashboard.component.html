@@ -15,6 +15,8 @@
         navText="Update Lecture">
           <app-update-course-lecture *ngIf="helper.data.lecture.updateCourseId === helper.data.courseId"
            [lecture]="helper.data.lecture"></app-update-course-lecture>
+          <app-payment-viewer *ngIf="helper.data.payment?.updateCourseId === helper.data.courseId"
+            [record]="helper.data.payment" [updateCourse]="this.helper.data.course"></app-payment-viewer>
         </app-component-overlay>
       </div>
       <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown === 0">
