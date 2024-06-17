@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Observable, filter, map } from 'rxjs';
-import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
+import { DEFAULT_COURSE_RECORD, UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
 import { QueryDocumentSnapshot } from 'firebase/firestore';
-import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
+import { DEFAULT_UPDATE_COURSE, UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { AppUser, USERS } from '../models/user';
 
 @Component({
@@ -42,35 +42,7 @@ export class UpdateCourseComponent implements OnInit {
     // the user may or may not have registered
     this.ongoing = this.authService.queryCollections$<UpdateCourse>
     (UPDATE_COURSES, "endDate", ">=", Date.now() - (2 * 7 * 24 * 60 * 60 * 1000)).pipe(
-        map(result => result.length === 0 ?
-          {
-            updateCourseId: "",
-            title: "",
-            creator: "",
-            registrationOpenDate: 0,
-            registrationCloseDate: 0,
-            startDate: 0,
-            endDate: 0,
-            membershipRelease: false,
-            membershipCertificate: "",
-            membershipCPD: "",
-            membershipLectures: [],
-            membershipTheme: "",
-            membershipParticipants: "",
-            fellowshipRelease: false,
-            fellowshipCertificate: "",
-            fellowshipCPD: "",
-            fellowshipLectures: [],
-            fellowshipTheme: "",
-            fellowshipParticipants: "",
-            totRelease: false,
-            totCertificate: "",
-            totCPD: "",
-            totLectures: [],
-            totTheme: "",
-            totParticipants: "",
-            resourcePersons: []
-          } : result[0])
+        map(result => result.length === 0 ? Object.assign({}, DEFAULT_UPDATE_COURSE) : result[0])
       )
   }
 
