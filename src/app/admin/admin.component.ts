@@ -82,8 +82,15 @@ export class AdminComponent implements OnInit {
   setToPayment() {
     this.level = 2;
     this.sublevel = 0;
-    this.records$ = this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
-      "updateCourseId", "==", this.currentCourse?.updateCourseId!).pipe(map(this.hybridize));
+    this.records$ = this.authService.queryCollectionsUnTyped$(UPDATE_COURSES_RECORDS,
+      "updateCourseId", "==", this.currentCourse?.updateCourseId!).pipe(
+        map(snapshot => snapshot.docs.map(doc => {
+          const record = doc.data() as UpdateCourseRecord;
+          if(record.id !== doc.id) record.id = doc.id;
+          return record;
+        })),
+        map(this.hybridize)
+      );
 
     this.list$ = this.records$.pipe(
       map(records => {
@@ -158,10 +165,22 @@ export class AdminComponent implements OnInit {
     this.helper.setComponentDialogData({ 
       courseId: this.currentCourse!.updateCourseId,
       lecture,
-      payment: null
+      payment: this.helper.data.payment,
+      course: this.helper.data.course
     });
     
     this.helper.toggleDialog(1);
     this.createNewLecture();
+  }
+
+  showPayment(record: UpdateCourseRecord) {
+    this.helper.setComponentDialogData({
+      courseId: this.currentCourse!.updateCourseId,
+      lecture: this.helper.data.lecture,
+      payment: record,
+      course: this.currentCourse!
+    });
+
+    this.helper.toggleDialog(1);
   }
 }

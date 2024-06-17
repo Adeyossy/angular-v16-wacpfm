@@ -3,6 +3,7 @@ import { OverlayComponent } from '../overlay/overlay.component';
 import { UpdateCourseLectureComponent } from '../update-course/update-course-lecture/update-course-lecture.component';
 import { HelperService } from '../services/helper.service';
 import { DEFAULT_LECTURE } from '../models/update_course';
+import { DEFAULT_COURSE_RECORD } from '../models/update_course_record';
 
 @Component({
   selector: 'app-component-overlay',
@@ -21,7 +22,8 @@ export class ComponentOverlayComponent extends OverlayComponent {
       {
         courseId: "",
         lecture: DEFAULT_LECTURE,
-        payment: null
+        payment: Object.assign({}, DEFAULT_COURSE_RECORD),
+        course: this.helper.data.course
       }
     );
     this.helper.toggleDialog(-1);

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UpdateCourseLectureComponent } from '../update-course/update-course-lecture/update-course-lecture.component';
-import { DEFAULT_LECTURE, UpdateCourseLecture } from '../models/update_course';
+import { DEFAULT_LECTURE, DEFAULT_UPDATE_COURSE, UpdateCourse, UpdateCourseLecture } from '../models/update_course';
 import { DEFAULT_COURSE_RECORD, UpdateCourseRecord } from '../models/update_course_record';
 
 export interface ComponentDialogInfo {
@@ -12,7 +12,8 @@ export interface ComponentDialogInfo {
 export interface ComponentDialogData {
   courseId: string,
   lecture: UpdateCourseLecture,
-  payment: UpdateCourseRecord
+  payment: UpdateCourseRecord,
+  course: UpdateCourse
 }
 
 @Injectable({
@@ -27,7 +28,8 @@ export class HelperService {
   data: ComponentDialogData = {
     courseId: "",
     lecture: Object.assign({}, DEFAULT_LECTURE),
-    payment: Object.assign({}, DEFAULT_COURSE_RECORD)
+    payment: Object.assign({}, DEFAULT_COURSE_RECORD),
+    course: Object.assign({}, DEFAULT_UPDATE_COURSE)
   }
 
   dialog = {

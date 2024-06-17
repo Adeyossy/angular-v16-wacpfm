@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NEVER, Observable, concatMap, map, of } from 'rxjs';
 import { UPDATE_COURSES_LECTURES, UpdateCourseLecture } from 'src/app/models/update_course';
+import { DEFAULT_COURSE_RECORD } from 'src/app/models/update_course_record';
 import { RESOURCE_PERSONS, RESOURCE_PERSON_TITLES, ResourcePerson } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
@@ -55,7 +56,8 @@ export class ResourcePersonComponent implements OnInit {
     this.helper.setComponentDialogData({ 
       courseId: lecture.updateCourseId,
       lecture,
-      payment: null
+      payment: Object.assign({}, DEFAULT_COURSE_RECORD),
+      course: this.helper.data.course
     });
     
     this.helper.toggleDialog(1);
