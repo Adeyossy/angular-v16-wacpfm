@@ -14,4 +14,6 @@ export interface CardList {
 export class CardListComponent {
   @Input() item: CardList = {title: "", subtitle: "", text: "" }
   @Input() index: number = -1;
+  @Input() control = false;
+  @Input() state = false;
 }

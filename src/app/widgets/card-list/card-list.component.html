@@ -1,4 +1,5 @@
-<div class="container-fluid px-3 py-2 wacpfm-card-item">
+<div class="container-fluid px-3 py-2 wacpfm-card-item"
+[ngClass]="control ? state ? 'border-success' : 'border-danger': ''">
   <div class="row g-0">
     <div class="col-1">
       <p class="wacpfm-small-text color-accent">{{ index + 1 }}.</p>
@@ -11,6 +12,11 @@
         {{ item.text }}
       </span>
     </div>
-    <div class="col-2"></div>
+    <div class="col-2 wacpfm-heading-medium" *ngIf="control">
+      <i class="bi bi-check-circle-fill text-success" *ngIf="state; else negative"></i>
+      <ng-template #negative>
+        <i class="bi bi-x-circle-fill text-danger"></i>
+      </ng-template>
+    </div>
   </div>
 </div>
