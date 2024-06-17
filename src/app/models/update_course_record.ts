@@ -16,3 +16,13 @@ export type UpdateCourseRecord = {
   paymentEvidence?: string;
   approved?: boolean; // true if approved, false if declined; missing if not yet attended to
 }
+
+export const DEFAULT_COURSE_RECORD: UpdateCourseRecord = {
+  courseType: 'Membership',
+  id: "",
+  paymentId: "",
+  updateCourseId: "",
+  userEmail: "",
+  userId: "",
+  paymentEvidence: ""
+};
