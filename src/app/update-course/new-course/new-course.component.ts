@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthErrorCodes } from 'firebase/auth';
 import { DocumentReference } from 'firebase/firestore';
 import { Observable, Subscription, concatMap, map } from 'rxjs';
-import { UPDATE_COURSES, UpdateCourse } from 'src/app/models/update_course';
+import { DEFAULT_UPDATE_COURSE, UPDATE_COURSES, UpdateCourse } from 'src/app/models/update_course';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 
@@ -17,34 +17,7 @@ export class NewCourseComponent implements OnInit {
   courseSubscription = new Subscription();
   course$ = new Observable<DocumentReference>();
 
-  updateCourse: UpdateCourse = {
-    updateCourseId: "",
-    title: "",
-    creator: "",
-    registrationOpenDate: Date.now(),
-    registrationCloseDate: Date.now(),
-    startDate: Date.now(),
-    endDate: Date.now() + (4 * 24 * 60 * 60 * 1000),
-    membershipTheme: "",
-    fellowshipTheme: "",
-    totTheme: "",
-    membershipRelease: false,
-    membershipCertificate: "",
-    membershipCPD: "",
-    membershipParticipants: "",
-    fellowshipRelease: false,
-    fellowshipCertificate: "",
-    fellowshipCPD: "",
-    fellowshipParticipants: "",
-    totRelease: false,
-    totCertificate: "",
-    totCPD: "",
-    totParticipants: "",
-    membershipLectures: [],
-    fellowshipLectures: [],
-    totLectures: [],
-    resourcePersons: []
-  }
+  updateCourse: UpdateCourse = Object.assign({}, DEFAULT_UPDATE_COURSE);
 
   constructor(private authService: AuthService, public helper: HelperService,
     private router: Router) {
