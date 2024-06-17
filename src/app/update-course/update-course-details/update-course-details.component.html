@@ -119,11 +119,15 @@
         </button>
         <br><br>
         <a href="{{getCourseTypeDeets(newCourse, record.courseType).cpd}}" type="application/pdf" [download]="'CPD.'.concat(record.courseType,'.', 
-      helper.getDateString(newCourse.startDate).replace(pattern, '.'), '.pdf')" target="_blank">
+          helper.getDateString(newCourse.startDate).replace(pattern, '.'), '.pdf')" target="_blank">
           <button class="small" [disabled]="!getCourseTypeDeets(newCourse, record.courseType).releaseResources">
             <i class="bi bi-file-earmark-ruled"></i> Download CPD Form
           </button>
         </a>
+        <br><br>
+        <img [src]="getCourseTypeDeets(newCourse, record.courseType).groupLink" 
+          alt="{{record.courseType}} WhatsApp group qr-code" class="img-fluid"
+          *ngIf="getCourseTypeDeets(newCourse, record.courseType).groupLink">
       </div>
       <div class="col-lg-6 wacpfm-lecture-table">
         <div class="wacpfm-lecture-container px-2"
