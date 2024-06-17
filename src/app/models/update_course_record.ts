@@ -14,4 +14,5 @@ export type UpdateCourseRecord = {
   courseType: UpdateCourseType;
   paymentId: Payment | null;
   paymentEvidence?: string;
+  approved?: boolean; // true if approved, false if declined; missing if not yet attended to
 }
