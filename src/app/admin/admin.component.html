@@ -70,7 +70,8 @@
           <br>
           <hr><br>
           <app-card-list *ngFor="let list of courseTypeOnly(records, courseType); index as i"
-            [item]="paymentToCardList(list)" [index]="i"></app-card-list>
+            [item]="paymentToCardList(list)" [index]="i" (click)="showPayment(list)"
+            [control]="!(list.approved === undefined)" [state]="!!list.approved"></app-card-list>
         </div>
         <br>
       </div>
@@ -115,8 +116,8 @@
 </div>
 <ng-template #loading>
   <app-loading-ui></app-loading-ui>
-  <br>
+  <br><br>
   <app-loading-ui></app-loading-ui>
-  <br>
+  <br><br>
   <app-loading-ui></app-loading-ui>
 </ng-template>
