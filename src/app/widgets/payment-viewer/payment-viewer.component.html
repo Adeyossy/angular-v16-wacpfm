@@ -1,1 +1,28 @@
-<p>payment-viewer works!</p>
+<div>
+  <h1 class="wacpfm-subheading fw-bold">{{ record.courseType }}</h1>
+  <p class="wacpfm-font-primary" *ngIf="record.approved"><i class="bi bi-check-circle-fill"></i> Approved</p>
+</div>
+<img [src]="record.paymentEvidence" alt="Payment receipt for this update course" class="img-fluid">
+<br><br>
+<div *ngIf="approval$ | async as approval; else buttons">
+  <button class="wacpfm-primary-button" *ngIf="approval === true; else loading" (click)="continue()">Continue</button>
+  <ng-template #loading>
+    <app-loading-circles></app-loading-circles>
+  </ng-template>
+</div>
+<ng-template #buttons>
+  <div class="container-fluid p-0">
+    <div class="row">
+      <div class="col-6">
+        <button class="bg-danger text-white border-danger" (click)="deny()" [disabled]="record.approved === false">
+          <i class="bi bi-x-circle"></i> Decline
+        </button>
+      </div>
+      <div class="col-6">
+        <button class="wacpfm-primary-button" (click)="approve()" [disabled]="record.approved">
+          <i class="bi bi-check-circle"></i> Accept
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
