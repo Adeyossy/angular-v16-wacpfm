@@ -81,6 +81,10 @@
       <div>
         <div class="wacpfm-card wacpfm-match-height">
           <h1 class="wacpfm-subheading fw-bold">Resident and ToT Update Course</h1>
+          <p class="wacpfm-small-text">This should be used as a reference to identify those 
+            who paid for both ToT course and resident course.
+          </p>
+          <p class="wacpfm-small-text">Please DO NOT USE to approve payments.</p>
           <br>
           <hr><br>
           <app-card-list *ngFor="let item of getHybridParticipants(records); index as i"
@@ -96,7 +100,7 @@
         <h1 class="wacpfm-heading-small fw-bold mb-2">Lectures</h1>
         <p class="wacpfm-subheading">View and edit details of Update Course lectures</p>
         <br>
-        <button *ngIf="newLecture$ | async as lecture; else loading" class="small w-auto" 
+        <button *ngIf="newLecture$ | async as lecture; else loading" class="wacpfm-primary-button small w-auto" 
           (click)="showLecture(lecture)">+ NEW LECTURE</button>
         <ng-template #loading>
           <app-loading-circles></app-loading-circles>
