@@ -3,7 +3,164 @@
   <div class="wacpfm-underline"></div>
 </div>
 <br>
-<div class="wacpfm-ongoing-course wacpfm-card">
+<div class="container-fluid p-0">
+  <div class="row g-0" *ngIf="ongoing | async as newCourse; else empty">
+    <div class="col-12 wacpfm-ongoing-course wacpfm-card mb-5">
+      <div class="wacpfm-heading-underline mb-3">
+        <h1 class="fw-bold wacpfm-small-text">COURSE TITLE</h1>
+        <div class="wacpfm-underline"></div>
+      </div>
+      <div *ngIf="newCourse.creator; else nullCourse" class="wacpfm-clickable">
+        <h1 class="wacpfm-heading-small wacpfm-font-arial">{{ newCourse.title }}</h1>
+        <!-- <div class="wacpfm-page-divider my-3"></div> -->
+        <br>
+        <!-- The lower block of commented code should be uncommented ahead of next course -->
+        <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
+          <div class="row g-0">
+            <div class="col-6 col-md-6 col-lg-4 py-2">
+              <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true" *ngIf="!newCourse.tot.participants.includes(user!.email) &&
+               !newCourse.fellowship.participants.includes(user!.email) &&
+               !newCourse.membership.participants.includes(user!.email)">
+                <span *ngIf="courseRecords | async as cr; else loadingCirclesInline">
+                  <span *ngIf="cr.length; else register">Applied</span>
+                  <ng-template #register>Register</ng-template>
+                </span>
+                <ng-template #loadingCirclesInline>
+                  <span class="wacpfm-loading-circle me-1"></span>
+                  <span class="wacpfm-loading-circle me-1 second"></span>
+                  <span class="wacpfm-loading-circle me-1 third"></span>
+                </ng-template>
+              </button>
+              <ng-template></ng-template>
+            </div>
+            <div class="offset-1 col-5 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3 py-2 text-end"
+              *ngIf="user?.updateCourseRole === 'admin'">
+              <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
+                <button class="small w-auto px-4">Edit</button>
+              </a>
+            </div>
+          </div>
+        </div>
+        <ng-template #loadingCircles>
+          <app-loading-circles></app-loading-circles>
+        </ng-template>
+      </div>
+      <div class="wacpfm-ongoing-course-register wacpfm-padding-default" [ngClass]="openCategoryUI ? 'd-block' : 'd-none'">
+        <div class="container-fluid p-0">
+          <div class="row g-0">
+            <div class="col-12 py-4">
+              <h2 class="wacpfm-subheading fw-bold">
+                <i class="bi bi-patch-question-fill"></i> Which course do you want to register for?
+              </h2>
+            </div>
+            <div class="col-lg-6 p-2">
+              <a routerLink="./payment/jnr"><button class="small">Junior Resident</button></a>
+            </div>
+            <div class="col-lg-6 p-2">
+              <a routerLink="./payment/snr"><button class="small">Senior Resident</button></a>
+            </div>
+            <div class="col-4 col-lg-6 p-2">
+              <a routerLink="./payment/tot"><button class="small">ToT</button></a>
+            </div>
+            <div class="col-8 col-lg-6 p-2">
+              <a routerLink="./payment/tot-resident"><button class="small">ToT & Resident</button></a>
+            </div>
+          </div>
+          <div class="row g-0 justify-content-end">
+            <div class="col-4 col-lg-3 col-xl-2 text-end p-2">
+              <button class="wacpfm-primary-button small" (click)="openCategoryUI = false">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12"><!-- Section for the lectures -->
+      <div class="container-fluid p-0">
+        <div class="row g-0 wacpfm-card p-0 wacpfm-course-details mb-5"
+          *ngFor="let record of courseRecords | async; index as r" 
+            [class.d-none]="!record.approved && !hasPaid(newCourse, record.userEmail)">
+          <div class="col-lg-6 wacpfm-padding-default">
+            <div class="wacpfm-heading-underline">
+              <h1 class="wacpfm-subheading fw-bold">{{record.courseType}} Course</h1>
+              <div class="wacpfm-underline"></div>
+            </div>
+            <br>
+            <div class="wacpfm-category-theme" id="tot">
+              <h1 class="wacpfm-small-text wacpfm-heading-primary fw-bold mb-1">THEME</h1>
+              <h2 class="wacpfm-subheading fw-bold">
+                {{ getCourseTypeDeets(newCourse, record.courseType).theme }}
+              </h2>
+            </div>
+            <br>
+            <button class="wacpfm-primary-button small" routerLink="./certificate/{{record.id}}"
+              [disabled]="!getCourseTypeDeets(newCourse, record.courseType).releaseResources">
+              <i class="bi bi-file-earmark-image"></i> Download Certificate
+            </button>
+            <br><br>
+            <a href="{{getCourseTypeDeets(newCourse, record.courseType).cpd}}" type="application/pdf" [download]="'CPD.'.concat(record.courseType,'.', 
+              helper.getDateString(newCourse.startDate).replace(pattern, '.'), '.pdf')" target="_blank">
+              <button class="small" [disabled]="!getCourseTypeDeets(newCourse, record.courseType).releaseResources">
+                <i class="bi bi-file-earmark-ruled"></i> Download CPD Form
+              </button>
+            </a>
+            <br><br>
+            <img [src]="getCourseTypeDeets(newCourse, record.courseType).groupLink" 
+              alt="{{record.courseType}} WhatsApp group qr-code" class="img-fluid"
+              *ngIf="getCourseTypeDeets(newCourse, record.courseType).groupLink">
+          </div>
+          <div class="col-lg-6 wacpfm-lecture-table">
+            <div class="wacpfm-lecture-container px-2"
+              *ngFor="let lecture of (lecturesPerRecord$ | async)?.[r]?.[day[r]]; index as i"
+              [class.d-none]="lecture.courseType !== record.courseType">
+              <div class="container-fluid p-0 wacpfm-lecture-table-head" *ngIf="i === 0">
+                <div class="row g-0 px-3 py-2">
+                  <!-- <div class="col-1"><p class="wacpfm-small-text color-accent">#</p></div> -->
+                  <div class="offset-1 col-10 px-1">
+                    <h2 class="wacpfm-smaller-text fw-bold mb-1">LECTURES</h2>
+                    <p class="wacpfm-toggle wacpfm-smaller-text d-inline-block py-1" [class.toggled]="day[r] === 0"
+                      (click)="toggleDay(r, 0)">
+                      Day 1
+                    </p>
+                    <p class="wacpfm-toggle wacpfm-smaller-text d-inline-block py-1" [class.toggled]="day[r] === 1"
+                      (click)="toggleDay(r, 1)" [class.d-none]="record.courseType === 'ToT'">
+                      Day 2
+                    </p>
+                  </div>
+                  <div class="col-1">
+                    <!-- <i class="bi bi-file-earmark-pdf-fill color-accent" disabled></i> -->
+                  </div>
+                </div>
+              </div>
+              <hr *ngIf="i > 0" class="m-0 wacpfm-heading-primary">
+              <div class="container-fluid px-3 py-3 wacpfm-lecture">
+                <div class="row g-0">
+                  <div class="col-1">
+                    <p class="wacpfm-small-text color-accent">{{ i + 1 }}.</p>
+                  </div>
+                  <div class="col-9 px-1">
+                    <p class="wacpfm-lecture-title">{{ lecture.lectureTitle }}</p>
+                    <span class="wacpfm-smaller-text opacity-75 pe-2">{{ helper.millisToHour(lecture.startTime) }}</span>
+                    <i class="bi bi-three-dots-vertical color-accent wacpfm-smaller-text"></i>
+                    <span class="wacpfm-smaller-text fw-bold opacity-75">
+                      {{ helper.millisToHour(lecture.endTime) }}
+                    </span>
+                  </div>
+                  <div class="col-1 text-end" *ngFor="let link of lecture.materialLink">
+                    <a [href]="link" [download]="'Update.Course.Lecture.' + (i + 1) + '.pdf'" type="application/pdf"
+                      target="_blank">
+                      <i class="bi bi-file-earmark-pdf-fill color-accent"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="wacpfm-ongoing-course wacpfm-card">
   <div class="wacpfm-heading-underline mb-3">
     <h1 class="fw-bold wacpfm-small-text">COURSE TITLE</h1>
     <div class="wacpfm-underline"></div>
@@ -11,9 +168,7 @@
   <div class="wacpfm-ongoing-course-preview" *ngIf="ongoing | async as newCourse; else empty">
     <div *ngIf="newCourse.creator; else nullCourse" class="wacpfm-clickable">
       <h1 class="wacpfm-heading-small wacpfm-font-arial">{{ newCourse.title }}</h1>
-      <!-- <div class="wacpfm-page-divider my-3"></div> -->
       <br>
-      <!-- The lower block of commented code should be uncommented ahead of next course -->
       <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
         <div class="row g-0">
           <div class="col-6 col-md-6 col-lg-4 py-2">
@@ -135,7 +290,6 @@
           [class.d-none]="lecture.courseType !== record.courseType">
           <div class="container-fluid p-0 wacpfm-lecture-table-head" *ngIf="i === 0">
             <div class="row g-0 px-3 py-2">
-              <!-- <div class="col-1"><p class="wacpfm-small-text color-accent">#</p></div> -->
               <div class="offset-1 col-10 px-1">
                 <h2 class="wacpfm-smaller-text fw-bold mb-1">LECTURES</h2>
                 <p class="wacpfm-toggle wacpfm-smaller-text d-inline-block py-1" [class.toggled]="day[r] === 0"
@@ -148,7 +302,6 @@
                 </p>
               </div>
               <div class="col-1">
-                <!-- <i class="bi bi-file-earmark-pdf-fill color-accent" disabled></i> -->
               </div>
             </div>
           </div>
@@ -178,4 +331,18 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
+<ng-template #nullCourse>
+  <div class="d-flex flex-column justify-content-center align-items-center">
+    <img src="assets/empty.png" alt="No update course in view - vector image by pikisuperstar"
+      class="img-fluid w-50 text-center">
+    <p class="wacpfm-smaller-text">No new update course</p>
+  </div>
+</ng-template>
+<ng-template #empty>
+  <app-loading-ui></app-loading-ui>
+  <br>
+  <app-loading-ui></app-loading-ui>
+  <br>
+  <app-loading-ui></app-loading-ui>
+</ng-template>
