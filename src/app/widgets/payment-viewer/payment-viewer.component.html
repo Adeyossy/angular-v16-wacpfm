@@ -1,7 +1,12 @@
 <div>
   <h1 class="wacpfm-subheading fw-bold">{{ record.courseType }}</h1>
-  <p class="wacpfm-font-primary" *ngIf="record.approved"><i class="bi bi-check-circle-fill"></i> Approved</p>
+  <p class="wacpfm-heading-medium fw-bold" *ngIf="record.approved"><i class="bi bi-check-circle-fill"></i> Approved</p>
 </div>
+<br><br>
+<div class="wacpfm-card">
+  <!-- <app-card-list ></app-card-list> -->
+</div>
+<br><br>
 <img [src]="record.paymentEvidence" alt="Payment receipt for this update course" class="img-fluid">
 <br><br>
 <div *ngIf="approval$ | async as approval; else buttons">
