@@ -67,6 +67,8 @@
       <div *ngFor="let courseType of courseTypes">
         <div class="wacpfm-card wacpfm-match-height">
           <h1 class="wacpfm-subheading fw-bold">{{ courseType }}</h1>
+          <!-- <br>
+          <button class="small w-auto">Grant Participants Access</button> -->
           <br>
           <hr><br>
           <app-card-list *ngFor="let list of courseTypeOnly(records, courseType); index as i"
@@ -74,6 +76,17 @@
             [control]="!(list.approved === undefined)" [state]="!!list.approved"></app-card-list>
         </div>
         <br>
+      </div>
+      <br>
+      <div>
+        <div class="wacpfm-card wacpfm-match-height">
+          <h1 class="wacpfm-subheading fw-bold">Resident and ToT Update Course</h1>
+          <br>
+          <hr><br>
+          <app-card-list *ngFor="let item of getHybridParticipants(records); index as i"
+            [item]="paymentToCardList(item)" [index]="i" (click)="showPayment(item)"
+            [control]="!(item.approved === undefined)" [state]="!!item.approved"></app-card-list>
+        </div>
       </div>
     </div>
   </div>
@@ -83,7 +96,7 @@
         <h1 class="wacpfm-heading-small fw-bold mb-2">Lectures</h1>
         <p class="wacpfm-subheading">View and edit details of Update Course lectures</p>
         <br>
-        <button *ngIf="newLecture$ | async as lecture; else loading" class="wacpfm-primary-button small w-auto" 
+        <button *ngIf="newLecture$ | async as lecture; else loading" class="small w-auto" 
           (click)="showLecture(lecture)">+ NEW LECTURE</button>
         <ng-template #loading>
           <app-loading-circles></app-loading-circles>
