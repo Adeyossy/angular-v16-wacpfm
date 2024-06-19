@@ -133,6 +133,12 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     this.conversionSub.unsubscribe()
   }
 
+  hasPaid(course: UpdateCourseRev, email: string) {
+    return course.membership.participants.includes(email) ||
+    course.fellowship.participants.includes(email) || 
+    course.tot.participants.includes(email)
+  }
+
   getCourseRecords() {
     return this.activatedRoute.paramMap.pipe(
       concatMap(params => this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
