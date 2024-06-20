@@ -11,6 +11,8 @@
   --wacpfm-background-colour-lighter: #F8FAFC;
   --wacpfm-background-colour: #F5F7FA;
   --wacpfm-background-colour-darker: #F1F3F6;
+  --wacpfm-background-colour-green: rgb(200, 255, 200);
+  --wacpfm-background-colour-red: rgb(255, 200, 200);
   --wacpfm-overlay-background: rgba(0, 0, 0, 0.5);
   --wacpfm-primary-shadow: #CCDDFF;
   --wacpfm-light-grey: rgb(228, 228, 228);
