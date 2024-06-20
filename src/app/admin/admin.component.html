@@ -88,8 +88,8 @@
           <br>
           <hr><br>
           <app-card-list *ngFor="let item of getHybridParticipants(records); index as i"
-            [item]="paymentToCardList(item)" [index]="i" (click)="showPayment(item)"
-            [control]="!(item.approved === undefined)" [state]="!!item.approved"></app-card-list>
+            [item]="paymentToCardList(item)" [index]="i" [state]="!!item.approved"
+            [control]="!(item.approved === undefined)"></app-card-list>
         </div>
       </div>
     </div>
