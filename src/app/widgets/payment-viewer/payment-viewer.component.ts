@@ -3,7 +3,7 @@ import { collection, doc, writeBatch } from 'firebase/firestore';
 import { NEVER, Observable, concatMap, map } from 'rxjs';
 import { DEFAULT_UPDATE_COURSE, UPDATE_COURSES, UpdateCourse } from 'src/app/models/update_course';
 import { DEFAULT_COURSE_RECORD, UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
-import { AppUser } from 'src/app/models/user';
+import { AppUser, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { CardList } from '../card-list/card-list.component';
@@ -24,8 +24,14 @@ export class PaymentViewerComponent implements OnInit {
   ngOnInit(): void {
     const keys = ["firstname", "middlename", "lastname", "gender", "phoneNumber", "whatsapp",
       "email", "country", "zip", "designation", "practicePlace", "college"] as const;
-    this.userDetails$ = this.authService.getAppUser$().pipe(
-      map(appUser => keys.map(key => {return { title: appUser[key], subtitle: key, text: "" }}))
+    this.userDetails$ = this.authService.queryCollections$<AppUser>
+    (USERS, "email", "==", this.record.userEmail).pipe(
+      map(appUsers => {
+        if (appUsers.length > 0) {
+          return keys.map(key => {return { title: appUsers[0][key], subtitle: key, text: "" }})
+        }
+        return keys.map(key => { return { title: "", subtitle: "", text: "" } })
+      })
     )
   }
 
