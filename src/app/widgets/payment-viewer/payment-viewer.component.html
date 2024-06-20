@@ -4,7 +4,8 @@
 </div>
 <br><br>
 <div class="wacpfm-card">
-  <!-- <app-card-list ></app-card-list> -->
+  <app-card-list *ngFor="let list of userDetails$ | async; index as i" [item]="list" [index]="i">
+  </app-card-list>
 </div>
 <br><br>
 <img [src]="record.paymentEvidence" alt="Payment receipt for this update course" class="img-fluid">
