@@ -1,7 +1,7 @@
 import { Component, DoCheck, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { NEVER, Observable, concatMap, map, timer } from 'rxjs';
-import { UPDATE_COURSES_RECORDS, UPDATE_COURSE_TYPES, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
+import { NEVER, Observable, concatMap, map, of, timer } from 'rxjs';
+import { DEFAULT_COURSE_RECORD, UPDATE_COURSES_RECORDS, UPDATE_COURSE_TYPES, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
 import { CardList } from '../widgets/card-list/card-list.component';
 import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture, DEFAULT_LECTURE } from '../models/update_course';
 import { HelperService } from '../services/helper.service';
@@ -11,8 +11,9 @@ import { HelperService } from '../services/helper.service';
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })
-export class AdminComponent implements OnInit, DoCheck {
+export class AdminComponent implements OnInit {
   courses$: Observable<UpdateCourse[]> = NEVER;
+  cardItem$: Observable<CardList> = of({title: "", subtitle: "", text: ""});
   records$: Observable<UpdateCourseRecord[]> = NEVER;
   // list$: Observable<CardList[]> = new Observable();
   level = 0;
@@ -24,9 +25,10 @@ export class AdminComponent implements OnInit, DoCheck {
   grantAccess$: Observable<void> = NEVER;
 
   // should lecture is a flag to let the system knoww that
-  shouldRefresh: "lecture" | "payment" | "resource_person" | "" = "";
+  // shouldRefresh: "lecture" | "payment" | "resource_person" | "" = "";
+  // refreshID = "";
 
-  constructor(private authService: AuthService, private helper: HelperService) { }
+  constructor(private authService: AuthService, public helper: HelperService) { }
 
   ngOnInit(): void {
     // this.records$ = this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
@@ -51,32 +53,34 @@ export class AdminComponent implements OnInit, DoCheck {
     //   })
     // );
 
-    this.courses$ = this.authService.getCollection$(UPDATE_COURSES);
+    this.courses$ = this.authService.getCollectionListener$(UPDATE_COURSES).pipe(
+      map(snapshot => snapshot.docs.map(doc => doc.data() as UpdateCourse))
+    );
     this.createNewLecture();
   }
 
-  ngDoCheck(): void {
-    if (this.helper.isDialogShown === -1 && this.shouldRefresh) {
-      switch (this.shouldRefresh) {
-        case "lecture":
-          this.setToLectures();
-          break;
+  // ngDoCheck(): void {
+  //   if (this.helper.isDialogShown === -1 && this.shouldRefresh) {
+  //     switch (this.shouldRefresh) {
+  //       case "lecture":
+  //         // this.setToLectures();
+  //         break;
 
-        case "payment":
-          this.setToPayment();
-          break;
+  //       case "payment":
+  //         this.cardItem$ = this.refreshRecord();
+  //         break;
 
-        case "resource_person":
-          this.setToResourcePersons();
-          break;
+  //       case "resource_person":
+  //         // this.setToResourcePersons();
+  //         break;
 
-        default:
-          break;
-      }
+  //       default:
+  //         break;
+  //     }
 
-      this.shouldRefresh = "";
-    }
-  }
+  //     this.shouldRefresh = "";
+  //   }
+  // }
 
   courseToCardList(course: UpdateCourse) {
     return {
@@ -110,10 +114,15 @@ export class AdminComponent implements OnInit, DoCheck {
     return newRecords;
   }
 
+  // refreshRecord() {
+  //   return this.authService.getDoc$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS, this.refreshID)
+  //   .pipe(map(rec => this.paymentToCardList(rec)));
+  // }
+
   setToPayment() {
     this.level = 2;
     this.sublevel = 0;
-    this.records$ = this.authService.queryCollectionsUnTyped$(UPDATE_COURSES_RECORDS,
+    this.records$ = this.authService.queryForListener$(UPDATE_COURSES_RECORDS,
       "updateCourseId", "==", this.currentCourse?.updateCourseId!).pipe(
         map(snapshot => snapshot.docs.map(doc => {
           const record = doc.data() as UpdateCourseRecord;
@@ -121,31 +130,12 @@ export class AdminComponent implements OnInit, DoCheck {
           return record;
         }))
       );
-
-    // this.list$ = this.records$.pipe(
-    //   map(records => {
-    //     const newRecs: CardList[] = [];
-    //     for (let i = 0; i < records.length; i++) {
-    //       let rec = records[i];
-    //       let existingIndex = newRecs.findIndex(c => c.title === rec.userEmail);
-    //       if (existingIndex >= 0) {
-    //         newRecs[existingIndex].subtitle += `, ${rec.courseType}`;
-    //         newRecs[existingIndex].subtitle = newRecs[existingIndex].subtitle.split(", ")
-    //           .sort().join(", ");
-    //       } else {
-    //         if (rec.userEmail === "adeyossy1@gmail.com") continue;
-    //         newRecs.push({ title: rec.userEmail, subtitle: rec.courseType, text: "" })
-    //       }
-    //     }
-    //     return newRecs;
-    //   })
-    // );
   }
 
   setToLectures() {
     this.level = 2;
     this.sublevel = 1;
-    this.lectures$ = this.authService.queryCollectionsUnTyped$(UPDATE_COURSES_LECTURES,
+    this.lectures$ = this.authService.queryForListener$(UPDATE_COURSES_LECTURES,
       "updateCourseId", "==", this.currentCourse!.updateCourseId).pipe(
         map(snapshot => snapshot.docs.map(doc => {
           const lecture = doc.data() as UpdateCourseLecture;
@@ -201,27 +191,28 @@ export class AdminComponent implements OnInit, DoCheck {
     this.helper.setComponentDialogData({
       courseId: this.currentCourse!.updateCourseId,
       lecture,
-      payment: this.helper.data.payment,
+      payment: Object.assign({}, DEFAULT_COURSE_RECORD),
       course: this.helper.data.course
     });
 
     this.helper.toggleDialog(1);
     this.createNewLecture();
 
-    this.shouldRefresh = "lecture";
+    // this.shouldRefresh = "lecture";
   }
 
   showPayment(record: UpdateCourseRecord) {
     this.helper.setComponentDialogData({
       courseId: this.currentCourse!.updateCourseId,
-      lecture: this.helper.data.lecture,
+      lecture: Object.assign({}, DEFAULT_LECTURE),
       payment: record,
       course: this.currentCourse!
     });
 
     this.helper.toggleDialog(1);
 
-    this.shouldRefresh = "payment";
+    // this.shouldRefresh = "payment";
+    // this.refreshID = record.id;
   }
 
   byCourseType(courseType: UpdateCourseType, emails: string) {

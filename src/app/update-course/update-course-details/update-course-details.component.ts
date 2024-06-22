@@ -141,12 +141,13 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
   getCourseRecords() {
     return this.activatedRoute.paramMap.pipe(
-      concatMap(params => this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
+      concatMap(params => this.authService.queryCollectionsUnTyped$(UPDATE_COURSES_RECORDS,
         "updateCourseId", "==", params.get("updateCourseId") as string)),
-      map(docs => docs.map(doc => {
+      map(snapshot => snapshot.docs.map(doc => {
         this.day.push(0);
-        if(!doc.hasOwnProperty('id') || !doc.id) doc.id = doc.id;
-        return doc;
+        const record = doc.data() as UpdateCourseRecord;
+        if(!record.hasOwnProperty('id') || !record.id) record.id = doc.id;
+        return record;
       })),
       concatMap(doc => this.user$.pipe(
         map(user => doc.filter(d => d.userEmail.toLowerCase() === user.email.toLowerCase())
