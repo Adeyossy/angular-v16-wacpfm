@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AsyncSubject, Observable, concatMap, map } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
-import { DocumentReference, Firestore, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
+import { DocumentReference, Firestore, Query, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { AppUser, USERS } from '../models/user';
 import { UpdateCourse } from '../models/update_course';
@@ -214,6 +214,19 @@ export class AuthService {
     return this.getFirestore$().pipe(
       concatMap(db => deleteDoc(doc(db, collectionName, docId)))
     );
+  }
+
+  attachListener$(query: Query) {
+    return new Observable<QuerySnapshot>((observer) => {
+      return onSnapshot(query, {
+        next(snapshot) {
+          return observer.next(snapshot)
+        },
+        error(error) {
+          return observer.error(error)
+        },
+      })
+    })
   }
 
   queryCollectionsUnTyped$(collectionName: string, property: string,
