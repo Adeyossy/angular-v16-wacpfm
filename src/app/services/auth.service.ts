@@ -309,4 +309,11 @@ export class AuthService {
       map(collection => collection.docs.map(doc => doc.data()) as Type[])
     )
   }
+  
+  getCollectionListener$(collectionName: string) {
+    return this.getFirestore$().pipe(
+      map(db => collection(db, collectionName)),
+      concatMap(q => this.attachListener$(q))
+    )
+  }
 }
