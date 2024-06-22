@@ -53,7 +53,9 @@ export class AdminComponent implements OnInit {
     //   })
     // );
 
-    this.courses$ = this.authService.getCollection$(UPDATE_COURSES);
+    this.courses$ = this.authService.getCollectionListener$(UPDATE_COURSES).pipe(
+      map(snapshot => snapshot.docs.map(doc => doc.data() as UpdateCourse))
+    );
     this.createNewLecture();
   }
 
