@@ -1,7 +1,7 @@
 import { Component, DoCheck, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { NEVER, Observable, concatMap, map, of, timer } from 'rxjs';
-import { UPDATE_COURSES_RECORDS, UPDATE_COURSE_TYPES, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
+import { DEFAULT_COURSE_RECORD, UPDATE_COURSES_RECORDS, UPDATE_COURSE_TYPES, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
 import { CardList } from '../widgets/card-list/card-list.component';
 import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture, DEFAULT_LECTURE } from '../models/update_course';
 import { HelperService } from '../services/helper.service';
@@ -189,7 +189,7 @@ export class AdminComponent implements OnInit {
     this.helper.setComponentDialogData({
       courseId: this.currentCourse!.updateCourseId,
       lecture,
-      payment: this.helper.data.payment,
+      payment: Object.assign({}, DEFAULT_COURSE_RECORD),
       course: this.helper.data.course
     });
 
@@ -202,7 +202,7 @@ export class AdminComponent implements OnInit {
   showPayment(record: UpdateCourseRecord) {
     this.helper.setComponentDialogData({
       courseId: this.currentCourse!.updateCourseId,
-      lecture: this.helper.data.lecture,
+      lecture: Object.assign({}, DEFAULT_LECTURE),
       payment: record,
       course: this.currentCourse!
     });

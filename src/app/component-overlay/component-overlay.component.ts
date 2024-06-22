@@ -21,7 +21,7 @@ export class ComponentOverlayComponent extends OverlayComponent {
     this.helper.setComponentDialogData(
       {
         courseId: "",
-        lecture: DEFAULT_LECTURE,
+        lecture: Object.assign({}, DEFAULT_LECTURE),
         payment: Object.assign({}, DEFAULT_COURSE_RECORD),
         course: this.helper.data.course
       }
