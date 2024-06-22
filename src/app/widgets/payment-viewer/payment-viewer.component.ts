@@ -27,14 +27,14 @@ export class PaymentViewerComponent implements OnInit {
     const keys = ["firstname", "middlename", "lastname", "gender", "phoneNumber", "whatsapp",
       "email", "country", "zip", "designation", "practicePlace", "college"] as const;
     this.userDetails$ = this.authService.queryCollections$<AppUser>
-    (USERS, "email", "==", this.record.userEmail).pipe(
-      map(appUsers => {
-        if (appUsers.length > 0) {
-          return keys.map(key => {return { title: appUsers[0][key], subtitle: key, text: "" }})
-        }
-        return keys.map(key => { return { title: "", subtitle: "", text: "" } })
-      })
-    )
+      (USERS, "email", "==", this.record.userEmail).pipe(
+        map(appUsers => {
+          if (appUsers.length > 0) {
+            return keys.map(key => { return { title: appUsers[0][key], subtitle: key, text: "" } })
+          }
+          return keys.map(key => { return { title: "", subtitle: "", text: "" } })
+        })
+      )
   }
 
   approve() {
@@ -67,8 +67,38 @@ export class PaymentViewerComponent implements OnInit {
   }
 
   deny() {
-    this.approval$ = this.authService.updateDoc$(UPDATE_COURSES_RECORDS, this.record.id,
-      { approved: false }).pipe(map(_v => "final"));
+    this.approval$ = this.authService.getFirestore$().pipe(
+      concatMap(db => {
+        const batch = writeBatch(db);
+        const recordRef = doc(collection(db, UPDATE_COURSES_RECORDS), this.record.id);
+        batch.update(recordRef, { approved: false });
+        const updateCourseRef = doc(collection(db, UPDATE_COURSES), this.updateCourse.updateCourseId);
+        if (this.record.courseType === 'Membership') {
+          let members = this.updateCourse.membershipParticipants.split(", ");
+          if (members.includes(this.record.userEmail)) {
+            members = members.filter(rec => rec.toLowerCase() !== this.record.userEmail.toLowerCase());
+            batch.update(updateCourseRef, { membershipParticipants: members.join(", ") })
+          }
+        }
+        if (this.record.courseType === 'Fellowship') {
+          let fellows = this.updateCourse.fellowshipParticipants.split(", ");
+          if (fellows.includes(this.record.userEmail)) {
+            fellows = fellows.filter(rec => rec.toLowerCase() !== this.record.userEmail.toLowerCase());
+            batch.update(updateCourseRef, { fellowshipParticipants: fellows.join(", ") })
+          }
+        }
+        if (this.record.courseType === 'ToT') {
+          let tots = this.updateCourse.totParticipants.split(", ");
+          if (tots.includes(this.record.userEmail)) {
+            tots = tots.filter(rec => rec.toLowerCase() !== this.record.userEmail.toLowerCase());
+            batch.update(updateCourseRef, { totParticipants: tots.join(", ") })
+          }
+        }
+
+        return batch.commit();
+      }),
+      map(_v => "final")
+    )
   }
 
   continue() {
