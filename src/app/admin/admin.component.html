@@ -6,12 +6,12 @@
 <div class="container-fluid p-0">
   <div class="row wacpfm-card" *ngIf="level === 0">
     <div class="col-lg-6">
-      <div class="wacpfm-heading-underline">
-        <h1 class="wacpfm-heading-small wacpfm-heading-primary fw-bold">Update Courses</h1>
+      <h1 class="wacpfm-heading-medium wacpfm-heading-primary fw-bold">Update Courses</h1>
+      <!-- <div class="wacpfm-heading-underline">
         <div class="wacpfm-underline subheading"></div>
-      </div>
+      </div> -->
       <br>
-      <p class="wacpfm-small-text">Manage registrations, payments, participants and resource persons
+      <p class="wacpfm-subheading">Manage registrations, payments, participants and resource persons
         for Update Courses. Click on any of the courses listed next for more.
       </p>
     </div>
@@ -57,16 +57,16 @@
   </div>
   <div class="row" *ngIf="level === 2 && sublevel === 0">
     <div class="col-12" *ngIf="sublevel === 0">
-      <div class="wacpfm-card wacpfm-match-height">
-        <h1 class="wacpfm-heading-small fw-bold">Payments</h1>
-        <p class="wacpfm-subheading">Manage payments for Update Course here</p>
+      <div class="wacpfm-card wacpfm-header-card wacpfm-match-height">
+        <h1 class="wacpfm-heading-medium fw-bold">Payments</h1>
+        <p class="wacpfm-heading-small">Manage payments for Update Course here</p>
       </div>
     </div>
     <div class="col-12"><br></div>
     <div class="col-12" *ngIf="records$ | async as records; else loading">
       <div *ngFor="let courseType of courseTypes">
         <div class="wacpfm-card wacpfm-match-height">
-          <h1 class="wacpfm-subheading fw-bold">{{ courseType }}</h1>
+          <h1 class="wacpfm-heading-small fw-bold">{{ courseType }}</h1>
           <!-- <br>
           <button class="small w-auto">Grant Participants Access</button> -->
           <br>
@@ -80,8 +80,9 @@
       <br>
       <div>
         <div class="wacpfm-card wacpfm-match-height">
-          <h1 class="wacpfm-subheading fw-bold">Resident and ToT Update Course</h1>
-          <p class="wacpfm-small-text">This should be used as a reference to identify those 
+          <h1 class="wacpfm-heading-small fw-bold">Resident and ToT Update Course</h1>
+          <br>
+          <p class="wacpfm-subheading">This should be used as a reference to identify those 
             who paid for both ToT course and resident course.
           </p>
           <p class="wacpfm-small-text">Please DO NOT USE to approve payments.</p>

@@ -319,8 +319,14 @@ button:active {
   width: 100%;
   background-color: var(--wacpfm-background-colour-lighter);
   padding: var(--wacpfm-spacing-default);
-  border: 2px solid var(--wacpfm-light-grey);
+  border: 2px solid var(--wacpfm-primary-colour-light);
+  /* box-shadow: 8px 8px var(--wacpfm-primary-shadow); */
   transition: background-color 200ms ease-in;
+}
+
+.wacpfm-card.wacpfm-header-card {
+  background-color: var(--wacpfm-primary-colour-light);
+  border-color: var(--wacpfm-primary-colour);
 }
 
 .wacpfm-loading-circle {
