@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AsyncSubject, NEVER, Observable, concatMap, from, map, of } from 'rxjs';
+import { AsyncSubject, Observable, concatMap, map } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
-import { DocumentReference, Firestore, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
+import { DocumentReference, Firestore, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { AppUser, USERS } from '../models/user';
 import { UpdateCourse } from '../models/update_course';
@@ -230,6 +230,24 @@ export class AuthService {
       concatMap(db => getDocs(query(collection(db, collectionName),
         where(property, comparator, value)))),
       map(docs => docs.docs.map(doc => doc.data() as Type))
+    );
+  }
+
+  queryForListener$(collectionName: string, property: string,
+    comparator: WhereFilterOp, value: string | boolean | number) {
+    return this.getFirestore$().pipe(
+      map(db => query(collection(db, collectionName),
+        where(property, comparator, value))),
+      concatMap(q => new Observable<QuerySnapshot>((observer) => {
+        return onSnapshot(q, {
+          next(snapshot) {
+            return observer.next(snapshot)
+          },
+          error(error) {
+            return observer.error(error)
+          },
+        })
+      }))
     );
   }
 
