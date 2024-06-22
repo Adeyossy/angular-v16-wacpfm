@@ -1,12 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { collection, doc, writeBatch } from 'firebase/firestore';
-import { NEVER, Observable, concatMap, map } from 'rxjs';
+import { NEVER, Observable, concatMap, map, of } from 'rxjs';
 import { DEFAULT_UPDATE_COURSE, UPDATE_COURSES, UpdateCourse } from 'src/app/models/update_course';
 import { DEFAULT_COURSE_RECORD, UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
 import { AppUser, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { CardList } from '../card-list/card-list.component';
+
+type ApprovalStates = "initial" | "final";
 
 @Component({
   selector: 'app-payment-viewer',
@@ -16,7 +18,7 @@ import { CardList } from '../card-list/card-list.component';
 export class PaymentViewerComponent implements OnInit {
   @Input() record: UpdateCourseRecord = Object.assign({}, DEFAULT_COURSE_RECORD);
   @Input() updateCourse: UpdateCourse = Object.assign({}, DEFAULT_UPDATE_COURSE);
-  approval$: Observable<boolean> = NEVER;
+  approval$: Observable<ApprovalStates> = of("initial");
   userDetails$: Observable<CardList[]> = NEVER;
 
   constructor(private authService: AuthService, private helper: HelperService) { }
@@ -60,13 +62,13 @@ export class PaymentViewerComponent implements OnInit {
 
         return batch.commit();
       }),
-      map(_v => true)
+      map(_v => "final")
     )
   }
 
   deny() {
     this.approval$ = this.authService.updateDoc$(UPDATE_COURSES_RECORDS, this.record.id,
-      { approved: false }).pipe(map(_v => true));
+      { approved: false }).pipe(map(_v => "final"));
   }
 
   continue() {
