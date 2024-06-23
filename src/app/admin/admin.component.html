@@ -56,42 +56,20 @@
     </div>
   </div>
   <div class="row" *ngIf="level === 2 && sublevel === 0">
-    <div class="col-12" *ngIf="sublevel === 0">
-      <div class="wacpfm-card wacpfm-header-card wacpfm-match-height">
-        <h1 class="wacpfm-heading-medium fw-bold">Payments</h1>
-        <p class="wacpfm-heading-small">Manage payments for Update Course here</p>
-      </div>
-    </div>
-    <div class="col-12"><br></div>
-    <div class="col-12" *ngIf="records$ | async as records; else loading">
-      <div *ngFor="let courseType of courseTypes">
-        <div class="wacpfm-card wacpfm-match-height">
-          <h1 class="wacpfm-heading-small fw-bold">{{ courseType }}</h1>
-          <!-- <br>
-          <button class="small w-auto">Grant Participants Access</button> -->
-          <br>
-          <hr><br>
-          <app-card-list *ngFor="let list of courseTypeOnly(records, courseType); index as i"
-            [item]="paymentToCardList(list)" [index]="i" (click)="showPayment(list)"
-            [control]="!(list.approved === undefined)" [state]="!!list.approved"></app-card-list>
-        </div>
-        <br>
-      </div>
+    <div class="col-12" *ngIf="records$ | async as records">
+      <app-course-type [lists]="records" (onRecordClicked)="showPayment($event)"></app-course-type>
       <br>
-      <div>
-        <div class="wacpfm-card wacpfm-match-height">
-          <h1 class="wacpfm-heading-small fw-bold">Resident and ToT Update Course</h1>
-          <br>
-          <p class="wacpfm-subheading">This should be used as a reference to identify those 
-            who paid for both ToT course and resident course.
-          </p>
-          <p class="wacpfm-small-text">Please DO NOT USE to approve payments.</p>
-          <br>
-          <hr><br>
-          <app-card-list *ngFor="let item of getHybridParticipants(records); index as i"
-            [item]="paymentToCardList(item)" [index]="i" [state]="!!item.approved"
-            [control]="!(item.approved === undefined)"></app-card-list>
-        </div>
+      <div class="wacpfm-card">
+        <h1 class="wacpfm-heading-small fw-bold">Resident and ToT Update Course</h1>
+        <br>
+        <p class="wacpfm-subheading">This should be used as a reference to identify those
+          who paid for both ToT course and resident course.
+        </p>
+        <p class="wacpfm-small-text">Please DO NOT USE to approve payments.</p>
+        <br>
+        <hr><br>
+        <app-card-list *ngFor="let item of getHybridParticipants(records); index as i" [item]="paymentToCardList(item)"
+          [index]="i" [state]="!!item.approved" [control]="!(item.approved === undefined)"></app-card-list>
       </div>
     </div>
   </div>
@@ -101,7 +79,7 @@
         <h1 class="wacpfm-heading-small fw-bold mb-2">Lectures</h1>
         <p class="wacpfm-subheading">View and edit details of Update Course lectures</p>
         <br>
-        <button *ngIf="newLecture$ | async as lecture; else loading" class="wacpfm-primary-button small w-auto" 
+        <button *ngIf="newLecture$ | async as lecture; else loading" class="wacpfm-primary-button small w-auto"
           (click)="showLecture(lecture)">+ NEW LECTURE</button>
         <ng-template #loading>
           <app-loading-circles></app-loading-circles>
@@ -116,8 +94,8 @@
           <br>
           <hr><br>
           <app-card-list *ngFor="let lecture of courseTypeOnly(lectures, courseType); index as i"
-            [item]="convertToCardList(lecture.lectureTitle, lecture.lecturerEmail, lecture.courseType)"
-            [index]="i" (click)="showLecture(lecture)"></app-card-list>
+            [item]="convertToCardList(lecture.lectureTitle, lecture.lecturerEmail, lecture.courseType)" [index]="i"
+            (click)="showLecture(lecture)"></app-card-list>
         </div>
         <br>
       </div>
