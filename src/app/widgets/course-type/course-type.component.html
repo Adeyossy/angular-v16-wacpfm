@@ -1,1 +1,17 @@
-<p>course-type works!</p>
+<div class="wacpfm-card wacpfm-header-card">
+  <h1 class="wacpfm-heading-medium fw-bold">Payments</h1>
+  <p class="wacpfm-heading-small">Manage payments for Update Course here</p>
+</div>
+<br>
+<div *ngFor="let courseType of courseTypes">
+  <details class="wacpfm-card">
+    <summary class="wacpfm-heading wacpfm-heading-small fw-bold">{{ courseType }}</summary>
+    <!-- <br>
+      <button class="small w-auto">Grant Participants Access</button> -->
+    <br>
+    <hr><br>
+    <app-card-list *ngFor="let list of courseTypeOnly(lists, courseType); index as i" [item]="convertToCardList(list)"
+      [index]="i" (click)="emit(list)" [control]="evaluateControl(list)" [state]="evaluateState(list)"></app-card-list>
+  </details>
+  <br>
+</div>
