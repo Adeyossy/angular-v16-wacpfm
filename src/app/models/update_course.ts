@@ -1,4 +1,5 @@
 import { environment } from "src/environments/environment";
+import { UpdateCourseType } from "./update_course_record";
 
 export const UPDATE_COURSES = environment.updateCourse;
 export const UPDATE_COURSES_LECTURES = environment.updateCourseLecture;
@@ -61,7 +62,7 @@ export type UpdateCourseRev = {
 
 export type UpdateCourseLecture = {
   updateCourseId: string;
-  courseType: "Membership" | "Fellowship" | "ToT"
+  courseType: UpdateCourseType;
   lectureId: string;
   lectureTitle: string;
   lecturerId: string;
