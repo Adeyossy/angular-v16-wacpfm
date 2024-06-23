@@ -32,6 +32,7 @@ import { ComponentOverlayComponent } from './component-overlay/component-overlay
 import { UpdateCourseLectureComponent } from './update-course/update-course-lecture/update-course-lecture.component';
 import { ResourcePersonComponent } from './update-course/resource-person/resource-person.component';
 import { PaymentViewerComponent } from './widgets/payment-viewer/payment-viewer.component';
+import { CourseTypeComponent } from './widgets/course-type/course-type.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { PaymentViewerComponent } from './widgets/payment-viewer/payment-viewer.
     ComponentOverlayComponent,
     UpdateCourseLectureComponent,
     ResourcePersonComponent,
-    PaymentViewerComponent
+    PaymentViewerComponent,
+    CourseTypeComponent
   ],
   imports: [
     BrowserModule,
