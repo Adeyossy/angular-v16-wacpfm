@@ -5,7 +5,7 @@
 <br>
 <div class="container-fluid p-0">
   <div class="row g-0" *ngIf="ongoing | async as newCourse; else empty">
-    <div class="col-12 wacpfm-ongoing-course wacpfm-card mb-5">
+    <div class="col-12 wacpfm-ongoing-course wacpfm-card wacpfm-header-card mb-5">
       <div class="wacpfm-heading-underline mb-3">
         <h1 class="fw-bold wacpfm-small-text">COURSE TITLE</h1>
         <div class="wacpfm-underline"></div>
@@ -21,7 +21,7 @@
               <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true" *ngIf="!newCourse.tot.participants.includes(user!.email) &&
                !newCourse.fellowship.participants.includes(user!.email) &&
                !newCourse.membership.participants.includes(user!.email)">
-                <span *ngIf="courseRecords | async as cr; else loadingCirclesInline">
+                <span *ngIf="courseRecords$ | async as cr; else loadingCirclesInline">
                   <span *ngIf="cr.length; else register">Applied</span>
                   <ng-template #register>Register</ng-template>
                 </span>
@@ -74,11 +74,26 @@
         </div>
       </div>
     </div>
-    <div class="col-12"><!-- Section for the lectures -->
-      <div class="container-fluid p-0">
-        <div class="row g-0 wacpfm-card p-0 wacpfm-course-details mb-5"
-          *ngFor="let record of courseRecords | async; index as r" 
-            [class.d-none]="record.approved === undefined ? !hasPaid(newCourse, record.userEmail) : !record.approved">
+    <div class="col-12" *ngIf="courseRecords$ | async as courseRecords; else empty"><!-- Section for the lectures -->
+      <div class="container-fluid p-0 mb-5" *ngFor="let record of courseRecords; index as r">
+        <div class="row g-0 wacpfm-card p-0 wacpfm-course-details" 
+        *ngIf="record.approved !== undefined ? record.approved : hasPaid(newCourse, record.userEmail); else notapproved">
+          <div class="col-12 mb-1 wacpfm-padding-default">
+            <div class="wacpfm-heading-underline mb-2">
+              <h1 class="wacpfm-heading-medium fw-bold">
+                <i class="bi bi-trophy-fill text-success"></i> {{ record.courseType }}
+              </h1>
+              <div class="wacpfm-heading-underline">
+                <h2 class="wacpfm-heading-small fw-bold m-0">Successfully Registered</h2>
+                <div class="wacpfm-underline"></div>
+              </div>
+            </div>
+            <br>
+            <p class="wacpfm-subheading mb-1">Congratulations you are successfully registered for this course.</p>
+            <p class="wacpfm-subheading mb-1">You will be sent the online meeting link for the course through this registered e-mail 24 hours before the start date.</p>
+            <p class="wacpfm-subheading mb-1">Please use the QR code below to join the WhatsApp group for the course for information sharing purposes.</p>
+            <p class="wacpfm-subheading">Thank you!</p>
+          </div>
           <div class="col-lg-6 wacpfm-padding-default">
             <div class="wacpfm-heading-underline">
               <h1 class="wacpfm-subheading fw-bold">{{record.courseType}} Course</h1>
@@ -156,6 +171,36 @@
             </div>
           </div>
         </div>
+        <ng-template #notapproved>
+          <div class="row g-0 wacpfm-card wacpfm-course-details" *ngIf="record.approved === undefined; else declined">
+            <div class="col-12">
+              <div class="wacpfm-heading-underline mb-3">
+                <h1 class="wacpfm-heading-medium fw-bold">{{ record.courseType }} Payment</h1>
+                <div class="wacpfm-heading-underline">
+                  <h2 class="wacpfm-heading-small fw-bold m-0">Payment undergoing verification</h2>
+                  <div class="wacpfm-underline"></div>
+                </div>
+              </div>
+              <p class="wacpfm-subheading">Kindly give us some time for the manual verification of your receipt.</p>
+              <p class="wacpfm-subheading">You may return from time to time to check for your confirmation status by refreshing this page. Thank you</p>
+            </div>
+          </div>
+          <ng-template #declined>
+            <div class="row g-0 wacpfm-card wacpfm-course-details border border-danger" *ngIf="record.approved === false">
+              <div class="col-12">
+                <div class="wacpfm-heading-underline mb-3">
+                  <h1 class="wacpfm-heading-medium fw-bold">{{ record.courseType }} Payment</h1>
+                  <div class="wacpfm-heading-underline">
+                    <h2 class="wacpfm-heading-small fw-bold m-0 text-danger">Payment Declined</h2>
+                    <div class="wacpfm-underline"></div>
+                  </div>
+                </div>
+                <p class="wacpfm-subheading">Your payment receipt was reviewed and has been declined.</p>
+                <p class="wacpfm-subheading">You can reach out to the Training Coordinator if you believe this is an error.</p>
+              </div>
+            </div>
+          </ng-template>
+        </ng-template>
       </div>
     </div>
   </div>
