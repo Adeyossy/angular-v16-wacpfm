@@ -16,8 +16,7 @@ import { HelperService } from 'src/app/services/helper.service';
 })
 export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   ongoing: Observable<UpdateCourseRev> = new Observable();
-  courseRecords: Observable<UpdateCourseRecord[]> = new Observable();
-  paid$: Observable<boolean> = new Observable();
+  courseRecords$: Observable<UpdateCourseRecord[]> = new Observable();
   user$: Observable<AppUser> = new Observable();
   updateCourseLecture$: Observable<UpdateCourseLecture[]> = new Observable();
   lecturesPerRecord$: Observable<UpdateCourseLecture[][][]> = new Observable();
@@ -84,15 +83,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
     this.user$ = this.authService.getDocByUserId$<AppUser>(USERS);
 
-    this.paid$ = this.ongoing.pipe(
-      concatMap(course => this.user$.pipe(
-        map(user => course.membership.participants.includes(user.email) ||
-            course.fellowship.participants.includes(user.email) || 
-            course.tot.participants.includes(user.email))
-      ))
-    )
-
-    // this.courseRecords = this.getCourseRecords();
+    // this.courseRecords$ = this.getCourseRecords();
 
     this.updateCourseLecture$ = this.getCourseLectures();
 
@@ -110,7 +101,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: _val => {
         console.log("converted successfully");
-        this.courseRecords = this.getCourseRecords().pipe(
+        this.courseRecords$ = this.getCourseRecords().pipe(
           map(rec => rec.sort((a, b) => a.courseType.charCodeAt(0) - b.courseType.charCodeAt(0)))
         );
         this.updateCourseLecture$ = this.getCourseLectures();
@@ -167,7 +158,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     return this.updateCourseLecture$.pipe(
       concatMap(lectures => {
         // console.log("piping lpr");
-        return this.courseRecords.pipe(
+        return this.courseRecords$.pipe(
           map(records =>
             records.map(record =>
               lectures.filter(lect => lect.courseType === record.courseType)
@@ -192,6 +183,10 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
   getCourseTypeDeets(obj: UpdateCourseRev, property: "Membership" | "Fellowship" | "ToT") {
     return obj[property.toLowerCase() as "membership" | "fellowship" | "tot"]
+  }
+
+  filterRecords(record: UpdateCourseRecord) {
+    return record.approved !== false;
   }
 
   createNewRecord(refId: string, uCourse: UpdateCourseRev, appUser: AppUser, 
