@@ -75,7 +75,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   dismissOverlay() {
     this.hasAuthStarted = false;
     this.helper.toggleDialog(-1);
-    if (this.isAuthFinished) this.router.navigateByUrl("/dashboard/updatecourse");
+    if (this.isAuthFinished) {
+      console.log("navigating");
+      this.router.navigateByUrl("/dashboard/updatecourse");
+    }
     this.loginSubscription.unsubscribe();
   }
 }
