@@ -13,12 +13,12 @@
           <p class="wacpfm-subheading m-0">Its aim is to simplify and coordinate the activities of the faculty.</p>
         </div>
         <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
-          <div class="row g-0" *ngIf="user?.email; else goToDashboard">
+          <div class="row g-0" *ngIf="user?.email; else auth">
             <div class="col-lg-4 py-4">
               <button class="wacpfm-primary-button" routerLink="/dashboard/updatecourse">Go to Dashboard</button>
             </div>
           </div>
-          <ng-template #goToDashboard>
+          <ng-template #auth>
             <div class="row g-0">
               <div class="col-lg-4 py-4">
                 <button routerLink="/access/register" class="wacpfm-primary-button">Register</button>
