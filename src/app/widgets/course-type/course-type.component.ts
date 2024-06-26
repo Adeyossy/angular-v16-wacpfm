@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Observable } from 'rxjs';
+import { NEVER, Observable } from 'rxjs';
 import { UpdateCourseLecture } from 'src/app/models/update_course';
 import { UPDATE_COURSE_TYPES, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
 import { CardList } from '../card-list/card-list.component';
@@ -11,7 +11,9 @@ import { CardList } from '../card-list/card-list.component';
 })
 export class CourseTypeComponent {
   @Input() lists: Array<UpdateCourseLecture | UpdateCourseRecord> = [];
-  @Output() onClick: EventEmitter<UpdateCourseLecture | UpdateCourseRecord> = new EventEmitter();
+  @Input() newItem$: Observable<UpdateCourseLecture | UpdateCourseRecord> = NEVER;
+  @Input() title = "";
+  @Input() subtitle = "";
   @Output() onRecordClicked: EventEmitter<UpdateCourseRecord> = new EventEmitter();
   @Output() onLectureClicked: EventEmitter<UpdateCourseLecture> = new EventEmitter();
   courseTypes = UPDATE_COURSE_TYPES;

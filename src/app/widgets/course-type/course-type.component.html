@@ -1,6 +1,9 @@
 <div class="wacpfm-card wacpfm-header-card">
-  <h1 class="wacpfm-heading-medium fw-bold">Payments</h1>
-  <p class="wacpfm-heading-small">Manage payments for Update Course here</p>
+  <h1 class="wacpfm-heading-medium fw-bold">{{ title }}</h1>
+  <p class="wacpfm-heading-small">{{ subtitle }}</p>
+  <br>
+  <button *ngIf="newItem$ | async as newItem; else loading" (click)="emit(newItem)"
+    class="wacpfm-primary-button small w-auto">CREATE NEW</button>
 </div>
 <br>
 <div *ngFor="let courseType of courseTypes">
@@ -15,3 +18,10 @@
   </details>
   <br>
 </div>
+<ng-template #loading>
+  <app-loading-ui></app-loading-ui>
+  <br><br>
+  <app-loading-ui></app-loading-ui>
+  <br><br>
+  <app-loading-ui></app-loading-ui>
+</ng-template>
