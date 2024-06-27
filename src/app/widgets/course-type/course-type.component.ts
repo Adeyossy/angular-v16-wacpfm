@@ -42,7 +42,7 @@ export class CourseTypeComponent {
     if ("accountNumber" in list) {
       return {
         title: list.userEmail,
-        subtitle: "",
+        subtitle: list.accountName,
         text: ""
       }
     }
