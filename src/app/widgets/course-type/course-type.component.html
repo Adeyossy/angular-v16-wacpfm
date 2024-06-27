@@ -3,7 +3,7 @@
   <p class="wacpfm-heading-small">{{ subtitle }}</p>
   <br>
   <button *ngIf="newItem$ | async as newItem; else loading" (click)="emit(newItem)"
-    class="wacpfm-primary-button small w-auto">CREATE NEW</button>
+    class="wacpfm-primary-button small w-auto px-3" [class.d-none]="!newItem.updateCourseId">CREATE NEW</button>
 </div>
 <br>
 <div *ngFor="let courseType of courseTypes">
@@ -19,9 +19,5 @@
   <br>
 </div>
 <ng-template #loading>
-  <app-loading-ui></app-loading-ui>
-  <br><br>
-  <app-loading-ui></app-loading-ui>
-  <br><br>
-  <app-loading-ui></app-loading-ui>
+  <app-loading-circles></app-loading-circles>
 </ng-template>
