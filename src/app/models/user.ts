@@ -1,5 +1,6 @@
 import { FieldValue } from "firebase/firestore";
 import { environment } from "src/environments/environment";
+import { UpdateCourseType } from "./update_course_record";
 
 export const USERS = "users";
 export const RESOURCE_PERSONS = environment.resourcePersons;
@@ -28,7 +29,8 @@ export type AppUser = {
 export const RESOURCE_PERSON_TITLES = ["Prof.", "Dr."] as const;
 
 export type ResourcePerson = {
-  title: "Prof." | "Dr.",
+  id: string;
+  title: "Prof." | "Dr.";
   userId: string;
   userEmail: string;
   accountNumber: number;
@@ -36,4 +38,18 @@ export type ResourcePerson = {
   bankName: string;
   lectureId: string; // ids of the lecture from the update course lecture collection
   updateCourseId: string; // id of the update course being registered for
+  courseType: UpdateCourseType
 };
+
+export const DEFAULT_RESOURCE_PERSON: ResourcePerson = {
+  id: "",
+  title: "Dr.",
+  userId: "",
+  userEmail: "",
+  accountNumber: 0,
+  accountName: "",
+  bankName: "",
+  lectureId: "",
+  updateCourseId: "",
+  courseType: "Membership"
+}
