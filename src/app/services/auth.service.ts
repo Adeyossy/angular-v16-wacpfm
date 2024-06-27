@@ -310,6 +310,13 @@ export class AuthService {
     )
   }
   
+  getSubCollection$<Type>(path: [string, string]): Observable<Type[]> {
+    return this.getFirestore$().pipe(
+      concatMap(db => getDocs(collection(db, ...path))),
+      map(collection => collection.docs.map(doc => doc.data()) as Type[])
+    )
+  }
+  
   getCollectionListener$(collectionName: string) {
     return this.getFirestore$().pipe(
       map(db => collection(db, collectionName)),
