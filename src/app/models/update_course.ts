@@ -115,7 +115,7 @@ export const DEFAULT_LECTURE: UpdateCourseLecture = {
   lectureTitle: "",
   updateCourseId: "",
   startTime: Date.now().toString(),
-  endTime: String(Date.now() + (60 * 60)),
+  endTime: String(Date.now() + (60 * 60 * 1000)),
   materialLink: [],
   videoLink: ""
 }

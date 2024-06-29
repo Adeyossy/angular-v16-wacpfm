@@ -51,13 +51,16 @@
           Manage details of resource persons including lectures and bank details here.
         </p>
         <br>
-        <button class="wacpfm-primary-button" disabled>GO TO RESOURCE PERSONS</button>
+        <button class="wacpfm-primary-button" (click)="setToResourcePersons()">
+          GO TO RESOURCE PERSONS
+        </button>
       </div>
     </div>
   </div>
   <div class="row" *ngIf="level === 2 && sublevel === 0">
     <div class="col-12" *ngIf="records$ | async as records; else loading">
-      <app-course-type [lists]="records" (onRecordClicked)="showPayment($event)"></app-course-type>
+      <app-course-type [lists]="records" (onRecordClicked)="showPayment($event)"
+        title="Payments" subtitle="Manage payments for Update Course here"></app-course-type>
       <br>
       <div class="wacpfm-card">
         <h1 class="wacpfm-heading-small fw-bold">Resident and ToT Update Course</h1>
@@ -74,31 +77,17 @@
     </div>
   </div>
   <div class="row" *ngIf="level === 2 && sublevel === 1">
-    <div class="col-12">
-      <div class="wacpfm-card wacpfm-match-height">
-        <h1 class="wacpfm-heading-small fw-bold mb-2">Lectures</h1>
-        <p class="wacpfm-subheading">View and edit details of Update Course lectures</p>
-        <br>
-        <button *ngIf="newLecture$ | async as lecture; else loading" class="wacpfm-primary-button small w-auto"
-          (click)="showLecture(lecture)">+ NEW LECTURE</button>
-        <ng-template #loading>
-          <app-loading-circles></app-loading-circles>
-        </ng-template>
-      </div>
-    </div>
-    <div class="col-12"><br></div>
     <div class="col-12" *ngIf="lectures$ | async as lectures; else loading">
-      <div *ngFor="let courseType of courseTypes">
-        <div class="wacpfm-card wacpfm-match-height">
-          <h1 class="wacpfm-subheading fw-bold">{{ courseType }}</h1>
-          <br>
-          <hr><br>
-          <app-card-list *ngFor="let lecture of courseTypeOnly(lectures, courseType); index as i"
-            [item]="convertToCardList(lecture.lectureTitle, lecture.lecturerEmail, lecture.courseType)" [index]="i"
-            (click)="showLecture(lecture)"></app-card-list>
-        </div>
-        <br>
-      </div>
+      <app-course-type [lists]="lectures" [newItem$]="newLecture$" title="Lectures"
+      subtitle="View and edit details of Update Course lectures."
+      (onLectureClicked)="showLecture($event)"></app-course-type>
+    </div>
+  </div>
+  <div class="row" *ngIf="level === 2 && sublevel === 2">
+    <div class="col-12" *ngIf="resourcePersons$ | async as resourcePersons; else loading">
+      <app-course-type [lists]="resourcePersons" [newItem$]="newLecturer$" title="Resource Persons"
+      subtitle="View and edit details of Resource Persons"
+      (onLecturerClicked)="showResourcePerson($event)"></app-course-type>
     </div>
   </div>
   <div class="row">

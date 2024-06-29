@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AsyncSubject, Observable, concatMap, map } from 'rxjs';
+import { AsyncSubject, Observable, concatMap, from, iif, map, of } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
 import { DocumentReference, Firestore, Query, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+import { UploadTask, getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { AppUser, USERS } from '../models/user';
 import { UpdateCourse } from '../models/update_course';
 
@@ -39,9 +39,9 @@ export class AuthService {
     return this.getFirebaseAuth$().pipe(
       concatMap(auth => new Observable<User | null>((observer) => {
         return auth.onAuthStateChanged(
-          user => observer.next(user),
-          error => observer.error(error),
-          () => observer.complete()
+          user => { observer.next(user) },
+          error => { observer.error(error) },
+          () => { observer.complete() }
         )
       }))
     );
@@ -106,8 +106,8 @@ export class AuthService {
   updateUserName(userName: string) {
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
-        if(user) {
-          return updateProfile(user, {displayName: userName})
+        if (user) {
+          return updateProfile(user, { displayName: userName })
         }
         throw AuthErrorCodes.NULL_USER;
       })
@@ -133,14 +133,14 @@ export class AuthService {
    * @param data - an object representing the data to be stored
    * @returns Observable<void>
    */
-  addDocWithID$<Type extends { [x: string]: any }>(collectionName: string, docId: string, 
-    data: Type, merge=false) {
+  addDocWithID$<Type extends { [x: string]: any }>(collectionName: string, docId: string,
+    data: Type, merge = false) {
     return merge ? this.getFirestore$().pipe(
       concatMap(db => setDoc(doc(db, collectionName, docId), data, { merge: true }))
-    ) : 
-    this.getFirestore$().pipe(
-      concatMap(db => setDoc(doc(db, collectionName, docId), data))
-    );
+    ) :
+      this.getFirestore$().pipe(
+        concatMap(db => setDoc(doc(db, collectionName, docId), data))
+      );
   }
 
   /**
@@ -173,7 +173,7 @@ export class AuthService {
     return this.getFirestore$().pipe(
       concatMap(db => getDoc(doc(db, collectionName, docId))),
       map(doc => {
-        if(doc.exists()) return doc.data() as Type;
+        if (doc.exists()) return doc.data() as Type;
         else throw new Error(this.FIRESTORE_NULL_DOCUMENT);
       })
     )
@@ -191,8 +191,9 @@ export class AuthService {
         if (user) return this.getFirestore$().pipe(
           concatMap(db => getDoc(doc(db, collectionName, user.uid))),
           map(doc => {
-            if(doc.exists()) return doc.data() as Type;
-            else throw AuthErrorCodes.NULL_USER}
+            if (doc.exists()) return doc.data() as Type;
+            else throw AuthErrorCodes.NULL_USER
+          }
           )
         );
         else throw new Error(AuthErrorCodes.NULL_USER);
@@ -266,11 +267,11 @@ export class AuthService {
 
   querySubCollection$(property: string, comparator: WhereFilterOp, value: string,
     path: string[]) {
-      return this.getFirestore$().pipe(
-        concatMap(db => getDocs(query(collection(db, path[0], path[1], path[2]),
-          where(property, comparator, value))))
-      );
-    }
+    return this.getFirestore$().pipe(
+      concatMap(db => getDocs(query(collection(db, path[0], path[1], path[2]),
+        where(property, comparator, value))))
+    );
+  }
 
   queryByUserId$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
@@ -290,6 +291,22 @@ export class AuthService {
     );
   }
 
+  uploadListener$(uploadTask: UploadTask) {
+    return new Observable<string>((observer) => {
+      return uploadTask.on('state_changed',
+        (snapshot) => {
+          observer.next((snapshot.bytesTransferred / snapshot.totalBytes).toFixed(2))
+        },
+        (error) => observer.error(error),
+        async () => {
+          const url = await getDownloadURL(uploadTask.snapshot.ref);
+          observer.next(url);
+          observer.complete();
+        }
+      )
+    })
+  }
+
   uploadFile$(folderName: string, file: File, userId: string) {
     return this.getFirebaseApp$().pipe(
       map(app => getStorage(app)),
@@ -299,17 +316,30 @@ export class AuthService {
     )
   }
 
-  UploadFileResumably$(file: File) {
+  UploadFileResumably$<Type>(folderName: string, file: File, id: string) {
     // Use this for the lecturer's contents
+    return this.getFirebaseApp$().pipe(
+      map(app => getStorage(app)),
+      map(str => ref(str, `${folderName}/${id}/${file.name}`)),
+      map(strRef => uploadBytesResumable(strRef, file)),
+      concatMap(this.uploadListener$)
+    )
   }
-  
+
   getCollection$<Type>(collectionName: string): Observable<Type[]> {
     return this.getFirestore$().pipe(
       concatMap(db => getDocs(collection(db, collectionName))),
       map(collection => collection.docs.map(doc => doc.data()) as Type[])
     )
   }
-  
+
+  getSubCollection$<Type>(path: [string, string]): Observable<Type[]> {
+    return this.getFirestore$().pipe(
+      concatMap(db => getDocs(collection(db, ...path))),
+      map(collection => collection.docs.map(doc => doc.data()) as Type[])
+    )
+  }
+
   getCollectionListener$(collectionName: string) {
     return this.getFirestore$().pipe(
       map(db => collection(db, collectionName)),

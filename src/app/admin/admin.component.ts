@@ -5,6 +5,7 @@ import { DEFAULT_COURSE_RECORD, UPDATE_COURSES_RECORDS, UPDATE_COURSE_TYPES, Upd
 import { CardList } from '../widgets/card-list/card-list.component';
 import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture, DEFAULT_LECTURE } from '../models/update_course';
 import { HelperService } from '../services/helper.service';
+import { DEFAULT_RESOURCE_PERSON, RESOURCE_PERSONS, ResourcePerson } from '../models/user';
 
 @Component({
   selector: 'app-admin',
@@ -22,6 +23,8 @@ export class AdminComponent implements OnInit {
   courseTypes = UPDATE_COURSE_TYPES;
   newLecture$: Observable<UpdateCourseLecture> = NEVER;
   lectures$: Observable<UpdateCourseLecture[]> = NEVER;
+  resourcePersons$: Observable<ResourcePerson[]> = NEVER;
+  newLecturer$: Observable<ResourcePerson> = NEVER;
   grantAccess$: Observable<void> = NEVER;
 
   // should lecture is a flag to let the system knoww that
@@ -57,6 +60,7 @@ export class AdminComponent implements OnInit {
       map(snapshot => snapshot.docs.map(doc => doc.data() as UpdateCourse))
     );
     this.createNewLecture();
+    this.createNewLecturer();
   }
 
   // ngDoCheck(): void {
@@ -161,8 +165,24 @@ export class AdminComponent implements OnInit {
   setToResourcePersons() {
     this.level = 2;
     this.sublevel = 2;
-    this.lectures$ = this.authService.queryCollections$<UpdateCourseLecture>(UPDATE_COURSES_LECTURES,
-      "updateCourseId", "==", this.currentCourse!.updateCourseId);
+    this.resourcePersons$ = this.authService.queryForListener$(RESOURCE_PERSONS,
+      "updateCourseId", "==", this.currentCourse!.updateCourseId).pipe(
+        map(snapshot => snapshot.docs.map(doc => {
+          const resourcePerson = doc.data() as ResourcePerson;
+          return resourcePerson;
+        }))
+      );
+  }
+
+  createNewLecturer() {
+    this.newLecturer$ = this.authService.getDocId$(RESOURCE_PERSONS).pipe(
+      map(ref => {
+        const lecturer = Object.assign({}, DEFAULT_RESOURCE_PERSON);
+        lecturer.id = ref.id;
+        lecturer.updateCourseId = this.currentCourse!.updateCourseId;
+        return lecturer;
+      })
+    );
   }
 
   convertToCardList(title: string, subtitle: string, text: string) {
@@ -192,13 +212,12 @@ export class AdminComponent implements OnInit {
       courseId: this.currentCourse!.updateCourseId,
       lecture,
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
-      course: this.helper.data.course
+      course: this.helper.data.course,
+      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON)
     });
 
     this.helper.toggleDialog(1);
     this.createNewLecture();
-
-    // this.shouldRefresh = "lecture";
   }
 
   showPayment(record: UpdateCourseRecord) {
@@ -206,13 +225,23 @@ export class AdminComponent implements OnInit {
       courseId: this.currentCourse!.updateCourseId,
       lecture: Object.assign({}, DEFAULT_LECTURE),
       payment: record,
-      course: this.currentCourse!
+      course: this.currentCourse!,
+      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON)
     });
 
     this.helper.toggleDialog(1);
+  }
 
-    // this.shouldRefresh = "payment";
-    // this.refreshID = record.id;
+  showResourcePerson(resourcePerson: ResourcePerson) {
+    this.helper.setComponentDialogData({
+      courseId: this.currentCourse!.updateCourseId,
+      lecture: Object.assign({}, DEFAULT_LECTURE),
+      payment: Object.assign({}, DEFAULT_COURSE_RECORD),
+      course: this.currentCourse!,
+      lecturer: resourcePerson
+    });
+
+    this.helper.toggleDialog(1);
   }
 
   byCourseType(courseType: UpdateCourseType, emails: string) {

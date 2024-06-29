@@ -17,6 +17,8 @@
            [lecture]="helper.data.lecture"></app-update-course-lecture>
           <app-payment-viewer *ngIf="helper.data.payment?.updateCourseId === helper.data.courseId"
             [record]="helper.data.payment" [updateCourse]="this.helper.data.course"></app-payment-viewer>
+          <app-resource-person *ngIf="helper.data.lecturer.updateCourseId === helper.data.courseId"
+            [resourcePerson]="helper.data.lecturer"></app-resource-person>
         </app-component-overlay>
       </div>
       <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown === 0">
