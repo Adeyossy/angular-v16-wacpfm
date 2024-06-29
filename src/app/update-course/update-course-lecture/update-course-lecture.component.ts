@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NEVER, Observable, map, of } from 'rxjs';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NEVER, Observable, Subscription, map, of } from 'rxjs';
 import { DEFAULT_LECTURE, UPDATE_COURSES_LECTURES, UpdateCourseLecture } from 'src/app/models/update_course';
 import { UPDATE_COURSE_TYPES, UpdateCourseType } from 'src/app/models/update_course_record';
-import { RESOURCE_PERSONS, ResourcePerson } from 'src/app/models/user';
+import { AppUser, RESOURCE_PERSONS, ResourcePerson, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 
@@ -11,27 +11,55 @@ import { HelperService } from 'src/app/services/helper.service';
   templateUrl: './update-course-lecture.component.html',
   styleUrls: ['./update-course-lecture.component.css']
 })
-export class UpdateCourseLectureComponent implements OnInit {
+export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
   @Input() updateCourseId = "";
   @Input() lecture: UpdateCourseLecture = Object.assign({}, DEFAULT_LECTURE);
   @Input() updateState$: Observable<boolean> | null = null;
+  @ViewChild('material') material: ElementRef = new ElementRef('input');
+  @ViewChild('video') video: ElementRef = new ElementRef('input');
+  @ViewChild('materialIndicator') materialIndicator: ElementRef = new ElementRef('div');
+
+  materialModel: any = "";
+  videoModel: any = "";
+
+  materialFile: File | null = null;
+  videoFile: File | null = null;
+
+  materialBlobURL = "";
+  videoBlobURL = "";
+
   resourcePerson$: Observable<ResourcePerson[]> = of([]);
+  names$: Observable<string> = NEVER;
+  materialUpload$: Observable<number> = NEVER;
+  videoUpload$: Observable<number> = NEVER;
+
+  materialSub = new Subscription();
+  videoSub = new Subscription();
+  materialProgress = 0;
+  videoProgress = 0;
 
   courseTypes = UPDATE_COURSE_TYPES.slice();
 
-  constructor(private authService: AuthService, public helper: HelperService) {}
+  constructor(private authService: AuthService, public helper: HelperService) { }
 
   ngOnInit(): void {
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    console.log("regex test => ", emailRegex.test(this.lecture.lecturerEmail));
     if (this.lecture.lecturerEmail && emailRegex.test(this.lecture.lecturerEmail)) {
-      this.resourcePerson$ = this.authService.queryByUserEmail$(RESOURCE_PERSONS);
+      this.findResourcePerson();
+      this.names$ = this.getName$();
     }
   }
 
+  ngOnDestroy(): void {
+    this.materialSub.unsubscribe();
+    this.videoSub.unsubscribe();
+  }
+
   setCourseType(value: string[]) {
-    if(value.length) {
+    if (value.length) {
       this.lecture.courseType = value[0] as UpdateCourseType
-    } 
+    }
   }
 
   templateToDate(datetime: string, time: "startTime" | "endTime") {
@@ -50,17 +78,90 @@ export class UpdateCourseLectureComponent implements OnInit {
   }
 
   updateLecture() {
-      this.updateState$ = this.authService.addDocWithID$(UPDATE_COURSES_LECTURES, this.lecture.lectureId, 
+    this.updateState$ = this.authService.addDocWithID$(UPDATE_COURSES_LECTURES, this.lecture.lectureId,
       this.lecture).pipe(map(_update => true));
   }
 
   findResourcePerson() {
-    this.resourcePerson$ = this.authService.queryByUserEmail$(RESOURCE_PERSONS);
+    this.resourcePerson$ = this.authService.queryCollections$(RESOURCE_PERSONS, "userEmail",
+      "==", this.lecture.lecturerEmail
+    );
   }
 
   getName$() {
-    return this.authService.getAppUser$().pipe(
-      map(appUser => `${appUser.firstname} ${appUser.lastname}`)
+    return this.authService.queryCollections$<AppUser>(USERS, "email", "==", this.lecture.lecturerEmail).pipe(
+      map(([appUser]) => `${appUser.firstname} ${appUser.lastname}`)
     )
+  }
+
+  onMaterialChange(what: any) {
+    const r = this.material.nativeElement as HTMLInputElement;
+    console.log("materialModel => ", this.materialModel);
+    console.log("r => ", r);
+    if (r.files && r.files.length) {
+      const file = r.files[0];
+      this.materialFile = file;
+      this.materialBlobURL = URL.createObjectURL(file);
+      console.log('r.files => ', URL.createObjectURL(r.files[0]));
+    }
+  }
+
+  onVideoChange(what: any) {
+    const r = this.video.nativeElement as HTMLInputElement;
+    console.log("videoModel => ", this.videoModel);
+    if (r.files && r.files.length) {
+      const file = r.files[0];
+      this.videoFile = file;
+      this.videoBlobURL = URL.createObjectURL(file);
+      console.log('r.files => ', URL.createObjectURL(r.files[0]));
+    }
+  }
+
+  uploadMaterial() {
+    this.materialUpload$ = this.authService.UploadFileResumably$(`Materials/${this.lecture.updateCourseId}`,
+      this.materialFile!, this.lecture.courseType).pipe(
+        map(output => {
+          console.log("lecturerEmail => ", this.lecture.lecturerEmail);
+          if (isNaN(parseFloat(output))) {
+            console.log("url? => ", output);
+            this.lecture.materialLink = [output];
+            return 100;
+          } else {
+            const percent = parseFloat(output);
+            // const div = this.materialIndicator.nativeElement as HTMLDivElement;
+            // setInterval(() => {
+            //   const totalWidth = div.parentElement!.style.width;
+            //   console.log("totalWidth => ", totalWidth);
+            //   const computed = percent * parseInt(totalWidth);
+            // }, 17);
+            // div.style.width = `${output}%`;
+            return percent * 100;
+          }
+        })
+      )
+  }
+
+  uploadVoiceover() {
+    this.videoUpload$ = this.authService.UploadFileResumably$(`Materials/${this.lecture.updateCourseId}`,
+      this.videoFile!, this.lecture.courseType).pipe(
+        map(output => {
+          console.log("lecturerEmail => ", this.lecture.lecturerEmail);
+          if (isNaN(parseFloat(output))) {
+            console.log("url? => ", output);
+            this.lecture.videoLink = output;
+            return 100;
+          } else {
+            const percent = parseFloat(output);
+            // const div = this.materialIndicator.nativeElement as HTMLDivElement;
+            // setInterval(() => {
+            //   const totalWidth = div.parentElement!.style.width;
+            //   console.log("totalWidth => ", totalWidth);
+            //   const computed = percent * parseInt(totalWidth);
+            // }, 17);
+            // div.style.width = `${output}%`;
+            return percent * 100;
+          }
+        })
+      )
   }
 }

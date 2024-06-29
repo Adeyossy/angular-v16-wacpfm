@@ -14,18 +14,18 @@
     placeholder="i.e the title of the lecture" required>
   <br><br>
   <label for="wacpfm-lecturer-email">Resource Person's Email</label>
-  <input #email="ngModel" type="text" name="wacpfm-lecturer-email" id="wacpfm-lecturer-email" [(ngModel)]="lecture.lecturerEmail"
-  (blur)="findResourcePerson()" placeholder="i.e resource person's email used to register" required>
+  <input #email="ngModel" type="text" name="wacpfm-lecturer-email" id="wacpfm-lecturer-email"
+    [(ngModel)]="lecture.lecturerEmail" (blur)="findResourcePerson()"
+    placeholder="i.e resource person's email used to register" required>
   <br><br>
   <div *ngIf="resourcePerson$ | async as lecturers; else loading">
     <div *ngIf="lecturers.length > 0; else sendEmail">
       <div class="p-2" *ngFor="let lecturer of lecturers">
-        <p class="wacpfm-small-text">{{ lecturer.title + " " + (getName$() | async) }}</p>
+        <p class="wacpfm-small-text">{{ lecturer.title + " " + (names$ | async) }}</p>
       </div>
     </div>
     <ng-template #sendEmail>
-      <a *ngIf="email.valid" href="mailto:{{lecture.lecturerEmail}}" 
-      class="wacpfm-link-card wacpfm-smaller-text">
+      <a *ngIf="email.valid" href="mailto:{{lecture.lecturerEmail}}" class="wacpfm-link-card wacpfm-smaller-text">
         Send them an email
       </a>
     </ng-template>
@@ -42,8 +42,80 @@
   <app-select mode="single" [itemsSelectionState]="courseTypes.map(toSelection)" [items]="courseTypes"
     (emitItems)="setCourseType($event)" [noOfClicks]="1"></app-select>
   <br><br>
-  <button class="wacpfm-primary-button" *ngIf="updateState$ === null; else update"
-  (click)="updateLecture()">Update Lecture</button>
+  <!-- -------------- Material Upload section starts here------------- -->
+  <div class="wacpfm-heading-underline">
+    <div class="wacpfm-heading-small fw-bold">Lecture PDF Section</div>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br>
+  <div class="" *ngFor="let link of lecture.materialLink; index as i">
+    <a [href]="link" [download]="lecture.lectureTitle + '.' + (i + 1) + '.pdf'" type="application/pdf"
+      target="_blank" class="wacpfm-link-card fw-bold">
+      <i class="bi bi-file-earmark-pdf-fill color-accent"></i> Download PDF
+    </a>
+  </div>
+  <br><br>
+  <div *ngIf="materialFile" class="wacpfm-card wacpfm-header-card">
+    <h1 class="wacpfm-heading-small">{{ materialFile.name }}</h1>
+    <br>
+    <h2 class="wacpfm-subheading">{{ (materialFile.size/(1024*1000)).toFixed(2) }}MB</h2>
+    <br>
+  </div>
+  <div #materialIndicator class="wacpfm-upload-progress" *ngIf="materialUpload$ | async as mUp">
+      <h1 class="wacpfm-heading-small text-center fw-bold wacpfm-text-primary">{{ mUp }}%</h1>
+  </div>
+  <div class="container-fluid p-0">
+    <div class="row g-0">
+      <div class="col-lg-6">
+        <label for="wacpfm-material" class="label-as-input w-100 text-center wacpfm-match-height">
+          <i class="bi bi-cloud-arrow-up-fill"></i> Choose Lecture PDF to Upload
+        </label>
+        <input #material type="file" name="wacpfm-material" id="wacpfm-material" placeholder="Choose PDF" class="d-none"
+          accept=".pdf" [ngModel]="materialModel" (ngModelChange)="onMaterialChange($event)" required>
+      </div>
+      <div class="col-lg-6" *ngIf="materialFile">
+        <button class="wacpfm-primary-button" (click)="uploadMaterial()">Upload PDF</button>
+      </div>
+    </div>
+  </div>
+  <br><br>
+  <!-- ----------------------------- End of Material Upload section --------------------------- -->
+  <!-- --------------------------------- Video Upload section --------------------------------- -->
+  <div class="wacpfm-heading-underline">
+    <div class="wacpfm-heading-small fw-bold">Lecture PPT Voiceover Section</div>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br>
+  <a [href]="lecture.videoLink" [download]="lecture.lectureTitle + '.pptx'" type="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    target="_blank" class="wacpfm-link-card fw-bold">
+    <i class="bi bi-file-earmark-pdf-fill color-accent"></i> Download PPTX
+  </a>
+  <br><br>
+  <div *ngIf="videoFile" class="wacpfm-card wacpfm-header-card">
+    <h1 class="wacpfm-heading-small">{{ videoFile.name }}</h1>
+    <p class="wacpfm-small-text">{{ (videoFile.size/(1024*1000)).toFixed(2) }}MB</p>
+  </div>
+  <div #materialIndicator class="wacpfm-upload-progress" *ngIf="videoUpload$ | async as vUp">
+      <h1 class="wacpfm-heading-small text-center fw-bold wacpfm-text-primary">{{ vUp }}%</h1>
+  </div>
+  <div class="container-fluid p-0" *ngIf="!lecture.videoLink">
+    <div class="row g-0">
+      <div class="col-md-6">
+        <label for="wacpfm-video" class="label-as-input w-100 text-center wacpfm-match-height">
+          <i class="bi bi-cloud-arrow-up-fill"></i> Choose Lecture
+        </label>
+        <input #video type="file" name="wacpfm-video" id="wacpfm-video" placeholder="Choose PPT Voiceover" 
+        class="d-none" accept=".ppt, .ppsx, .mp4, .pptx" 
+        (ngModelChange)="onVideoChange($event)" required [ngModel]="videoModel">
+      </div>
+      <div class="col-md-6" *ngIf="videoFile">
+        <button class="wacpfm-primary-button" (click)="uploadVoiceover()">Upload PDF</button>
+      </div>
+    </div>
+  </div>
+  <br><br>
+  <button class="wacpfm-primary-button" *ngIf="updateState$ === null; else update" (click)="updateLecture()">Update
+    Lecture</button>
   <ng-template #update>
     <div *ngIf="updateState$! | async as update; else loading">
       <button class="wacpfm-primary-button" (click)="helper.toggleDialog(-1)">Continue</button>
