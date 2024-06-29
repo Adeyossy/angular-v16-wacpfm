@@ -61,7 +61,8 @@
     <h2 class="wacpfm-subheading">{{ (materialFile.size/(1024*1000)).toFixed(2) }}MB</h2>
     <br>
   </div>
-  <div #materialIndicator class="wacpfm-upload-progress" *ngIf="materialUpload$ | async as mUp">
+  <div #materialIndicator class="wacpfm-upload-progress w-100 d-flex flex-column justify-content-center" 
+  *ngIf="materialUpload$ | async as mUp">
       <h1 class="wacpfm-heading-small text-center fw-bold wacpfm-text-primary">{{ mUp }}%</h1>
   </div>
   <div class="container-fluid p-0">
@@ -86,7 +87,8 @@
     <div class="wacpfm-underline"></div>
   </div>
   <br>
-  <a [href]="lecture.videoLink" [download]="lecture.lectureTitle + '.pptx'" type="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+  <a [href]="lecture.videoLink" [download]="lecture.lectureTitle + '.pptx'" *ngIf="lecture.videoLink"
+    type="application/vnd.openxmlformats-officedocument.presentationml.presentation"
     target="_blank" class="wacpfm-link-card fw-bold">
     <i class="bi bi-file-earmark-pdf-fill color-accent"></i> Download PPTX
   </a>
@@ -95,7 +97,8 @@
     <h1 class="wacpfm-heading-small">{{ videoFile.name }}</h1>
     <p class="wacpfm-small-text">{{ (videoFile.size/(1024*1000)).toFixed(2) }}MB</p>
   </div>
-  <div #materialIndicator class="wacpfm-upload-progress" *ngIf="videoUpload$ | async as vUp">
+  <div #materialIndicator class="wacpfm-upload-progress w-100 d-flex flex-column justify-content-center" 
+  *ngIf="videoUpload$ | async as vUp">
       <h1 class="wacpfm-heading-small text-center fw-bold wacpfm-text-primary">{{ vUp }}%</h1>
   </div>
   <div class="container-fluid p-0" *ngIf="!lecture.videoLink">
