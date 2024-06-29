@@ -39,7 +39,7 @@
   <br><br>
   <label for="wacpfm-lecturer-title">Course Category</label>
   <app-select mode="single" [itemsSelectionState]="courseSelection" [items]="courseTypes.slice()" 
-    (emitItems)="setTitle($event)" [noOfClicks]="1"></app-select>
+    (emitItems)="setCourseType($event)" [noOfClicks]="1"></app-select>
   <br><br>
   <button class="wacpfm-primary-button" (click)="updateLecturer()">
     Update Details
@@ -52,7 +52,10 @@
       <h1 class="wacpfm-heading-small fw-bold mb-2">Lectures</h1>
       <p class="wacpfm-subheading">Your lectures will appear here.</p>
       <br>
-      <button class="small w-50"><i class="bi bi-plus-circle-fill"></i> New Lecture</button>
+      <button class="small w-50" *ngIf="newLecture$ | async as newLecture; else loading"
+      (click)="showLecture(newLecture)">
+        <i class="bi bi-plus-circle-fill"></i> New Lecture
+      </button>
     </div>
     <div class="col-lg-6 py-3">
       <app-card-list *ngFor="let lecture of lectures$ | async; index as i" [item]="lectureToCardList(lecture)"
