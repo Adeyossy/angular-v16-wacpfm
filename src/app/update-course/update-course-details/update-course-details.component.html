@@ -20,7 +20,8 @@
             <div class="col-6 col-md-6 col-lg-4 py-2">
               <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true" *ngIf="!newCourse.tot.participants.includes(user!.email) &&
                !newCourse.fellowship.participants.includes(user!.email) &&
-               !newCourse.membership.participants.includes(user!.email)">
+               !newCourse.membership.participants.includes(user!.email) && 
+               newCourse.registrationCloseDate > today">
                 <span *ngIf="courseRecords$ | async as cr; else loadingCirclesInline">
                   <span *ngIf="cr.length; else register">Applied</span>
                   <ng-template #register>Register</ng-template>
@@ -45,7 +46,8 @@
           <app-loading-circles></app-loading-circles>
         </ng-template>
       </div>
-      <div class="wacpfm-ongoing-course-register wacpfm-padding-default" [ngClass]="openCategoryUI ? 'd-block' : 'd-none'">
+      <div class="wacpfm-ongoing-course-register wacpfm-padding-default" 
+        [ngClass]="openCategoryUI && newCourse.registrationCloseDate > today ? 'd-block' : 'd-none'">
         <div class="container-fluid p-0">
           <div class="row g-0">
             <div class="col-12 py-4">

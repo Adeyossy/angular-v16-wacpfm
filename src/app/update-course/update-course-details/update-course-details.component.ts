@@ -27,6 +27,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   day: number[] = []; // first day (zero-based numbering)
   conversionSub = new Subscription();
   pattern = /-/g;
+  today = Date.now();
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
     public helper: HelperService) {
