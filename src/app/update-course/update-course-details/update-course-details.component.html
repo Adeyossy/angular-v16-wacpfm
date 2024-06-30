@@ -103,7 +103,14 @@
           <div class="col-lg-6 wacpfm-padding-default">
             <div class="wacpfm-heading-underline">
               <h1 class="wacpfm-subheading fw-bold">{{record.courseType}} Course</h1>
-              <div class="wacpfm-underline"></div>
+              <div class="wacpfm-heading-underline">
+                <p class="wacpfm-subheading wacpfm-font-arial">
+                  <span *ngFor="let date of calculateDates(newCourse, record.courseType) as dates; index as d">
+                    {{ helper.getDate(date) }} <span *ngIf="dates.length > 1 && d === 0"> - </span>
+                  </span>
+                </p>
+                <div class="wacpfm-underline"></div>
+              </div>
             </div>
             <br>
             <div class="wacpfm-category-theme" id="tot">
@@ -113,10 +120,10 @@
               </h2>
             </div>
             <br>
-            <a *ngFor="let link of getCourseTypeDeets(newCourse, record.courseType).classLink" [href]="link">
-              <button class="wacpfm-primary-button small"
-                [disabled]="!getCourseTypeDeets(newCourse, record.courseType).releaseResources">
-                <i class="bi bi-file-earmark-image"></i> Join Training
+            <a *ngFor="let link of getCourseTypeDeets(newCourse, record.courseType).classLink as days; index as i" 
+            [href]="link" class="mb-3">
+              <button class="wacpfm-primary-button small">
+                <i class="bi bi-file-earmark-image"></i> Join Training <span *ngIf="days.length > 1">Day {{ i + 1 }}</span>
               </button>
             </a>
             <button class="wacpfm-primary-button small" routerLink="./certificate/{{record.id}}"
@@ -402,8 +409,8 @@
 </ng-template>
 <ng-template #empty>
   <app-loading-ui></app-loading-ui>
-  <br>
+  <br><br>
   <app-loading-ui></app-loading-ui>
-  <br>
+  <br><br>
   <app-loading-ui></app-loading-ui>
 </ng-template>

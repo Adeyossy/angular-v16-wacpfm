@@ -4,7 +4,7 @@ import { User } from 'firebase/auth';
 import { collection, doc, runTransaction, writeBatch } from 'firebase/firestore';
 import { AsyncSubject, Observable, Subscription, concatMap, from, iif, map, of, partition } from 'rxjs';
 import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseDetails, UpdateCourseLecture, UpdateCourseRev } from 'src/app/models/update_course';
-import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
+import { UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
 import { AppUser, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
@@ -58,7 +58,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             participants: uCourse.fellowshipParticipants.split(", "),
             releaseResources: uCourse.fellowshipRelease,
             theme: uCourse.fellowshipTheme,
-            groupLink: uCourse.fellowshipGroupLink,
+            groupLink: uCourse?.fellowshipGroupLink,
             classLink: uCourse?.fellowshipClassLink
           },
           membership: { 
@@ -68,7 +68,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             participants: uCourse.membershipParticipants.split(", "),
             releaseResources: uCourse.membershipRelease,
             theme: uCourse.membershipTheme,
-            groupLink: uCourse.membershipGroupLink,
+            groupLink: uCourse?.membershipGroupLink,
             classLink: uCourse?.membershipClassLink
           },
           tot: { 
@@ -78,7 +78,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             participants: uCourse.totParticipants.split(", "),
             releaseResources: uCourse.totRelease,
             theme: uCourse.totTheme,
-            groupLink: uCourse.totGroupLink,
+            groupLink: uCourse?.totGroupLink,
             classLink: uCourse?.totClassLink
           }
         };
@@ -105,9 +105,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: _val => {
         console.log("converted successfully");
-        this.courseRecords$ = this.getCourseRecords().pipe(
-          map(rec => rec.sort((a, b) => a.courseType.charCodeAt(0) - b.courseType.charCodeAt(0)))
-        );
+        this.courseRecords$ = this.getCourseRecords();
         this.updateCourseLecture$ = this.getCourseLectures();
         this.lecturesPerRecord$ = this.getLecturesPerRecord();
         const lprAsync = new AsyncSubject<UpdateCourseLecture[][][]>();
@@ -146,7 +144,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
       })),
       concatMap(doc => this.user$.pipe(
         map(user => doc.filter(d => d.userEmail.toLowerCase() === user.email.toLowerCase())
-          .sort((a, b) => a.courseType.charCodeAt(0) - b.courseType.charCodeAt(0)))
+          .sort(this.helper.sortCourseType))
       ))
     );
   }
@@ -241,5 +239,28 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     const confno = "";
     const zoomURI = `zoommtg://zoom.us/join?action=join&confno=${confno}&pwd=<password>`;
     window.location.href = ""
+  }
+
+  calculateDates(newCourse: UpdateCourseRev, courseType: UpdateCourseType) {
+    if (courseType === "Membership") {
+      const date = new Date(newCourse.startDate);
+      date.setDate(date.getDate() + 1);
+      date.setHours(16);
+      let endDate = date.getTime();
+      return [newCourse.startDate, endDate]
+    } else {
+      if (courseType === "Fellowship") {
+        const date = new Date(newCourse.startDate);
+        date.setDate(date.getDate() + 2);
+        date.setHours(9);
+        const startDate = date.getTime();
+        date.setDate(date.getDate() + 1);
+        date.setHours(16);
+        const endDate = date.getTime();
+        return [startDate, endDate]
+      } else {
+        return [newCourse.endDate]
+      }
+    }
   }
 }
