@@ -33,6 +33,7 @@ import { UpdateCourseLectureComponent } from './update-course/update-course-lect
 import { ResourcePersonComponent } from './update-course/resource-person/resource-person.component';
 import { PaymentViewerComponent } from './widgets/payment-viewer/payment-viewer.component';
 import { CourseTypeComponent } from './widgets/course-type/course-type.component';
+import { ResourcePersonsDashComponent } from './dashboard/resource-persons-dash/resource-persons-dash.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { CourseTypeComponent } from './widgets/course-type/course-type.component
     UpdateCourseLectureComponent,
     ResourcePersonComponent,
     PaymentViewerComponent,
-    CourseTypeComponent
+    CourseTypeComponent,
+    ResourcePersonsDashComponent
   ],
   imports: [
     BrowserModule,
