@@ -58,7 +58,8 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             participants: uCourse.fellowshipParticipants.split(", "),
             releaseResources: uCourse.fellowshipRelease,
             theme: uCourse.fellowshipTheme,
-            groupLink: uCourse.fellowshipGroupLink
+            groupLink: uCourse.fellowshipGroupLink,
+            classLink: uCourse?.fellowshipClassLink
           },
           membership: { 
             certificate: uCourse.membershipCertificate,
@@ -67,7 +68,8 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             participants: uCourse.membershipParticipants.split(", "),
             releaseResources: uCourse.membershipRelease,
             theme: uCourse.membershipTheme,
-            groupLink: uCourse.membershipGroupLink
+            groupLink: uCourse.membershipGroupLink,
+            classLink: uCourse?.membershipClassLink
           },
           tot: { 
             certificate: uCourse.totCertificate,
@@ -76,7 +78,8 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             participants: uCourse.totParticipants.split(", "),
             releaseResources: uCourse.totRelease,
             theme: uCourse.totTheme,
-            groupLink: uCourse.totGroupLink
+            groupLink: uCourse.totGroupLink,
+            classLink: uCourse?.totClassLink
           }
         };
       })
@@ -232,5 +235,11 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
           return from(batch.commit());        
       })
     )
+  }
+
+  goToClass() {
+    const confno = "";
+    const zoomURI = `zoommtg://zoom.us/join?action=join&confno=${confno}&pwd=<password>`;
+    window.location.href = ""
   }
 }

@@ -48,7 +48,7 @@
           <app-loading-circles></app-loading-circles>
         </ng-template>
       </div>
-      <div class="wacpfm-ongoing-course-register wacpfm-padding-default" 
+      <div class="wacpfm-ongoing-course-register wacpfm-padding-default"
         [ngClass]="openCategoryUI && newCourse.registrationCloseDate > today ? 'd-block' : 'd-none'">
         <div class="container-fluid p-0">
           <div class="row g-0">
@@ -80,8 +80,8 @@
     </div>
     <div class="col-12" *ngIf="courseRecords$ | async as courseRecords; else empty"><!-- Section for the lectures -->
       <div class="container-fluid p-0 mb-5" *ngFor="let record of courseRecords; index as r">
-        <div class="row g-0 wacpfm-card p-0 wacpfm-course-details" 
-        *ngIf="record.approved !== undefined ? record.approved : hasPaid(newCourse, record.userEmail); else notapproved">
+        <div class="row g-0 wacpfm-card p-0 wacpfm-course-details"
+          *ngIf="record.approved !== undefined ? record.approved : hasPaid(newCourse, record.userEmail); else notapproved">
           <div class="col-12 mb-1 wacpfm-padding-default">
             <div class="wacpfm-heading-underline mb-2">
               <h1 class="wacpfm-heading-medium fw-bold">
@@ -93,9 +93,11 @@
               </div>
             </div>
             <br>
-            <p class="wacpfm-subheading mb-1">Congratulations you are successfully registered for this course.</p>
-            <p class="wacpfm-subheading mb-1">You will be sent the online meeting link for the course through this registered e-mail 24 hours before the start date.</p>
-            <p class="wacpfm-subheading mb-1">Please use the QR code below to join the WhatsApp group for the course for information sharing purposes.</p>
+            <p class="wacpfm-subheading mb-2">Congratulations you are successfully registered for this course.</p>
+            <p class="wacpfm-subheading mb-2">You will be sent the online meeting link for the course through this
+              registered e-mail 24 hours before the start date.</p>
+            <p class="wacpfm-subheading mb-2">Please use the QR code below to join the WhatsApp group for the course for
+              information sharing purposes.</p>
             <p class="wacpfm-subheading">Thank you!</p>
           </div>
           <div class="col-lg-6 wacpfm-padding-default">
@@ -111,6 +113,12 @@
               </h2>
             </div>
             <br>
+            <a *ngFor="let link of getCourseTypeDeets(newCourse, record.courseType).classLink" [href]="link">
+              <button class="wacpfm-primary-button small"
+                [disabled]="!getCourseTypeDeets(newCourse, record.courseType).releaseResources">
+                <i class="bi bi-file-earmark-image"></i> Join Training
+              </button>
+            </a>
             <button class="wacpfm-primary-button small" routerLink="./certificate/{{record.id}}"
               [disabled]="!getCourseTypeDeets(newCourse, record.courseType).releaseResources">
               <i class="bi bi-file-earmark-image"></i> Download Certificate
@@ -123,7 +131,7 @@
               </button>
             </a>
             <br><br>
-            <img [src]="getCourseTypeDeets(newCourse, record.courseType).groupLink" 
+            <img [src]="getCourseTypeDeets(newCourse, record.courseType).groupLink"
               alt="{{record.courseType}} WhatsApp group qr-code" class="img-fluid"
               *ngIf="getCourseTypeDeets(newCourse, record.courseType).groupLink">
           </div>
@@ -158,7 +166,8 @@
                   </div>
                   <div class="col-9 px-1">
                     <p class="wacpfm-lecture-title">{{ lecture.lectureTitle }}</p>
-                    <span class="wacpfm-smaller-text opacity-75 pe-2">{{ helper.millisToHour(lecture.startTime) }}</span>
+                    <span class="wacpfm-smaller-text opacity-75 pe-2">{{ helper.millisToHour(lecture.startTime)
+                      }}</span>
                     <i class="bi bi-three-dots-vertical color-accent wacpfm-smaller-text"></i>
                     <span class="wacpfm-smaller-text fw-bold opacity-75">
                       {{ helper.millisToHour(lecture.endTime) }}
@@ -166,7 +175,7 @@
                   </div>
                   <div class="col-1 text-end" *ngFor="let link of lecture.materialLink">
                     <a [href]="link" [download]="'Update.Course.Lecture.' + (i + 1) + '.pdf'" type="application/pdf"
-                      target="_blank">
+                      target="_blank" *ngIf="getCourseTypeDeets(newCourse, record.courseType).releaseResources">
                       <i class="bi bi-file-earmark-pdf-fill color-accent"></i>
                     </a>
                   </div>
@@ -186,11 +195,13 @@
                 </div>
               </div>
               <p class="wacpfm-subheading">Kindly give us some time for the manual verification of your receipt.</p>
-              <p class="wacpfm-subheading">You may return from time to time to check for your confirmation status by refreshing this page. Thank you</p>
+              <p class="wacpfm-subheading">You may return from time to time to check for your confirmation status by
+                refreshing this page. Thank you</p>
             </div>
           </div>
           <ng-template #declined>
-            <div class="row g-0 wacpfm-card wacpfm-course-details border border-danger" *ngIf="record.approved === false">
+            <div class="row g-0 wacpfm-card wacpfm-course-details border border-danger"
+              *ngIf="record.approved === false">
               <div class="col-12">
                 <div class="wacpfm-heading-underline mb-3">
                   <h1 class="wacpfm-heading-medium fw-bold">{{ record.courseType }} Payment</h1>
@@ -200,7 +211,8 @@
                   </div>
                 </div>
                 <p class="wacpfm-subheading">Your payment receipt was reviewed and has been declined.</p>
-                <p class="wacpfm-subheading">You can reach out to the Training Coordinator if you believe this is an error.</p>
+                <p class="wacpfm-subheading">You can reach out to the Training Coordinator if you believe this is an
+                  error.</p>
               </div>
             </div>
           </ng-template>
