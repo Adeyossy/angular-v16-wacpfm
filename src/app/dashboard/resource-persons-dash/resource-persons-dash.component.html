@@ -1,1 +1,11 @@
-<p>resource-persons-dash works!</p>
+<div *ngIf="resourcePersons$ | async as lecturers">
+  <div *ngFor="let lecturer of lecturers">
+    <app-resource-person [resourcePerson]="lecturer"></app-resource-person>
+  </div>
+  <div class="wacpfm-card wacpfm-header-card border border-danger" *ngIf="lecturers.length == 0">
+    <h1 class="wacpfm-heading-small fw-bold">Not (Yet) Authorized</h1>
+    <p class="wacpfm-subheading">
+      It seems you are not a resource person for this update course
+    </p>
+  </div>
+</div>
