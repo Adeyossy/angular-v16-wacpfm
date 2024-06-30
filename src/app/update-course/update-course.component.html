@@ -2,7 +2,7 @@
   <div class="row g-0 justify-content-between">
     <div class="col-8 col-md-5 col-lg-4">
       <div class="wacpfm-heading-underline">
-        <h1 class="wacpfm-heading-small fw-bold">Update Course</h1>
+        <h1 class="wacpfm-heading-small fw-bold">Update Courses</h1>
         <div class="wacpfm-underline"></div>
       </div>
     </div>
@@ -63,11 +63,11 @@
   <br>
   <div class="row" *ngIf="(previousCourses | async) as results">
     <div class="col-lg-6" *ngFor="let result of results">
-      <div class="wacpfm-card" routerLink="./{{result.updateCourseId}}/details">
-        <p>{{ result.title }}</p>
+      <div class="wacpfm-card wacpfm-match-height" routerLink="./{{result.updateCourseId}}/details">
+        <p class="wacpfm-previous-course-title">{{ result.title }}</p>
         <div class="wacpfm-page-divider"></div>
         <br>
-        <p class="wacpfm-small-text">{{ getDate(result.startDate) }}</p>
+        <p class="wacpfm-small-text wacpfm-font-arial">{{ getDate(result.startDate) }}</p>
       </div>
     </div>
   </div>
