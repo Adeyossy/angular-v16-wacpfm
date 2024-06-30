@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'firebase/auth';
-import { collection, doc, runTransaction, writeBatch } from 'firebase/firestore';
+import { collection, doc, runTransaction, where, writeBatch } from 'firebase/firestore';
 import { AsyncSubject, Observable, Subscription, concatMap, from, iif, map, of, partition } from 'rxjs';
 import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseDetails, UpdateCourseLecture, UpdateCourseRev } from 'src/app/models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
-import { AppUser, USERS } from 'src/app/models/user';
+import { AppUser, RESOURCE_PERSONS, ResourcePerson, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 
@@ -28,6 +28,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   conversionSub = new Subscription();
   pattern = /-/g;
   today = Date.now();
+  resourcePersons$: Observable<ResourcePerson[]> = of([]);
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
     public helper: HelperService) {
@@ -35,6 +36,18 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit(): void {
+    this.resourcePersons$ = this.activatedRoute.paramMap.pipe(
+      concatMap(params => {
+        const id = params.get("updateCourseId");
+        return iif(
+          () => !!id,
+          this.authService.queryCollections$<ResourcePerson>(RESOURCE_PERSONS, 
+            "updateCourseId", "==", id!),
+          of([])
+        )
+      })
+    )
+
     this.ongoing = this.activatedRoute.paramMap.pipe(
       map(params => {
         const updateCourseId = params.get("updateCourseId");

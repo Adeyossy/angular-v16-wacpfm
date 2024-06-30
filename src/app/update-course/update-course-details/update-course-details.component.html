@@ -18,10 +18,11 @@
         <div class="container-fluid p-0" *ngIf="user$ | async as user; else loadingCircles">
           <div class="row g-0">
             <div class="col-6 col-md-6 col-lg-4 py-2">
-              <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true" *ngIf="!newCourse.tot.participants.includes(user!.email) &&
-               !newCourse.fellowship.participants.includes(user!.email) &&
-               !newCourse.membership.participants.includes(user!.email) && 
-               newCourse.registrationCloseDate > today">
+              <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true" 
+                *ngIf="!newCourse.tot.participants.includes(user!.email) &&
+                !newCourse.fellowship.participants.includes(user!.email) &&
+                !newCourse.membership.participants.includes(user!.email) && 
+                newCourse.registrationCloseDate > today">
                 <span *ngIf="courseRecords$ | async as cr; else loadingCirclesInline">
                   <span *ngIf="cr.length; else register">Applied</span>
                   <ng-template #register>Register</ng-template>
@@ -35,8 +36,9 @@
               <ng-template></ng-template>
             </div>
             <div class="offset-1 col-5 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3 py-2 text-end"
-              *ngIf="user?.updateCourseRole === 'resource_person'">
-              <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/resourcepersons">
+              *ngIf="resourcePersons$ | async as lecturer">
+              <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/resourcepersons"
+                *ngIf="lecturer.length > 0">
                 <button class="small w-auto px-4">
                   Resource Persons <i class="bi bi-arrow-right-circle"></i>
                 </button>
@@ -84,9 +86,7 @@
           *ngIf="record.approved !== undefined ? record.approved : hasPaid(newCourse, record.userEmail); else notapproved">
           <div class="col-12 mb-1 wacpfm-padding-default">
             <div class="wacpfm-heading-underline mb-2">
-              <h1 class="wacpfm-heading-medium fw-bold">
-                <i class="bi bi-trophy-fill text-success"></i> {{ record.courseType }}
-              </h1>
+              <h1 class="wacpfm-heading-medium fw-bold">{{ record.courseType }}</h1>
               <div class="wacpfm-heading-underline">
                 <h2 class="wacpfm-heading-small fw-bold m-0">Successfully Registered</h2>
                 <div class="wacpfm-underline"></div>
