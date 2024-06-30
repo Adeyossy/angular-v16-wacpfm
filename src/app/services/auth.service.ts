@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AsyncSubject, Observable, concatMap, from, iif, map, of } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
-import { DocumentReference, Firestore, Query, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
+import { DocumentReference, Firestore, Query, QueryFieldFilterConstraint, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
 import { UploadTask, getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { AppUser, USERS } from '../models/user';
 import { UpdateCourse } from '../models/update_course';
@@ -244,6 +244,13 @@ export class AuthService {
       concatMap(db => getDocs(query(collection(db, collectionName),
         where(property, comparator, value)))),
       map(docs => docs.docs.map(doc => doc.data() as Type))
+    );
+  }
+
+  queriesCollections$<Type>(collectionName: string, [where1, where2]: QueryFieldFilterConstraint[]) {
+    return this.getFirestore$().pipe(
+      concatMap(db => getDocs(query(collection(db, collectionName), where1, where2))),
+      map(snapshot => snapshot.docs.map(doc => doc.data() as Type))
     );
   }
 
