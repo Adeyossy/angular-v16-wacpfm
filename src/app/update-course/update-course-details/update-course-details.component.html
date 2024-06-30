@@ -35,9 +35,11 @@
               <ng-template></ng-template>
             </div>
             <div class="offset-1 col-5 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3 py-2 text-end"
-              *ngIf="user?.updateCourseRole === 'admin'">
-              <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/details">
-                <button class="small w-auto px-4">Edit</button>
+              *ngIf="user?.updateCourseRole === 'resource_person'">
+              <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/resourcepersons">
+                <button class="small w-auto px-4">
+                  Resource Persons <i class="bi bi-arrow-right-circle"></i>
+                </button>
               </a>
             </div>
           </div>
