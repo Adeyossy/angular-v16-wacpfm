@@ -51,6 +51,10 @@ export class HelperService {
     return new Date(millis);
   }
 
+  getDate(millis: number) {
+    return new Intl.DateTimeFormat("en-NG").format(millis);
+  }
+  
   getDateString(millis: number) {
     const date = new Date(millis);
     const year = date.getFullYear();
@@ -98,5 +102,11 @@ export class HelperService {
 
   setComponentDialogData(data: ComponentDialogData) {
     this.data = data;
+  }
+
+  sortCourseType(record1: UpdateCourseRecord, record2: UpdateCourseRecord) {
+    if(record1.courseType === "Membership") return -1;
+    if(record2.courseType === "Membership") return 1;
+    return record1.courseType.charCodeAt(0) - record2.courseType.charCodeAt(0);
   }
 }
