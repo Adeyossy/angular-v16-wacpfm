@@ -1,4 +1,4 @@
-<div *ngIf="resourcePersons$ | async as lecturers">
+<div *ngIf="resourcePersons$ | async as lecturers; else loadingUI">
   <div *ngFor="let lecturer of lecturers">
     <app-resource-person [resourcePerson]="lecturer"></app-resource-person>
   </div>
@@ -9,3 +9,10 @@
     </p>
   </div>
 </div>
+<ng-template #loadingUI>
+  <app-loading-ui></app-loading-ui>
+  <br><br>
+  <app-loading-ui></app-loading-ui>
+  <br><br>
+  <app-loading-ui></app-loading-ui>
+</ng-template>

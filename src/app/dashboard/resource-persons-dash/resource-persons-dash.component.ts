@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./resource-persons-dash.component.css']
 })
 export class ResourcePersonsDashComponent implements OnInit {
-  resourcePersons$: Observable<ResourcePerson[]> = new Observable();
+  resourcePersons$: Observable<ResourcePerson[]> = of([]);
 
   constructor(private authService: AuthService, private activatedRoute: ActivatedRoute) {}
 
@@ -20,7 +20,8 @@ export class ResourcePersonsDashComponent implements OnInit {
         const id = p.get("updateCourseId");
         return iif(
           () => id !== "", 
-          this.resourcePersons$.pipe(map(ls => ls.filter(l => l.updateCourseId === id))),
+          this.authService.queryByUserEmail$<ResourcePerson>(RESOURCE_PERSONS)
+            .pipe(map(ls => ls.filter(l => l.updateCourseId === id))),
           of([])
         )
       })
