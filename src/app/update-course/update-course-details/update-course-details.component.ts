@@ -30,21 +30,24 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   today = Date.now();
   resourcePersons$: Observable<ResourcePerson[]> = of([]);
   elders$: Observable<string> = NEVER;
+  membershipRecord$: Observable<UpdateCourseRecord> = NEVER;
+  fellowshipRecord$: Observable<UpdateCourseRecord> = NEVER;
+  totRecord$: Observable<UpdateCourseRecord> = NEVER;
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
     public helper: HelperService) {
-      this.lecturesPerRecord$.subscribe(this.lecturesPerRecordAsync);
-    }
+    this.lecturesPerRecord$.subscribe(this.lecturesPerRecordAsync);
+  }
 
   ngOnInit(): void {
     this.getElders();
-    
+
     this.resourcePersons$ = this.activatedRoute.paramMap.pipe(
       concatMap(params => {
         const id = params.get("updateCourseId");
         return iif(
           () => !!id,
-          this.authService.queryCollections$<ResourcePerson>(RESOURCE_PERSONS, 
+          this.authService.queryCollections$<ResourcePerson>(RESOURCE_PERSONS,
             "updateCourseId", "==", id!),
           of([])
         )
@@ -67,7 +70,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
           registrationOpenDate: uCourse.registrationOpenDate,
           registrationCloseDate: uCourse.registrationCloseDate,
           resourcePersons: uCourse.resourcePersons,
-          fellowship: { 
+          fellowship: {
             certificate: uCourse.fellowshipCertificate,
             cpd: uCourse.fellowshipCPD,
             lectures: uCourse.fellowshipLectures,
@@ -77,7 +80,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             groupLink: uCourse?.fellowshipGroupLink,
             classLink: uCourse?.fellowshipClassLink
           },
-          membership: { 
+          membership: {
             certificate: uCourse.membershipCertificate,
             cpd: uCourse.membershipCPD,
             lectures: uCourse.membershipLectures,
@@ -87,7 +90,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             groupLink: uCourse?.membershipGroupLink,
             classLink: uCourse?.membershipClassLink
           },
-          tot: { 
+          tot: {
             certificate: uCourse.totCertificate,
             cpd: uCourse.totCPD,
             lectures: uCourse.totLectures,
@@ -103,39 +106,48 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
     this.user$ = this.authService.getDocByUserId$<AppUser>(USERS);
 
-    // this.courseRecords$ = this.getCourseRecords();
+    // // this.courseRecords$ = this.getCourseRecords();
 
-    this.updateCourseLecture$ = this.getCourseLectures();
+    // this.updateCourseLecture$ = this.getCourseLectures();
 
-    this.lecturesPerRecord$ = this.getLecturesPerRecord();
+    // this.lecturesPerRecord$ = this.getLecturesPerRecord();
 
-    this.conversionSub = this.user$.pipe(
+    this.courseRecords$ = this.user$.pipe(
       concatMap(appUser => this.ongoing.pipe(
-        concatMap((uCourse) => this.getCourseRecords().pipe(
-          concatMap(records => {
-            return iif(() => records.length > 0, of(null), 
-              this.batchWriteRecords(uCourse, appUser))             
-          })
+        concatMap((uCourse) => this.getCourseRecords(appUser.email).pipe(
+          concatMap(records =>  records.length > 0 ? 
+            of(records) : this.batchWriteRecords(uCourse, appUser))
         ))
       ))
-    ).subscribe({
-      next: _val => {
-        console.log("converted successfully");
-        this.courseRecords$ = this.getCourseRecords();
-        this.updateCourseLecture$ = this.getCourseLectures();
-        this.lecturesPerRecord$ = this.getLecturesPerRecord();
-        const lprAsync = new AsyncSubject<UpdateCourseLecture[][][]>();
-        this.lecturesPerRecord$.subscribe(lprAsync);
-        this.lecturesPerRecordAsync = lprAsync;
-      },
-      error: err => {
-        console.log("error on conversion");
-        console.log(err);
-      },
-      complete: () => {
-        console.log("conversion complete");
-      }
-    })
+    );
+
+    // this.conversionSub = this.user$.pipe(
+    //   concatMap(appUser => this.ongoing.pipe(
+    //     concatMap((uCourse) => this.getCourseRecords(appUser.email).pipe(
+    //       concatMap(records => {
+    //         return iif(() => records.length > 0, of(null),
+    //           this.batchWriteRecords(uCourse, appUser))
+    //       })
+    //     ))
+    //   ))
+    // ).subscribe({
+    //   next: _val => {
+    //     console.log("converted successfully");
+    //     this.courseRecords$ = this.getCourseRecords();
+    //     this.updateCourseLecture$ = this.getCourseLectures();
+    //     this.lecturesPerRecord$ = this.getLecturesPerRecord();
+    //     const lprAsync = new AsyncSubject<UpdateCourseLecture[][][]>();
+    //     this.lecturesPerRecord$.subscribe(lprAsync);
+    //     this.lecturesPerRecordAsync = lprAsync;
+    //   },
+    //   error: err => {
+    //     console.log("error on conversion");
+    //     console.log(err);
+    //   },
+    //   complete: () => {
+    //     console.log("conversion complete");
+    //   }
+    // })
   }
 
   ngOnDestroy(): void {
@@ -144,46 +156,65 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
   hasPaid(course: UpdateCourseRev, email: string) {
     return course.membership.participants.includes(email) ||
-    course.fellowship.participants.includes(email) || 
-    course.tot.participants.includes(email)
+      course.fellowship.participants.includes(email) ||
+      course.tot.participants.includes(email)
   }
 
-  getCourseRecords() {
+  isMembership(course: UpdateCourseRev, email: string) {
+    return course.membership.participants.includes(email);
+  }
+
+  isFellowship(course: UpdateCourseRev, email: string) {
+    return course.fellowship.participants.includes(email);
+  }
+
+  isTot(course: UpdateCourseRev, email: string) {
+    return course.tot.participants.includes(email);
+  }
+
+  getCourseRecords(email: string) {
     return this.activatedRoute.paramMap.pipe(
-      concatMap(params => this.authService.queryCollectionsUnTyped$(UPDATE_COURSES_RECORDS,
-        "updateCourseId", "==", params.get("updateCourseId") as string)),
+      concatMap(params => this.authService.queriesForListener$(UPDATE_COURSES_RECORDS,
+        [
+          where("updateCourseId", "==", params.get("updateCourseId") as string),
+          where("userEmail", "==", email)
+        ])
+      ),
       map(snapshot => snapshot.docs.map(doc => {
         this.day.push(0);
         const record = doc.data() as UpdateCourseRecord;
-        if(!record.hasOwnProperty('id') || !record.id) record.id = doc.id;
+        if (!record.hasOwnProperty('id') || !record.id) record.id = doc.id;
         return record;
-      })),
-      concatMap(doc => this.user$.pipe(
-        map(user => doc.filter(d => d.userEmail.toLowerCase() === user.email.toLowerCase())
-          .sort(this.helper.sortCourseType))
-      ))
+      }).sort(this.helper.sortCourseType)
+      ),
+      map(records => {
+        console.log("records length in method => ", records.length)
+        this.updateCourseLecture$ = this.getCourseLectures();
+        this.lecturesPerRecord$ = this.getLecturesPerRecord(records);
+        const lprAsync = new AsyncSubject<UpdateCourseLecture[][][]>();
+        this.lecturesPerRecord$.subscribe(lprAsync);
+        this.lecturesPerRecordAsync = lprAsync;
+        return records;
+      })
     );
   }
 
+  // Get with multiple queries
+  // Use a listener
   getCourseLectures() {
     return this.activatedRoute.paramMap.pipe(
       concatMap(params => this.authService.queryCollections$<UpdateCourseLecture>
         (UPDATE_COURSES_LECTURES, "updateCourseId", "==", params.get("updateCourseId") as string)),
-      map(docs => docs.sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))));
+      map(docs => docs.sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime)))
+    );
   }
 
-  getLecturesPerRecord() {
+  // For each lecture record, return an observable of its lectures
+  getLecturesPerRecord(records: UpdateCourseRecord[]) {
     return this.updateCourseLecture$.pipe(
-      concatMap(lectures => {
-        // console.log("piping lpr");
-        return this.courseRecords$.pipe(
-          map(records =>
-            records.map(record =>
-              lectures.filter(lect => lect.courseType === record.courseType)
-            )
-          )
-        )
-      }),
+      map(lectures => records.map(record =>
+        lectures.filter(lect => lect.courseType === record.courseType))
+      ),
       map(lecturess => lecturess.map(lectures => [
         lectures.filter((lecture, index, array) =>
           new Date(parseInt(lecture.startTime)).getDay() ===
@@ -207,7 +238,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     return record.approved !== false;
   }
 
-  createNewRecord(refId: string, uCourse: UpdateCourseRev, appUser: AppUser, 
+  createNewRecord(refId: string, uCourse: UpdateCourseRev, appUser: AppUser,
     courseType: "Membership" | "Fellowship" | "ToT") {
     return {
       id: refId,
@@ -224,30 +255,31 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     console.log("batch writing records");
     return this.authService.getFirestore$().pipe(
       concatMap(db => {
-          const batch = writeBatch(db);
-          if (uCourse!.membership.participants.find(member =>
-            member.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
-            const memberRef = doc(collection(db, UPDATE_COURSES_RECORDS));
-            batch.set(memberRef, 
-              this.createNewRecord(memberRef.id, uCourse, appUser, "Membership"))
-          }
+        const batch = writeBatch(db);
+        if (uCourse!.membership.participants.find(member =>
+          member.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
+          const memberRef = doc(collection(db, UPDATE_COURSES_RECORDS));
+          batch.set(memberRef,
+            this.createNewRecord(memberRef.id, uCourse, appUser, "Membership"))
+        }
 
-          if (uCourse!.fellowship.participants.find(fellow =>
-            fellow.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
-            const fellowRef = doc(collection(db, UPDATE_COURSES_RECORDS));
-            batch.set(fellowRef, 
-              this.createNewRecord(fellowRef.id, uCourse, appUser, "Fellowship"))
-          }
+        if (uCourse!.fellowship.participants.find(fellow =>
+          fellow.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
+          const fellowRef = doc(collection(db, UPDATE_COURSES_RECORDS));
+          batch.set(fellowRef,
+            this.createNewRecord(fellowRef.id, uCourse, appUser, "Fellowship"))
+        }
 
-          if (uCourse!.tot.participants.find(tot =>
-            tot.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
-            const totRef = doc(collection(db, UPDATE_COURSES_RECORDS));
-            batch.set(totRef, 
-              this.createNewRecord(totRef.id, uCourse, appUser, "ToT"))
-          }
+        if (uCourse!.tot.participants.find(tot =>
+          tot.toLowerCase().trim() === appUser.email.toLowerCase().trim())) {
+          const totRef = doc(collection(db, UPDATE_COURSES_RECORDS));
+          batch.set(totRef,
+            this.createNewRecord(totRef.id, uCourse, appUser, "ToT"))
+        }
 
-          return from(batch.commit());        
-      })
+        return from(batch.commit());
+      }),
+      map(_v => [] as UpdateCourseRecord[])
     )
   }
 
@@ -282,10 +314,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
   getElders() {
     this.elders$ = this.authService.fetchElders$().pipe(
-      map(d => {
-        console.log("elders => ", d["elders"]);
-        return d["elders"];
-      })
+      map(d => d["elders"])
     )
   }
 }
