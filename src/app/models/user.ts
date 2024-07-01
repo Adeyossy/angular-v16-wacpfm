@@ -2,6 +2,10 @@ import { FieldValue } from "firebase/firestore";
 import { environment } from "src/environments/environment";
 import { UpdateCourseType } from "./update_course_record";
 
+export interface IndexType {
+  [index: string]: string;
+}
+
 export const USERS = "users";
 export const RESOURCE_PERSONS = environment.resourcePersons;
 
