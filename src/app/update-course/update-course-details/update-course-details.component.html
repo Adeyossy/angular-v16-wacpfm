@@ -22,7 +22,7 @@
                 *ngIf="!newCourse.tot.participants.includes(user!.email) &&
                 !newCourse.fellowship.participants.includes(user!.email) &&
                 !newCourse.membership.participants.includes(user!.email) && 
-                newCourse.registrationCloseDate > today">
+                newCourse.endDate > today">
                 <span *ngIf="courseRecords$ | async as cr; else loadingCirclesInline">
                   <span *ngIf="cr.length; else register">Applied</span>
                   <ng-template #register>Register</ng-template>
@@ -51,7 +51,7 @@
         </ng-template>
       </div>
       <div class="wacpfm-ongoing-course-register wacpfm-padding-default"
-        [ngClass]="openCategoryUI && newCourse.registrationCloseDate > today ? 'd-block' : 'd-none'">
+        [ngClass]="openCategoryUI && newCourse.endDate > today ? 'd-block' : 'd-none'">
         <div class="container-fluid p-0">
           <div class="row g-0">
             <div class="col-12 py-4">
