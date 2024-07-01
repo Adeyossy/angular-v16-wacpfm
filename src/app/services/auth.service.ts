@@ -242,6 +242,12 @@ export class AuthService {
     );
   }
 
+  queriesCollectionsUnTyped$(collectionName: string, [where1, where2]: QueryFieldFilterConstraint[]) {
+    return this.getFirestore$().pipe(
+      concatMap(db => getDocs(query(collection(db, collectionName), where1, where2)))
+    );
+  }
+
   queryCollections$<Type>(collectionName: string, property: string,
     comparator: WhereFilterOp, value: string | boolean | number) {
     return this.getFirestore$().pipe(
@@ -263,6 +269,23 @@ export class AuthService {
     return this.getFirestore$().pipe(
       map(db => query(collection(db, collectionName),
         where(property, comparator, value))),
+      concatMap(q => new Observable<QuerySnapshot>((observer) => {
+        return onSnapshot(q, {
+          next(snapshot) {
+            return observer.next(snapshot)
+          },
+          error(error) {
+            return observer.error(error)
+          },
+        })
+      }))
+    );
+  }
+
+  queriesForListener$(collectionName: string, [where1, where2]: QueryFieldFilterConstraint[]) {
+    return this.getFirestore$().pipe(
+      map(db => query(collection(db, collectionName),
+        where1, where2)),
       concatMap(q => new Observable<QuerySnapshot>((observer) => {
         return onSnapshot(q, {
           next(snapshot) {
