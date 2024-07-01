@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'firebase/auth';
 import { collection, doc, runTransaction, where, writeBatch } from 'firebase/firestore';
-import { AsyncSubject, Observable, Subscription, concatMap, from, iif, map, of, partition } from 'rxjs';
+import { AsyncSubject, NEVER, Observable, Subscription, concatMap, from, iif, map, of, partition } from 'rxjs';
 import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseDetails, UpdateCourseLecture, UpdateCourseRev } from 'src/app/models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
-import { AppUser, RESOURCE_PERSONS, ResourcePerson, USERS } from 'src/app/models/user';
+import { AppUser, IndexType, RESOURCE_PERSONS, ResourcePerson, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 
@@ -29,6 +29,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   pattern = /-/g;
   today = Date.now();
   resourcePersons$: Observable<ResourcePerson[]> = of([]);
+  elders$: Observable<string> = NEVER;
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
     public helper: HelperService) {
@@ -36,6 +37,8 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit(): void {
+    this.getElders();
+    
     this.resourcePersons$ = this.activatedRoute.paramMap.pipe(
       concatMap(params => {
         const id = params.get("updateCourseId");
@@ -275,5 +278,14 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
         return [newCourse.endDate]
       }
     }
+  }
+
+  getElders() {
+    this.elders$ = this.authService.fetchElders$().pipe(
+      map(d => {
+        console.log("elders => ", d["elders"]);
+        return d["elders"];
+      })
+    )
   }
 }
