@@ -82,12 +82,14 @@
     <div class="col-12" *ngIf="elders$ | async as elders">
       <div class="wacpfm-card wacpfm-header-card" *ngIf="elders.includes(user.email)">
         <h1 class="wacpfm-heading-medium fw-bold">Thank you!</h1>
-        <p class="wacpfm-heading-small">
+        <br>
+        <p class="wacpfm-subheading">
           You are paid up in full! Thank you for all the contributions you have made to Family Medicine in the
           sub-region. We will always be grateful!
         </p>
       </div>
     </div>
+    <br><br>
     <div class="col-12" *ngIf="courseRecords$ | async as courseRecords; else empty"><!-- Section for the lectures -->
       <div class="container-fluid p-0 mb-5" *ngFor="let record of courseRecords; index as r">
         <div class="row g-0 wacpfm-card p-0 wacpfm-course-details"
@@ -108,6 +110,7 @@
               information sharing purposes.</p>
             <p class="wacpfm-subheading">Thank you!</p>
           </div>
+          <div class="col-12"><hr></div>
           <div class="col-lg-6 wacpfm-padding-default">
             <div class="wacpfm-heading-underline">
               <h1 class="wacpfm-subheading fw-bold">{{record.courseType}} Course</h1>
