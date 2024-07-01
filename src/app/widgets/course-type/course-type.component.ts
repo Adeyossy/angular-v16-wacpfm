@@ -77,4 +77,9 @@ export class CourseTypeComponent {
 
     return false;
   }
+
+  extractEmails(record: UpdateCourseRecord | ResourcePerson | UpdateCourseLecture) {
+    if("lecturerEmail" in record) return record.lecturerEmail;
+    return record.userEmail;
+  }
 }

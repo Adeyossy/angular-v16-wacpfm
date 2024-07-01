@@ -9,8 +9,10 @@
 <div *ngFor="let courseType of courseTypes">
   <details class="wacpfm-card">
     <summary class="wacpfm-heading wacpfm-heading-small fw-bold">{{ courseType }}</summary>
-    <!-- <br>
-      <button class="small w-auto">Grant Participants Access</button> -->
+    <br>
+    <a href="mailto:{{courseTypeOnly(lists, courseType).map(this.extractEmails).join(', ')}}" class="wacpfm-link-card">
+      Email Participants
+    </a>
     <br>
     <hr><br>
     <app-card-list *ngFor="let list of courseTypeOnly(lists, courseType); index as i" [item]="convertToCardList(list)"
