@@ -5,7 +5,7 @@ import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, si
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
 import { DocumentReference, Firestore, Query, QueryFieldFilterConstraint, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
 import { UploadTask, getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
-import { AppUser, USERS } from '../models/user';
+import { AppUser, IndexType, USERS } from '../models/user';
 import { UpdateCourse } from '../models/update_course';
 
 @Injectable({
@@ -25,6 +25,10 @@ export class AuthService {
     if (this.asyncSubject.closed)
       this.httpClient.get(`${this.backendUrl}/index`).subscribe(this.asyncSubject);
     return this.asyncSubject;
+  }
+
+  fetchElders$(): Observable<IndexType> {
+    return this.httpClient.get<IndexType>(`${this.backendUrl}/elders`);
   }
 
   getFirebaseApp$(): Observable<FirebaseApp> {
