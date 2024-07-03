@@ -36,7 +36,7 @@
             </div>
             <div class="offset-1 col-5 offset-lg-4 col-lg-4 offset-xl-5 col-xl-3 py-2 text-end"
               *ngIf="resourcePersons$ | async as lecturer">
-              <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/resourcepersons"
+              <a routerLink="/dashboard/updatecourse/{{newCourse.updateCourseId}}/resourcepersons/{{user.email}}"
                 *ngIf="lecturer.length > 0">
                 <button class="small w-auto px-4">
                   Resource Persons <i class="bi bi-arrow-right-circle"></i>

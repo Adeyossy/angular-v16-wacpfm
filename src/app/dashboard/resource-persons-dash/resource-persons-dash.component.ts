@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { where } from 'firebase/firestore';
 import { Observable, concatMap, iif, map, of } from 'rxjs';
 import { RESOURCE_PERSONS, ResourcePerson } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -18,10 +19,13 @@ export class ResourcePersonsDashComponent implements OnInit {
     this.resourcePersons$ = this.activatedRoute.paramMap.pipe(
       concatMap(p => {
         const id = p.get("updateCourseId");
+        const email = p.get("email");
         return iif(
-          () => id !== "", 
-          this.authService.queryByUserEmail$<ResourcePerson>(RESOURCE_PERSONS)
-            .pipe(map(ls => ls.filter(l => l.updateCourseId === id))),
+          () => id !== "" && email !== "", 
+          this.authService.queriesCollections$<ResourcePerson>(RESOURCE_PERSONS, [
+            where("updateCourseId", "==", id),
+            where("userEmail", "==", email)
+          ]),
           of([])
         )
       })
