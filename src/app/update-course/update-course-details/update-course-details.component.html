@@ -139,13 +139,14 @@
               </button>
             </a>
             <button class="wacpfm-primary-button small" routerLink="./certificate/{{record.id}}"
-              [disabled]="!getCourseTypeDeets(newCourse, record.courseType).releaseResources">
+              [disabled]="getEndDate(newCourse, record.courseType) > today">
               <i class="bi bi-file-earmark-image"></i> Download Certificate
             </button>
             <br><br>
             <a href="{{getCourseTypeDeets(newCourse, record.courseType).cpd}}" type="application/pdf" [download]="'CPD.'.concat(record.courseType,'.', 
               helper.getDateString(newCourse.startDate).replace(pattern, '.'), '.pdf')" target="_blank">
-              <button class="small" [disabled]="!getCourseTypeDeets(newCourse, record.courseType).releaseResources">
+              <button class="small" [disabled]="getEndDate(newCourse, record.courseType) > today && 
+              !getCourseTypeDeets(newCourse, record.courseType).cpd">
                 <i class="bi bi-file-earmark-ruled"></i> Download CPD Form
               </button>
             </a>
