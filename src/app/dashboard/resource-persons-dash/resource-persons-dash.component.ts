@@ -13,21 +13,21 @@ import { AuthService } from 'src/app/services/auth.service';
 export class ResourcePersonsDashComponent implements OnInit {
   resourcePersons$: Observable<ResourcePerson[]> = of([]);
 
-  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute) {}
+  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.resourcePersons$ = this.activatedRoute.paramMap.pipe(
       concatMap(p => {
         const id = p.get("updateCourseId");
-        const email = p.get("email");
-        return iif(
-          () => id !== "" && email !== "", 
-          this.authService.queriesCollections$<ResourcePerson>(RESOURCE_PERSONS, [
-            where("updateCourseId", "==", id),
-            where("userEmail", "==", email)
-          ]),
-          of([])
-        )
+        if (id) {
+          return this.authService.getFirebaseUser$().pipe(
+            concatMap(user => this.authService.queriesCollections$<ResourcePerson>(RESOURCE_PERSONS, [
+              where("updateCourseId", "==", id),
+              where("userEmail", "==", user.email)
+            ]))
+          )
+        }
+        return of([]);
       })
     );
   }
