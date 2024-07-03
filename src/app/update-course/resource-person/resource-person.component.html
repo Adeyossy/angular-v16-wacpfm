@@ -46,13 +46,26 @@
   </button>
 </details>
 <br><br>
+<div class="wacpfm-card">
+  <h1 class="wacpfm-heading-small fw-bold">Faculty Template</h1>
+  <p class="wacpfm-subheading">Please use the faculty template to create your lecture. Thank you!
+    Download it using the button below.
+  </p>
+  <a href="https://firebasestorage.googleapis.com/v0/b/wacpfm.appspot.com/o/Faculty%20of%20Family%20Medicine%20PPT%20template.pptx?alt=media&token=4d475ad8-2933-421a-aab6-0720dd8ad02e" 
+    download="Faculty of Family Medicine PPT template.pptx"
+    type="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    target="_blank" class="wacpfm-link-card fw-bold">
+    <i class="bi bi-file-earmark-ppt-fill color-accent"></i> Download Voiceover
+  </a>
+</div>
+<br><br>
 <div class="container-fluid wacpfm-card">
   <div class="row">
     <div class="col-lg-6">
       <h1 class="wacpfm-heading-small fw-bold mb-2">Lectures</h1>
       <p class="wacpfm-subheading">Your lectures will appear here.</p>
       <br>
-      <button class="small w-50" *ngIf="newLecture$ | async as newLecture; else loading"
+      <button class="small w-auto px-3" *ngIf="newLecture$ | async as newLecture; else loading"
       (click)="showLecture(newLecture)">
         <i class="bi bi-plus-circle-fill"></i> New Lecture
       </button>
