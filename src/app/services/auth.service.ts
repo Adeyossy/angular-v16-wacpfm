@@ -39,11 +39,14 @@ export class AuthService {
     return this.getFirebaseApp$().pipe(map(app => getAuth(app)));
   }
 
-  getFirebaseUser$(): Observable<User | null> {
+  getFirebaseUser$(): Observable<User> {
     return this.getFirebaseAuth$().pipe(
-      concatMap(auth => new Observable<User | null>((observer) => {
+      concatMap(auth => new Observable<User>((observer) => {
         return auth.onAuthStateChanged(
-          user => { observer.next(user) },
+          user => { 
+            if(user !== null) observer.next(user);
+            else observer.error(new Error(AuthErrorCodes.NULL_USER));
+          },
           error => { observer.error(error) },
           () => { observer.complete() }
         )
