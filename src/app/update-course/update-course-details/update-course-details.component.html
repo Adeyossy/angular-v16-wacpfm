@@ -195,7 +195,7 @@
                   </div>
                   <div class="col-1 text-end" *ngFor="let link of lecture.materialLink">
                     <a [href]="link" [download]="'Update.Course.Lecture.' + (i + 1) + '.pdf'" type="application/pdf"
-                      target="_blank" *ngIf="getCourseTypeDeets(newCourse, record.courseType).releaseResources">
+                      target="_blank" *ngIf="getEndDate(newCourse, record.courseType) <= today">
                       <i class="bi bi-file-earmark-pdf-fill color-accent"></i>
                     </a>
                   </div>
