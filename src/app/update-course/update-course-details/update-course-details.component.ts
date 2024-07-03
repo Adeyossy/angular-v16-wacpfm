@@ -289,6 +289,41 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     window.location.href = ""
   }
 
+  getStartDate(newCourse: UpdateCourseRev, courseType: UpdateCourseType) {
+    if (courseType === "Membership") {
+      return newCourse.startDate
+    } else {
+      if (courseType === "Fellowship") {
+        const date = new Date(newCourse.startDate);
+        date.setDate(date.getDate() + 2);
+        date.setHours(9);
+        return date.getTime();
+      } else {
+        return newCourse.endDate
+      }
+    }
+  }
+
+  getEndDate(newCourse: UpdateCourseRev, courseType: UpdateCourseType) {
+    if (courseType === "Membership") {
+      const date = new Date(newCourse.startDate);
+      date.setDate(date.getDate() + 1);
+      date.setHours(17);
+      return date.getTime();
+    } else {
+      if (courseType === "Fellowship") {
+        const date = new Date(newCourse.startDate);
+        date.setDate(date.getDate() + 3);
+        date.setHours(16);
+        return date.getTime();
+      } else {
+        const end = new Date(newCourse.endDate);
+        end.setHours(17);
+        return end.getTime();
+      }
+    }
+  }
+
   calculateDates(newCourse: UpdateCourseRev, courseType: UpdateCourseType) {
     if (courseType === "Membership") {
       const date = new Date(newCourse.startDate);
