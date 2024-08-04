@@ -48,3 +48,13 @@ i.bi-file-earmark-pdf-fill {
 .wacpfm-lecture {
   border: none;
 }
+
+iframe {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  iframe {
+    height: 33vh;
+  }
+}
