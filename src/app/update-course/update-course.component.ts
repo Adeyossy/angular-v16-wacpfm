@@ -35,8 +35,10 @@ export class UpdateCourseComponent implements OnInit {
     //       )))
     // );
 
-    this.previousCourses = this.authService.queryCollections$(UPDATE_COURSES, "endDate", "<", 
-      Date.now() - this.twoWeeks);
+    this.previousCourses = this.authService.queryCollections$<UpdateCourse>(UPDATE_COURSES, "endDate", "<", 
+      Date.now() - this.twoWeeks).pipe(
+        map(courses => courses.sort((a, b) => b.endDate - a.endDate))
+      );
 
     // pipe an observable of Update Courses that has not ended
     // the user may or may not have registered
