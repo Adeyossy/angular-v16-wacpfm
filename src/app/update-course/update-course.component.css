@@ -2,3 +2,13 @@
   line-height: 1.5rem;
   height: 9rem;
 }
+
+iframe {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  iframe {
+    height: 33vh;
+  }
+}
