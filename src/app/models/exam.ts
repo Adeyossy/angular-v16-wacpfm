@@ -22,3 +22,14 @@ export interface Examiner {
   trainingResponsibilities: "IRTC" | "CMEC" | "Mentor";
   referees: string[];
 }
+
+export interface Referee {
+  id: string;
+  name: string;
+  institution: string;
+  email: string;
+  phoneNumber: number;
+  candidateId: number;
+  response: "Correct" | "False";
+  reasonIfIncorrect: string;
+}
