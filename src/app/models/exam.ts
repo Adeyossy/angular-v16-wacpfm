@@ -1,3 +1,5 @@
+import { FieldValue } from "firebase/firestore";
+
 export interface Examiner {
   userId: string;
   dateOfBirth: number;
@@ -32,4 +34,42 @@ export interface Referee {
   candidateId: number;
   response: "Correct" | "False";
   reasonIfIncorrect: string;
+}
+
+interface Upload {
+  uploadDate: FieldValue;
+  url: string;
+  id: number;
+  description: string;
+  filetype: string;
+}
+
+export interface Candidate {
+  wacpNo: string;
+  dateOfBirth: number;
+  examType: "Membership" | "Fellowship";
+  presenceInTrainingCentre: boolean;
+  nameOfTrainingCentre: string;
+  previousDissertations: number;
+  previousPMRs: number;
+  previousOrals: number;
+  pmrTitle: string;
+  pmrSupervisor1Name: string;
+  pmrSupervisor2Name?: string;
+  dissertationTitle: string;
+  dissertationSupervisor1Name: string;
+  dissertationSupervisor2Name?: string;
+  dissertationSupervisor3Name?: string;
+  physicalHandicap: "None" | "Use of a wheelchair" | "Use of walking frame or crutches" | `Visual acuity 
+    worse than 3/60 despite correction` | `Severe hearing impairment despite hearing aid` | 
+    "Others";
+  otherHandicap: string;
+  handicapAssistance: string;
+  exclusivelyBreastfedBaby: boolean;
+  thirdTrimester: boolean;
+  examCentre: "Abuja" | "Accra" | "Ibadan";
+  certificate: Upload;
+  dissertation: Upload;
+  pmr: Upload[];
+  pmrPages: Upload[];
 }
