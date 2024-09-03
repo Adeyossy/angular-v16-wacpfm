@@ -34,6 +34,7 @@ import { ResourcePersonComponent } from './update-course/resource-person/resourc
 import { PaymentViewerComponent } from './widgets/payment-viewer/payment-viewer.component';
 import { CourseTypeComponent } from './widgets/course-type/course-type.component';
 import { ResourcePersonsDashComponent } from './dashboard/resource-persons-dash/resource-persons-dash.component';
+import { ExamComponent } from './exam/exam.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { ResourcePersonsDashComponent } from './dashboard/resource-persons-dash/
     ResourcePersonComponent,
     PaymentViewerComponent,
     CourseTypeComponent,
-    ResourcePersonsDashComponent
+    ResourcePersonsDashComponent,
+    ExamComponent
   ],
   imports: [
     BrowserModule,
