@@ -36,6 +36,13 @@ export interface Referee {
   reasonIfIncorrect: string;
 }
 
+export interface Subexam {
+  score: number;
+  totalMarksObtainable: number;
+  remarks: string;
+  assessorId: string;
+}
+
 interface Upload {
   uploadDate: FieldValue;
   url: string;
@@ -45,6 +52,7 @@ interface Upload {
 }
 
 export interface Candidate {
+  userId: string;
   wacpNo: string;
   dateOfBirth: number;
   examType: "Membership" | "Fellowship";
@@ -72,4 +80,20 @@ export interface Candidate {
   dissertation: Upload;
   pmr: Upload[];
   pmrPages: Upload[];
+}
+
+export interface MembershipExamRecord { // DB name - membership_exam_records
+  candidateId: string;
+  theory: Subexam;
+  osce: Subexam;
+  logbook: Subexam;
+  orals: Subexam;
+  examId: string;
+}
+
+export interface FellowshipExamRecord {
+  candidateId: string;
+  dissertationId: string;
+  pmrId: string;
+  defense: any;
 }
