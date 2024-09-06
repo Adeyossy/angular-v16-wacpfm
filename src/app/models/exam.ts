@@ -82,6 +82,18 @@ export interface Candidate {
   pmrPages: Upload[];
 }
 
+export interface MembershipExam {
+  id: string;
+  alias: string;
+  dateCreated: FieldValue; // date in milliseconds
+  registrationStartDate: number;
+  registrationCloseDate: number;
+  firstExamDate: number;
+  lastExamDate: number;
+  examiners: string[];
+  candidates: string[];
+}
+
 export interface MembershipExamRecord { // DB name - membership_exam_records
   candidateId: string;
   theory: Subexam;
@@ -89,6 +101,7 @@ export interface MembershipExamRecord { // DB name - membership_exam_records
   logbook: Subexam;
   orals: Subexam;
   examId: string;
+  examAlias: string;
 }
 
 export interface FellowshipExamRecord {
@@ -96,4 +109,6 @@ export interface FellowshipExamRecord {
   dissertationId: string;
   pmrId: string;
   defense: any;
+  examId: string;
+  examAlias: string;
 }
