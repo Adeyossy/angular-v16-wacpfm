@@ -117,3 +117,18 @@ export interface FellowshipExamRecord {
   examId: string;
   examAlias: string;
 }
+
+export interface Grade {
+  examinerId: string;
+  examinerEmail: string;
+  score: number;
+  comment: string;
+}
+
+export interface Dissertation {
+  candidateId: string;
+  candidateEmail: string;
+  examinerIds: string[];
+  gradesByExaminer: Grade[];
+  title: string;
+}
