@@ -142,13 +142,22 @@ export interface DissertationGrade extends Grade {
   appendices: { title: "Appendices" } & SubGrade;
 }
 
-export interface Dissertation {
+export interface AcademicWriting {
   candidateId: string;
   wacpNo: string;
   candidateEmail: string;
   examinerIds: string[];
   examinerEmails: string[];
+  gradesByExaminer: Grade[];
+  title: string;
+}
+
+export interface Dissertation extends AcademicWriting {
   gradesByExaminer: DissertationGrade[];
   title: string;
   abstract: string;
+}
+
+export interface PMR extends AcademicWriting {
+  candidateId: string;
 }
