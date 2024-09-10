@@ -82,7 +82,7 @@ export interface Candidate {
   pmrPages: Upload[];
 }
 
-export interface MembershipExam {
+export interface Exam {
   id: string;
   alias: string;
   dateCreated: FieldValue; // date in milliseconds
@@ -92,6 +92,11 @@ export interface MembershipExam {
   lastExamDate: number;
   examiners: string[];
   candidates: string[];
+}
+
+export interface FellowshipExam extends Exam {
+  dissertationShareDate: number; // date dissertatino is shared with examiners
+  pmrShareDate: number; // date PMR is shared with examiners
 }
 
 export interface MembershipExamRecord { // DB name - membership_exam_records
