@@ -95,7 +95,7 @@ export interface Exam {
 }
 
 export interface FellowshipExam extends Exam {
-  dissertationShareDate: number; // date dissertatino is shared with examiners
+  dissertationShareDate: number; // date dissertation is shared with examiners
   pmrShareDate: number; // date PMR is shared with examiners
 }
 
