@@ -125,10 +125,30 @@ export interface Grade {
   comment: string;
 }
 
+type SubGrade = {
+  score: number;
+  comment: string;
+}
+
+export interface DissertationGrade extends Grade {
+  abstract: { title: "Abstract" } & SubGrade;
+  preliminaryPages: { title: "Preliminary Pages" } & SubGrade;
+  introduction: { title: "Chapter 1: Introduction" } & SubGrade;
+  literatureReview: { title: "Chapter 2: Literature Review" } & SubGrade;
+  method: { title: "Chapter 3: Method" } & SubGrade;
+  results: { title: "Chapter 4: Results" } & SubGrade;
+  discussion: { title: "Chapter 5: Discussion" } & SubGrade;
+  references: { title: "References" } & SubGrade;
+  appendices: { title: "Appendices" } & SubGrade;
+}
+
 export interface Dissertation {
   candidateId: string;
+  wacpNo: string;
   candidateEmail: string;
   examinerIds: string[];
-  gradesByExaminer: Grade[];
+  examinerEmails: string[];
+  gradesByExaminer: DissertationGrade[];
   title: string;
+  abstract: string;
 }
