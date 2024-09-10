@@ -122,6 +122,7 @@ export interface Grade {
   examinerId: string;
   examinerEmail: string;
   score: number;
+  totalMarksObtainable: number;
   comment: string;
 }
 
@@ -154,10 +155,8 @@ export interface AcademicWriting {
 
 export interface Dissertation extends AcademicWriting {
   gradesByExaminer: DissertationGrade[];
-  title: string;
   abstract: string;
 }
 
 export interface PMR extends AcademicWriting {
-  candidateId: string;
 }
