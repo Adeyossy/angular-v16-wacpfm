@@ -41,6 +41,12 @@ export class HelperService {
     buttonText: ""
   }
 
+  countries = [
+    'Benin', 'Burkina Faso', 'Gambia', 'Ghana', 'Guinea',
+    'Ivory Coast', 'Liberia', 'Niger', 'Nigeria', 'Senegal', 
+    'Sierra Leone', 'Togo'
+  ];
+
   constructor() { }
 
   dateToMillis(date: Date) {
