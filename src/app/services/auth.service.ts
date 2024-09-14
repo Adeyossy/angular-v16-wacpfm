@@ -22,12 +22,20 @@ export class AuthService {
     this.httpClient.get(`${this.backendUrl}/index`).subscribe(this.asyncSubject);
   }
 
+  /**
+   * Fetches the firebase config object from the Netlify environment variables
+   * @returns An observable of the Firebase app config object
+   */
   getFirebaseConfig$(): AsyncSubject<FirebaseOptions> {
     if (this.asyncSubject.closed)
       this.httpClient.get(`${this.backendUrl}/index`).subscribe(this.asyncSubject);
     return this.asyncSubject;
   }
 
+  /**
+   * Fetches the emails of medical elders who should be given access to the faculty app
+   * @returns An observable emails
+   */
   fetchElders$(): Observable<IndexType> {
     return this.httpClient.get<IndexType>(`${this.backendUrl}/elders`);
   }
@@ -44,8 +52,8 @@ export class AuthService {
     return this.getFirebaseAuth$().pipe(
       concatMap(auth => new Observable<User>((observer) => {
         return auth.onAuthStateChanged(
-          user => { 
-            if(user !== null) observer.next(user);
+          user => {
+            if (user !== null) observer.next(user);
             else observer.error(new Error(AuthErrorCodes.NULL_USER));
           },
           error => { observer.error(error) },
