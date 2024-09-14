@@ -53,13 +53,13 @@ interface Upload {
 
 export interface Candidate {
   userId: string;
+  userEmail: string;
   wacpNo: string;
   dateOfBirth: number;
+  dateOfRegistration: FieldValue;
   examType: "Membership" | "Fellowship";
   presenceInTrainingCentre: boolean;
   nameOfTrainingCentre: string;
-  previousDissertations: number;
-  previousPMRs: number;
   previousOrals: number;
   pmrTitle: string;
   pmrSupervisor1Name: string;
@@ -73,8 +73,8 @@ export interface Candidate {
     "Others";
   otherHandicap: string;
   handicapAssistance: string;
-  exclusivelyBreastfedBaby: boolean;
-  thirdTrimester: boolean;
+  exclusivelyBreastfedBaby: boolean; // if female
+  thirdTrimester: boolean; // if female
   examCentre: "Abuja" | "Accra" | "Ibadan";
   certificate: Upload;
   dissertation: Upload;
@@ -94,19 +94,28 @@ export interface Exam {
   candidates: string[];
 }
 
+/**
+ * Ideally, candidates should only have one record each for membership and fellowship exams if 
+ * they did not fail.
+ * 
+ * This implies that any candidate that has a resit should have an increment by 1 in the number 
+ * of previous dissertations, PMRs and orals taken. A check would have to be made for previous 
+ * records.
+ */
 export interface FellowshipExam extends Exam {
   dissertationShareDate: number; // date dissertation is shared with examiners
   pmrShareDate: number; // date PMR is shared with examiners
 }
 
-export interface MembershipExamRecord { // DB name - membership_exam_records
-  candidateId: string;
+export interface MembershipExamRecord extends Candidate { // DB name - membership_exam_records
   theory: Subexam;
   osce: Subexam;
   logbook: Subexam;
   orals: Subexam;
   examId: string;
   examAlias: string;
+  previousDissertations: number;
+  previousPMRs: number;
 }
 
 export interface FellowshipExamRecord {
