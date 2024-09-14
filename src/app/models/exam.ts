@@ -1,4 +1,7 @@
 import { FieldValue } from "firebase/firestore";
+import { environment } from "src/environments/environment";
+
+export const EXAMINERS = environment.examiner;
 
 export interface Examiner {
   userId: string;
@@ -6,18 +9,18 @@ export interface Examiner {
   name: string;
   contactPhoneNumber: number;
   country: string;
-  dateOfBirth: number;
-  geopolitical: "North Central" | "North East" | "North West" | "South West" | "South East" | "South South";
-  wacpMembershipStatus: "Life member" | "Paid-up currently" | "Paid-up last year" | "Paid-up 2 years ago";
+  dateOfBirth: string;
+  geopolitical: "North Central" | "North East" | "North West" | "South West" | "South East" | "South South" | "";
+  wacpMembershipStatus: "Life member" | "Paid-up currently" | "Paid-up last year" | "Paid-up 2 years ago" | "";
   residentDoctorsNo: number;
   trainingCentre: string;
-  currentEmploymentStatus: "Employed" | "Retired";
+  currentEmploymentStatus: "Employed" | "Retired" | "";
   wacpResponsibilities: boolean;
   yearOfFellowship: number;
   firstYearAsExaminer: number;
   timesPartakenInExam: number;
-  trainerCertificationStatus: "Current" | "Lapsed" | "None";
-  doctorsEducatorsTrainingStatus: "Done" | "Not done" | "Equivalent";
+  trainerCertificationStatus: "Current" | "Lapsed" | "None" | "";
+  doctorsEducatorsTrainingStatus: "Done" | "Not done" | "Equivalent" | "";
   dissertationsSupervised: number;
   prbSupervised: number;
   fellowshipSupervised: number;
@@ -25,7 +28,7 @@ export interface Examiner {
   publications: number;
   previousMgtExperience: boolean;
   specifyMgtExperience: string;
-  trainingResponsibilities: "IRTC" | "CMEC" | "Mentor";
+  trainingResponsibilities: "IRTC" | "CMEC" | "Mentor" | "";
   referees: string[];
 }
 
