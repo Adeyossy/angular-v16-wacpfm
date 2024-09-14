@@ -14,6 +14,7 @@ import { UpdateCourse } from '../models/update_course';
 export class AuthService {
   backendUrl = "/.netlify/functions";
   asyncSubject = new AsyncSubject<FirebaseOptions>();
+  appUser: AppUser | null = null;
 
   FIRESTORE_NULL_DOCUMENT = "firestore/document does not exist";
 
@@ -198,8 +199,11 @@ export class AuthService {
         if (user) return this.getFirestore$().pipe(
           concatMap(db => getDoc(doc(db, collectionName, user.uid))),
           map(doc => {
-            if (doc.exists()) return doc.data() as Type;
-            else throw AuthErrorCodes.NULL_USER
+            if (doc.exists()) {
+              const data = doc.data() as Type;
+              if (collectionName === USERS) this.appUser = data as AppUser;
+              return data;
+            } else throw AuthErrorCodes.NULL_USER
           }
           )
         );
@@ -209,6 +213,7 @@ export class AuthService {
   }
 
   getAppUser$() {
+    if (this.appUser !== null) return of(this.appUser);
     return this.getDocByUserId$<AppUser>(USERS);
   }
 
