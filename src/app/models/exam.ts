@@ -2,6 +2,10 @@ import { FieldValue } from "firebase/firestore";
 
 export interface Examiner {
   userId: string;
+  userEmail: string;
+  name: string;
+  contactPhoneNumber: number;
+  country: string;
   dateOfBirth: number;
   geopolitical: "North Central" | "North East" | "North West" | "South West" | "South East" | "South South";
   wacpMembershipStatus: "Life member" | "Paid-up currently" | "Paid-up last year" | "Paid-up 2 years ago";
