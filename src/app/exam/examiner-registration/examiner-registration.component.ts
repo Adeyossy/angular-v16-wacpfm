@@ -12,7 +12,7 @@ import { HelperService } from 'src/app/services/helper.service';
   styleUrls: ['./examiner-registration.component.css']
 })
 export class ExaminerRegistrationComponent implements OnInit {
-  examiner: Examiner | null = {
+  examiner: Examiner = {
     userEmail: "",
     userId: "",
     name: "",

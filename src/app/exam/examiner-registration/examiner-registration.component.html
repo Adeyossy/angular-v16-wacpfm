@@ -1,3 +1,33 @@
-<label for="wacpfm-register-examiner-name"><i class="bi bi-key-fill"></i> Password</label>
-<input type="password" name="password" id="wacpfm-register-examiner-name" required placeholder="xxxxxxxxx">
-<br>
+<label for="wacpfm-register-examiner-name"><i class="bi bi-key-fill"></i> Name</label>
+<input type="text" name="examiner-name" id="wacpfm-register-examiner-name" required 
+  [(ngModel)]="examiner.name" placeholder="i.e. Your name">
+<br><br>
+<label for="wacpfm-register-examiner-dob"><i class="bi bi-key-fill"></i> Date of Birth</label>
+<input type="date" name="examiner-dob" id="wacpfm-register-examiner-dob" required 
+  [(ngModel)]="examiner.dateOfBirth" placeholder="i.e. Your name">
+<br><br>
+<label for="wacpfm-register-examiner-residents"><i class="bi"></i> Number of residents in your institution</label>
+<input type="number" name="examiner-residents" id="wacpfm-register-examiner-residents" required>
+<br><br>
+<label for="wacpfm-register-examiner-centrename"><i class="bi"></i> Name of Training Centre</label>
+<input type="text" name="examiner-centrename" id="wacpfm-register-examiner-centrename" required>
+<br><br>
+<label for="wacpfm-register-examiner-centrename"><i class="bi"></i> Name of Training Centre</label>
+<input type="text" name="examiner-centrename" id="wacpfm-register-examiner-centrename" required>
+<br><br>
+<!--   Insert current employment status here   -->
+<label for="wacpfm-register-examiner-fellowshipyear"><i class="bi"></i> Year of Fellowship</label>
+<input type="text" name="examiner-fellowshipyear" id="wacpfm-register-examiner-fellowshipyear"
+required>
+<br><br>
+<div class="wacpfm-heading-underline">
+  <h2 class="wacpfm-heading-small">Examiner Experience</h2>
+  <div class="wacpfm-underline"></div>
+</div>
+<br><br>
+<label for="wacpfm-register-examiner-firstinvitation">
+  <i class="bi"></i> Year of first invitation as examiner
+</label>
+<input type="text" name="examiner-firstinvitation" id="wacpfm-register-examiner-firstinvitation"
+inputmode="numeric" required>
+<br><br>
