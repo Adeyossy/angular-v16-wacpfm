@@ -30,7 +30,7 @@ export class SelectComponent implements OnInit {
   }
 
   showItem(index: number): boolean {
-    if (this.noOfClicks % 2 === 1) {
+    if (this.itemsSelectionState.reduce(this.reducePredicate)) {
       return this.itemsSelectionState[index];
     } else {
       return !this.itemsSelectionState[index];
@@ -38,7 +38,10 @@ export class SelectComponent implements OnInit {
   }
 
   showAll() {
-    this.noOfClicks = 0;
     this.itemsSelectionState.fill(false);
+  }
+
+  reducePredicate = (acc: boolean, curr: boolean) => {
+    return acc || curr
   }
 }
