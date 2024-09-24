@@ -50,6 +50,11 @@ export class ExamService {
     );
   }
 
+  /**
+   * Fetch exam-related item from collection either from the cloud or from cache
+   * @param collection name of the Firebase collection
+   * @returns Observable of the Type based on the collection
+   */
   getItem$<Type>(collection: string) {
     if (this.cache[collection]) return of(this.cache[collection]) as Observable<Type>;
     return this.authService.getDocByUserId$<Type>(collection).pipe(
