@@ -50,7 +50,7 @@ export class ExamService {
     );
   }
 
-  getCachedItem$<Type>(collection: string) {
+  getItem$<Type>(collection: string) {
     if (this.cache[collection]) return of(this.cache[collection]) as Observable<Type>;
     return this.authService.getDocByUserId$<Type>(collection).pipe(
       map(data => {
