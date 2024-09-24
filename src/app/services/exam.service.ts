@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { EXAMINERS, Examiner, FellowshipExamRecord, MembershipExamRecord } from '../models/exam';
-import { map, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 
 type Cache = {
-  examiner: Examiner | null;
-  membership_candidate: MembershipExamRecord | null;
-  fellowship_candidate: FellowshipExamRecord | null;
+  [collection: string]: unknown;
 }
 
 @Injectable({
@@ -25,23 +23,24 @@ export class ExamService {
 
   constructor(private authService: AuthService) {}
 
-  getExamItem$<Type>(collectionName: string, cacheKey: "examiner" | "membership_candidate" 
-    | "fellowship_candidate") {
+  getExamItem$<Type extends Examiner | MembershipExamRecord | FellowshipExamRecord>(
+    collectionName: string, cacheKey: "examiner" | "membership_candidate" | "fellowship_candidate"
+  ) {
     let cachedItem = this.cache[cacheKey];
     if (cachedItem !== null) return of(cachedItem);
     return this.authService.getDocByUserId$<Type>(collectionName).pipe(
       map(examItem => {
         switch (cacheKey) {
           case "examiner":
-            cachedItem = examItem as Examiner;
+            cachedItem = examItem as Type;
             return cachedItem;
 
           case "membership_candidate":
-            cachedItem = examItem as MembershipExamRecord;
+            cachedItem = examItem as Type;
             return cachedItem;
 
           case "fellowship_candidate":
-            cachedItem = examItem as FellowshipExamRecord;
+            cachedItem = examItem as Type;
             return cachedItem;
           
           default:
@@ -51,5 +50,18 @@ export class ExamService {
     );
   }
 
-  getFellowshipCandidate$() {}
+  getCachedItem$<Type>(collection: string) {
+    if (this.cache[collection]) return of(this.cache[collection]) as Observable<Type>;
+    return this.authService.getDocByUserId$<Type>(collection).pipe(
+      map(data => {
+        this.cache[collection] = data;
+        return data;
+      })
+    )
+  }
+
+  getExaminer$<Type>() {
+    if (this.cache[EXAMINERS]) return of(this.cache[EXAMINERS]) as Observable<Type>;
+    return this.authService.getDocByUserId$<Type>(EXAMINERS);
+  }
 }
