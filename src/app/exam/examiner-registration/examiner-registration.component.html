@@ -1,33 +1,77 @@
-<label for="wacpfm-register-examiner-name"><i class="bi bi-key-fill"></i> Name</label>
-<input type="text" name="examiner-name" id="wacpfm-register-examiner-name" required 
-  [(ngModel)]="examiner.name" placeholder="i.e. Your name">
-<br><br>
-<label for="wacpfm-register-examiner-dob"><i class="bi bi-key-fill"></i> Date of Birth</label>
-<input type="date" name="examiner-dob" id="wacpfm-register-examiner-dob" required 
-  [(ngModel)]="examiner.dateOfBirth" placeholder="i.e. Your name">
-<br><br>
-<label for="wacpfm-register-examiner-residents"><i class="bi"></i> Number of residents in your institution</label>
-<input type="number" name="examiner-residents" id="wacpfm-register-examiner-residents" required>
-<br><br>
-<label for="wacpfm-register-examiner-centrename"><i class="bi"></i> Name of Training Centre</label>
-<input type="text" name="examiner-centrename" id="wacpfm-register-examiner-centrename" required>
-<br><br>
-<label for="wacpfm-register-examiner-centrename"><i class="bi"></i> Name of Training Centre</label>
-<input type="text" name="examiner-centrename" id="wacpfm-register-examiner-centrename" required>
-<br><br>
-<!--   Insert current employment status here   -->
-<label for="wacpfm-register-examiner-fellowshipyear"><i class="bi"></i> Year of Fellowship</label>
-<input type="text" name="examiner-fellowshipyear" id="wacpfm-register-examiner-fellowshipyear"
-required>
-<br><br>
-<div class="wacpfm-heading-underline">
-  <h2 class="wacpfm-heading-small">Examiner Experience</h2>
-  <div class="wacpfm-underline"></div>
+<div *ngIf="examiner$ | async as examiner">
+  <label for="wacpfm-register-examiner-name"><i class="bi bi-key-fill"></i> Name</label>
+  <input type="text" name="examiner-name" id="wacpfm-register-examiner-name" 
+    required [(ngModel)]="examiner.name" placeholder="i.e. Your name">
+  <br><br>
+  <label for="wacpfm-register-examiner-dob"><i class="bi bi-key-fill"></i> Date of Birth</label>
+  <input type="date" name="examiner-dob" id="wacpfm-register-examiner-dob" required 
+    [(ngModel)]="examiner.dateOfBirth" placeholder="i.e. Your name">
+  <br><br>
+  <label for="wacpfm-register-examiner-residents"><i class="bi"></i> Number of residents in your institution</label>
+  <input type="number" name="examiner-residents" id="wacpfm-register-examiner-residents" required
+    [(ngModel)]="examiner.residentDoctorsNo">
+  <br><br>
+  <label for="wacpfm-register-examiner-centrename"><i class="bi"></i> Name of Training Centre</label>
+  <input type="text" name="examiner-centrename" id="wacpfm-register-examiner-centrename" required
+    [(ngModel)]="examiner.trainingCentre">
+  <br><br>
+  <label for="wacpfm-register-examiner-centrename"><i class="bi"></i> Name of Training Centre</label>
+  <input type="text" name="examiner-centrename" id="wacpfm-register-examiner-centrename" required
+    [(ngModel)]="examiner.currentEmploymentStatus">
+  <br><br>
+  <!--   Insert current employment status here   -->
+  <label for="wacpfm-register-examiner-fellowshipyear"><i class="bi"></i> Year of Fellowship</label>
+  <input type="text" inputmode="numeric" name="examiner-fellowshipyear" id="wacpfm-register-examiner-fellowshipyear" 
+    [(ngModel)]="examiner.yearOfFellowship" required>
+  <br><br>
+  <!--   Examiner experience section   -->
+  <div class="wacpfm-heading-underline">
+    <h2 class="wacpfm-heading-small">Examiner Experience</h2>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br><br>
+  <label for="wacpfm-register-examiner-firstinvitation">
+    <i class="bi"></i> Year of first invitation as examiner
+  </label>
+  <input type="text" name="examiner-firstinvitation" id="wacpfm-register-examiner-firstinvitation"
+    [(ngModel)]="examiner.firstYearAsExaminer" inputmode="numeric" required>
+  <br><br>
+  <div class="wacpfm-heading-underline">
+    <h2 class="wacpfm-heading-small">Examiner Training Experience</h2>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <!-- Insert training status here -->
+  <!-- Insert Doctors as Educators training status here -->
+  <label for="wacpfm-register-examiner-dissertations"><i class="bi"></i> Number of dissertations supervised</label>
+  <input type="number" name="examiner-dissertations" id="wacpfm-register-examiner-dissertations" required
+    [(ngModel)]="examiner.dissertationsSupervised">
+  <br><br>
+  <label for="wacpfm-register-examiner-prbs"><i class="bi"></i> Number of Patient record book supervised</label>
+  <input type="number" name="examiner-prbs" id="wacpfm-register-examiner-prbs" required
+    [(ngModel)]="examiner.prbSupervised">
+  <br><br>
+  <label for="wacpfm-register-examiner-fellowshipsupervisor">
+    <i class="bi"></i> Number of supervised fellowship candidates (cumulative)
+  </label>
+  <input type="number" name="examiner-fellowshipsupervisor" id="wacpfm-register-examiner-fellowshipsupervisor" 
+    required [(ngModel)]="examiner.fellowshipSupervised">
+  <br><br>
+  <label for="wacpfm-register-examiner-fellowssupervised">
+    <i class="bi"></i> Number of Fellows supervised (cumulative)
+  </label>
+  <input type="number" name="examiner-fellowssupervised" id="wacpfm-register-examiner-fellowssupervised" 
+    required [(ngModel)]="examiner.fellowsSupervised">
+  <br><br>
+  <label for="wacpfm-register-examiner-publications">
+    <i class="bi"></i> How many publications do you have?
+  </label>
+  <input type="number" name="examiner-publications" id="wacpfm-register-examiner-publications" 
+    required [(ngModel)]="examiner.publications">
+  <br><br>
+  <label for="wacpfm-register-examiner-specifymgtexperience">
+    <i class="bi"></i> Please specify previous management experience
+  </label>
+  <input type="text" name="examiner-specifymgtexperience" id="wacpfm-register-examiner-specifymgtexperience" 
+    required [(ngModel)]="examiner.specifyMgtExperience">
+  <br><br>
 </div>
-<br><br>
-<label for="wacpfm-register-examiner-firstinvitation">
-  <i class="bi"></i> Year of first invitation as examiner
-</label>
-<input type="text" name="examiner-firstinvitation" id="wacpfm-register-examiner-firstinvitation"
-inputmode="numeric" required>
-<br><br>
