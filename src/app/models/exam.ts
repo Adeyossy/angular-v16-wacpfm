@@ -29,6 +29,7 @@ export interface Examiner {
   previousMgtExperience: boolean;
   specifyMgtExperience: string;
   trainingResponsibilities: "IRTC" | "CMEC" | "Mentor" | "";
+  residentsMentored: number;
   referees: string[];
 }
 
