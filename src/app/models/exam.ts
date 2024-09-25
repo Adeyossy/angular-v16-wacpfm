@@ -30,7 +30,7 @@ export interface Examiner {
   specifyMgtExperience: string;
   trainingResponsibilities: "IRTC" | "CMEC" | "Mentor" | "";
   residentsMentored: number;
-  referees: string[];
+  referees: Referee[];
 }
 
 export interface Referee {
