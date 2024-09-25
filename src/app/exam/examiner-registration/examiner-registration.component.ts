@@ -38,11 +38,26 @@ export class ExaminerRegistrationComponent implements OnInit {
     previousMgtExperience: false,
     specifyMgtExperience: "",
     trainingResponsibilities: "",
+    residentsMentored: 0,
     referees: []
   }
 
   examiner$: Observable<Examiner> = new Observable();
   appUser$: Observable<AppUser> = new Observable();
+
+  geopolitical = ["North Central", "North East", "North West", "South West", "South East", 
+    "South South"] as const;
+
+  wacpMembershipStatus = ["Life member", "Paid-up currently", "Paid-up last year", 
+    "Paid-up 2 years ago"] as const;
+
+  currentEmploymentStatus = ["Employed", "Retired"] as const;
+
+  trainerCertificationStatus = ["Current", "Lapsed", "None"];
+
+  doctorsEducatorsTrainingStatus = ["Done", "Not done", "Equivalent"];
+
+  trainingResponsibilities = ["IRTC", "CMEC", "Mentor"];
 
   constructor(private authService: AuthService, private examService: ExamService) {}
 
