@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Examiner, EXAMINERS, Geopolitical } from 'src/app/models/exam';
 import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -52,7 +52,7 @@ export class ExaminerRegistrationComponent implements OnInit {
     }
   }
 
-  examiner$: Observable<Examiner> = new Observable();
+  examiner$: Observable<Examiner> = of(this.examiner);
   appUser$: Observable<AppUser> = new Observable();
 
   geopolitical = ["North Central", "North East", "North West", "South West", "South East",
