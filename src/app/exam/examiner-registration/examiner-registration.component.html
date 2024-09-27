@@ -1,3 +1,7 @@
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small fw-bold">Examiner Registration</h1>
+  <div class="wacpfm-underline"></div>
+</div>
 <div *ngIf="examiner$ | async as examiner">
   <label for="wacpfm-register-examiner-name"><i class="bi bi-key-fill"></i> Name</label>
   <input type="text" name="examiner-name" id="wacpfm-register-examiner-name" required [(ngModel)]="examiner.name"
@@ -109,6 +113,12 @@
   <app-select [items]="trainingResponsibilities.slice()" mode="single"
     (emitItems)="examiner.trainingResponsibilities = $event[0]"></app-select>
   <br><br>
+  <div *ngIf="examiner.trainingResponsibilities === 'Mentor to Residents'">
+    <label for="">Number of residents mentored</label>
+    <input type="number" name="examiner-mentee" id="wacpfm-register-examiner-mentee" required
+    [(ngModel)]="examiner.residentsMentored">
+  </div>
+  <br><br><br>
   <div class="wacpfm-heading-underline">
     <h2 class="wacpfm-heading-small">Referee Information</h2>
     <div class="wacpfm-underline"></div>
