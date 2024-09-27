@@ -3,6 +3,8 @@ import { environment } from "src/environments/environment";
 
 export const EXAMINERS = environment.examiner;
 
+export type Geopolitical = "North Central" | "North East" | "North West" | "South West" | "South East" | "South South" | "";
+
 export interface Examiner {
   userId: string;
   userEmail: string;
@@ -10,17 +12,18 @@ export interface Examiner {
   contactPhoneNumber: number;
   country: string;
   dateOfBirth: string;
+  nameOfInstitution: string;
   geopolitical: "North Central" | "North East" | "North West" | "South West" | "South East" | "South South" | "";
-  wacpMembershipStatus: "Life member" | "Paid-up currently" | "Paid-up last year" | "Paid-up 2 years ago" | "";
+  wacpMembershipStatus: string;
   residentDoctorsNo: number;
   trainingCentre: string;
-  currentEmploymentStatus: "Employed" | "Retired" | "";
+  currentEmploymentStatus: string;
   wacpResponsibilities: boolean;
   yearOfFellowship: number;
   firstYearAsExaminer: number;
   timesPartakenInExam: number;
-  trainerCertificationStatus: "Current" | "Lapsed" | "None" | "";
-  doctorsEducatorsTrainingStatus: "Done" | "Not done" | "Equivalent" | "";
+  trainerCertificationStatus: string;
+  doctorsEducatorsTrainingStatus: string;
   dissertationsSupervised: number;
   prbSupervised: number;
   fellowshipSupervised: number;
@@ -28,9 +31,9 @@ export interface Examiner {
   publications: number;
   previousMgtExperience: boolean;
   specifyMgtExperience: string;
-  trainingResponsibilities: "IRTC" | "CMEC" | "Mentor" | "";
+  trainingResponsibilities: string;
   residentsMentored: number;
-  referees: Referee[];
+  referees: Referee;
 }
 
 export interface Referee {
@@ -39,8 +42,8 @@ export interface Referee {
   institution: string;
   email: string;
   phoneNumber: number;
-  candidateId: number;
-  response: "Correct" | "False";
+  candidateId: string;
+  response: "Correct" | "Not Correct" | "";
   reasonIfIncorrect: string;
 }
 
