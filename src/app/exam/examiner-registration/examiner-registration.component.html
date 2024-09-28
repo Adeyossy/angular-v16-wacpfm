@@ -2,6 +2,7 @@
   <h1 class="wacpfm-heading-small fw-bold">Examiner Registration</h1>
   <div class="wacpfm-underline"></div>
 </div>
+<br>
 <div *ngIf="examiner$ | async as examiner">
   <label for="wacpfm-register-examiner-name"><i class="bi bi-key-fill"></i> Name</label>
   <input type="text" name="examiner-name" id="wacpfm-register-examiner-name" required [(ngModel)]="examiner.name"
@@ -38,7 +39,7 @@
   <label for="wacpfm-register-examiner-fellowshipyear"><i class="bi"></i> Year of Fellowship</label>
   <input type="text" inputmode="numeric" name="examiner-fellowshipyear" id="wacpfm-register-examiner-fellowshipyear"
     [(ngModel)]="examiner.yearOfFellowship" required>
-  <br><br>
+  <br><br><br>
   <!--   Examiner experience section   -->
   <div class="wacpfm-heading-underline">
     <h2 class="wacpfm-heading-small">Examiner Experience</h2>
@@ -57,7 +58,7 @@
   </label>
   <input type="number" name="examiner-timespartakeninexam" id="wacpfm-register-examiner-timespartakeninexam"
     [(ngModel)]="examiner.timesPartakenInExam" inputmode="numeric" required>
-  <br><br>
+  <br><br><br>
   <div class="wacpfm-heading-underline">
     <h2 class="wacpfm-heading-small">Examiner Training Experience</h2>
     <div class="wacpfm-underline"></div>
