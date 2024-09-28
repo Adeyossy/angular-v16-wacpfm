@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { concatMap, map, Observable, of } from 'rxjs';
 import { Examiner, EXAMINERS, Geopolitical } from 'src/app/models/exam';
 import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -16,7 +16,7 @@ export class ExaminerRegistrationComponent implements OnInit {
     userEmail: "",
     userId: "",
     name: "",
-    contactPhoneNumber: 0,
+    contactPhoneNumber: "",
     country: "",
     geopolitical: "",
     dateOfBirth: "",
@@ -53,7 +53,7 @@ export class ExaminerRegistrationComponent implements OnInit {
   }
 
   examiner$: Observable<Examiner> = of(this.examiner);
-  appUser$: Observable<AppUser> = new Observable();
+  updateTracker$: Observable<boolean> = of(false);
 
   geopolitical = ["North Central", "North East", "North West", "South West", "South East",
     "South South"] as const;
@@ -94,7 +94,16 @@ export class ExaminerRegistrationComponent implements OnInit {
   constructor(private authService: AuthService, private examService: ExamService) { }
 
   ngOnInit(): void {
-    this.appUser$ = this.authService.getAppUser$();
+    this.examiner$.pipe(
+      concatMap(examiner => this.authService.getAppUser$().pipe(map(appUser => {
+        examiner.userId = appUser.userId;
+        examiner.userEmail = appUser.email;
+        examiner.name = `${appUser.firstname} ${appUser.lastname}`;
+        examiner.country = appUser.country;
+        examiner.contactPhoneNumber = appUser.phoneNumber;
+        return examiner;
+      })))
+    )
   }
 
   getExaminer$() {
@@ -109,5 +118,13 @@ export class ExaminerRegistrationComponent implements OnInit {
   toBoolean(dichot: string[]) {
     if (dichot.includes("Yes")) return true;
     return false;
+  }
+
+  update$() {
+    this.updateTracker$ = this.examiner$.pipe(
+      concatMap(examiner => this.authService.addDocWithID$(EXAMINERS, examiner.userId, 
+        examiner, true)),
+      map(_void => true)
+    )
   }
 }

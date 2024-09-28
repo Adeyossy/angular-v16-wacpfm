@@ -9,7 +9,7 @@ export interface Examiner {
   userId: string;
   userEmail: string;
   name: string;
-  contactPhoneNumber: number;
+  contactPhoneNumber: string;
   country: string;
   dateOfBirth: string;
   nameOfInstitution: string;
