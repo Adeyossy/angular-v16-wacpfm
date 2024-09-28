@@ -89,7 +89,7 @@ export class ExaminerRegistrationComponent implements OnInit {
     "UCH, Ibadan", "UCTH, Calabar", "UDUTH, Sokoto", "UITH, Ilorin",
     "UNILAG Medical Centre, Lagos", "UNTH (Ituku-Ozalla) Enugu", "UPTH, Port Harcourt",
     "UUTH, Uyo", "Blue Cross Hospital, Sierra Leone", "Liberia"
-  ];
+  ].sort();
 
   constructor(private authService: AuthService, private examService: ExamService) { }
 
