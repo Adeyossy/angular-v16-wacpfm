@@ -47,6 +47,9 @@ export interface Referee {
   reasonIfIncorrect: string;
 }
 
+/**
+ * Models the individual components under each exam
+ */
 export interface Subexam {
   score: number;
   totalMarksObtainable: number;
@@ -64,6 +67,7 @@ interface Upload {
 
 export interface Candidate {
   userId: string;
+  candidateId: string;
   userEmail: string;
   wacpNo: string;
   dateOfBirth: number;
@@ -72,13 +76,6 @@ export interface Candidate {
   presenceInTrainingCentre: boolean;
   nameOfTrainingCentre: string;
   previousOrals: number;
-  pmrTitle: string;
-  pmrSupervisor1Name: string;
-  pmrSupervisor2Name?: string;
-  dissertationTitle: string;
-  dissertationSupervisor1Name: string;
-  dissertationSupervisor2Name?: string;
-  dissertationSupervisor3Name?: string;
   physicalHandicap: "None" | "Use of a wheelchair" | "Use of walking frame or crutches" | `Visual acuity 
     worse than 3/60 despite correction` | `Severe hearing impairment despite hearing aid` | 
     "Others";
@@ -87,8 +84,7 @@ export interface Candidate {
   exclusivelyBreastfedBaby: boolean; // if female
   thirdTrimester: boolean; // if female
   examCentre: "Abuja" | "Accra" | "Ibadan";
-  certificate: Upload;
-  dissertation: Upload;
+  certificate: Upload; // certificate of training (fellowship only?)
   pmr: Upload[];
   pmrPages: Upload[];
 }
@@ -125,17 +121,17 @@ export interface MembershipExamRecord extends Candidate { // DB name - membershi
   orals: Subexam;
   examId: string;
   examAlias: string;
-  previousDissertations: number;
-  previousPMRs: number;
 }
 
-export interface FellowshipExamRecord {
+export interface FellowshipExamRecord extends Candidate {
   candidateId: string;
-  dissertationId: string;
-  pmrId: string;
+  dissertation: Dissertation[];
+  pmrs: AcademicWriting[];
   defense: any;
   examId: string;
   examAlias: string;
+  previousDissertations: number;
+  previousPMRs: number;
 }
 
 export interface Grade {
@@ -176,6 +172,17 @@ export interface AcademicWriting {
 export interface Dissertation extends AcademicWriting {
   gradesByExaminer: DissertationGrade[];
   abstract: string;
+}
+
+const dissertation: Dissertation = {
+  abstract: "",
+  title: "",
+  gradesByExaminer: [],
+  candidateEmail: "",
+  candidateId: "",
+  examinerEmails: [],
+  examinerIds: [],
+  wacpNo: ""
 }
 
 export interface PMR extends AcademicWriting {
