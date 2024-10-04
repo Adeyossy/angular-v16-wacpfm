@@ -88,7 +88,7 @@ export interface Candidate {
 }
 
 type ExamSpecifics = {
-  curriculum: "old" | "new";
+  curriculum: string;
   examiners: string[];
   candidates: string[];
 }
@@ -96,11 +96,12 @@ type ExamSpecifics = {
 export interface Exam {
   id: string;
   alias: string;
+  title: string;
   dateCreated: FieldValue; // date in milliseconds
-  registrationStartDate: number; // date registration starts
-  registrationCloseDate: number; // date registration ends
-  firstExamDate: number; // first day of exams
-  lastExamDate: number;
+  registrationStartDate: string; // date registration starts
+  registrationCloseDate: string; // date registration ends
+  firstExamDate: string; // first day of exams
+  lastExamDate: string;
   membership: ExamSpecifics;
   fellowship: ExamSpecifics;
 }

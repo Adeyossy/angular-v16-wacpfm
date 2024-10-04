@@ -1,1 +1,34 @@
-<p>edit-exam works!</p>
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small fw-bold">Edit Exam</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+<div *ngIf="exam$ | async as exam">
+  <label for="wacpfm-exam-title">Title</label>
+  <input type="text" name="exam-title" id="wacpfm-exam-title" required [(ngModel)]="exam.title"
+    placeholder="i.e. Your name">
+  <br><br>
+  <label for="wacpfm-exam-registration-open">Date Registration Opens</label>
+  <input type="date" name="wacpfm-exam-registration-open" id="wacpfm-exam-registration-open" required
+    [(ngModel)]="exam.registrationStartDate">
+  <br><br>
+  <label for="wacpfm-exam-registration-close">Date Registration Closes</label>
+  <input type="date" name="wacpfm-exam-registration-close" id="wacpfm-exam-registration-close" required
+    [(ngModel)]="exam.registrationCloseDate">
+  <br><br>
+  <label for="wacpfm-exam-first-date">First Exam Date</label>
+  <input type="date" name="wacpfm-exam-first-date" id="wacpfm-exam-first-date" required
+    [(ngModel)]="exam.firstExamDate">
+  <br><br>
+  <label for="wacpfm-exam-last-date">Last Exam Date</label>
+  <input type="date" name="wacpfm-exam-last-date" id="wacpfm-exam-last-date" required
+    [(ngModel)]="exam.lastExamDate">
+  <br><br>
+  <label for="wacpfm-exam-membership-curriculum">Curriculum Used for MEMBERSHIP Exam</label>
+  <app-select (emitItems)="exam.membership.curriculum = $event[0]" mode="single" 
+    [items]="['Old', 'New']"></app-select>
+  <br><br>
+  <label for="wacpfm-exam-fellowship-curriculum">Curriculum Used for FELLOWSHIP Exam</label>
+  <app-select (emitItems)="exam.fellowship.curriculum = $event[0]" mode="single" 
+    [items]="['Old', 'New']"></app-select>
+  <br><br>
+</div>
