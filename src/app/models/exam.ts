@@ -85,20 +85,24 @@ export interface Candidate {
   thirdTrimester: boolean; // if female
   examCentre: "Abuja" | "Accra" | "Ibadan";
   certificate: Upload; // certificate of training (fellowship only?)
-  pmr: Upload[];
-  pmrPages: Upload[];
+}
+
+type ExamSpecifics = {
+  curriculum: "old" | "new";
+  examiners: string[];
+  candidates: string[];
 }
 
 export interface Exam {
   id: string;
   alias: string;
   dateCreated: FieldValue; // date in milliseconds
-  registrationStartDate: number;
-  registrationCloseDate: number;
-  firstExamDate: number;
+  registrationStartDate: number; // date registration starts
+  registrationCloseDate: number; // date registration ends
+  firstExamDate: number; // first day of exams
   lastExamDate: number;
-  examiners: string[];
-  candidates: string[];
+  membership: ExamSpecifics;
+  fellowship: ExamSpecifics;
 }
 
 /**
@@ -119,6 +123,7 @@ export interface MembershipExamRecord extends Candidate { // DB name - membershi
   osce: Subexam;
   logbook: Subexam;
   orals: Subexam;
+  pmr: Subexam;
   examId: string;
   examAlias: string;
 }
