@@ -36,6 +36,7 @@ import { CourseTypeComponent } from './widgets/course-type/course-type.component
 import { ResourcePersonsDashComponent } from './dashboard/resource-persons-dash/resource-persons-dash.component';
 import { ExamComponent } from './exam/exam.component';
 import { ExaminerRegistrationComponent } from './exam/examiner-registration/examiner-registration.component';
+import { EditExamComponent } from './exam/edit-exam/edit-exam.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { ExaminerRegistrationComponent } from './exam/examiner-registration/exam
     CourseTypeComponent,
     ResourcePersonsDashComponent,
     ExamComponent,
-    ExaminerRegistrationComponent
+    ExaminerRegistrationComponent,
+    EditExamComponent
   ],
   imports: [
     BrowserModule,
