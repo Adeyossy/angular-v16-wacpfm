@@ -37,6 +37,7 @@ import { ResourcePersonsDashComponent } from './dashboard/resource-persons-dash/
 import { ExamComponent } from './exam/exam.component';
 import { EditExaminerComponent } from './exam/edit-examiner/edit-examiner.component';
 import { EditExamComponent } from './exam/edit-exam/edit-exam.component';
+import { EditCandidateComponent } from './exam/edit-candidate/edit-candidate.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { EditExamComponent } from './exam/edit-exam/edit-exam.component';
     ResourcePersonsDashComponent,
     ExamComponent,
     EditExaminerComponent,
-    EditExamComponent
+    EditExamComponent,
+    EditCandidateComponent
   ],
   imports: [
     BrowserModule,
