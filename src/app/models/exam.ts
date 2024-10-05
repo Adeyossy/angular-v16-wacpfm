@@ -2,6 +2,7 @@ import { FieldValue } from "firebase/firestore";
 import { environment } from "src/environments/environment";
 
 export const EXAMINERS = environment.examiner;
+export const EXAMS = environment.exam;
 
 export type Geopolitical = "North Central" | "North East" | "North West" | "South West" | "South East" | "South South" | "";
 
