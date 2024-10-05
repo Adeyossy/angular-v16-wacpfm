@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { concatMap, map, Observable, of } from 'rxjs';
 import { Examiner, EXAMINERS, Geopolitical } from 'src/app/models/exam';
-import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ExamService } from 'src/app/services/exam.service';
-import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
-  selector: 'app-examiner-registration',
-  templateUrl: './examiner-registration.component.html',
-  styleUrls: ['./examiner-registration.component.css']
+  selector: 'app-edit-examiner',
+  templateUrl: './edit-examiner.component.html',
+  styleUrls: ['./edit-examiner.component.css']
 })
-export class ExaminerRegistrationComponent implements OnInit {
+export class EditExaminerComponent implements OnInit {
   examiner: Examiner = {
     userEmail: "",
     userId: "",

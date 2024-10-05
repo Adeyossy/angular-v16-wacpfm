@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExaminerRegistrationComponent } from './examiner-registration.component';
+import { EditExaminerComponent } from './edit-examiner.component';
 
 describe('ExaminerRegistrationComponent', () => {
-  let component: ExaminerRegistrationComponent;
-  let fixture: ComponentFixture<ExaminerRegistrationComponent>;
+  let component: EditExaminerComponent;
+  let fixture: ComponentFixture<EditExaminerComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ExaminerRegistrationComponent]
+      declarations: [EditExaminerComponent]
     });
-    fixture = TestBed.createComponent(ExaminerRegistrationComponent);
+    fixture = TestBed.createComponent(EditExaminerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

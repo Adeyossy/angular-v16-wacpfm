@@ -20,7 +20,7 @@ import { AdminComponent } from './admin/admin.component';
 import { adminGuard } from './admin/admin.guard';
 import { ResourcePersonsDashComponent } from './dashboard/resource-persons-dash/resource-persons-dash.component';
 import { ExamComponent } from './exam/exam.component';
-import { ExaminerRegistrationComponent } from './exam/examiner-registration/examiner-registration.component';
+import { EditExaminerComponent } from './exam/edit-examiner/edit-examiner.component';
 import { EditExamComponent } from './exam/edit-exam/edit-exam.component';
 
 const routes: Routes = [
@@ -48,7 +48,7 @@ const routes: Routes = [
       { path: "admin", component: AdminComponent, canActivate: [adminGuard] },
       { path: "exam", component: ExamComponent, title: "Examination | Faculty of Family Medicine App" },
       { path: "exam/edit", component: EditExamComponent, title: "Edit Exam Details | FM App" },
-      { path: "exam/examiner/profile", component: ExaminerRegistrationComponent, title: "Examiner Profile" }
+      { path: "exam/examiner/profile", component: EditExaminerComponent, title: "Examiner Profile" }
     ]
   },
   {
