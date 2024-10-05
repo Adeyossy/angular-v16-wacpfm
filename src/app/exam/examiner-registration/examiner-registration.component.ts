@@ -53,7 +53,7 @@ export class ExaminerRegistrationComponent implements OnInit {
   }
 
   examiner$: Observable<Examiner> = of(this.examiner);
-  updateTracker$: Observable<boolean> = of(false);
+  updateTracker$: Observable<boolean> | null = null;
 
   geopolitical = ["North Central", "North East", "North West", "South West", "South East",
     "South South"] as const;

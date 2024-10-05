@@ -155,10 +155,13 @@
   <input type="number" name="examiner-refereephone" id="wacpfm-register-examiner-refereephone" required
     [(ngModel)]="examiner.referees.phoneNumber">
   <br><br>
-  <div *ngIf="updateTracker$ | async as tracker; else update">
+  <div *ngIf="updateTracker$ === null; else update">
     <button class="wacpfm-primary-button" routerLink="/dashboard/examination">Continue</button>
   </div>
   <ng-template #update>
-    <button class="wacpfm-primary-button" (click)="update$()">Submit</button>
+    <button *ngIf="updateTracker$ | async as tracker; else loading" class="wacpfm-primary-button" (click)="update$()">Submit</button>
+    <ng-template #loading>
+      <app-loading-circles></app-loading-circles>
+    </ng-template>
   </ng-template>
 </div>
