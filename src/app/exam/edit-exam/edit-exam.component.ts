@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { catchError, concatMap, map, Observable, of } from 'rxjs';
 import { Exam, EXAMS } from 'src/app/models/exam';
 import { AuthService } from 'src/app/services/auth.service';
-import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-edit-exam',
@@ -20,7 +19,7 @@ export class EditExamComponent {
       concatMap(exam => this.authService.addDocWithID$(EXAMS, exam.id, 
         exam, true)),
       map(_void => true),
-      catchError(err => of(false))
+      catchError(_err => of(false))
     )
   }
 }

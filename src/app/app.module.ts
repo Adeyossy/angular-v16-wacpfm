@@ -35,7 +35,7 @@ import { PaymentViewerComponent } from './widgets/payment-viewer/payment-viewer.
 import { CourseTypeComponent } from './widgets/course-type/course-type.component';
 import { ResourcePersonsDashComponent } from './dashboard/resource-persons-dash/resource-persons-dash.component';
 import { ExamComponent } from './exam/exam.component';
-import { ExaminerRegistrationComponent } from './exam/examiner-registration/examiner-registration.component';
+import { EditExaminerComponent } from './exam/edit-examiner/edit-examiner.component';
 import { EditExamComponent } from './exam/edit-exam/edit-exam.component';
 
 @NgModule({
@@ -70,7 +70,7 @@ import { EditExamComponent } from './exam/edit-exam/edit-exam.component';
     CourseTypeComponent,
     ResourcePersonsDashComponent,
     ExamComponent,
-    ExaminerRegistrationComponent,
+    EditExaminerComponent,
     EditExamComponent
   ],
   imports: [
