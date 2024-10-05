@@ -4,6 +4,7 @@ export const environment = {
   resourcePersons: "resource_persons",
   updateCourseLecture: "update_course_lectures",
   examiner: "examiners",
+  exam: "exams",
   membershipExam: "membership_exams",
   fellowshipExam: "fellowship_exams",
   membershipCandidate: "membership_candidates",
