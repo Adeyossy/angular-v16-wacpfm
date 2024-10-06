@@ -38,6 +38,7 @@ import { ExamComponent } from './exam/exam.component';
 import { EditExaminerComponent } from './exam/edit-examiner/edit-examiner.component';
 import { EditExamComponent } from './exam/edit-exam/edit-exam.component';
 import { EditCandidateComponent } from './exam/edit-candidate/edit-candidate.component';
+import { FileUploadComponent } from './widgets/file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { EditCandidateComponent } from './exam/edit-candidate/edit-candidate.com
     ExamComponent,
     EditExaminerComponent,
     EditExamComponent,
-    EditCandidateComponent
+    EditCandidateComponent,
+    FileUploadComponent
   ],
   imports: [
     BrowserModule,
