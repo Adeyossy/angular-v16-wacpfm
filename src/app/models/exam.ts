@@ -68,24 +68,23 @@ interface Upload {
 
 export interface Candidate {
   userId: string;
-  candidateId: string;
+  candidateId: string; // aka exam number
+  gender: string;
   userEmail: string;
   wacpNo: string;
-  dateOfBirth: number;
+  dateOfBirth: string;
   dateOfRegistration: FieldValue;
-  examType: "Membership" | "Fellowship";
-  presenceInTrainingCentre: boolean;
+  examType: string;
+  presenceInTrainingCentre: string; // Yes or No
   nameOfTrainingCentre: string;
   previousOrals: number;
-  physicalHandicap: "None" | "Use of a wheelchair" | "Use of walking frame or crutches" | `Visual acuity 
-    worse than 3/60 despite correction` | `Severe hearing impairment despite hearing aid` | 
-    "Others";
+  physicalHandicap: string;
   otherHandicap: string;
   handicapAssistance: string;
-  exclusivelyBreastfedBaby: boolean; // if female
-  thirdTrimester: boolean; // if female
-  examCentre: "Abuja" | "Accra" | "Ibadan";
-  certificate: Upload; // certificate of training (fellowship only?)
+  exclusivelyBreastfedBaby: string; // if female, response is Yes or No
+  thirdTrimester: string; // if female, response is Yes or No
+  examCentre: string;
+  certificate: Upload; // certificate of training
 }
 
 type ExamSpecifics = {

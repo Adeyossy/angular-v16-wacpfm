@@ -1,1 +1,51 @@
-<p>edit-candidate works!</p>
+<div *ngIf="candidate$ | async as candidate">
+  <label for="wacpfm-candidate-no">Examination Number</label>
+  <input type="text" name="candidate-no" id="wacpfm-candidate-no" required [(ngModel)]="candidate.candidateId"
+    placeholder="i.e. Your name">
+  <br><br>
+  <label for="wacpfm-candidate-wacpno">WACP Number</label>
+  <input type="text" name="wacpfm-candidate-wacpno" id="wacpfm-candidate-wacpno" required
+    [(ngModel)]="candidate.wacpNo">
+  <br><br>
+  <label for="wacpfm-candidate-dob">Date of Birth</label>
+  <input type="date" name="wacpfm-candidate-dob" id="wacpfm-candidate-dob" required [(ngModel)]="candidate.dateOfBirth">
+  <br><br>
+  <label for="wacpfm-candidate-category">What category are you registering for?</label>
+  <app-select (emitItems)="candidate.examType = $event[0]" mode="single"
+    [items]="['Membership', 'Fellowship']"></app-select>
+  <br><br>
+  <label for="wacpfm-candidate-trainingcentre">Presence in training centre</label>
+  <app-select (emitItems)="candidate.presenceInTrainingCentre = $event[0]" mode="single"
+    [items]="['Yes', 'No']"></app-select>
+  <br><br>
+  <label for="wacpfm-candidate-trainingcentre-name">Name of Training Centre</label>
+  <input type="text" name="wacpfm-candidate-trainingcentre-name" id="wacpfm-candidate-trainingcentre-name" required
+    [(ngModel)]="candidate.presenceInTrainingCentre">
+  <br><br>
+  <label for="wacpfm-candidate-orals">Number of Previous Orals</label>
+  <input type="number" name="wacpfm-candidate-orals" id="wacpfm-candidate-orals" required
+    [(ngModel)]="candidate.presenceInTrainingCentre">
+  <br><br>
+  <label for="wacpfm-candidate-physical-handicap">Physical Handicap</label>
+  <app-select (emitItems)="candidate.physicalHandicap = $event[0]" mode="single" [items]="handicap"></app-select>
+  <br><br>
+  <label for="wacpfm-candidate-other-handicap">Other Handicap</label>
+  <input type="text" name="wacpfm-candidate-other-handicap" id="wacpfm-candidate-other-handicap" required
+    [(ngModel)]="candidate.otherHandicap">
+  <br><br>
+  <label for="wacpfm-candidate-handicap-assistance">What would you like to see in place to assist you?</label>
+  <p class="wacpfm-smaller-text">Pls remember that this is subject to possibility at the host examination site and
+    examination security considerations</p>
+  <input type="text" name="wacpfm-candidate-handicap-assistance" id="wacpfm-candidate-handicap-assistance" required
+    [(ngModel)]="candidate.handicapAssistance">
+  <br><br>
+  <div *ngIf="candidate.gender.toLowerCase() === 'female'">
+    <label for="wacpfm-candidate-breastfed">Will you have an exclusively breast-fed baby less than 6-months old during the examinations?</label>
+    <app-select (emitItems)="candidate.exclusivelyBreastfedBaby = $event[0]" mode="single"
+      [items]="['Yes', 'No']"></app-select>
+    <br><br>
+    <label for="wacpfm-candidate-pregnant">Will you be in the 3rd trimester of pregnancy during the examinations?</label>
+    <app-select (emitItems)="candidate.exclusivelyBreastfedBaby = $event[0]" mode="single" [items]="['Yes', 'No']"></app-select>
+    <br><br>
+  </div>
+</div>
