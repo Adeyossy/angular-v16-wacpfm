@@ -118,8 +118,9 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
   }
 
   uploadMaterial() {
-    this.materialUpload$ = this.authService.UploadFileResumably$(`Materials/${this.lecture.updateCourseId}`,
-      this.materialFile!, this.lecture.courseType).pipe(
+    const path = `Materials/${this.lecture.updateCourseId}/${this.lecture.courseType}
+      /${this.materialFile!.name}`;
+    this.materialUpload$ = this.authService.uploadFileResumably$(this.materialFile!, path).pipe(
         map(output => {
           console.log("lecturerEmail => ", this.lecture.lecturerEmail);
           if (isNaN(parseFloat(output))) {
@@ -142,8 +143,9 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
   }
 
   uploadVoiceover() {
-    this.videoUpload$ = this.authService.UploadFileResumably$(`Materials/${this.lecture.updateCourseId}`,
-      this.videoFile!, this.lecture.courseType).pipe(
+    const path = `Materials/${this.lecture.updateCourseId}/${this.lecture.courseType}
+      /${this.videoFile!.name}`;
+    this.videoUpload$ = this.authService.uploadFileResumably$(this.videoFile!, path).pipe(
         map(output => {
           console.log("lecturerEmail => ", this.lecture.lecturerEmail);
           if (isNaN(parseFloat(output))) {
