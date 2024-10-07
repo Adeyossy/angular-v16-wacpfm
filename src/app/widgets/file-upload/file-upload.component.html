@@ -1,1 +1,18 @@
-<p>file-upload works!</p>
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <div class="col-md-6 col-xl-4" *ngFor="let file of files">
+      <input type="text" name="wacpfm-file-name" id="wacpfm-file-name" placeholder="Type the title here"
+      [(ngModel)]="file.title">
+    </div>
+    <div class="col-md-6 wacpfm-match-height">
+      <div class="wacpfm-upload-choose w-100 wacpfm-match-height d-flex flex-column justify-content-center align-items-center">
+        <label class="wacpfm-upload-choose-text">
+          <h1 class="wacpfm-heading-medium">+</h1>
+          <p class="wacpfm-small-text">Choose File</p>
+        </label>
+        <input #file type="file" name="wacpfm-file" id="wacpfm-file" class="d-none"
+        [accept]="formats" (ngModelChange)="onFileChosen()">
+      </div>
+    </div>
+  </div>
+</div>

@@ -61,7 +61,7 @@ export interface Subexam {
 interface Upload {
   uploadDate: FieldValue;
   url: string;
-  id: number;
+  id: number; // Use the lastModified attribute of the file object as id?
   description: string;
   filetype: string;
 }
