@@ -366,11 +366,11 @@ export class AuthService {
     )
   }
 
-  UploadFileResumably$<Type>(folderName: string, file: File, id: string) {
+  uploadFileResumably$<Type>(file: File, path: string) {
     // Use this for the lecturer's contents
     return this.getFirebaseApp$().pipe(
       map(app => getStorage(app)),
-      map(str => ref(str, `${folderName}/${id}/${file.name}`)),
+      map(str => ref(str, path)),
       map(strRef => uploadBytesResumable(strRef, file)),
       concatMap(this.uploadListener$)
     )
