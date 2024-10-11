@@ -26,6 +26,7 @@ export class AdminComponent implements OnInit {
   resourcePersons$: Observable<ResourcePerson[]> = NEVER;
   newLecturer$: Observable<ResourcePerson> = NEVER;
   grantAccess$: Observable<void> = NEVER;
+  data$: Observable<string> | null = null;
 
   // should lecture is a flag to let the system knoww that
   // shouldRefresh: "lecture" | "payment" | "resource_person" | "" = "";
@@ -272,5 +273,14 @@ export class AdminComponent implements OnInit {
           )
         })
       )
+  }
+
+  fetchData$() {
+    this.data$ = this.authService.getDetails$(this.currentCourse!.updateCourseId).pipe(
+      map(data => {
+        const json = JSON.stringify(data);
+        return URL.createObjectURL(new Blob([json], {type: "application/json"}))
+      })
+    )
   }
 }

@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AsyncSubject, Observable, concatMap, from, iif, map, of } from 'rxjs';
+import { AsyncSubject, Observable, concatMap, from, iif, map, of, zip } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
 import { DocumentReference, Firestore, Query, QueryFieldFilterConstraint, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
 import { UploadTask, getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { AppUser, IndexType, USERS } from '../models/user';
-import { UpdateCourse } from '../models/update_course';
+import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
+import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
 
 @Injectable({
   providedIn: 'root'
@@ -43,8 +44,8 @@ export class AuthService {
     return this.getFirebaseAuth$().pipe(
       concatMap(auth => new Observable<User>((observer) => {
         return auth.onAuthStateChanged(
-          user => { 
-            if(user !== null) observer.next(user);
+          user => {
+            if (user !== null) observer.next(user);
             else observer.error(new Error(AuthErrorCodes.NULL_USER));
           },
           error => { observer.error(error) },
@@ -382,5 +383,34 @@ export class AuthService {
       map(db => collection(db, collectionName)),
       concatMap(q => this.attachListener$(q))
     )
+  }
+
+  getDetails$(courseId: string) {
+    return this.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS, "updateCourseId",
+      "==", courseId).pipe(
+        concatMap(records => zip(records.filter(record => record.userEmail !== "adeyossy1@gmail.com").
+          filter(record => record.userEmail !== "adeyosolamustapha@outlook.com").filter(record => 
+            record.userEmail !== "amustapha133@stu.ui.edu.ng")
+          .map(record => this.queryCollections$<AppUser>(
+          USERS, "email", "==", record.userEmail).pipe(
+          map(([appUser]) => {
+            return {
+              user_email: appUser.email,
+              record_email: record.userEmail,
+              first_name: appUser.firstname,
+              middle_name: appUser.middlename,
+              last_name: appUser.lastname,
+              course_id: record.updateCourseId,
+              category: record.courseType,
+              gender: appUser.gender,
+              country: appUser.country,
+              designation: appUser.designation,
+              place_of_practice: appUser.practicePlace,
+              college: appUser.college,
+              has_paid: record.approved
+            }
+          })
+        ))))
+      )
   }
 }

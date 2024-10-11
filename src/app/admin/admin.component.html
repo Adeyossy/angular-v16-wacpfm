@@ -56,6 +56,24 @@
         </button>
       </div>
     </div>
+    <div class="col-lg-6 py-3">
+      <div class="wacpfm-card wacpfm-match-height">
+        <h1 class="wacpfm-subheading fw-bold">Data</h1>
+        <br>
+        <p class="wacpfm-small-text wacpfm-lines">
+          Download data for this update course.
+        </p>
+        <br>
+        <button *ngIf="data$ === null; else fetch" class="wacpfm-primary-button" (click)="fetchData$()">
+          FETCH DATA
+        </button>
+        <ng-template #fetch>
+          <a *ngIf="data$ | async as data; else loading" [href]="data" download="data.json">
+            <button class="wacpfm-primary-button">DOWNLOAD DATA</button>
+          </a>
+        </ng-template>
+      </div>
+    </div>
   </div>
   <div class="row" *ngIf="level === 2 && sublevel === 0">
     <div class="col-12" *ngIf="records$ | async as records; else loading">
