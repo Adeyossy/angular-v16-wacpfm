@@ -278,8 +278,10 @@ export class AdminComponent implements OnInit {
   fetchData$() {
     this.data$ = this.authService.getDetails$(this.currentCourse!.updateCourseId).pipe(
       map(data => {
+        const rows = data.map(d => Object.values(d).join(";")).join("\r\n");
+        const final = Object.keys(data[0]).join(";").concat("\r\n", rows);
         const json = JSON.stringify(data);
-        return URL.createObjectURL(new Blob([json], {type: "application/json"}))
+        return URL.createObjectURL(new Blob([final], {type: "text/csv"}))
       })
     )
   }

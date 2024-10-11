@@ -68,7 +68,7 @@
           FETCH DATA
         </button>
         <ng-template #fetch>
-          <a *ngIf="data$ | async as data; else loading" [href]="data" download="data.json">
+          <a *ngIf="data$ | async as data; else loading" [href]="data" download="Course.data.csv">
             <button class="wacpfm-primary-button">DOWNLOAD DATA</button>
           </a>
         </ng-template>
