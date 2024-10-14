@@ -22,6 +22,7 @@ import { ResourcePersonsDashComponent } from './dashboard/resource-persons-dash/
 import { ExamComponent } from './exam/exam.component';
 import { EditExaminerComponent } from './exam/edit-examiner/edit-examiner.component';
 import { EditExamComponent } from './exam/edit-exam/edit-exam.component';
+import { EditCandidateComponent } from './exam/edit-candidate/edit-candidate.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
@@ -48,7 +49,9 @@ const routes: Routes = [
       { path: "admin", component: AdminComponent, canActivate: [adminGuard] },
       { path: "exam", component: ExamComponent, title: "Examination | Faculty of Family Medicine App" },
       { path: "exam/edit", component: EditExamComponent, title: "Edit Exam Details | FM App" },
-      { path: "exam/examiner/profile", component: EditExaminerComponent, title: "Examiner Profile" }
+      { path: "exam/edit/examiner", component: EditExaminerComponent, title: "Examiner Profile" },
+      { path: "exam/edit/candidate", component: EditCandidateComponent, title: "Edit Candidate Profile" },
+      { path: "exam/edit/candidate/fellowship" }
     ]
   },
   {
