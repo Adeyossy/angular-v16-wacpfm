@@ -359,6 +359,16 @@ button:active {
   border-color: var(--wacpfm-primary-colour);
 }
 
+.wacpfm-three-lines {
+  line-height: 1rem;
+  height: 3rem;
+}
+
+.wacpfm-four-lines {
+  line-height: 1rem;
+  height: 4rem;
+}
+
 @keyframes slideLefttoRight {
   from {
     opacity: 0.5;
