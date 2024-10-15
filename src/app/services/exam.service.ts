@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { EXAMINERS, Examiner, FellowshipExamRecord, MembershipExamRecord } from '../models/exam';
 import { map, Observable, of } from 'rxjs';
+import { QueryFieldFilterConstraint } from 'firebase/firestore';
 
 type Cache = {
   [collection: string]: unknown;
@@ -17,8 +18,8 @@ export class ExamService {
   examinerCache: Examiner | null = null;
   cache: Cache = {
     examiner: null,
-    membership_candidate: null,
-    fellowship_candidate: null
+    candidate: null,
+    exam: null
   }
 
   constructor(private authService: AuthService) {}
@@ -58,6 +59,16 @@ export class ExamService {
   getItem$<Type>(collection: string) {
     if (this.cache[collection]) return of(this.cache[collection]) as Observable<Type>;
     return this.authService.getDocByUserId$<Type>(collection).pipe(
+      map(data => {
+        this.cache[collection] = data;
+        return data;
+      })
+    )
+  }
+
+  getasType$<Type>(collection: string, [where1, where2]: QueryFieldFilterConstraint[]) {
+    if (this.cache[collection]) return of(this.cache[collection]) as Observable<Type>;
+    return this.authService.queriesCollections$<Type>(collection, [where1, where2]).pipe(
       map(data => {
         this.cache[collection] = data;
         return data;
