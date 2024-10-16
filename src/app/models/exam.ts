@@ -1,4 +1,4 @@
-import { FieldValue } from "firebase/firestore";
+import { FieldValue, serverTimestamp } from "firebase/firestore";
 import { environment } from "src/environments/environment";
 
 export const EXAMINERS = environment.examiner;
@@ -95,7 +95,7 @@ type ExamSpecifics = {
 
 export interface Exam {
   id: string;
-  alias: string;
+  alias: string; // format: lowercase full month-full year
   title: string;
   dateCreated: FieldValue; // date in milliseconds
   registrationStartDate: number; // date registration starts
@@ -104,6 +104,19 @@ export interface Exam {
   lastExamDate: number;
   membership: ExamSpecifics;
   fellowship: ExamSpecifics;
+}
+
+export const NEW_EXAM: Exam = {
+  id: "",
+  alias: "",
+  title: "",
+  dateCreated: serverTimestamp(),
+  registrationStartDate: Date.now(),
+  registrationCloseDate: Date.now(),
+  firstExamDate: Date.now(),
+  lastExamDate: Date.now(),
+  membership: { curriculum: "Old", examiners: [].slice(), candidates: [].slice() },
+  fellowship: { curriculum: "Old", examiners: [].slice(), candidates: [].slice() }
 }
 
 /**
