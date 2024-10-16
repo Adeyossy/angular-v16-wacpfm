@@ -9,19 +9,23 @@
   <br><br>
   <label for="wacpfm-exam-registration-open">Date Registration Opens</label>
   <input type="date" name="wacpfm-exam-registration-open" id="wacpfm-exam-registration-open" required
-    [(ngModel)]="exam.registrationStartDate">
+    [ngModel]="helper.toDateString(exam.registrationStartDate)" 
+    (ngModelChange)="exam.registrationStartDate = helper.parseToMillis($event)">
   <br><br>
   <label for="wacpfm-exam-registration-close">Date Registration Closes</label>
   <input type="date" name="wacpfm-exam-registration-close" id="wacpfm-exam-registration-close" required
-    [(ngModel)]="exam.registrationCloseDate">
+  [ngModel]="helper.toDateString(exam.registrationCloseDate)" 
+  (ngModelChange)="exam.registrationCloseDate = helper.parseToMillis($event)">
   <br><br>
   <label for="wacpfm-exam-first-date">First Exam Date</label>
   <input type="date" name="wacpfm-exam-first-date" id="wacpfm-exam-first-date" required
-    [(ngModel)]="exam.firstExamDate">
+  [ngModel]="helper.toDateString(exam.firstExamDate)" 
+  (ngModelChange)="exam.firstExamDate = helper.parseToMillis($event)">
   <br><br>
   <label for="wacpfm-exam-last-date">Last Exam Date</label>
   <input type="date" name="wacpfm-exam-last-date" id="wacpfm-exam-last-date" required
-    [(ngModel)]="exam.lastExamDate">
+  [ngModel]="helper.toDateString(exam.lastExamDate)" 
+  (ngModelChange)="exam.lastExamDate = helper.parseToMillis($event)">
   <br><br>
   <label for="wacpfm-exam-membership-curriculum">Curriculum Used for MEMBERSHIP Exam</label>
   <app-select (emitItems)="exam.membership.curriculum = $event[0]" mode="single" 

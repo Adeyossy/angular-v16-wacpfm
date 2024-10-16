@@ -98,10 +98,10 @@ export interface Exam {
   alias: string;
   title: string;
   dateCreated: FieldValue; // date in milliseconds
-  registrationStartDate: string; // date registration starts
-  registrationCloseDate: string; // date registration ends
-  firstExamDate: string; // first day of exams
-  lastExamDate: string;
+  registrationStartDate: number; // date registration starts
+  registrationCloseDate: number; // date registration ends
+  firstExamDate: number; // first day of exams
+  lastExamDate: number;
   membership: ExamSpecifics;
   fellowship: ExamSpecifics;
 }
