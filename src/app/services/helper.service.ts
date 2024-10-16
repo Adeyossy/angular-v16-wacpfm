@@ -115,4 +115,12 @@ export class HelperService {
     if(record2.courseType === "Membership") return 1;
     return record1.courseType.charCodeAt(0) - record2.courseType.charCodeAt(0);
   }
+
+  toDateString(millis: number) {
+    return new Date(millis).toLocaleDateString("en-NG").split("/").reverse().join("-");
+  }
+
+  parseToMillis(date: string) {
+    return Date.parse(date);
+  }
 }
