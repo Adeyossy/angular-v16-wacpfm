@@ -5,7 +5,7 @@ import { map, Observable, of } from 'rxjs';
 import { QueryFieldFilterConstraint } from 'firebase/firestore';
 
 type Cache = {
-  [collection: string]: unknown;
+  [collection: string]: unknown[];
 }
 
 @Injectable({
@@ -17,9 +17,9 @@ export class ExamService {
   // exam progress
   examinerCache: Examiner | null = null;
   cache: Cache = {
-    examiner: null,
-    candidate: null,
-    exam: null
+    examiner: [],
+    candidate: [],
+    exam: []
   }
 
   constructor(private authService: AuthService) {}
@@ -33,15 +33,15 @@ export class ExamService {
       map(examItem => {
         switch (cacheKey) {
           case "examiner":
-            cachedItem = examItem as Type;
+            cachedItem = [examItem] as Type[];
             return cachedItem;
 
           case "membership_candidate":
-            cachedItem = examItem as Type;
+            cachedItem = [examItem] as Type[];
             return cachedItem;
 
           case "fellowship_candidate":
-            cachedItem = examItem as Type;
+            cachedItem = [examItem] as Type[];
             return cachedItem;
           
           default:
@@ -60,17 +60,19 @@ export class ExamService {
     if (this.cache[collection]) return of(this.cache[collection]) as Observable<Type>;
     return this.authService.getDocByUserId$<Type>(collection).pipe(
       map(data => {
-        this.cache[collection] = data;
+        this.cache[collection] = [data];
         return data;
       })
     )
   }
 
-  getasType$<Type>(collection: string, [where1, where2]: QueryFieldFilterConstraint[]) {
-    if (this.cache[collection]) return of(this.cache[collection]) as Observable<Type>;
+  queryItem$<Type>(collection: string, [where1, where2]: QueryFieldFilterConstraint[]) {
+    if (this.cache[collection].length) return of(this.cache[collection]) as Observable<Type[]>;
     return this.authService.queriesCollections$<Type>(collection, [where1, where2]).pipe(
       map(data => {
-        this.cache[collection] = data;
+        if (data.length) {
+          this.cache[collection] = data;
+        }
         return data;
       })
     )
