@@ -87,6 +87,33 @@ export interface Candidate {
   certificate: Upload; // certificate of training
 }
 
+export const NEW_CANDIDATE: Candidate = {
+  userId: "",
+  candidateId: "",
+  gender: "",
+  userEmail: "",
+  wacpNo: "",
+  dateOfBirth: "",
+  dateOfRegistration: serverTimestamp(),
+  examType: "",
+  presenceInTrainingCentre: "",
+  nameOfTrainingCentre: "",
+  previousOrals: 0,
+  physicalHandicap: "",
+  otherHandicap: "",
+  handicapAssistance: "",
+  exclusivelyBreastfedBaby: "",
+  thirdTrimester: "",
+  examCentre: "",
+  certificate: {
+    description: "",
+    filetype: "",
+    id: 0,
+    uploadDate: serverTimestamp(),
+    url: ""
+  }
+}
+
 type ExamSpecifics = {
   curriculum: string;
   examiners: string[];
