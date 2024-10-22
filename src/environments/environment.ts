@@ -5,9 +5,5 @@ export const environment = {
   updateCourseLecture: "update_course_lectures",
   examiner: "examiners",
   exam: "exams",
-  membershipExam: "membership_exams",
-  fellowshipExam: "fellowship_exams",
-  membershipCandidate: "membership_candidates",
-  fellowshipCandidate: "fellowship_candidates",
-  referee: "referees"
+  candidates: "candidates"
 };
