@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { EXAMINERS, FellowshipExamRecord, MembershipExamRecord } from '../models/exam';
+import { EXAMINERS } from '../models/exam';
 import { Examiner } from "../models/examiner";
 import { map, Observable, of } from 'rxjs';
 import { QueryFieldFilterConstraint } from 'firebase/firestore';
+import { FellowshipExamRecord, MembershipExamRecord } from '../models/candidate';
 
 type Cache = {
   [collection: string]: unknown[];

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Candidate } from 'src/app/models/exam';
+import { Candidate } from "src/app/models/candidate";
 
 @Component({
   selector: 'app-edit-candidate',
