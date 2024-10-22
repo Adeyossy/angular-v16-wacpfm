@@ -1,3 +1,4 @@
+import { FieldValue } from "firebase/firestore";
 import { environment } from "src/environments/environment";
 
 export const EXAMINERS = environment.examiner;
@@ -10,6 +11,7 @@ export interface Examiner {
   contactPhoneNumber: string;
   country: string;
   dateOfBirth: string;
+  dateOfRegistration: FieldValue;
   nameOfInstitution: string;
   geopolitical: Geopolitical;
   wacpMembershipStatus: string;
@@ -31,16 +33,20 @@ export interface Examiner {
   specifyMgtExperience: string;
   trainingResponsibilities: string;
   residentsMentored: number;
-  referees: Referee;
+  referees: Referee[];
 }
 
+/**
+ * A referee is a subcollection under
+ */
 export interface Referee {
-  id: string;
+  id: string; // The userId of this referee if they are registered on the app
   name: string;
   institution: string;
   email: string;
-  phoneNumber: number;
-  candidateId: string;
+  phoneNumber: string;
+  examinerId: string;
+  examinerEmail: string;
   response: "Correct" | "Not Correct" | "";
   reasonIfIncorrect: string;
 }

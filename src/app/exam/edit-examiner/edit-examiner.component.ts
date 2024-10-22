@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { where } from 'firebase/firestore';
+import { serverTimestamp, where } from 'firebase/firestore';
 import { concatMap, map, Observable, of } from 'rxjs';
 import { EXAMINERS } from 'src/app/models/exam';
-import { Examiner, Geopolitical } from "src/app/models/examiner";
+import { Examiner, Geopolitical, Referee } from "src/app/models/examiner";
 import { AuthService } from 'src/app/services/auth.service';
 import { ExamService } from 'src/app/services/exam.service';
 
@@ -20,6 +20,7 @@ export class EditExaminerComponent implements OnInit {
     country: "",
     geopolitical: "",
     dateOfBirth: "",
+    dateOfRegistration: serverTimestamp(),
     nameOfInstitution: "",
     wacpMembershipStatus: "",
     residentDoctorsNo: 0,
@@ -40,17 +41,8 @@ export class EditExaminerComponent implements OnInit {
     specifyMgtExperience: "",
     trainingResponsibilities: "",
     residentsMentored: 0,
-    referees: {
-      candidateId: "",
-      email: "",
-      id: "",
-      institution: "",
-      name: "",
-      phoneNumber: 0,
-      reasonIfIncorrect: "",
-      response: ""
-    }
-  }
+    referees: []
+  };
 
   examiner$: Observable<Examiner> = of(this.examiner);
   updateTracker$: Observable<boolean> | null = null;
@@ -127,5 +119,24 @@ export class EditExaminerComponent implements OnInit {
         examiner, true)),
       map(_void => true)
     )
+  }
+
+  newReferee() {
+    const referee: Referee = {
+      id: "",
+      email: "",
+      name: "",
+      institution: "",
+      phoneNumber: "",
+      examinerEmail: "",
+      examinerId: "",
+      response: "",
+      reasonIfIncorrect: ""
+    }
+    return referee;
+  }
+
+  deleteReferee = (referees: Referee[], i: number) => {
+    return referees.filter((_ref, index) => index !== i)
   }
 }

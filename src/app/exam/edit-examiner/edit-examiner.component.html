@@ -125,35 +125,37 @@
     <div class="wacpfm-underline"></div>
   </div>
   <br>
-  <label for="wacpfm-register-examiner-refereename">
-    <i class="bi"></i> Name of guarantor
-  </label>
-  <input type="text" name="examiner-refereename" id="wacpfm-register-examiner-refereename" required
-    [(ngModel)]="examiner.referees.name">
-  <br><br>
-  <label for="wacpfm-register-examiner-refereeinstitution">
-    <i class="bi"></i> Institution of guarantor
-  </label>
-  <input type="text" name="examiner-refereeinstitution" id="wacpfm-register-examiner-refereeinstitution" required
-    [(ngModel)]="examiner.referees.institution">
-  <br><br>
-  <label for="wacpfm-register-examiner-refereeinstitution">
-    <i class="bi"></i> Institution of guarantor
-  </label>
-  <input type="text" name="examiner-refereeinstitution" id="wacpfm-register-examiner-refereeinstitution" required
-    [(ngModel)]="examiner.referees.institution">
-  <br><br>
-  <label for="wacpfm-register-examiner-refereeemail">
-    <i class="bi"></i> E-mail of guarantor
-  </label>
-  <input type="text" name="examiner-refereeemail" id="wacpfm-register-examiner-refereeemail" required
-    [(ngModel)]="examiner.referees.email">
-  <br><br>
-  <label for="wacpfm-register-examiner-refereephone">
-    <i class="bi"></i> Telephone Number of guarantor
-  </label>
-  <input type="number" name="examiner-refereephone" id="wacpfm-register-examiner-refereephone" required
-    [(ngModel)]="examiner.referees.phoneNumber">
+  <div class="wacpfm-examiner-referee" *ngFor="let referee of examiner.referees; index as i">
+    <label for="wacpfm-register-examiner-refereename">
+      <i class="bi"></i> Name of guarantor
+    </label>
+    <input type="text" name="examiner-refereename" id="wacpfm-register-examiner-refereename" required
+      [(ngModel)]="referee.name">
+    <br><br>
+    <label for="wacpfm-register-examiner-refereeinstitution">
+      <i class="bi"></i> Institution of guarantor
+    </label>
+    <input type="text" name="examiner-refereeinstitution" id="wacpfm-register-examiner-refereeinstitution" required
+      [(ngModel)]="referee.institution">
+    <br><br>
+    <label for="wacpfm-register-examiner-refereeemail">
+      <i class="bi"></i> E-mail of guarantor
+    </label>
+    <input type="email" name="examiner-refereeemail" id="wacpfm-register-examiner-refereeemail" required
+      [(ngModel)]="referee.email">
+    <br><br>
+    <label for="wacpfm-register-examiner-refereephone">
+      <i class="bi"></i> Telephone Number of guarantor
+    </label>
+    <input type="tel" name="examiner-refereephone" id="wacpfm-register-examiner-refereephone" required
+      [(ngModel)]="referee.phoneNumber">
+    <br><br>
+    <button class="small text-end mx-auto" (click)="examiner.referees = this.deleteReferee(examiner.
+      referees, i)"><i class="bi bi-trash3-fill"></i> Delete Referee</button>
+  </div>
+  <br>
+  <button class="small"><i class="bi bi-plus-circle-fill" (click)="examiner.referees.
+    push(newReferee())"></i> Add Referee</button>
   <br><br>
   <div *ngIf="updateTracker$ === null; else update">
     <button class="wacpfm-primary-button" routerLink="/dashboard/examination">Continue</button>
