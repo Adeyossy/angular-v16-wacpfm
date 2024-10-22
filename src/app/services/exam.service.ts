@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { EXAMINERS, Examiner, FellowshipExamRecord, MembershipExamRecord } from '../models/exam';
+import { EXAMINERS, FellowshipExamRecord, MembershipExamRecord } from '../models/exam';
+import { Examiner } from "../models/examiner";
 import { map, Observable, of } from 'rxjs';
 import { QueryFieldFilterConstraint } from 'firebase/firestore';
 
@@ -16,6 +17,13 @@ export class ExamService {
   // exam information
   // exam progress
   examinerCache: Examiner | null = null;
+
+  /**
+   * Stores information on the current exam: the exam itself, examiner and/or candidate.
+   * 
+   * TODO: Link this cache to a particular exam using its alias so several exams can be cached
+   * and not just the current one.
+   */
   cache: Cache = {
     examiner: [],
     candidate: [],

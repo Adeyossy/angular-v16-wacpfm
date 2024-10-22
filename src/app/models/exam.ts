@@ -4,50 +4,6 @@ import { environment } from "src/environments/environment";
 export const EXAMINERS = environment.examiner;
 export const EXAMS = environment.exam;
 
-export type Geopolitical = "North Central" | "North East" | "North West" | "South West" | "South East" | "South South" | "";
-
-export interface Examiner {
-  userId: string;
-  userEmail: string;
-  name: string;
-  contactPhoneNumber: string;
-  country: string;
-  dateOfBirth: string;
-  nameOfInstitution: string;
-  geopolitical: "North Central" | "North East" | "North West" | "South West" | "South East" | "South South" | "";
-  wacpMembershipStatus: string;
-  residentDoctorsNo: number;
-  trainingCentre: string;
-  currentEmploymentStatus: string;
-  wacpResponsibilities: boolean;
-  yearOfFellowship: number;
-  firstYearAsExaminer: number;
-  timesPartakenInExam: number;
-  trainerCertificationStatus: string;
-  doctorsEducatorsTrainingStatus: string;
-  dissertationsSupervised: number;
-  prbSupervised: number;
-  fellowshipSupervised: number;
-  fellowsSupervised: number;
-  publications: number;
-  previousMgtExperience: boolean;
-  specifyMgtExperience: string;
-  trainingResponsibilities: string;
-  residentsMentored: number;
-  referees: Referee;
-}
-
-export interface Referee {
-  id: string;
-  name: string;
-  institution: string;
-  email: string;
-  phoneNumber: number;
-  candidateId: string;
-  response: "Correct" | "Not Correct" | "";
-  reasonIfIncorrect: string;
-}
-
 /**
  * Models the individual components under each exam
  */
@@ -118,6 +74,7 @@ type ExamSpecifics = {
   curriculum: string;
   examiners: string[];
   candidates: string[];
+  pmrShareDate: number; // date PMR is shared with examiners
 }
 
 export interface Exam {
@@ -130,7 +87,7 @@ export interface Exam {
   firstExamDate: number; // first day of exams
   lastExamDate: number;
   membership: ExamSpecifics;
-  fellowship: ExamSpecifics;
+  fellowship: ExamSpecifics & {dissertationShareDate: number}; // date dissertation is shared with examiners
 }
 
 export const NEW_EXAM: Exam = {
@@ -142,8 +99,19 @@ export const NEW_EXAM: Exam = {
   registrationCloseDate: Date.now(),
   firstExamDate: Date.now(),
   lastExamDate: Date.now(),
-  membership: { curriculum: "Old", examiners: [].slice(), candidates: [].slice() },
-  fellowship: { curriculum: "Old", examiners: [].slice(), candidates: [].slice() }
+  membership: {
+    curriculum: "Old", 
+    examiners: [].slice(), 
+    candidates: [].slice(), 
+    pmrShareDate: Date.now()
+  },
+  fellowship: { 
+    curriculum: "Old", 
+    examiners: [].slice(), 
+    candidates: [].slice(), 
+    pmrShareDate: Date.now(),
+    dissertationShareDate: Date.now()
+  }
 }
 
 /**
@@ -154,11 +122,6 @@ export const NEW_EXAM: Exam = {
  * of previous dissertations, PMRs and orals taken. A check would have to be made for previous 
  * records.
  */
-export interface FellowshipExam extends Exam {
-  dissertationShareDate: number; // date dissertation is shared with examiners
-  pmrShareDate: number; // date PMR is shared with examiners
-}
-
 export interface MembershipExamRecord extends Candidate { // DB name - membership_exam_records
   theory: Subexam;
   osce: Subexam;

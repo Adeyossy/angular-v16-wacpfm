@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { where } from 'firebase/firestore';
 import { concatMap, map, Observable, of } from 'rxjs';
-import { Examiner, EXAMINERS, Geopolitical } from 'src/app/models/exam';
+import { EXAMINERS } from 'src/app/models/exam';
+import { Examiner, Geopolitical } from "src/app/models/examiner";
 import { AuthService } from 'src/app/services/auth.service';
 import { ExamService } from 'src/app/services/exam.service';
 
@@ -105,8 +107,9 @@ export class EditExaminerComponent implements OnInit {
   }
 
   getExaminer$() {
-    this.examiner$ = this.examService.getExamItem$<Examiner>(EXAMINERS,
-      "examiner") as Observable<Examiner>;
+    // this.examiner$ = this.examService.queryItem$<Examiner>(EXAMINERS, [
+    //   where()
+    // ]) as Observable<Examiner>;
   }
 
   geopoliticise(zones: string[]) {
