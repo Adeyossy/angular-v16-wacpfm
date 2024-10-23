@@ -29,4 +29,15 @@ export class ExamComponent implements OnInit {
       })
     )
   }
+
+  getUserType(exam: Exam, userEmail: string) {
+    if (exam.fellowship.candidates.includes(userEmail)) return "Fellowship Candidate";
+    else {
+      if (exam.fellowship.examiners.includes(userEmail)) return "Examiner";
+      else if (exam.membership.curriculum.toLowerCase() === "new") {
+        if (exam.membership.candidates.includes(userEmail)) return "Membership Candidate";
+        else return "Examiner"
+      } else return ""
+    }
+  }
 }
