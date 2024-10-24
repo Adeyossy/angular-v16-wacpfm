@@ -19,7 +19,7 @@
       <div class="col-md-4 col-lg-5 d-none d-md-block"></div>
       <div class="offset-1 col-3 offset-md-1 col-md-2 offset-lg-2 col-lg-1">
         <div *ngIf="user$ | async as user; else loading">
-          <button *ngIf="user === 1; else nullUser" class="small wacpfm-smaller-text" (click)="this.signOut()">Logout</button>
+          <button *ngIf="user.uid; else nullUser" class="small wacpfm-smaller-text" (click)="this.signOut()">Logout</button>
           <ng-template #nullUser>
             <button class="wacpfm-primary-button small wacpfm-smaller-text"
             routerLink="/access/login">Login</button>

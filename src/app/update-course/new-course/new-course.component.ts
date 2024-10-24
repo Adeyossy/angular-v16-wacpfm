@@ -25,7 +25,6 @@ export class NewCourseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.userSubscription = this.authService.getFirebaseUser$().pipe()
     this.course$ = this.authService.getDocId$(UPDATE_COURSES).pipe(
       map(docRef => {
         this.updateCourse.updateCourseId = docRef.id;
@@ -34,7 +33,7 @@ export class NewCourseComponent implements OnInit {
     );
     const userSub = this.authService.getFirebaseUser$().subscribe({
       next: user => {
-        if (user) this.updateCourse.creator = user.uid;
+        if (user.uid) this.updateCourse.creator = user.uid;
         else throw new Error(AuthErrorCodes.NULL_USER);
       },
       error: err => {

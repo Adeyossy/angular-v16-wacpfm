@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AsyncSubject, Observable, concatMap, from, iif, map, of, zip } from 'rxjs';
-import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
+import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut, updateProfile, IdTokenResult } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
 import { DocumentReference, Firestore, Query, QueryFieldFilterConstraint, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
 import { UploadTask, getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
@@ -46,7 +46,38 @@ export class AuthService {
         return auth.onAuthStateChanged(
           user => {
             if (user !== null) observer.next(user);
-            else observer.error(new Error(AuthErrorCodes.NULL_USER));
+            else {
+              const nullUser: User = {
+                emailVerified: false,
+                isAnonymous: false,
+                displayName: '',
+                email: '',
+                phoneNumber: '',
+                photoURL: '',
+                providerId: '',
+                uid: '',
+                metadata: {},
+                providerData: [],
+                refreshToken: '',
+                tenantId: null,
+                delete: function (): Promise<void> {
+                  throw new Error('Function not implemented.');
+                },
+                getIdToken: function (forceRefresh?: boolean): Promise<string> {
+                  throw new Error('Function not implemented.');
+                },
+                getIdTokenResult: function (forceRefresh?: boolean): Promise<IdTokenResult> {
+                  throw new Error('Function not implemented.');
+                },
+                reload: function (): Promise<void> {
+                  throw new Error('Function not implemented.');
+                },
+                toJSON: function (): object {
+                  throw new Error('Function not implemented.');
+                }
+              }
+              observer.next(nullUser)
+            };
           },
           error => { observer.error(error) },
           () => { observer.complete() }
@@ -75,10 +106,7 @@ export class AuthService {
 
   isEmailVerified$() {
     return this.getFirebaseUser$().pipe(
-      map(user => {
-        if (user) return user.emailVerified;
-        throw new Error(AuthErrorCodes.NULL_USER);
-      })
+      map(user => user.emailVerified)
     );
   }
 
@@ -87,7 +115,7 @@ export class AuthService {
     // users should be able to enter a code to be verified
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
-        if (user) {
+        if (user.uid) {
           console.log("url => ", window.location.origin);
           return sendEmailVerification(user, {
             url: `${window.location.origin}/profile/registration`
@@ -113,12 +141,7 @@ export class AuthService {
 
   updateUserName(userName: string) {
     return this.getFirebaseUser$().pipe(
-      concatMap(user => {
-        if (user) {
-          return updateProfile(user, { displayName: userName })
-        }
-        throw AuthErrorCodes.NULL_USER;
-      })
+      concatMap(user => updateProfile(user, { displayName: userName }))
     )
   }
 
@@ -196,7 +219,7 @@ export class AuthService {
   getDocByUserId$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
-        if (user) return this.getFirestore$().pipe(
+        if (user.uid) return this.getFirestore$().pipe(
           concatMap(db => getDoc(doc(db, collectionName, user.uid))),
           map(doc => {
             if (doc.exists()) return doc.data() as Type;
@@ -313,19 +336,13 @@ export class AuthService {
 
   queryByUserId$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
-      concatMap(user => {
-        if (user) return this.queryCollections$<Type>(collectionName, "userId", "==", user.uid);
-        else throw new Error(AuthErrorCodes.NULL_USER);
-      })
+      concatMap(user => this.queryCollections$<Type>(collectionName, "userId", "==", user.uid))
     );
   }
 
   queryByUserEmail$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
-      concatMap(user => {
-        if (user) return this.queryCollections$<Type>(collectionName, "userEmail", "==", user.email!);
-        else throw new Error(AuthErrorCodes.NULL_USER);
-      })
+      concatMap(user => this.queryCollections$<Type>(collectionName, "userEmail", "==", user.email!))
     );
   }
 

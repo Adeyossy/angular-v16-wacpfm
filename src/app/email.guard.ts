@@ -8,7 +8,7 @@ export const emailGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
   return authService.getFirebaseUser$().pipe(
-    map(user => user ? user.emailVerified : false),
+    map(user => user.emailVerified),
     map(isVerified => isVerified ? true : router.parseUrl('/access/register/verifyemail'))
   );
 };

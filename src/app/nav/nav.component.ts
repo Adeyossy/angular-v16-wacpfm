@@ -11,14 +11,12 @@ import { HelperService } from '../services/helper.service';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent {
-  user$ = new Observable<number>();
+  user$ = new Observable<User>();
   declare isDashboard: boolean;
 
   constructor(private authService: AuthService, private router: Router, 
     public helper: HelperService) {
-    this.user$ = authService.getFirebaseUser$().pipe(
-      map(user => user ? 1 : -1)
-    );
+    this.user$ = authService.getFirebaseUser$();
   }
 
   signOut() {

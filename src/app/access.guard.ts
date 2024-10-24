@@ -7,6 +7,6 @@ export const accessGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
   return authService.getFirebaseUser$().pipe(
-    map(user => user ? true : router.parseUrl('/access/login'))
+    map(user => user.uid ? true : router.parseUrl('/access/login'))
   );
 };

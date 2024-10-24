@@ -9,7 +9,7 @@ import { AuthErrorCodes, User } from 'firebase/auth';
   styleUrls: ['./verify-email.component.css']
 })
 export class VerifyEmailComponent implements OnDestroy {
-  user$ = new Observable<User | null>();
+  user$ = new Observable<User>();
   verification = new Subscription();
   verificationStarted = false;
   navText = "Loading...";
@@ -33,7 +33,7 @@ export class VerifyEmailComponent implements OnDestroy {
       concatMap(_value => this.user$)
     ).subscribe({
       next: user => {
-        if (user) {
+        if (user.uid) {
           this.message = "Email Verification link has been sent. Check your email, " 
           + user.email + ".";
           this.navText = "Dismiss";

@@ -103,10 +103,6 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
 
     if (this.receiptFile) {
       this.paymentSub$ = this.authService.getFirebaseUser$().pipe(
-        map(user => {
-          if (user) return user;
-          throw new Error(AuthErrorCodes.NULL_USER);
-        }),
         concatMap(user => this.authService.uploadFile$("receipts", this.receiptFile!, user.uid).pipe(
           concatMap(result => this.activatedRoute.paramMap.pipe(
             map(params => {
@@ -117,10 +113,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
               }
             }),
             concatMap(params => this.authService.getFirebaseUser$().pipe(
-              map(user => {
-                if (user) return { ...params, user };
-                throw new Error(AuthErrorCodes.NULL_USER)
-              })
+              map(user => { return { ...params, user } })
             )),
             concatMap(params => {
               switch (params.category) {

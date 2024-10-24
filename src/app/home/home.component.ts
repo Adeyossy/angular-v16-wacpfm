@@ -14,8 +14,6 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.user$ = this.authService.getFirebaseUser$().pipe(
-      map(user => user ? user : Object.create(null))
-    );
+    this.user$ = this.authService.getFirebaseUser$();
   }
 }
