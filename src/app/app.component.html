@@ -1,6 +1,11 @@
 <header>
   <app-nav></app-nav>
-  <div class="wacpfm-page-divider"></div>
+  <!-- <div class="wacpfm-page-divider"></div> -->
+   <div class="bottom">
+    <div class="middle wacpfm-match-height" [class.move-middle]="isNavigating$ | async">
+      <div class="top wacpfm-match-height" [class.move-top]="isNavigating$ | async"></div>
+    </div>
+   </div>
 </header>
 <main [class.wacpfm-overlay-visible]="helper.isDialogShown >= 0">
   <router-outlet></router-outlet>

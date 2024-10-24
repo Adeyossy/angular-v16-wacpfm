@@ -1,0 +1,23 @@
+.bottom {
+  height: 6px;
+  width: 100vw;
+  background-color: var(--wacpfm-accent-colour-green);
+}
+
+.middle {
+  width: 66.6667vw;
+  background-color: var(--wacpfm-accent-colour-orange);
+}
+
+.top {
+  width: 33.3333vw;
+  background-color: var(--wacpfm-accent-colour-red);
+}
+
+.move-middle {
+  animation: middleKeyframes 1000ms ease-in infinite;
+}
+
+.move-top {
+  animation: topKeyframes 1000ms ease-in infinite;
+}

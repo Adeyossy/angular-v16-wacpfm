@@ -264,7 +264,7 @@ button:active {
 }
 
 .wacpfm-page-divider {
-  height: 8px;
+  height: 6px;
   background: var(--wacpfm-three-colours);
 }
 
@@ -411,6 +411,26 @@ button:active {
 
   to {
     transform: translateY(-16px);
+  }
+}
+
+@keyframes middleKeyframes {
+  from {
+    width: 66.6667vw;
+  }
+
+  to {
+    width: 100vw;
+  }
+}
+
+@keyframes topKeyframes {
+  from {
+    width: 33.3333vw;
+  }
+
+  to {
+    width: 50vw;
   }
 }
 
