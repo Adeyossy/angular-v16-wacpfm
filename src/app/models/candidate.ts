@@ -1,5 +1,8 @@
 import { FieldValue, serverTimestamp } from "firebase/firestore";
 import { Subexam } from "./exam";
+import { environment } from "src/environments/environment";
+
+export const CANDIDATES = environment.candidates;
 
 interface Upload {
   uploadDate: FieldValue;
