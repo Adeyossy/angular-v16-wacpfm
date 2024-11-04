@@ -2,6 +2,7 @@
   <h1 class="wacpfm-heading-small fw-bold">Edit Exam</h1>
   <div class="wacpfm-underline"></div>
 </div>
+<br>
 <div *ngIf="exam$ | async as exam">
   <label for="wacpfm-exam-title">Title</label>
   <input type="text" name="exam-title" id="wacpfm-exam-title" required [(ngModel)]="exam.title"
