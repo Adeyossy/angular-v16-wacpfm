@@ -7,6 +7,7 @@ export type Geopolitical = "North Central" | "North East" | "North West" | "Sout
 export interface Examiner {
   userId: string;
   userEmail: string;
+  examId: string;
   name: string;
   contactPhoneNumber: string;
   country: string;
