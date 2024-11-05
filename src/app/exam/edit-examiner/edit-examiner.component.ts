@@ -122,6 +122,7 @@ export class EditExaminerComponent implements OnInit {
   }
 
   newReferee() {
+    console.log("newReferee");
     const referee: Referee = {
       id: "",
       email: "",

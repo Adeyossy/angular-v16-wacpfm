@@ -7,6 +7,7 @@
   <label for="wacpfm-register-examiner-name"><i class="bi bi-key-fill"></i> Name</label>
   <input type="text" name="examiner-name" id="wacpfm-register-examiner-name" required [(ngModel)]="examiner.name"
     placeholder="i.e. Your name">
+  <p>Name: {{ examiner.name }}</p>
   <br><br>
   <label for="wacpfm-register-examiner-dob"><i class="bi bi-key-fill"></i> Date of Birth</label>
   <input type="date" name="examiner-dob" id="wacpfm-register-examiner-dob" required [(ngModel)]="examiner.dateOfBirth"
@@ -119,13 +120,15 @@
     <input type="number" name="examiner-mentee" id="wacpfm-register-examiner-mentee" required
     [(ngModel)]="examiner.residentsMentored">
   </div>
-  <br><br><br>
+  <br><br>
   <div class="wacpfm-heading-underline">
     <h2 class="wacpfm-heading-small">Referee Information</h2>
     <div class="wacpfm-underline"></div>
   </div>
-  <br>
-  <div class="wacpfm-examiner-referee" *ngFor="let referee of examiner.referees; index as i">
+  <details class="wacpfm-card wacpfm-examiner-referee" 
+  *ngFor="let referee of examiner.referees; index as i">
+    <summary class="wacpfm-subheading fw-bold">Referee {{ i + 1 }}</summary>
+    <br>
     <label for="wacpfm-register-examiner-refereename">
       <i class="bi"></i> Name of guarantor
     </label>
@@ -150,12 +153,16 @@
     <input type="tel" name="examiner-refereephone" id="wacpfm-register-examiner-refereephone" required
       [(ngModel)]="referee.phoneNumber">
     <br><br>
-    <button class="small text-end" (click)="examiner.referees = this.deleteReferee(examiner.
-      referees, i)"><i class="bi bi-trash3-fill"></i> Delete Referee</button>
-  </div>
-  <br>
-  <button class="small"><i class="bi bi-plus-circle-fill" (click)="examiner.referees.
-    push(newReferee())"></i> Add Referee</button>
+    <div class="text-end">
+      <button class="small text-end w-auto px-4 text-danger border-danger" 
+      (click)="examiner.referees.splice(i, 1)"><i class="bi bi-trash3-fill"></i> Delete Referee
+      </button>
+    </div>
+  </details>
+  <br> 
+  <button class="small w-auto px-4" (click)="examiner.referees.splice(examiner.referees.length, 0, newReferee())">
+    <i class="bi bi-plus-circle-fill"></i> Add Referee
+  </button>
   <br><br>
   <div *ngIf="updateTracker$ === null; else update">
     <button class="wacpfm-primary-button" routerLink="/dashboard/examination">Continue</button>
