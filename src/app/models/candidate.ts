@@ -74,7 +74,6 @@ export interface MembershipExamRecord extends Candidate {
   orals: Subexam;
   pmr: Subexam;
   examId: string;
-  examAlias: string;
 }
 
 export interface FellowshipExamRecord extends Candidate {
@@ -83,7 +82,6 @@ export interface FellowshipExamRecord extends Candidate {
   pmrs: AcademicWriting[];
   defense: any;
   examId: string;
-  examAlias: string;
   previousDissertations: number;
   previousPMRs: number;
 }
