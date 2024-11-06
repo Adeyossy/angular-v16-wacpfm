@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { serverTimestamp, where } from 'firebase/firestore';
 import { concatMap, map, Observable, of } from 'rxjs';
 import { EXAMINERS } from 'src/app/models/exam';
-import { Examiner, Geopolitical, Referee } from "src/app/models/examiner";
+import { Examiner, Geopolitical, NEW_EXAMINER, Referee } from "src/app/models/examiner";
 import { AuthService } from 'src/app/services/auth.service';
 import { ExamService } from 'src/app/services/exam.service';
 
@@ -12,39 +12,7 @@ import { ExamService } from 'src/app/services/exam.service';
   styleUrls: ['./edit-examiner.component.css']
 })
 export class EditExaminerComponent implements OnInit {
-  examiner: Examiner = {
-    userEmail: "",
-    userId: "",
-    name: "",
-    contactPhoneNumber: "",
-    country: "",
-    geopolitical: "",
-    dateOfBirth: "",
-    dateOfRegistration: serverTimestamp(),
-    nameOfInstitution: "",
-    wacpMembershipStatus: "",
-    residentDoctorsNo: 0,
-    trainingCentre: "",
-    currentEmploymentStatus: "",
-    wacpResponsibilities: false,
-    yearOfFellowship: 0,
-    firstYearAsExaminer: 0,
-    timesPartakenInExam: 0,
-    trainerCertificationStatus: "None",
-    doctorsEducatorsTrainingStatus: "Not done",
-    dissertationsSupervised: 0,
-    prbSupervised: 0,
-    fellowshipSupervised: 0,
-    fellowsSupervised: 0,
-    publications: 0,
-    previousMgtExperience: false,
-    specifyMgtExperience: "",
-    trainingResponsibilities: "",
-    residentsMentored: 0,
-    referees: []
-  };
-
-  examiner$: Observable<Examiner> = of(this.examiner);
+  examiner$: Observable<Examiner> = of(NEW_EXAMINER);
   updateTracker$: Observable<boolean> | null = null;
 
   geopolitical = ["North Central", "North East", "North West", "South West", "South East",

@@ -1,4 +1,4 @@
-import { FieldValue } from "firebase/firestore";
+import { FieldValue, serverTimestamp } from "firebase/firestore";
 import { environment } from "src/environments/environment";
 
 export const EXAMINERS = environment.examiner;
@@ -36,6 +36,39 @@ export interface Examiner {
   residentsMentored: number;
   referees: Referee[];
 }
+
+export const NEW_EXAMINER: Examiner = {
+  userEmail: "",
+  userId: "",
+  examId: "",
+  name: "",
+  contactPhoneNumber: "",
+  country: "",
+  geopolitical: "",
+  dateOfBirth: "",
+  dateOfRegistration: serverTimestamp(),
+  nameOfInstitution: "",
+  wacpMembershipStatus: "",
+  residentDoctorsNo: 0,
+  trainingCentre: "",
+  currentEmploymentStatus: "",
+  wacpResponsibilities: false,
+  yearOfFellowship: 0,
+  firstYearAsExaminer: 0,
+  timesPartakenInExam: 0,
+  trainerCertificationStatus: "None",
+  doctorsEducatorsTrainingStatus: "Not done",
+  dissertationsSupervised: 0,
+  prbSupervised: 0,
+  fellowshipSupervised: 0,
+  fellowsSupervised: 0,
+  publications: 0,
+  previousMgtExperience: false,
+  specifyMgtExperience: "",
+  trainingResponsibilities: "",
+  residentsMentored: 0,
+  referees: []
+};
 
 /**
  * A referee is a subcollection under
