@@ -26,9 +26,9 @@ export class ExamService {
    * and not just the current one.
    */
   cache: Cache = {
-    examiner: [],
-    candidate: [],
-    exam: []
+    examiners: [],
+    candidates: [],
+    exams: []
   }
 
   constructor(private authService: AuthService) {}
@@ -66,11 +66,11 @@ export class ExamService {
    * @returns Observable of the Type based on the collection
    */
   getItem$<Type>(collection: string) {
-    if (this.cache[collection]) return of(this.cache[collection]) as Observable<Type>;
+    if (this.cache[collection].length) return of(this.cache[collection]) as Observable<Type[]>;
     return this.authService.getDocByUserId$<Type>(collection).pipe(
       map(data => {
         this.cache[collection] = [data];
-        return data;
+        return this.cache[collection];
       })
     )
   }
