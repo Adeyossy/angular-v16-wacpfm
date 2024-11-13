@@ -1,32 +1,28 @@
 <div class="container-fluid p-0">
   <div class="row g-0">
-    <div class="col-md-6 col-xl-4" *ngFor="let file of files">
-      <textarea type="text" name="wacpfm-file-name" id="wacpfm-file-name" placeholder="Type the title here"
-        [(ngModel)]="file.title" class="wacpfm-small-text"></textarea>
+    <div class="col-md-6 col-lg-4 col-xl-3 wacpfm-match-height p-0">
+      <div
+        class="wacpfm-upload-choose w-100 wacpfm-match-height d-flex flex-column justify-content-center align-items-center">
+        <label for="wacpfm-file-{{files.length - 1}}" class="text-center wacpfm-card">
+          <i class="bi bi-plus-circle-fill wacpfm-heading-small"></i>
+          <p class="wacpfm-small-text">Choose File</p>
+        </label>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-4" *ngFor="let file of files; index as i">
       <div class="container-fluid p-0">
         <div class="row g-0">
           <div class="col">
             <button class="small wacpfm-small-text">
-              <label class="wacpfm-change-file wacpfm-small-text">Change File</label>
+              <label class="wacpfm-small-text" for="wacpfm-file">Change File</label>
             </button>
-            <input #file type="file" name="wacpfm-change-file" id="wacpfm-change-file" 
-            class="d-none" [accept]="formats" (ngModelChange)="onFileChosen()">
+            <input #file type="file" name="wacpfm-file" [id]="'wacpfm-file-'+i" 
+            class="d-none" [accept]="formats" (ngModelChange)="onFileChosen(file)">
           </div>
           <div class="col">
             <button class="small wacpfm-primary-button">Upload</button>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-6 wacpfm-match-height">
-      <div
-        class="wacpfm-upload-choose w-100 wacpfm-match-height d-flex flex-column justify-content-center align-items-center">
-        <label class="wacpfm-file">
-          <h1 class="wacpfm-heading-medium">+</h1>
-          <p class="wacpfm-small-text">Choose File</p>
-        </label>
-        <input #file type="file" name="wacpfm-file" id="wacpfm-file" class="d-none" [accept]="formats"
-          (ngModelChange)="onFileChosen()">
       </div>
     </div>
   </div>
