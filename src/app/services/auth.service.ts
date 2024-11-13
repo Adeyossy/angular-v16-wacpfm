@@ -4,7 +4,7 @@ import { AsyncSubject, Observable, concatMap, from, iif, map, of } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
 import { DocumentReference, Firestore, Query, QueryFieldFilterConstraint, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
-import { UploadTask, getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
+import { UploadTask, deleteObject, getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { AppUser, IndexType, USERS } from '../models/user';
 import { UpdateCourse } from '../models/update_course';
 
@@ -373,6 +373,13 @@ export class AuthService {
       map(str => ref(str, path)),
       map(strRef => uploadBytesResumable(strRef, file)),
       concatMap(this.uploadListener$)
+    )
+  }
+
+  deleteFile$(url: string) {
+    return this.getFirebaseApp$().pipe(
+      map(app => getStorage(app)),
+      concatMap(str => deleteObject(ref(str, encodeURI(url))))
     )
   }
 
