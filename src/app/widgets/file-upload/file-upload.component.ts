@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { map, NEVER, Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -16,6 +16,7 @@ export class FileUploadComponent implements OnInit {
   @Input() formats = "";
   @Input() path = "";
   @ViewChild('file') uploadFile: ElementRef = new ElementRef('input');
+  @ViewChildren('file') uploadFiles!: QueryList<ElementRef>;
   @Input() files: FilePlus[] = [];
   @Output() fileEmitter = new EventEmitter<FilePlus>();
   @Output() createEmitter = new EventEmitter<FilePlus>();
@@ -61,6 +62,13 @@ export class FileUploadComponent implements OnInit {
         cloudURL: ""
       };
       this.createEmitter.emit(filePlus);
+    }
+  }
+
+  onFileChosenInList(filePlus: FilePlus, index: number) {
+    const view = this.uploadFiles.get(index);
+    if (view !== undefined) {
+      const fileElement = view.nativeElement as HTMLInputElement;
     }
   }
 
