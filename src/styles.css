@@ -226,6 +226,15 @@ button.small {
   font-weight: 400;
 }
 
+label.icon, button.icon {
+  width: auto;
+  height: auto;
+  padding: var(--wacpfm-border-radius) var(--wacpfm-font-text) ;
+  border: none;
+  border-radius: var(--wacpfm-border-radius);
+  background-color: var(--wacpfm-background-colour-lighter);
+}
+
 button.wacpfm-primary-button {
   background-color: var(--wacpfm-primary-colour);
   color: white;
