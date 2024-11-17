@@ -10,6 +10,7 @@ interface Upload {
   id: number; // Use the lastModified attribute of the file object as id?
   description: string;
   filetype: string;
+  type: string;
 }
 
 export interface Candidate {
@@ -56,7 +57,8 @@ export const NEW_CANDIDATE: Candidate = {
     filetype: "",
     id: 0,
     uploadDate: serverTimestamp(),
-    url: ""
+    url: "",
+    type: ""
   }
 };/**
  * Ideally, candidates should only have one record each for membership and fellowship exams if
