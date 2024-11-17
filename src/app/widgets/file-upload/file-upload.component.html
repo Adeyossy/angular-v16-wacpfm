@@ -1,26 +1,32 @@
 <div class="container-fluid p-0">
-  <div class="row g-0">
-    <div class="col-md-6 col-lg-4 col-xl-3 wacpfm-match-height p-0">
-      <div
-        class="wacpfm-upload-choose w-100 wacpfm-match-height d-flex flex-column justify-content-center align-items-center">
-        <label for="wacpfm-file-{{files.length - 1}}" class="text-center wacpfm-card">
+  <div class="row">
+    <div class="col-md-6 col-lg-4 wacpfm-match-height p-3">
+      <div (click)="insertNewFile()" class="w-100 wacpfm-match-height text-center wacpfm-card">
           <i class="bi bi-plus-circle-fill wacpfm-heading-small"></i>
-          <p class="wacpfm-small-text">Choose File</p>
-        </label>
+          <p class="wacpfm-small-text">Add File</p>
       </div>
     </div>
-    <div class="col-md-6 col-xl-4" *ngFor="let file of files; index as i">
-      <div class="container-fluid p-0">
-        <div class="row g-0">
-          <div class="col">
-            <button class="small wacpfm-small-text">
-              <label class="wacpfm-small-text" for="wacpfm-file">Change File</label>
-            </button>
-            <input #file type="file" name="wacpfm-file" [id]="'wacpfm-file-'+i" 
-            class="d-none" [accept]="formats" (ngModelChange)="onFileChosen(file)">
-          </div>
-          <div class="col">
-            <button class="small wacpfm-primary-button">Upload</button>
+    <div class="col-md-6 col-lg-4 wacpfm-match-height p-3" *ngFor="let file of files; index as i">
+      <div class="wacpfm-card">
+        <p class="wacpfm-small-text">
+          <span *ngIf="file.blobURL.trim() === ''; else filename" class="opacity-50">Click the <i class="bi bi-folder2-open"></i> icon below to choose a file.</span>
+          <ng-template #filename>
+            <span>{{ file.name }}</span>
+          </ng-template>
+        </p>
+        <div class="container-fluid p-0">
+          <div class="row justify-content-end">  
+            <div class="col">
+              <label for="wacpfm-file-{{i}}" class="icon wacpfm-heading-small"><i class="bi bi-folder2-open"></i>
+                <input #file type="file" name="wacpfm-file" [id]="'wacpfm-file-'+i" class="d-none"
+                  (change)="onFileChosenInList($event.target, i)">
+              </label>
+            </div>
+            <div class="col" *ngIf="file.blobURL || file.cloudURL">
+              <label class="icon wacpfm-heading-small">
+                <i class="bi bi-cloud-arrow-up"></i>
+              </label>
+            </div>
           </div>
         </div>
       </div>

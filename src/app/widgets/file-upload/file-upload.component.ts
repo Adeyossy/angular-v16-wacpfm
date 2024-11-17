@@ -28,9 +28,9 @@ export class FileUploadComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    if (this.files.length === 0) {
-      this.files = [ this.createNewFile() ];
-    }
+    // if (this.files.length === 0) {
+    //   this.files = [ this.createNewFile() ];
+    // }
   }
 
   createNewFile() {
@@ -40,6 +40,10 @@ export class FileUploadComponent implements OnInit {
         blobURL: "",
         cloudURL: ""
       }
+  }
+
+  insertNewFile() {
+    this.files.unshift(this.createNewFile());
   }
 
   deleteFromApp(filePlus: FilePlus) {
@@ -65,10 +69,27 @@ export class FileUploadComponent implements OnInit {
     }
   }
 
-  onFileChosenInList(filePlus: FilePlus, index: number) {
+  onFileChosenInList(target: EventTarget | null, index: number) {
+    console.log("onFileChosenInList called");
     const view = this.uploadFiles.get(index);
+    console.log("this.uploadFiles.get(index) => ", this.uploadFiles.get(index));
+    console.log("view => ", view);
     if (view !== undefined) {
       const fileElement = view.nativeElement as HTMLInputElement;
+      if (fileElement.files && fileElement.files.length) {
+        const file = fileElement.files[0] as FilePlus;
+        file.blobURL = URL.createObjectURL(file);
+        file.cloudURL = "";
+        const filePlus: FilePlus = {
+          ...file, 
+          blobURL: URL.createObjectURL(file), 
+          cloudURL: ""
+        };
+        this.createEmitter.emit(filePlus);
+        console.log("file.name => ", file.name);
+        console.log("filePlus.name => ", filePlus.name);
+        this.files = this.files.map((f, i) => index === i ? file : f);
+      }
     }
   }
 
