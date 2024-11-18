@@ -13,6 +13,10 @@ interface Upload {
   type: string;
 }
 
+/**
+ * A base model of a candidate for the WACP exam.
+ * DO NOT USE DIRECTLY. Use the subclasses instead.
+ */
 export interface Candidate {
   userId: string;
   candidateId: string; // aka exam number
@@ -81,7 +85,7 @@ export interface MembershipExamRecord extends Candidate {
 export interface FellowshipExamRecord extends Candidate {
   candidateId: string;
   dissertation: Dissertation[];
-  pmrs: AcademicWriting[];
+  casebooks: AcademicWriting[];
   defense: any;
   examId: string;
   previousDissertations: number;
@@ -120,6 +124,7 @@ export interface AcademicWriting {
   examinerEmails: string[];
   gradesByExaminer: Grade[];
   title: string;
+  files: Upload[];
 }
 
 export interface Dissertation extends AcademicWriting {
@@ -134,7 +139,8 @@ const dissertation: Dissertation = {
   candidateId: "",
   examinerEmails: [],
   examinerIds: [],
-  wacpNo: ""
+  wacpNo: "",
+  files: []
 };
 
 export interface PMR extends AcademicWriting {
