@@ -66,7 +66,8 @@ export class ExamService {
    * @returns Observable of the Type based on the collection
    */
   getItem$<Type>(collection: string) {
-    if (this.cache[collection].length) return of(this.cache[collection]) as Observable<Type[]>;
+    if (this.cache[collection] && this.cache[collection].length) 
+      return of(this.cache[collection]) as Observable<Type[]>;
     return this.authService.getDocByUserId$<Type>(collection).pipe(
       map(data => {
         this.cache[collection] = [data];
@@ -76,7 +77,8 @@ export class ExamService {
   }
 
   queryItem$<Type>(collection: string, [where1, where2]: QueryFieldFilterConstraint[]) {
-    if (this.cache[collection].length) return of(this.cache[collection]) as Observable<Type[]>;
+    if (this.cache[collection] && this.cache[collection].length) 
+      return of(this.cache[collection]) as Observable<Type[]>;
     return this.authService.queriesCollections$<Type>(collection, [where1, where2]).pipe(
       map(data => {
         if (data.length) {
