@@ -14,9 +14,10 @@ interface FilePlus extends File {
 })
 export class FileUploadComponent implements OnInit {
   @Input() formats = "";
-  @Input() path = "";
+  @Input() path = "test";
   @ViewChild('file') uploadFile: ElementRef = new ElementRef('input');
   @ViewChildren('file') uploadFiles!: QueryList<ElementRef>;
+  @ViewChildren('animate') animators!: QueryList<ElementRef>;
   @Input() files: FilePlus[] = [];
   @Output() fileEmitter = new EventEmitter<FilePlus>();
   @Output() createEmitter = new EventEmitter<FilePlus>();
@@ -93,24 +94,29 @@ export class FileUploadComponent implements OnInit {
     }
   }
 
-  upload(file: FilePlus) {
+  upload(file: FilePlus, index: number) {
     this.uploadState$ = this.authService.uploadFileResumably$(file, `${this.path}/${file.name}`)
     .pipe(
         map(output => {
           if (isNaN(parseFloat(output))) {
             console.log("url? => ", output);
+            file.cloudURL = output;
             this.linkEmitter.emit(output);
             return 100;
           } else {
-            const percent = parseFloat(output);
-            // const div = this.materialIndicator.nativeElement as HTMLDivElement;
-            // setInterval(() => {
-            //   const totalWidth = div.parentElement!.style.width;
-            //   console.log("totalWidth => ", totalWidth);
-            //   const computed = percent * parseInt(totalWidth);
-            // }, 17);
-            // div.style.width = `${output}%`;
-            return percent * 100;
+            const percent = 100 * parseFloat(output);
+            const query = this.animators.get(index);
+            if (query !== undefined) {
+              const div = query.nativeElement as HTMLDivElement;
+              const totalHeight = div.parentElement!.style.height;
+              const interval = setInterval(() => {
+                const divHeight = parseInt(div.style.height.substring(0, div.style.height.length - 1));
+                const computed = Math.floor(percent * parseInt(totalHeight));
+                if (divHeight < Math.floor(percent)) div.style.height = `${divHeight + 1}%`;
+                if (divHeight === Math.floor(percent)) clearInterval(interval);
+              }, 17);
+            }
+            return percent;
           }
         })
       )

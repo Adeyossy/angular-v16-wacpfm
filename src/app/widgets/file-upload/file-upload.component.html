@@ -7,24 +7,33 @@
       </div>
     </div>
     <div class="col-md-6 col-lg-4 wacpfm-match-height p-3" *ngFor="let file of files; index as i">
-      <div class="wacpfm-card">
-        <p class="wacpfm-small-text">
-          <span *ngIf="file.blobURL.trim() === ''; else filename" class="opacity-50">Click the <i class="bi bi-folder2-open"></i> icon below to choose a file.</span>
+      <div class="wacpfm-card position-relative">
+        <div #animate class="wacpfm-upload-animator" style="height: 0%;"></div>
+        <p>
+          <span *ngIf="file.blobURL.trim() === ''; else filename" class="opacity-50">
+            Click the <i class="bi bi-folder2-open"></i> icon below to choose a file.
+          </span>
           <ng-template #filename>
             <span>{{ file.name }}</span>
+            <span *ngIf="uploadState$ | async as progress"> ({{ progress }}%)</span>
           </ng-template>
         </p>
         <div class="container-fluid p-0">
-          <div class="row justify-content-end">  
-            <div class="col">
-              <label for="wacpfm-file-{{i}}" class="icon wacpfm-heading-small"><i class="bi bi-folder2-open"></i>
-                <input #file type="file" name="wacpfm-file" [id]="'wacpfm-file-'+i" class="d-none"
-                  (change)="onFileChosenInList($event.target, i)">
+          <div class="row">  
+            <div class="col-4">
+              <label for="wacpfm-file-{{files.length - 1 - i}}" class="icon wacpfm-heading-small">
+                <i class="bi bi-folder2-open"></i>
+                <input #file type="file" name="wacpfm-file" id="wacpfm-file-{{files.length - 1 - i}}"
+                  class="d-none" (change)="onFileChosenInList($event.target, i)">
               </label>
             </div>
-            <div class="col" *ngIf="file.blobURL || file.cloudURL">
-              <label class="icon wacpfm-heading-small">
+            <div class="col-4" *ngIf="file.blobURL || file.cloudURL">
+              <label class="icon wacpfm-heading-small" *ngIf="file.blobURL && !file.cloudURL"
+              (click)="upload(file, i)">
                 <i class="bi bi-cloud-arrow-up"></i>
+              </label>
+              <label class="icon wacpfm-heading-small" *ngIf="file.cloudURL" (click)="deleteFromCloud$(file)">
+                <i class="bi bi-trash3 text-danger"></i>
               </label>
             </div>
           </div>
