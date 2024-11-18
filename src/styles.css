@@ -330,6 +330,7 @@ button:active {
   background-color: var(--wacpfm-background-colour-lighter);
   padding: var(--wacpfm-spacing-default);
   border: 2px solid var(--wacpfm-primary-colour-light);
+  border-radius: var(--wacpfm-border-radius);
   /* box-shadow: 8px 8px var(--wacpfm-primary-shadow); */
   transition: background-color 200ms ease-in;
 }
