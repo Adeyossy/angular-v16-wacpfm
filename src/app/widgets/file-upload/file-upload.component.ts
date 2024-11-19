@@ -24,6 +24,7 @@ export class FileUploadComponent implements OnInit {
   @Output() deleteEmitter = new EventEmitter<FilePlus>();
   @Output() linkEmitter = new EventEmitter<string>();
   uploadState$: Observable<number> = NEVER;
+  uploadStates: Observable<number>[] = [];
   deleteState$: Observable<boolean> | null = null;
 
   constructor(private authService: AuthService) { }
@@ -36,11 +37,11 @@ export class FileUploadComponent implements OnInit {
 
   createNewFile() {
     const file = new File([], "");
-     return {
-        ...file,
-        blobURL: "",
-        cloudURL: ""
-      }
+    return {
+      ...file,
+      blobURL: "",
+      cloudURL: ""
+    }
   }
 
   insertNewFile() {
@@ -62,8 +63,8 @@ export class FileUploadComponent implements OnInit {
     if (fileElement.files && fileElement.files.length) {
       const file = fileElement.files[0];
       const filePlus: FilePlus = {
-        ...file, 
-        blobURL: URL.createObjectURL(file), 
+        ...file,
+        blobURL: URL.createObjectURL(file),
         cloudURL: ""
       };
       this.createEmitter.emit(filePlus);
@@ -82,8 +83,8 @@ export class FileUploadComponent implements OnInit {
         file.blobURL = URL.createObjectURL(file);
         file.cloudURL = "";
         const filePlus: FilePlus = {
-          ...file, 
-          blobURL: URL.createObjectURL(file), 
+          ...file,
+          blobURL: URL.createObjectURL(file),
           cloudURL: ""
         };
         this.createEmitter.emit(filePlus);
@@ -94,31 +95,33 @@ export class FileUploadComponent implements OnInit {
     }
   }
 
-  upload(file: FilePlus, index: number) {
-    this.uploadState$ = this.authService.uploadFileResumably$(file, `${this.path}/${file.name}`)
-    .pipe(
-        map(output => {
-          if (isNaN(parseFloat(output))) {
-            console.log("url? => ", output);
-            file.cloudURL = output;
-            this.linkEmitter.emit(output);
-            return 100;
-          } else {
-            const percent = 100 * parseFloat(output);
-            const query = this.animators.get(index);
-            if (query !== undefined) {
-              const div = query.nativeElement as HTMLDivElement;
-              const totalHeight = div.parentElement!.style.height;
-              const interval = setInterval(() => {
-                const divHeight = parseInt(div.style.height.substring(0, div.style.height.length - 1));
-                const computed = Math.floor(percent * parseInt(totalHeight));
-                if (divHeight < Math.floor(percent)) div.style.height = `${divHeight + 1}%`;
-                if (divHeight === Math.floor(percent)) clearInterval(interval);
-              }, 17);
-            }
-            return percent;
+  getUploader$(file: FilePlus, index: number) {
+    return this.authService.uploadFileResumably$(file, `${this.path}/${file.name}`).pipe(
+      map(output => {
+        if (isNaN(parseFloat(output))) {
+          console.log("url? => ", output);
+          file.cloudURL = output;
+          this.linkEmitter.emit(output);
+          return 100;
+        } else {
+          const percent = 100 * parseFloat(output);
+          const query = this.animators.get(index);
+          if (query !== undefined) {
+            const div = query.nativeElement as HTMLDivElement;
+
+            const interval = setInterval(() => {
+              const divHeight = parseInt(div.style.height.substring(0, div.style.height.length - 1));
+              if (divHeight < Math.floor(percent)) div.style.height = `${divHeight + 1}%`;
+              if (divHeight === Math.floor(percent)) clearInterval(interval);
+            }, 17);
           }
-        })
-      )
+          return percent;
+        }
+      })
+    )
+  }
+
+  upload(file: FilePlus, index: number) {
+    this.uploadStates = this.files.map((f, i) => index === i ? this.getUploader$(file, index) : NEVER)
   }
 }
