@@ -102,6 +102,7 @@ export class FileUploadComponent implements OnInit {
           console.log("url? => ", output);
           file.cloudURL = output;
           this.linkEmitter.emit(output);
+          this.uploadStates[index] = NEVER;
           return 100;
         } else {
           const percent = 100 * parseFloat(output);

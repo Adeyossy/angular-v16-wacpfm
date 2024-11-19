@@ -4,8 +4,9 @@
   height: 0%;
   right: 0; bottom: 0; left: 0;
   margin: auto;
-  background-color: var(--wacpfm-primary-colour);
-  opacity: 0.25;
+  background-color: var(--wacpfm-background-colour-green);
+  opacity: 0.75;
+  border-radius: var(--wacpfm-border-radius);
   /* z-index: 0; */
 }
 
