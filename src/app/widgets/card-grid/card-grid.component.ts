@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-card-grid',
@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./card-grid.component.css']
 })
 export class CardGridComponent {
-
+  @Input() items: {title: string; description: string; link: string}[] = [];
 }
