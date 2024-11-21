@@ -49,10 +49,10 @@ const routes: Routes = [
       { path: "updatecourse/:updateCourseId/details/certificate/:recordId", component: CertificateComponent },
       { path: "admin", component: AdminComponent, canActivate: [adminGuard] },
       { path: "exam", component: ExamComponent, title: "Examination | Faculty of Family Medicine App" },
-      { path: "exam/:examId/edit", component: EditExamComponent, title: "Edit Exam Details | FM App" },
-      { path: "exam/:examId/examiner/:examinerId/edit", component: EditExaminerComponent, title: "Examiner Profile" },
-      { path: "exam/:examId/candidate/:category/:candidateId/edit", component: EditCandidateComponent, title: "Edit Candidate Profile" },
-      { path: "exam/:examId/candidate/fellowship", component: EditFellowshipComponent, title: "Edit Fellowship Details" }
+      { path: "exam/:examAlias/edit", component: EditExamComponent, title: "Edit Exam Details | FM App" },
+      { path: "exam/:examAlias/examiner/:examinerId/edit", component: EditExaminerComponent, title: "Examiner Profile" },
+      { path: "exam/:examAlias/candidate/:category/:candidateId/edit", component: EditCandidateComponent, title: "Edit Candidate Profile" },
+      { path: "exam/:examAlias/candidate/fellowship", component: EditFellowshipComponent, title: "Edit Fellowship Details" }
     ]
   },
   {
