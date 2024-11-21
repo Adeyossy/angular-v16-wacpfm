@@ -3,6 +3,8 @@ import { Exam, EXAMS, NEW_EXAM } from '../models/exam';
 import { map, NEVER, Observable, of } from 'rxjs';
 import { ExamService } from '../services/exam.service';
 import { where } from 'firebase/firestore';
+import { AppUser } from '../models/user';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-exam',
@@ -11,10 +13,12 @@ import { where } from 'firebase/firestore';
 })
 export class ExamComponent implements OnInit {
   exam$: Observable<Exam> = new Observable();
+  appUser$: Observable<AppUser> = NEVER; 
 
-  constructor(private examService: ExamService) { }
+  constructor(private examService: ExamService, private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.appUser$ = this.authService.getAppUser$();
     this.exam$ = this.examService.queryItem$<Exam>(EXAMS, [
       where("registrationStartDate", "<=", Date.now()),
       where("registrationCloseDate", ">=", Date.now())

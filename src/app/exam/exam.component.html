@@ -6,6 +6,15 @@
         <div class="wacpfm-underline"></div>
       </div>
       <h1 class="wacpfm-heading-small wacpfm-font-arial wacpfm-four-lines">{{ exam.title }}</h1>
+      <br>
+      <div *ngIf="appUser$ | async as user">
+        <!-- If the user is not registered, display registration links -->
+        <div *ngIf="!exam.membership.candidates.includes(user.email) && 
+          !exam.fellowship.candidates.includes(user.email) &&
+          !exam.membership.examiners.includes(user.email) &&
+          !exam.fellowship.examiners.includes(user.email)">
+        </div>
+      </div>
     </div>
     <ng-template #noExam>
       <div class="wacpfm-heading-underline mb-3">
