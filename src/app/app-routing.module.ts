@@ -50,9 +50,9 @@ const routes: Routes = [
       { path: "admin", component: AdminComponent, canActivate: [adminGuard] },
       { path: "exam", component: ExamComponent, title: "Examination | Faculty of Family Medicine App" },
       { path: "exam/:examId/edit", component: EditExamComponent, title: "Edit Exam Details | FM App" },
-      { path: "exam/:examId/edit/examiner/:examinerId", component: EditExaminerComponent, title: "Examiner Profile" },
-      { path: "exam/:examId/edit/candidate/:candidateId", component: EditCandidateComponent, title: "Edit Candidate Profile" },
-      { path: "exam/:id/edit/candidate/fellowship", component: EditFellowshipComponent, title: "Edit Fellowship Details" }
+      { path: "exam/:examId/examiner/:examinerId/edit", component: EditExaminerComponent, title: "Examiner Profile" },
+      { path: "exam/:examId/candidate/:category/:candidateId/edit", component: EditCandidateComponent, title: "Edit Candidate Profile" },
+      { path: "exam/:examId/candidate/fellowship", component: EditFellowshipComponent, title: "Edit Fellowship Details" }
     ]
   },
   {
