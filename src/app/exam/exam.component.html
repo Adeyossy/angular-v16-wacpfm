@@ -1,25 +1,21 @@
 <div class="wacpfm-card">
   <div *ngIf="exam$ | async as exam; else loading">
-    <div class="wacpfm-heading-underline mb-3">
-      <h1 class="fw-bold wacpfm-small-text">{{ exam.alias.replace('-', ' ').toUpperCase() }}</h1>
-      <div class="wacpfm-underline"></div>
-    </div>
-    <h1 class="wacpfm-heading-small wacpfm-font-arial wacpfm-four-lines">{{ exam.title }}</h1>
-  </div>
-</div>
-<app-file-upload></app-file-upload>
-<div class="container-fluid p-0">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="wacpfm-card">
-        <h1 class="wacpfm-heading-small">Portal</h1>
+    <div *ngIf="exam.alias.trim()">
+      <div class="wacpfm-heading-underline mb-3">
+        <h1 class="fw-bold wacpfm-small-text">{{ exam.alias.replace('-', ' ').toUpperCase() }}</h1>
+        <div class="wacpfm-underline"></div>
       </div>
+      <h1 class="wacpfm-heading-small wacpfm-font-arial wacpfm-four-lines">{{ exam.title }}</h1>
     </div>
-    <div class="col-md-6">
-      <div class="wacpfm-card">
-        <h1 class="wacpfm-heading-small">Last Exam</h1>
+    <ng-template #noExam>
+      <div class="wacpfm-heading-underline mb-3">
+        <h1 class="fw-bold wacpfm-small-text">NO EXAM</h1>
+        <div class="wacpfm-underline"></div>
       </div>
-    </div>
+      <h1 class="wacpfm-heading-small wacpfm-font-arial wacpfm-four-lines">
+        There is no exam at the moment. Kindly check back during the next examination period.
+      </h1>
+    </ng-template>
   </div>
 </div>
 <ng-template #loading>
