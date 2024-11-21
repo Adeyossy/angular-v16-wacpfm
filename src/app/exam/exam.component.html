@@ -13,6 +13,7 @@
           !exam.fellowship.candidates.includes(user.email) &&
           !exam.membership.examiners.includes(user.email) &&
           !exam.fellowship.examiners.includes(user.email)">
+          <app-card-grid [items]="replaceParams(exam.alias, user.userId)"></app-card-grid>
         </div>
       </div>
     </div>

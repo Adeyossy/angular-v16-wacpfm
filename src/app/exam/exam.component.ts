@@ -13,7 +13,24 @@ import { AuthService } from '../services/auth.service';
 })
 export class ExamComponent implements OnInit {
   exam$: Observable<Exam> = new Observable();
-  appUser$: Observable<AppUser> = NEVER; 
+  appUser$: Observable<AppUser> = NEVER;
+  registrationTasks = [
+    { 
+      title: "Membership Candidate", 
+      description: "", 
+      link: "/dashboard/exam/:examAlias/candidate/membership/:userId" 
+    },
+    { 
+      title: "Fellowship Candidate", 
+      description: "", 
+      link: "/dashboard/exam/:examAlias/candidate/fellowship/:userId" 
+    },
+    { 
+      title: "Examiner", 
+      description: "", 
+      link: "/dashboard/exam/:examAlias/examiner/:userId" 
+    }
+  ]
 
   constructor(private examService: ExamService, private authService: AuthService) { }
 
@@ -43,5 +60,12 @@ export class ExamComponent implements OnInit {
         else return "Examiner"
       } else return ""
     }
+  }
+
+  replaceParams(examAlias: string, userId: string) {
+    return this.registrationTasks.map(r => {
+      r.link = r.link.replace(":examAlias", examAlias).replace(":userId", userId);
+      return r;
+    })
   }
 }
