@@ -1,6 +1,6 @@
 <div class="wacpfm-card">
   <div *ngIf="exam$ | async as exam; else loading">
-    <div *ngIf="exam.alias.trim()">
+    <div *ngIf="exam.alias.trim(); else noExam">
       <div class="wacpfm-heading-underline mb-3">
         <h1 class="fw-bold wacpfm-small-text">{{ exam.alias.replace('-', ' ').toUpperCase() }}</h1>
         <div class="wacpfm-underline"></div>
@@ -22,7 +22,7 @@
         <h1 class="fw-bold wacpfm-small-text">NO EXAM</h1>
         <div class="wacpfm-underline"></div>
       </div>
-      <h1 class="wacpfm-heading-small wacpfm-font-arial wacpfm-four-lines">
+      <h1 class="wacpfm-heading-small wacpfm-font-arial">
         There is no exam at the moment. Kindly check back during the next examination period.
       </h1>
     </ng-template>
