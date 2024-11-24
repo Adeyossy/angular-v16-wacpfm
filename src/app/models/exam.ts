@@ -16,7 +16,6 @@ export interface Subexam {
 
 type ExamSpecifics = {
   curriculum: string;
-  examiners: string[];
   candidates: string[];
   pmrShareDate: number; // date PMR is shared with examiners
 }
@@ -32,6 +31,7 @@ export interface Exam {
   lastExamDate: number;
   membership: ExamSpecifics;
   fellowship: ExamSpecifics & {dissertationShareDate: number}; // date dissertation is shared with examiners
+  examiners: string[]; // invited examiners
 }
 
 export const NEW_EXAM: Exam = {
@@ -44,17 +44,16 @@ export const NEW_EXAM: Exam = {
   firstExamDate: Date.now(),
   lastExamDate: Date.now(),
   membership: {
-    curriculum: "Old", 
-    examiners: [].slice(), 
+    curriculum: "Old",
     candidates: [].slice(), 
     pmrShareDate: Date.now()
   },
   fellowship: { 
     curriculum: "Old", 
-    examiners: [].slice(), 
     candidates: [].slice(), 
     pmrShareDate: Date.now(),
     dissertationShareDate: Date.now()
-  }
+  },
+  examiners: []
 }
 
