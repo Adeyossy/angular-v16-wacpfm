@@ -9,12 +9,12 @@
       <br>
       <div *ngIf="appUser$ | async as user">
         <!-- If the user is not registered, display registration links -->
-        <div *ngIf="!exam.membership.candidates.includes(user.email) && 
-          !exam.fellowship.candidates.includes(user.email) &&
-          !exam.membership.examiners.includes(user.email) &&
-          !exam.fellowship.examiners.includes(user.email)">
-          <app-card-grid [items]="replaceParams(exam.alias, user.userId)"></app-card-grid>
+        <div *ngIf="getUserType(exam, user.email) as userType">
+          <app-card-grid [items]="replaceHome(exam.alias, userType, user.userId)"></app-card-grid>
         </div>
+        <ng-template #register>
+          <app-card-grid [items]="replaceReg(exam.alias, user.userId)"></app-card-grid>
+        </ng-template>
       </div>
     </div>
     <ng-template #noExam>

@@ -15,20 +15,28 @@ export class ExamComponent implements OnInit {
   exam$: Observable<Exam> = new Observable();
   appUser$: Observable<AppUser> = NEVER;
   registrationTasks = [
-    { 
-      title: "Membership Candidate", 
-      description: "", 
-      link: "/dashboard/exam/:examAlias/candidate/membership/:userId" 
+    {
+      title: "Membership Candidate",
+      description: "",
+      link: "/dashboard/exam/:examAlias/candidate/membership/:userId"
     },
-    { 
-      title: "Fellowship Candidate", 
-      description: "", 
-      link: "/dashboard/exam/:examAlias/candidate/fellowship/:userId" 
+    {
+      title: "Fellowship Candidate",
+      description: "",
+      link: "/dashboard/exam/:examAlias/candidate/fellowship/:userId"
     },
-    { 
-      title: "Examiner", 
-      description: "", 
-      link: "/dashboard/exam/:examAlias/examiner/:userId" 
+    {
+      title: "Examiner",
+      description: "",
+      link: "/dashboard/exam/:examAlias/examiner/:userId"
+    }
+  ];
+
+  continuationTasks = [
+    {
+      title: "Home",
+      description: "",
+      link: ":examAlias/:userType/:userId"
     }
   ]
 
@@ -44,28 +52,34 @@ export class ExamComponent implements OnInit {
         if (exams.length > 0) {
           if (exams.length > 1) console.log("Expected an array of 1 exam but got ", exams.length);
           return exams[0];
-        } 
-        
+        }
+
         return Object.assign({}, NEW_EXAM);
       })
     )
   }
 
   getUserType(exam: Exam, userEmail: string) {
-    if (exam.fellowship.candidates.includes(userEmail)) return "Fellowship Candidate";
+    if (exam.fellowship.candidates.includes(userEmail)) return "fellowship";
     else {
-      if (exam.fellowship.examiners.includes(userEmail)) return "Examiner";
-      else if (exam.membership.curriculum.toLowerCase() === "new") {
-        if (exam.membership.candidates.includes(userEmail)) return "Membership Candidate";
-        else return "Examiner"
-      } else return ""
+      if (exam.examiners.includes(userEmail)) return "examiner";
+      else if (exam.membership.candidates.includes(userEmail)) return "membership";
+      else return ""
     }
   }
 
-  replaceParams(examAlias: string, userId: string) {
+  replaceReg(examAlias: string, userId: string) {
     return this.registrationTasks.map(r => {
       r.link = r.link.replace(":examAlias", examAlias).replace(":userId", userId);
       return r;
+    })
+  }
+
+  replaceHome(examAlias: string, userType: string, userId: string) {
+    return this.continuationTasks.map(c => {
+      c.link = c.link.replace(":examAlias", examAlias).replace(":userType", userType)
+      .replace(":userId", userId);
+      return c;
     })
   }
 }
