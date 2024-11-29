@@ -54,6 +54,14 @@
     <br><br>
   </div>
   <br><br>
+  <div *ngIf="candidateType$ | async as type">
+    <div *ngIf="type === 'membership'"></div>
+    <div *ngIf="type === 'fellowship'">
+      <app-edit-fellowship [casebooks]="fetchForFellowship(candidate).casebooks"
+      [dissertations]="fetchForFellowship(candidate).dissertation"></app-edit-fellowship>
+    </div>
+  </div>
+  <br><br>
   <div *ngIf="updateTracker$ === null; else update">
     <button class="wacpfm-primary-button" routerLink="/dashboard/examination">Continue</button>
   </div>

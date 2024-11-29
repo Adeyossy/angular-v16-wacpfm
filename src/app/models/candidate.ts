@@ -80,6 +80,7 @@ export interface MembershipExamRecord extends Candidate {
   orals: Subexam;
   pmr: Subexam;
   examId: string;
+  examAlias: string;
 }
 
 export interface FellowshipExamRecord extends Candidate {
@@ -88,8 +89,20 @@ export interface FellowshipExamRecord extends Candidate {
   casebooks: AcademicWriting[];
   defense: any;
   examId: string;
+  examAlias: string;
   previousDissertations: number;
   previousPMRs: number;
+}
+
+export const NEW_FELLOWSHIP_CANDIDATE: FellowshipExamRecord = {
+  ...(Object.assign({}, NEW_CANDIDATE)),
+  dissertation: [],
+  casebooks: [],
+  defense: null,
+  examId: "",
+  examAlias: "",
+  previousDissertations: 0,
+  previousPMRs: 0
 }
 
 export interface Grade {
@@ -125,6 +138,7 @@ export interface AcademicWriting {
   gradesByExaminer: Grade[];
   title: string;
   files: Upload[];
+  type: "Dissertation" | "Casebook" | "PMR" | ""
 }
 
 export interface Dissertation extends AcademicWriting {
@@ -140,7 +154,8 @@ const dissertation: Dissertation = {
   examinerEmails: [],
   examinerIds: [],
   wacpNo: "",
-  files: []
+  files: [],
+  type: "Dissertation"
 };
 
 export interface PMR extends AcademicWriting {
