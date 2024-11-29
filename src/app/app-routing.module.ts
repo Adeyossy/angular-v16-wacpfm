@@ -52,7 +52,8 @@ const routes: Routes = [
       { path: "exam/:examAlias/edit", component: EditExamComponent, title: "Edit Exam Details | FM App" },
       { path: "exam/:examAlias/examiner/:examinerId/edit", component: EditExaminerComponent, title: "Examiner Profile" },
       { path: "exam/:examAlias/candidate/:category/:candidateId/edit", component: EditCandidateComponent, title: "Edit Candidate Profile" },
-      { path: "exam/:examAlias/candidate/fellowship", component: EditFellowshipComponent, title: "Edit Fellowship Details" }
+      { path: "exam/:examAlias/candidate/fellowship", component: EditFellowshipComponent, title: "Edit Fellowship Details" },
+      { path: "exam/:examAlias/candidate/:category/:candidateId/home", component: ExamComponent }
     ]
   },
   {
