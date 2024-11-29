@@ -1,1 +1,18 @@
-<p>edit-fellowship works!</p>
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading">Fellowship Uploads</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+<br><br>
+<div class="wacpfm-card">
+  <h1 class="wacpfm-heading-small">Dissertation</h1>
+  <br><hr><br>
+  <app-card-list *ngFor="let diss of dissertations.map(toCardList); index as i" 
+  [item]="diss" [index]="i" [control]="dissertations[i].files.length > 0"></app-card-list>
+</div>
+<br><br>
+<div class="wacpfm-card">
+  <h1 class="wacpfm-heading-small">Casebooks</h1>
+  <br><hr><br>
+  <app-card-list *ngFor="let book of casebooks.map(toCardList); index as i" 
+  [item]="book" [index]="i" [control]="casebooks[i].files.length > 0"></app-card-list>
+</div>
