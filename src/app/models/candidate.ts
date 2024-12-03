@@ -10,7 +10,16 @@ interface Upload {
   id: number; // Use the lastModified attribute of the file object as id?
   description: string;
   filetype: string;
-  type: string;
+  type: string; // could be a casebook, dissertation or PMR
+}
+
+export const DEFAULT_UPLOAD: Upload = {
+  uploadDate: serverTimestamp(),
+  url: "",
+  id: 0,
+  description: "",
+  filetype: "",
+  type: ""
 }
 
 /**
@@ -127,6 +136,18 @@ export interface DissertationGrade extends Grade {
   discussion: { title: "Chapter 5: Discussion"; } & SubGrade;
   references: { title: "References"; } & SubGrade;
   appendices: { title: "Appendices"; } & SubGrade;
+}
+
+export interface Writing {
+  title: string,
+  description?: string,
+  files: Upload[]
+}
+
+export const DEFAULT_WRITING: Writing = {
+  title: "",
+  description: "",
+  files: [ Object.assign({}, DEFAULT_UPLOAD) ]
 }
 
 export interface AcademicWriting {
