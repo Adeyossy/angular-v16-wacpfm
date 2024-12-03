@@ -16,7 +16,7 @@
   <input type="date" name="wacpfm-candidate-dob" id="wacpfm-candidate-dob" required [(ngModel)]="candidate.dateOfBirth">
   <br><br>
   <label for="wacpfm-candidate-category">What category are you registering for?</label>
-  <app-select (emitItems)="candidate.examType = $event[0]" mode="single"
+  <app-select (emitItems)="candidate.category = $event[0]" mode="single"
     [items]="['Membership', 'Fellowship']"></app-select>
   <br><br>
   <label for="wacpfm-candidate-trainingcentre">Presence in training centre</label>
@@ -54,13 +54,13 @@
     <br><br>
   </div>
   <br><br>
-  <div *ngIf="candidateType$ | async as type">
+  <!-- <div *ngIf="candidateType$ | async as type">
     <div *ngIf="type === 'membership'"></div>
     <div *ngIf="type === 'fellowship'">
       <app-edit-fellowship [casebooks]="fetchForFellowship(candidate).casebooks"
       [dissertations]="fetchForFellowship(candidate).dissertation"></app-edit-fellowship>
     </div>
-  </div>
+  </div> -->
   <br><br>
   <div *ngIf="updateTracker$ === null; else update">
     <button class="wacpfm-primary-button" routerLink="/dashboard/examination">Continue</button>
