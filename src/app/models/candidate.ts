@@ -25,7 +25,7 @@ export interface Candidate {
   wacpNo: string;
   dateOfBirth: string;
   dateOfRegistration: FieldValue;
-  examType: string;
+  category: string; /** exam category: either membership or fellowship */
   presenceInTrainingCentre: string; // Yes or No
   nameOfTrainingCentre: string;
   previousOrals: number;
@@ -36,6 +36,8 @@ export interface Candidate {
   thirdTrimester: string; // if female, response is Yes or No
   examCentre: string;
   certificate: Upload; // certificate of training
+  examId: string;
+  examAlias: string;
 }
 
 export const NEW_CANDIDATE: Candidate = {
@@ -46,7 +48,7 @@ export const NEW_CANDIDATE: Candidate = {
   wacpNo: "",
   dateOfBirth: "",
   dateOfRegistration: serverTimestamp(),
-  examType: "",
+  category: "",
   presenceInTrainingCentre: "",
   nameOfTrainingCentre: "",
   previousOrals: 0,
@@ -63,7 +65,9 @@ export const NEW_CANDIDATE: Candidate = {
     uploadDate: serverTimestamp(),
     url: "",
     type: ""
-  }
+  },
+  examAlias: "",
+  examId: ""
 };/**
  * Ideally, candidates should only have one record each for membership and fellowship exams if
  * they did not fail.
@@ -79,8 +83,6 @@ export interface MembershipExamRecord extends Candidate {
   logbook: Subexam;
   orals: Subexam;
   pmr: Subexam;
-  examId: string;
-  examAlias: string;
 }
 
 export interface FellowshipExamRecord extends Candidate {
@@ -88,8 +90,6 @@ export interface FellowshipExamRecord extends Candidate {
   dissertation: Dissertation[];
   casebooks: AcademicWriting[];
   defense: any;
-  examId: string;
-  examAlias: string;
   previousDissertations: number;
   previousPMRs: number;
 }
