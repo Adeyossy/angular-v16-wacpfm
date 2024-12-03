@@ -42,6 +42,7 @@ import { FileUploadComponent } from './widgets/file-upload/file-upload.component
 import { CardGridItemComponent } from './widgets/card-grid-item/card-grid-item.component';
 import { EditFellowshipComponent } from './exam/edit-candidate/edit-fellowship/edit-fellowship.component';
 import { CardGridComponent } from './widgets/card-grid/card-grid.component';
+import { EditMembershipComponent } from './exam/edit-candidate/edit-membership/edit-membership.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { CardGridComponent } from './widgets/card-grid/card-grid.component';
     FileUploadComponent,
     CardGridItemComponent,
     EditFellowshipComponent,
-    CardGridComponent
+    CardGridComponent,
+    EditMembershipComponent
   ],
   imports: [
     BrowserModule,
