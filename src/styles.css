@@ -342,7 +342,7 @@ button:active {
 
 .wacpfm-card.wacpfm-card-2 {
   background-color: var(--wacpfm-background-colour-white);
-  border-color: var(--wacpfm-light-grey);
+  border-color: var(--wacpfm-background-colour-darker);
 }
 
 .wacpfm-loading-circle {
@@ -373,6 +373,11 @@ button:active {
 
 .wacpfm-border-tot {
   border-color: var(--wacpfm-primary-colour);
+}
+
+.wacpfm-two-lines {
+  line-height: 1rem;
+  height: 2rem;
 }
 
 .wacpfm-three-lines {
