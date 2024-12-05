@@ -9,7 +9,7 @@
       <br>
       <div *ngIf="appUser$ | async as user">
         <!-- If the user is not registered, display registration links -->
-        <div *ngIf="getUserType(exam, user.email) as userType">
+        <div *ngIf="getUserType(exam, user.email) as userType; else register">
           <app-card-grid [items]="replaceHome(exam.alias, userType, user.userId)"></app-card-grid>
         </div>
         <ng-template #register>
@@ -25,6 +25,7 @@
       <h1 class="wacpfm-heading-small wacpfm-font-arial">
         There is no exam at the moment. Kindly check back during the next examination period.
       </h1>
+      <!-- Insert other tasks users can do here such as installing the app and update course tasks -->
     </ng-template>
   </div>
 </div>

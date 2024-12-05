@@ -16,19 +16,19 @@ export class ExamComponent implements OnInit {
   appUser$: Observable<AppUser> = NEVER;
   registrationTasks = [
     {
-      title: "Membership Candidate",
-      description: "",
-      link: "/dashboard/exam/:examAlias/candidate/membership/:userId"
+      title: "Candidate",
+      description: "Membership",
+      link: "/dashboard/exam/:examAlias/candidate/membership/:userId/edit"
     },
     {
-      title: "Fellowship Candidate",
-      description: "",
-      link: "/dashboard/exam/:examAlias/candidate/fellowship/:userId"
+      title: "Candidate",
+      description: "Fellowship",
+      link: "/dashboard/exam/:examAlias/candidate/fellowship/:userId/edit"
     },
     {
       title: "Examiner",
       description: "",
-      link: "/dashboard/exam/:examAlias/examiner/:userId"
+      link: "/dashboard/exam/:examAlias/examiner/:userId/edit"
     }
   ];
 
