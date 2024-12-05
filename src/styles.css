@@ -340,6 +340,11 @@ button:active {
   border-color: var(--wacpfm-primary-colour);
 }
 
+.wacpfm-card.wacpfm-card-2 {
+  background-color: var(--wacpfm-background-colour-white);
+  border-color: var(--wacpfm-light-grey);
+}
+
 .wacpfm-loading-circle {
   width: 16px;
   height: 16px;
