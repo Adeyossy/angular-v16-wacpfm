@@ -54,7 +54,7 @@ export const NEW_CANDIDATE: Candidate = {
   candidateId: "",
   gender: "",
   userEmail: "",
-  wacpNo: "",
+  wacpNo: "WP//",
   dateOfBirth: "",
   dateOfRegistration: serverTimestamp(),
   category: "",

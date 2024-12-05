@@ -8,9 +8,17 @@
   <input type="text" name="candidate-no" id="wacpfm-candidate-no" required [(ngModel)]="candidate.candidateId"
     placeholder="">
   <br><br>
+  <label for="wacpfm-candidate-no">Examination Number</label>
+  <input type="text" name="candidate-no" id="wacpfm-candidate-no" required [(ngModel)]="candidate.candidateId"
+    placeholder="">
+  <br><br>
   <label for="wacpfm-candidate-wacpno">Physician-in-Training Number</label>
   <input type="text" name="wacpfm-candidate-wacpno" id="wacpfm-candidate-wacpno" required
-    [(ngModel)]="candidate.wacpNo">
+    [(ngModel)]="candidate.wacpNo" pattern="WP\/\d+\/20\d+">
+  <!-- <input *ngFor="let wacpno of candidate.wacpNo.split('/') as wacpnos; index as i" type="text"
+    name="wacpfm-candidate-wacpno-{{i}}" id="wacpfm-candidate-wacpno-wa-{{i}}" [ngModel]="wacpnos[i]"
+    (ngModelChange)="candidate.wacpNo = wacpnos.join('/')" required class="d-inline w-auto" 
+    [disabled]="i === 0" [size]="i > 0 ? 4 : 2"> -->
   <br><br>
   <label for="wacpfm-candidate-dob">Date of Birth</label>
   <input type="date" name="wacpfm-candidate-dob" id="wacpfm-candidate-dob" required [(ngModel)]="candidate.dateOfBirth">
@@ -25,7 +33,7 @@
   <br><br>
   <label for="wacpfm-candidate-trainingcentre-name">Name of Training Centre</label>
   <input type="text" name="wacpfm-candidate-trainingcentre-name" id="wacpfm-candidate-trainingcentre-name" required
-    [(ngModel)]="candidate.presenceInTrainingCentre">
+    [(ngModel)]="candidate.nameOfTrainingCentre">
   <br><br>
   <label for="wacpfm-candidate-orals">Number of Previous Orals</label>
   <input type="number" name="wacpfm-candidate-orals" id="wacpfm-candidate-orals" required
@@ -45,12 +53,15 @@
     [(ngModel)]="candidate.handicapAssistance">
   <br><br>
   <div>
-    <label for="wacpfm-candidate-breastfed">Will you have an exclusively breast-fed baby less than 6-months old during the examinations?</label>
+    <label for="wacpfm-candidate-breastfed">Will you have an exclusively breast-fed baby less than 6-months old during
+      the examinations?</label>
     <app-select (emitItems)="candidate.exclusivelyBreastfedBaby = $event[0]" mode="single"
       [items]="['Yes', 'No']"></app-select>
     <br><br>
-    <label for="wacpfm-candidate-pregnant">Will you be in the 3rd trimester of pregnancy during the examinations?</label>
-    <app-select (emitItems)="candidate.exclusivelyBreastfedBaby = $event[0]" mode="single" [items]="['Yes', 'No']"></app-select>
+    <label for="wacpfm-candidate-pregnant">Will you be in the 3rd trimester of pregnancy during the
+      examinations?</label>
+    <app-select (emitItems)="candidate.exclusivelyBreastfedBaby = $event[0]" mode="single"
+      [items]="['Yes', 'No']"></app-select>
     <br><br>
   </div>
   <br><br>
@@ -66,7 +77,8 @@
     <button class="wacpfm-primary-button" routerLink="/dashboard/examination">Continue</button>
   </div>
   <ng-template #update>
-    <button *ngIf="updateTracker$ | async as tracker; else loading" class="wacpfm-primary-button" (click)="update$()">Submit</button>
+    <button *ngIf="updateTracker$ | async as tracker; else loading" class="wacpfm-primary-button"
+      (click)="update$()">Submit</button>
     <ng-template #loading>
       <app-loading-circles></app-loading-circles>
     </ng-template>
