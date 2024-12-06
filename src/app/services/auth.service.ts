@@ -185,6 +185,25 @@ export class AuthService {
     )
   }
 
+  batchWriteDocs$(refAndData: {ref: DocumentReference, data: object, 
+    type: "set" | "update" | "delete"}[]) {
+    return this.getFirestore$().pipe(
+      concatMap(db => {
+        const batch = writeBatch(db);
+        refAndData.forEach(rd => {
+          if (rd.type === "set") {
+            batch.set(rd.ref, rd.data);
+          } else {
+            if (rd.type === "update") batch.update(rd.ref, rd.data);
+            else batch.delete(rd.ref)
+          }
+        });
+        return batch.commit();
+      }),
+      map(_void => "done")
+    )
+  }
+
   getDoc$<Type>(collectionName: string, docId: string) {
     return this.getFirestore$().pipe(
       concatMap(db => getDoc(doc(db, collectionName, docId))),
