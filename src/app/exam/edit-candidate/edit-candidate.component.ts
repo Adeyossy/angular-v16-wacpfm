@@ -3,6 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { where } from 'firebase/firestore';
 import { catchError, concatMap, map, Observable, of } from 'rxjs';
 import { Candidate, CANDIDATES, FellowshipExamRecord, NEW_CANDIDATE, NEW_FELLOWSHIP_CANDIDATE } from "src/app/models/candidate";
+import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ExamService } from 'src/app/services/exam.service';
 
@@ -14,6 +15,7 @@ import { ExamService } from 'src/app/services/exam.service';
 export class EditCandidateComponent implements OnInit {
   candidate$: Observable<Candidate> = new Observable();
   candidateType$: Observable<string> = of("");
+  user$: Observable<AppUser> = of();
 
   handicap = ["None", "Use of a wheelchair", "Use of walking frame or crutches", `Visual acuity 
     worse than 3/60 despite correction`, `Severe hearing impairment`, `Stammering`, 
@@ -39,6 +41,8 @@ export class EditCandidateComponent implements OnInit {
       concatMap(this.paramsToCandidate),
       concatMap(this.mapToCandidate)
     );
+
+    this.user$ = this.authService.getAppUser$();
   }
 
   paramsToCandidate = (params: ParamMap) => {

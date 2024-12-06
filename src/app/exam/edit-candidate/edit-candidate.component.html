@@ -3,11 +3,17 @@
   <div class="wacpfm-underline"></div>
 </div>
 <br>
-<div *ngIf="candidate$ | async as candidate">
-  <label for="wacpfm-candidate-no">Examination Number</label>
-  <input type="text" name="candidate-no" id="wacpfm-candidate-no" required [(ngModel)]="candidate.candidateId"
-    placeholder="">
+<div *ngIf="user$ | async as user">
+  <label for="wacpfm-candidate-name">Candidate Name</label>
+  <input type="text" name="candidate-name" id="wacpfm-candidate-name" required 
+  [ngModel]="user.firstname + ' ' + user.lastname" disabled>
   <br><br>
+  <label for="wacpfm-candidate-gender">Candidate Gender</label>
+  <input type="text" name="candidate-gender" id="wacpfm-candidate-gender" required 
+  [ngModel]="user.gender" disabled>
+  <br><br>
+</div>
+<div *ngIf="candidate$ | async as candidate">
   <label for="wacpfm-candidate-no">Examination Number</label>
   <input type="text" name="candidate-no" id="wacpfm-candidate-no" required [(ngModel)]="candidate.candidateId"
     placeholder="">
@@ -26,6 +32,10 @@
   <label for="wacpfm-candidate-category">What category are you registering for?</label>
   <app-select (emitItems)="candidate.category = $event[0]" mode="single"
     [items]="['Membership', 'Fellowship']"></app-select>
+  <br><br>
+  <label for="wacpfm-candidate-category">What curriculum applies to you?</label>
+  <app-select (emitItems)="candidate.curriculum = $event[0]" mode="single"
+    [items]="['New', 'Old']"></app-select>
   <br><br>
   <label for="wacpfm-candidate-trainingcentre">Presence in training centre</label>
   <app-select (emitItems)="candidate.presenceInTrainingCentre = $event[0]" mode="single"
@@ -52,7 +62,7 @@
   <input type="text" name="wacpfm-candidate-handicap-assistance" id="wacpfm-candidate-handicap-assistance" required
     [(ngModel)]="candidate.handicapAssistance">
   <br><br>
-  <div>
+  <div *ngIf="candidate.gender.toLowerCase() === 'female'">
     <label for="wacpfm-candidate-breastfed">Will you have an exclusively breast-fed baby less than 6-months old during
       the examinations?</label>
     <app-select (emitItems)="candidate.exclusivelyBreastfedBaby = $event[0]" mode="single"
@@ -64,7 +74,6 @@
       [items]="['Yes', 'No']"></app-select>
     <br><br>
   </div>
-  <br><br>
   <!-- <div *ngIf="candidateType$ | async as type">
     <div *ngIf="type === 'membership'"></div>
     <div *ngIf="type === 'fellowship'">
@@ -72,7 +81,6 @@
       [dissertations]="fetchForFellowship(candidate).dissertation"></app-edit-fellowship>
     </div>
   </div> -->
-  <br><br>
   <div *ngIf="updateTracker$ === null; else update">
     <button class="wacpfm-primary-button" routerLink="/dashboard/examination">Continue</button>
   </div>

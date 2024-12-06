@@ -35,6 +35,7 @@ export interface Candidate {
   dateOfBirth: string;
   dateOfRegistration: FieldValue;
   category: string; /** exam category: either membership or fellowship */
+  curriculum: string;
   presenceInTrainingCentre: string; // Yes or No
   nameOfTrainingCentre: string;
   previousOrals: number;
@@ -58,6 +59,7 @@ export const NEW_CANDIDATE: Candidate = {
   dateOfBirth: "",
   dateOfRegistration: serverTimestamp(),
   category: "",
+  curriculum: "",
   presenceInTrainingCentre: "",
   nameOfTrainingCentre: "",
   previousOrals: 0,
