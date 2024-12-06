@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { where } from 'firebase/firestore';
 import { NEVER, Observable, Subscription, map, of } from 'rxjs';
 import { DEFAULT_LECTURE, UPDATE_COURSES_LECTURES, UpdateCourseLecture } from 'src/app/models/update_course';
 import { UPDATE_COURSE_TYPES, UpdateCourseType } from 'src/app/models/update_course_record';
@@ -83,13 +84,15 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
   }
 
   findResourcePerson() {
-    this.resourcePerson$ = this.authService.queryCollections$(RESOURCE_PERSONS, "userEmail",
-      "==", this.lecture.lecturerEmail
+    this.resourcePerson$ = this.authService.queryCollections$(RESOURCE_PERSONS, 
+      where("userEmail", "==", this.lecture.lecturerEmail)
     );
   }
 
   getName$() {
-    return this.authService.queryCollections$<AppUser>(USERS, "email", "==", this.lecture.lecturerEmail).pipe(
+    return this.authService.queryCollections$<AppUser>(
+      USERS, where("email", "==", this.lecture.lecturerEmail)
+    ).pipe(
       map(([appUser]) => `${appUser.firstname} ${appUser.lastname}`)
     )
   }

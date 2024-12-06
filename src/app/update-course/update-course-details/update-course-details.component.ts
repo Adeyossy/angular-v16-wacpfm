@@ -48,7 +48,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
         return iif(
           () => !!id,
           this.authService.queryCollections$<ResourcePerson>(RESOURCE_PERSONS,
-            "updateCourseId", "==", id!),
+            where("updateCourseId", "==", id!)),
           of([])
         )
       })
@@ -204,7 +204,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   getCourseLectures() {
     return this.activatedRoute.paramMap.pipe(
       concatMap(params => this.authService.queryCollections$<UpdateCourseLecture>
-        (UPDATE_COURSES_LECTURES, "updateCourseId", "==", params.get("updateCourseId") as string)),
+        (UPDATE_COURSES_LECTURES, where("updateCourseId", "==", params.get("updateCourseId") as string))),
       map(docs => docs.sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime)))
     );
   }

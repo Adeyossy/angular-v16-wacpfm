@@ -191,17 +191,18 @@ export class AuthService {
    * @param refAndData Array of objects describing the document reference and data for cloud write
    * @returns Observable<string>
    */
-  batchWriteDocs$(refAndData: {ref: DocumentReference, data: object, 
+  batchWriteDocs$(refAndData: {path: string, data: object, 
     type: "set" | "update" | "delete"}[]) {
     return this.getFirestore$().pipe(
       concatMap(db => {
         const batch = writeBatch(db);
         refAndData.forEach(rd => {
+          let ref = doc(db, rd.path);
           if (rd.type === "set") {
-            batch.set(rd.ref, rd.data);
+            batch.set(ref, rd.data);
           } else {
-            if (rd.type === "update") batch.update(rd.ref, rd.data);
-            else batch.delete(rd.ref)
+            if (rd.type === "update") batch.update(ref, rd.data);
+            else batch.delete(ref)
           }
         });
         return batch.commit();
@@ -289,11 +290,9 @@ export class AuthService {
     );
   }
 
-  queryCollections$<Type>(collectionName: string, property: string,
-    comparator: WhereFilterOp, value: string | boolean | number) {
+  queryCollections$<Type>(collectionName: string, where: QueryFieldFilterConstraint) {
     return this.getFirestore$().pipe(
-      concatMap(db => getDocs(query(collection(db, collectionName),
-        where(property, comparator, value)))),
+      concatMap(db => getDocs(query(collection(db, collectionName), where))),
       map(docs => docs.docs.map(doc => doc.data() as Type))
     );
   }
@@ -351,7 +350,8 @@ export class AuthService {
   queryByUserId$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
-        if (user) return this.queryCollections$<Type>(collectionName, "userId", "==", user.uid);
+        if (user) return this.queryCollections$<Type>(collectionName, 
+          where("userId", "==", user.uid));
         else throw new Error(AuthErrorCodes.NULL_USER);
       })
     );
@@ -360,7 +360,8 @@ export class AuthService {
   queryByUserEmail$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
       concatMap(user => {
-        if (user) return this.queryCollections$<Type>(collectionName, "userEmail", "==", user.email!);
+        if (user) return this.queryCollections$<Type>(collectionName, 
+          where("userEmail", "==", user.email!));
         else throw new Error(AuthErrorCodes.NULL_USER);
       })
     );

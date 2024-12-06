@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthErrorCodes, User } from 'firebase/auth';
+import { where } from 'firebase/firestore';
 import { UploadResult } from 'firebase/storage';
 import { NEVER, Observable, Subscription, catchError, concatMap, map, of, timeout } from 'rxjs';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
@@ -46,7 +47,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
         throw "Param does not exist";
       }),
       concatMap(id => this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
-        "updateCourseId", "==", id)),
+       where( "updateCourseId", "==", id))),
       map(res => res.filter(rec => rec.paymentEvidence)),
       concatMap(res => this.authService.getFirebaseUser$().pipe(
         map(user => res.filter(r => r.userEmail.toLowerCase().trim() === 

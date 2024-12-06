@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Observable, filter, map } from 'rxjs';
 import { DEFAULT_COURSE_RECORD, UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
-import { QueryDocumentSnapshot } from 'firebase/firestore';
+import { QueryDocumentSnapshot, where } from 'firebase/firestore';
 import { DEFAULT_UPDATE_COURSE, UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { AppUser, USERS } from '../models/user';
 
@@ -35,15 +35,15 @@ export class UpdateCourseComponent implements OnInit {
     //       )))
     // );
 
-    this.previousCourses = this.authService.queryCollections$<UpdateCourse>(UPDATE_COURSES, "endDate", "<", 
-      Date.now() - this.twoWeeks).pipe(
+    this.previousCourses = this.authService.queryCollections$<UpdateCourse>(UPDATE_COURSES, 
+      where("endDate", "<", Date.now() - this.twoWeeks)).pipe(
         map(courses => courses.sort((a, b) => b.endDate - a.endDate))
       );
 
     // pipe an observable of Update Courses that has not ended
     // the user may or may not have registered
     this.ongoing = this.authService.queryCollections$<UpdateCourse>
-    (UPDATE_COURSES, "endDate", ">=", Date.now() - (2 * 7 * 24 * 60 * 60 * 1000)).pipe(
+    (UPDATE_COURSES, where("endDate", ">=", Date.now() - (2 * 7 * 24 * 60 * 60 * 1000))).pipe(
         map(result => result.length === 0 ? Object.assign({}, DEFAULT_UPDATE_COURSE) : result[0])
       )
   }

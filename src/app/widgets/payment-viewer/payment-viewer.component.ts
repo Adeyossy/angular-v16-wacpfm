@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { collection, doc, writeBatch } from 'firebase/firestore';
+import { collection, doc, where, writeBatch } from 'firebase/firestore';
 import { NEVER, Observable, concatMap, map, of } from 'rxjs';
 import { DEFAULT_UPDATE_COURSE, UPDATE_COURSES, UpdateCourse } from 'src/app/models/update_course';
 import { DEFAULT_COURSE_RECORD, UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
@@ -27,7 +27,7 @@ export class PaymentViewerComponent implements OnInit {
     const keys = ["firstname", "middlename", "lastname", "gender", "phoneNumber", "whatsapp",
       "email", "country", "zip", "designation", "practicePlace", "college"] as const;
     this.userDetails$ = this.authService.queryCollections$<AppUser>
-      (USERS, "email", "==", this.record.userEmail).pipe(
+      (USERS, where("email", "==", this.record.userEmail)).pipe(
         map(appUsers => {
           if (appUsers.length > 0) {
             return keys.map(key => { return { title: appUsers[0][key], subtitle: key, text: "" } })
