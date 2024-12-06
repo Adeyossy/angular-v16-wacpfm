@@ -185,6 +185,12 @@ export class AuthService {
     )
   }
 
+  /**
+   * Writes batch of documents to firebase cloud firestore with support for set, update and delete
+   * operations.
+   * @param refAndData Array of objects describing the document reference and data for cloud write
+   * @returns Observable<string>
+   */
   batchWriteDocs$(refAndData: {ref: DocumentReference, data: object, 
     type: "set" | "update" | "delete"}[]) {
     return this.getFirestore$().pipe(
