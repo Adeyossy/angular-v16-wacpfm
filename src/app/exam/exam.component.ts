@@ -45,8 +45,7 @@ export class ExamComponent implements OnInit {
   ngOnInit(): void {
     this.appUser$ = this.authService.getAppUser$();
     this.exam$ = this.examService.queryItem$<Exam>(EXAMS, [
-      where("registrationStartDate", "<=", Date.now()),
-      where("registrationCloseDate", ">=", Date.now())
+      where("alias", "==", "first2025")
     ]).pipe(
       map(exams => {
         if (exams.length > 0) {
