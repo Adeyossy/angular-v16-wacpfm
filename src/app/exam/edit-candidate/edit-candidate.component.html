@@ -37,18 +37,25 @@
   <app-select (emitItems)="candidate.curriculum = $event[0]" mode="single"
     [items]="['New', 'Old']"></app-select>
   <br><br>
-  <label for="wacpfm-candidate-trainingcentre">Presence in training centre</label>
-  <app-select (emitItems)="candidate.presenceInTrainingCentre = $event[0]" mode="single"
-    [items]="['Yes', 'No']"></app-select>
-  <br><br>
   <label for="wacpfm-candidate-trainingcentre-name">Name of Training Centre</label>
   <input type="text" name="wacpfm-candidate-trainingcentre-name" id="wacpfm-candidate-trainingcentre-name" required
     [(ngModel)]="candidate.nameOfTrainingCentre">
   <br><br>
-  <label for="wacpfm-candidate-orals">Number of Previous Orals</label>
-  <input type="number" name="wacpfm-candidate-orals" id="wacpfm-candidate-orals" required
-    [(ngModel)]="candidate.previousOrals">
+  <label for="wacpfm-candidate-previous-attempts">How many previous attempts have you had at this exam?</label>
+  <input type="number" name="wacpfm-candidate-previous-attempts" id="wacpfm-candidate-previous-attempts" required
+    [(ngModel)]="previousAttempts">
   <br><br>
+  <div *ngIf="candidate.previousAttemptsDetails.length > 0">
+    <div class="wacpfm-heading-underline">
+      <h1 class="wacpfm-heading-small">Previous Attempt(s) Details</h1>
+      <div class="wacpfm-underline"></div>
+    </div>
+    <br><br>
+    <app-card-list></app-card-list>
+    <button class="small w-auto px-4" (click)="candidate.previousAttemptsDetails.push(newPreviousAttempt())">
+      <i class="bi bi-plus-circle-fill"></i> Add Previous Attempt
+    </button>
+  </div>
   <label for="wacpfm-candidate-physical-handicap">Physical Handicap</label>
   <app-select (emitItems)="candidate.physicalHandicap = $event[0]" mode="single" [items]="handicap"></app-select>
   <br><br>

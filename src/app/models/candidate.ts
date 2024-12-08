@@ -22,6 +22,12 @@ export const DEFAULT_UPLOAD: Upload = {
   type: ""
 }
 
+export interface PreviousAttempt {
+  month: string,
+  year: string,
+  modulesPassed: string[]
+}
+
 /**
  * A base model of a candidate for the WACP exam.
  * DO NOT USE DIRECTLY. Use the subclasses instead.
@@ -38,7 +44,7 @@ export interface Candidate {
   curriculum: string;
   presenceInTrainingCentre: string; // Yes or No
   nameOfTrainingCentre: string;
-  previousOrals: number;
+  previousAttemptsDetails: PreviousAttempt[];
   physicalHandicap: string;
   otherHandicap: string;
   handicapAssistance: string;
@@ -62,7 +68,7 @@ export const NEW_CANDIDATE: Candidate = {
   curriculum: "",
   presenceInTrainingCentre: "",
   nameOfTrainingCentre: "",
-  previousOrals: 0,
+  previousAttemptsDetails: [],
   physicalHandicap: "",
   otherHandicap: "",
   handicapAssistance: "",
@@ -79,7 +85,9 @@ export const NEW_CANDIDATE: Candidate = {
   },
   examAlias: "",
   examId: ""
-};/**
+};
+
+/**
  * Ideally, candidates should only have one record each for membership and fellowship exams if
  * they did not fail.
  *
@@ -94,6 +102,7 @@ export interface MembershipExamRecord extends Candidate {
   logbook: Subexam;
   orals: Subexam;
   pmr: Subexam;
+  isTheoryBanked: boolean;
 }
 
 export interface FellowshipExamRecord extends Candidate {

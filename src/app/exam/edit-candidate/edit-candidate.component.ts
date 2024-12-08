@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { arrayUnion, doc, where, writeBatch } from 'firebase/firestore';
 import { catchError, concatMap, map, Observable, of } from 'rxjs';
-import { Candidate, CANDIDATES, FellowshipExamRecord, NEW_CANDIDATE, NEW_FELLOWSHIP_CANDIDATE } from "src/app/models/candidate";
+import { Candidate, CANDIDATES, FellowshipExamRecord, NEW_CANDIDATE, NEW_FELLOWSHIP_CANDIDATE, PreviousAttempt } from "src/app/models/candidate";
 import { EXAMS } from 'src/app/models/exam';
 import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -23,6 +23,7 @@ export class EditCandidateComponent implements OnInit {
     "Others"];
 
   updateTracker$: Observable<boolean> | null = null;
+  previousAttempts = 0;
 
   constructor(private authService: AuthService, private activeRoute: ActivatedRoute,
     private examService: ExamService, private router: Router) {}
@@ -40,10 +41,22 @@ export class EditCandidateComponent implements OnInit {
 
     this.candidate$ = this.activeRoute.paramMap.pipe(
       concatMap(this.paramsToCandidate),
-      concatMap(this.mapToCandidate)
+      concatMap(this.mapToCandidate),
+      map(candidate => { 
+        this.previousAttempts = candidate.previousAttemptsDetails.length;
+        return candidate;
+      })
     );
 
     this.user$ = this.authService.getAppUser$();
+  }
+
+  newPreviousAttempt(): PreviousAttempt {
+    return {
+      month: "",
+      year: "",
+      modulesPassed: []
+    }
   }
 
   paramsToCandidate = (params: ParamMap) => {
