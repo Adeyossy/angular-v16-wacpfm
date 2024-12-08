@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { where } from 'firebase/firestore';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { arrayUnion, doc, where, writeBatch } from 'firebase/firestore';
 import { catchError, concatMap, map, Observable, of } from 'rxjs';
 import { Candidate, CANDIDATES, FellowshipExamRecord, NEW_CANDIDATE, NEW_FELLOWSHIP_CANDIDATE } from "src/app/models/candidate";
+import { EXAMS } from 'src/app/models/exam';
 import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ExamService } from 'src/app/services/exam.service';
@@ -24,7 +25,7 @@ export class EditCandidateComponent implements OnInit {
   updateTracker$: Observable<boolean> | null = null;
 
   constructor(private authService: AuthService, private activeRoute: ActivatedRoute,
-    private examService: ExamService) {}
+    private examService: ExamService, private router: Router) {}
 
   ngOnInit(): void {
     this.candidateType$ = this.activeRoute.paramMap.pipe(
@@ -82,10 +83,25 @@ export class EditCandidateComponent implements OnInit {
   }
 
   update$() {
+    // this.updateTracker$ = this.candidate$.pipe(
+    //   concatMap(candidate => this.authService.addDocWithID$(CANDIDATES, candidate.userId, 
+    //     candidate, true)),
+    //   map(_void => true),
+    //   catchError(_err => of(false))
+    // );
+
     this.updateTracker$ = this.candidate$.pipe(
-      concatMap(candidate => this.authService.addDocWithID$(CANDIDATES, candidate.userId, 
-        candidate, true)),
-      map(_void => true),
+      concatMap(candidate => this.authService.batchWriteDocs$([
+        { 
+          path: `${CANDIDATES}`, data: candidate, type: "set" 
+        },
+        { 
+          path: `${EXAMS}/${candidate.category}`, 
+          data: { candidates: arrayUnion(candidate.candidateId) },
+          type: "update" 
+        }
+      ])),
+      concatMap(res => res !== "" ? this.router.navigate(['upload']) : of(false)),
       catchError(_err => of(false))
     )
   }
