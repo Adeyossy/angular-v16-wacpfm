@@ -47,7 +47,7 @@
   <br><br>
   <label for="wacpfm-candidate-orals">Number of Previous Orals</label>
   <input type="number" name="wacpfm-candidate-orals" id="wacpfm-candidate-orals" required
-    [(ngModel)]="candidate.presenceInTrainingCentre">
+    [(ngModel)]="candidate.previousOrals">
   <br><br>
   <label for="wacpfm-candidate-physical-handicap">Physical Handicap</label>
   <app-select (emitItems)="candidate.physicalHandicap = $event[0]" mode="single" [items]="handicap"></app-select>
@@ -82,11 +82,11 @@
     </div>
   </div> -->
   <div *ngIf="updateTracker$ === null; else update">
-    <button class="wacpfm-primary-button" routerLink="/dashboard/examination">Continue</button>
+    <button class="wacpfm-primary-button" routerLink="/dashboard/examination">Submit</button>
   </div>
   <ng-template #update>
     <button *ngIf="updateTracker$ | async as tracker; else loading" class="wacpfm-primary-button"
-      (click)="update$()">Submit</button>
+      (click)="update$()">Continue</button>
     <ng-template #loading>
       <app-loading-circles></app-loading-circles>
     </ng-template>
