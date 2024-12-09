@@ -57,3 +57,13 @@ export const NEW_EXAM: Exam = {
   examiners: []
 }
 
+export const EXAM_DESCRIPTION = {
+  membership: {
+    old: ["Theory", "OSCE", "Logbook", "Orals"],
+    new: ["Theory", "OSCE", "Logbook", "Orals", "PMR"]
+  },
+  fellowship: {
+    old: ["Dissertation", "Casebook", "Orals"],
+    new: ["Dissertation", "PMR", "Portfolio", "Orals"]
+  }
+}
