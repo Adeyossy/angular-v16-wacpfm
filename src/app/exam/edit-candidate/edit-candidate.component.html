@@ -5,22 +5,22 @@
 <br>
 <div *ngIf="user$ | async as user">
   <label for="wacpfm-candidate-name">Candidate Name</label>
-  <input type="text" name="candidate-name" id="wacpfm-candidate-name" required 
-  [ngModel]="user.firstname + ' ' + user.lastname" disabled>
+  <input type="text" name="candidate-name" id="wacpfm-candidate-name" required
+    [ngModel]="user.firstname + ' ' + user.lastname" disabled>
   <br><br>
   <label for="wacpfm-candidate-gender">Candidate Gender</label>
-  <input type="text" name="candidate-gender" id="wacpfm-candidate-gender" required 
-  [ngModel]="user.gender" disabled>
+  <input type="text" name="candidate-gender" id="wacpfm-candidate-gender" required [ngModel]="user.gender" disabled>
   <br><br>
 </div>
 <div *ngIf="candidate$ | async as candidate">
   <label for="wacpfm-candidate-no">Examination Number</label>
-  <input type="text" name="candidate-no" id="wacpfm-candidate-no" required [(ngModel)]="candidate.candidateId"
+  <input type="text" name="candidate-no" id="wacpfm-candidate-no" required [(ngModel)]="candidate.examNo"
     placeholder="">
+  <!-- <p>{{ candidate.examNo }}</p> -->
   <br><br>
   <label for="wacpfm-candidate-wacpno">Physician-in-Training Number</label>
-  <input type="text" name="wacpfm-candidate-wacpno" id="wacpfm-candidate-wacpno" required
-    [(ngModel)]="candidate.wacpNo" pattern="WP\/\d+\/20\d+">
+  <input type="text" name="wacpfm-candidate-wacpno" id="wacpfm-candidate-wacpno" required [(ngModel)]="candidate.wacpNo"
+    pattern="WP\/\d+\/20\d+">
   <!-- <input *ngFor="let wacpno of candidate.wacpNo.split('/') as wacpnos; index as i" type="text"
     name="wacpfm-candidate-wacpno-{{i}}" id="wacpfm-candidate-wacpno-wa-{{i}}" [ngModel]="wacpnos[i]"
     (ngModelChange)="candidate.wacpNo = wacpnos.join('/')" required class="d-inline w-auto" 
@@ -34,28 +34,60 @@
     [items]="['Membership', 'Fellowship']"></app-select>
   <br><br>
   <label for="wacpfm-candidate-category">What curriculum applies to you?</label>
-  <app-select (emitItems)="candidate.curriculum = $event[0]" mode="single"
-    [items]="['New', 'Old']"></app-select>
+  <app-select (emitItems)="candidate.curriculum = $event[0]" mode="single" [items]="['New', 'Old']"></app-select>
   <br><br>
   <label for="wacpfm-candidate-trainingcentre-name">Name of Training Centre</label>
-  <input type="text" name="wacpfm-candidate-trainingcentre-name" id="wacpfm-candidate-trainingcentre-name" required
-    [(ngModel)]="candidate.nameOfTrainingCentre">
+  <!-- <input type="text" name="wacpfm-candidate-trainingcentre-name" id="wacpfm-candidate-trainingcentre-name" required
+    [(ngModel)]="candidate.nameOfTrainingCentre"> -->
+  <select name="wacpfm-candidate-trainingcentre-name" id="wacpfm-candidate-trainingcentre-name" 
+  [(ngModel)]="candidate.nameOfTrainingCentre">
+    <option *ngFor="let centre of examService.accreditation" [ngValue]="centre"
+    (click)="candidate.nameOfTrainingCentre = centre"
+    [selected]="candidate.nameOfTrainingCentre === centre">{{ centre }}</option>
+  </select>
   <br><br>
   <label for="wacpfm-candidate-previous-attempts">How many previous attempts have you had at this exam?</label>
   <input type="number" name="wacpfm-candidate-previous-attempts" id="wacpfm-candidate-previous-attempts" required
     [(ngModel)]="previousAttempts">
   <br><br>
-  <div *ngIf="candidate.previousAttemptsDetails.length > 0">
+  <div *ngIf="previousAttempts > 0">
     <div class="wacpfm-heading-underline">
       <h1 class="wacpfm-heading-small">Previous Attempt(s) Details</h1>
       <div class="wacpfm-underline"></div>
     </div>
-    <br><br>
-    <app-card-list></app-card-list>
+    <br>
+    <div class="wacpfm-previous-attempts">
+      <details class="wacpfm-previous-attempt wacpfm-card mb-2" *ngFor="let attempt of candidate.previousAttemptsDetails; index as i">
+        <summary><app-card-list [item]="{
+            title: attempt.modulesPassed.join(', '), 
+            subtitle: attempt.month,
+            text: ''
+          }" [index]="i" [state]="!!attempt.month" 
+          [control]="attempt.modulesPassed.length > 0"></app-card-list></summary>
+        <br>
+        <label for="wacpfm-previous-attempt-month">Month and Year of Attempt</label>
+        <input type="month" name="wacpfm-previous-attempt-month" id="wacpfm-previous-attempt-month" placeholder="month"
+          [(ngModel)]="attempt.month" required>
+        <br>
+        <label for="wacpfm-previous-attempt-modules">Which exams did you pass?</label>
+        <app-select mode="multiple" (emitItems)="attempt.modulesPassed = $event" 
+        [items]="getItems(candidate.category.toLowerCase(), candidate.curriculum.toLowerCase())" 
+        [itemsSelectionState]="toSelectionState(attempt.modulesPassed, 
+        candidate.category.toLowerCase(), candidate.curriculum.toLowerCase())"></app-select>
+        <br>
+        <div class="text-end">
+          <button class="small text-end w-auto px-4 text-danger border-danger" 
+          (click)="candidate.previousAttemptsDetails.splice(i, 1)"><i class="bi bi-trash3-fill"></i> Delete Attempt
+          </button>
+        </div>
+      </details>
+      <br>
+    </div>
     <button class="small w-auto px-4" (click)="candidate.previousAttemptsDetails.push(newPreviousAttempt())">
       <i class="bi bi-plus-circle-fill"></i> Add Previous Attempt
     </button>
   </div>
+  <br><br>
   <label for="wacpfm-candidate-physical-handicap">Physical Handicap</label>
   <app-select (emitItems)="candidate.physicalHandicap = $event[0]" mode="single" [items]="handicap"></app-select>
   <br><br>
@@ -89,11 +121,13 @@
     </div>
   </div> -->
   <div *ngIf="updateTracker$ === null; else update">
-    <button class="wacpfm-primary-button" routerLink="/dashboard/examination">Submit</button>
+    <button class="wacpfm-primary-button" (click)="update$()">Submit</button>
   </div>
   <ng-template #update>
-    <button *ngIf="updateTracker$ | async as tracker; else loading" class="wacpfm-primary-button"
-      (click)="update$()">Continue</button>
+    <div *ngIf="updateTracker$ | async as tracker; else loading">
+      <button *ngIf="tracker && true" class="wacpfm-primary-button" 
+      routerLink="./upload">Continue</button>
+    </div>
     <ng-template #loading>
       <app-loading-circles></app-loading-circles>
     </ng-template>
