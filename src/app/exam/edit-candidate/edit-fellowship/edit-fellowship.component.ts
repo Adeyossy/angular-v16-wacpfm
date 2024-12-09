@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { where } from 'firebase/firestore';
 import { concatMap, map, Observable, of } from 'rxjs';
-import { AcademicWriting, CANDIDATES, Dissertation, FellowshipExamRecord, NEW_FELLOWSHIP_CANDIDATE } from 'src/app/models/candidate';
+import { AcademicWriting, CANDIDATES, DISSERTATION, Dissertation, FellowshipExamRecord, NEW_FELLOWSHIP_CANDIDATE } from 'src/app/models/candidate';
 import { DEFAULT_LECTURE, DEFAULT_UPDATE_COURSE } from 'src/app/models/update_course';
 import { DEFAULT_COURSE_RECORD } from 'src/app/models/update_course_record';
 import { DEFAULT_RESOURCE_PERSON } from 'src/app/models/user';
@@ -44,11 +44,18 @@ export class EditFellowshipComponent implements OnInit {
   showWriting(writing: AcademicWriting) {
     this.helper.setComponentDialogData({
       course: Object.assign({}, DEFAULT_UPDATE_COURSE),
-      courseId: "",
+      courseId: "writing",
       lecture: Object.assign({}, DEFAULT_LECTURE),
       lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
       writing: writing
     });
+  }
+
+  addDissertation(fellowship: FellowshipExamRecord) {
+    fellowship.dissertation.push(Object.assign({}, DISSERTATION));
+    this.showWriting(fellowship.dissertation[fellowship.dissertation.length - 1]);
+
+    this.helper.toggleDialog(1);
   }
 }
