@@ -43,6 +43,7 @@ import { CardGridItemComponent } from './widgets/card-grid-item/card-grid-item.c
 import { EditFellowshipComponent } from './exam/edit-candidate/edit-fellowship/edit-fellowship.component';
 import { CardGridComponent } from './widgets/card-grid/card-grid.component';
 import { EditMembershipComponent } from './exam/edit-candidate/edit-membership/edit-membership.component';
+import { TitleSubtitleFileComponent } from './widgets/title-subtitle-file/title-subtitle-file.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { EditMembershipComponent } from './exam/edit-candidate/edit-membership/e
     CardGridItemComponent,
     EditFellowshipComponent,
     CardGridComponent,
-    EditMembershipComponent
+    EditMembershipComponent,
+    TitleSubtitleFileComponent
   ],
   imports: [
     BrowserModule,
