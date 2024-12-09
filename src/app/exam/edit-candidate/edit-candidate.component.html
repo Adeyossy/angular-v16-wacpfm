@@ -31,10 +31,12 @@
   <br><br>
   <label for="wacpfm-candidate-category">What category are you registering for?</label>
   <app-select (emitItems)="candidate.category = $event[0]" mode="single"
-    [items]="['Membership', 'Fellowship']"></app-select>
+    [items]="candidateCategories" [itemsSelectionState]="toSelectionState(candidateCategories, 
+    candidate.category)"></app-select>
   <br><br>
   <label for="wacpfm-candidate-category">What curriculum applies to you?</label>
-  <app-select (emitItems)="candidate.curriculum = $event[0]" mode="single" [items]="['New', 'Old']"></app-select>
+  <app-select (emitItems)="candidate.curriculum = $event[0]" mode="single" [items]="candidateCurriculum"
+  [itemsSelectionState]="toSelectionState(candidateCurriculum, candidate.curriculum)"></app-select>
   <br><br>
   <label for="wacpfm-candidate-trainingcentre-name">Name of Training Centre</label>
   <!-- <input type="text" name="wacpfm-candidate-trainingcentre-name" id="wacpfm-candidate-trainingcentre-name" required
@@ -57,11 +59,11 @@
     </div>
     <br>
     <div class="wacpfm-previous-attempts">
-      <details class="wacpfm-previous-attempt wacpfm-card mb-2" *ngFor="let attempt of candidate.previousAttemptsDetails; index as i">
+      <details class="wacpfm-previous-attempt" *ngFor="let attempt of candidate.previousAttemptsDetails; index as i">
         <summary><app-card-list [item]="{
             title: attempt.modulesPassed.join(', '), 
             subtitle: attempt.month,
-            text: ''
+            text: '(click to edit)'
           }" [index]="i" [state]="!!attempt.month" 
           [control]="attempt.modulesPassed.length > 0"></app-card-list></summary>
         <br>
@@ -72,7 +74,7 @@
         <label for="wacpfm-previous-attempt-modules">Which exams did you pass?</label>
         <app-select mode="multiple" (emitItems)="attempt.modulesPassed = $event" 
         [items]="getItems(candidate.category.toLowerCase(), candidate.curriculum.toLowerCase())" 
-        [itemsSelectionState]="toSelectionState(attempt.modulesPassed, 
+        [itemsSelectionState]="attemptToSelectionState(attempt.modulesPassed, 
         candidate.category.toLowerCase(), candidate.curriculum.toLowerCase())"></app-select>
         <br>
         <div class="text-end">
@@ -89,7 +91,8 @@
   </div>
   <br><br>
   <label for="wacpfm-candidate-physical-handicap">Physical Handicap</label>
-  <app-select (emitItems)="candidate.physicalHandicap = $event[0]" mode="single" [items]="handicap"></app-select>
+  <app-select (emitItems)="candidate.physicalHandicap = $event[0]" mode="single" [items]="handicap"
+  [itemsSelectionState]="toSelectionState(handicap, candidate.physicalHandicap)"></app-select>
   <br><br>
   <label for="wacpfm-candidate-other-handicap">Other Handicap</label>
   <input type="text" name="wacpfm-candidate-other-handicap" id="wacpfm-candidate-other-handicap" required
@@ -104,13 +107,13 @@
   <div *ngIf="candidate.gender.toLowerCase() === 'female'">
     <label for="wacpfm-candidate-breastfed">Will you have an exclusively breast-fed baby less than 6-months old during
       the examinations?</label>
-    <app-select (emitItems)="candidate.exclusivelyBreastfedBaby = $event[0]" mode="single"
-      [items]="['Yes', 'No']"></app-select>
+    <app-select (emitItems)="candidate.exclusivelyBreastfedBaby = $event[0]" mode="single" [items]="yesNo" 
+    [itemsSelectionState]="toSelectionState(yesNo, candidate.exclusivelyBreastfedBaby)"></app-select>
     <br><br>
     <label for="wacpfm-candidate-pregnant">Will you be in the 3rd trimester of pregnancy during the
       examinations?</label>
-    <app-select (emitItems)="candidate.exclusivelyBreastfedBaby = $event[0]" mode="single"
-      [items]="['Yes', 'No']"></app-select>
+    <app-select (emitItems)="candidate.thirdTrimester = $event[0]" mode="single"
+      [items]="yesNo" [itemsSelectionState]="toSelectionState(yesNo, candidate.thirdTrimester)"></app-select>
     <br><br>
   </div>
   <!-- <div *ngIf="candidateType$ | async as type">

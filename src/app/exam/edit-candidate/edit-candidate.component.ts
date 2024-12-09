@@ -16,6 +16,9 @@ import { ExamService } from 'src/app/services/exam.service';
 export class EditCandidateComponent implements OnInit {
   candidate$: Observable<Candidate> = new Observable();
   candidateType$: Observable<string> = of("");
+  candidateCategories = ["Membership", "Fellowship"];
+  candidateCurriculum = ["New", "Old"];
+  yesNo = ["Yes", "No"];
   user$: Observable<AppUser> = of();
 
   handicap = ["None", "Use of a wheelchair", "Use of walking frame or crutches", `Visual acuity 
@@ -115,7 +118,11 @@ export class EditCandidateComponent implements OnInit {
     return EXAM_DESCRIPTION[category as "membership" | "fellowship"][curriculum as "old" | "new"]
   }
 
-  toSelectionState = (items: string[], category: string, curriculum: string) => {
+  toSelectionState(items: string[], value: string) {
+    return items.map(item => item.toLowerCase().trim() === value.toLowerCase().trim())
+  }
+
+  attemptToSelectionState = (items: string[], category: string, curriculum: string) => {
     return this.getItems(category, curriculum).map(
       module => items.map(item => item.toLowerCase()).includes(module.toLowerCase())
     )
