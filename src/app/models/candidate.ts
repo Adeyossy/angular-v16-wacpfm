@@ -24,7 +24,6 @@ export const DEFAULT_UPLOAD: Upload = {
 
 export interface PreviousAttempt {
   month: string,
-  year: string,
   modulesPassed: string[]
 }
 
@@ -52,7 +51,7 @@ export interface Candidate {
   thirdTrimester: string; // if female, response is Yes or No
   examCentre: string;
   certificate: Upload; // certificate of training
-  examId: string;
+  examNo: string;
   examAlias: string;
 }
 
@@ -84,7 +83,7 @@ export const NEW_CANDIDATE: Candidate = {
     type: ""
   },
   examAlias: "",
-  examId: ""
+  examNo: ""
 };
 
 /**
@@ -95,7 +94,6 @@ export const NEW_CANDIDATE: Candidate = {
  * of previous dissertations, PMRs and orals taken. A check would have to be made for previous
  * records.
  */
-
 export interface MembershipExamRecord extends Candidate {
   theory: Subexam;
   osce: Subexam;
@@ -119,7 +117,7 @@ export const NEW_FELLOWSHIP_CANDIDATE: FellowshipExamRecord = {
   dissertation: [],
   casebooks: [],
   defense: null,
-  examId: "",
+  examNo: "",
   examAlias: "",
   previousDissertations: 0,
   previousPMRs: 0
