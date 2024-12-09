@@ -31,6 +31,28 @@ export class ExamService {
     exams: []
   }
 
+  accreditation = [
+    "44 NAR, Hosp., Kaduna", "ABUTH, Zaria", "AKTH, Kano", "Askoro District Hospital, FCT",
+    "ATBUTH, Bauchi", "BMC, Saki", "BUTH(ECWA Hospital), Jos", "BUTH (Baptist MC) Ogbomoso",
+    "BMSH, Port Harcourt", "BSUTH, Makurdi", "OLA Catholic Hosp, Oluyuro,Ibadan",
+    "Central Hospital, Benin City", "DASH, Lafia,  Jos", "ECWA Hospital, Egbe,Kogi State",
+    "EKO Hospital, Ikeja, Lagos", "Eku Baptist Hospital, Eku", "EKSUTH, Ado-Ekiti",
+    "Faith Mediplex Hosp, Edo State", "FMC, Keffi, Nassarawa State", "Fed Teach Hosp, Abakaliki",
+    "FMC, Makurdi", "FMC, Abeokuta", "FMC, Asaba", "FMC, Bida, Niger State", "FMC, Ebute-Metta",
+    "FMC, Lokoja", "FMC, Owerri", "Fed Teaching Hosp, Ido-Ekiti", "FMC, Owo", "FMC,( QEH),Umuahia",
+    "Garki  Hospital, Abuja", "General Hospital, Marina, Lagos", "IMSUTH, Imo State",
+    "ISTH, Irrua, Edo State", "Jericho Specialist Hosp, Oyo", "JUTH, Jos", "KSSH, Lokoja",
+    "LASUTH, Ikeja, Lagos", "LAUTECH TH, Osogbo", "LAUTECH TH, Ogbomoso", "LUTH, Lagos",
+    "Maitama District Hopsital, Abuja", "MMS Hosp., Kano", "NAUTH, Nnewi", "NHA, Abuja, FCT",
+    "OAUTHC, Ile-Ife", "OOUTH, Sagamu", "OLA Catholic Hospital, Jos", "PSSH, Jos",
+    "Sacred Heart  Hospital, Lantoro", "SDA, Hosp, Ile-Ife", "St. Gerard's Cath Hosp, Kaduna",
+    "St. Mary's Catholic Hosp. Eleta, Ibadan", "St. Nicholas Hospital, Lagos",
+    "State Specialist Hosp, Sekonu", "UATH, FCT, Abuja", "UBTH, Benin City",
+    "UCH, Ibadan", "UCTH, Calabar", "UDUTH, Sokoto", "UITH, Ilorin",
+    "UNILAG Medical Centre, Lagos", "UNTH (Ituku-Ozalla) Enugu", "UPTH, Port Harcourt",
+    "UUTH, Uyo", "Blue Cross Hospital, Sierra Leone", "Liberia"
+  ].sort();
+
   constructor(private authService: AuthService) {}
 
   getExamItem$<Type extends Examiner | MembershipExamRecord | FellowshipExamRecord>(
@@ -77,7 +99,7 @@ export class ExamService {
   }
 
   queryToDocuments<Type>(data: Type[], collection: string) {
-    console.log("data => ", data);
+    console.log(collection, " collection: convert query to document => ", data);
     if (data.length) {
       this.cache[collection] = data;
     }
@@ -88,11 +110,10 @@ export class ExamService {
   queryItem$<Type>(collection: string, [where1, where2]: QueryFieldFilterConstraint[]):
   Observable<Type[]> {
     if (this.cache[collection] && this.cache[collection].length) {
-      console.log("Calling cache");
+      console.log("Calling cache => collection: ", collection);
       return of(this.cache[collection]) as Observable<Type[]>;
     } else {
       if (where2 === undefined) {
-        console.log("Single argument");
         return this.authService.queryCollections$<Type>(collection, where1).pipe(
           map(data => this.queryToDocuments(data, collection))
         )
