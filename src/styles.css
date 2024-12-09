@@ -145,7 +145,7 @@ label {
   margin-bottom: 6px;
 }
 
-input, .label-as-input {
+input, .label-as-input, select {
   width: 100%;
   display: block;
   padding: 16px 24px;
@@ -156,16 +156,16 @@ input, .label-as-input {
   transition: border 200ms ease-in;
 }
 
-input:hover, .label-as-input:hover {
+input:hover, .label-as-input:hover, select:hover {
   border-color: var(--wacpfm-accent-colour-orange);
 }
 
-input:valid {
+input:valid, select:valid {
   border-color: var(--wacpfm-primary-colour);
   border-left: 4px solid var(--wacpfm-accent-colour-correct);
 }
 
-input:invalid {
+input:invalid, select:invalid {
   border-left: 4px solid var(--wacpfm-accent-colour-red);
 }
 
