@@ -2,12 +2,12 @@
   <h1 class="wacpfm-heading-small">Enter Details Below</h1>
   <br><br>
   <label for="wacpfm-disertation-title">Title</label>
-  <input type="text" name="disertation-title" id="wacpfm-disertation-title" required [ngModel]="title" 
-  (ngModelChange)="titleEmitter.emit($event)" disabled>
+  <input type="text" name="disertation-title" id="wacpfm-disertation-title" required [ngModel]="writing.title" 
+  (ngModelChange)="titleEmitter.emit($event)">
   <br><br>
   <label for="wacpfm-disertation-subtitle">Description</label>
-  <input type="text" name="disertation-subtitle" id="wacpfm-disertation-subtitle" required [ngModel]="subtitle" 
-  (ngModelChange)="subtitleEmitter.emit($event)" disabled>
+  <input type="text" name="disertation-subtitle" id="wacpfm-disertation-subtitle" required [ngModel]="writing.description" 
+  (ngModelChange)="subtitleEmitter.emit($event)">
   <br><br>
-  <app-file-upload [files]="files.map(toFile)"></app-file-upload>
+  <app-file-upload [files]="writing.files.map(toFile)"></app-file-upload>
 </div>
