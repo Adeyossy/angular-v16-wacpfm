@@ -9,5 +9,5 @@
   <input type="text" name="disertation-subtitle" id="wacpfm-disertation-subtitle" required [ngModel]="writing.description" 
   (ngModelChange)="subtitleEmitter.emit($event)">
   <br><br>
-  <app-file-upload [files]="writing.files.map(toFile)"></app-file-upload>
+  <app-file-upload [files]="writing.files.map(toFilePlus)"></app-file-upload>
 </div>

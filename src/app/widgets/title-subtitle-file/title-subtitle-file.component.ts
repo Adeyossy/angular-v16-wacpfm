@@ -9,11 +9,12 @@ import { serverTimestamp } from 'firebase/firestore';
   styleUrls: ['./title-subtitle-file.component.css']
 })
 export class TitleSubtitleFileComponent {
-  @Input() writing: Writing = Object.assign({}, DEFAULT_WRITING)
+  @Input() writing: Writing = Object.assign({}, DEFAULT_WRITING);
+  @Output() writingEmitter = new EventEmitter<Writing>();
   @Output() titleEmitter = new EventEmitter<string>();
   @Output() subtitleEmitter = new EventEmitter<string>();
 
-  toFile = (file: Upload) => {
+  toFilePlus = (file: Upload) => {
     const newFile = new File([], "empty") as FilePlus;
     newFile.blobURL = "";
     newFile.cloudURL = file.url;
@@ -21,7 +22,7 @@ export class TitleSubtitleFileComponent {
   }
 
   /**
-   * Converts files in FilePlus format for storage as Upload object
+   * Converts files in FilePlus format for storage as Upload object, then emits it
    * @param filesPlus files from file-upload component
    * @returns void
    */
