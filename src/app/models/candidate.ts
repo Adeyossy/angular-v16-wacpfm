@@ -171,6 +171,7 @@ export interface AcademicWriting {
   examinerEmails: string[];
   gradesByExaminer: Grade[];
   title: string;
+  description?: string;
   files: Upload[];
   type: WritingType
 }
