@@ -4,13 +4,13 @@ import { environment } from "src/environments/environment";
 
 export const CANDIDATES = environment.candidates;
 
-interface Upload {
+export interface Upload {
   uploadDate: FieldValue;
   url: string;
   id: number; // Use the lastModified attribute of the file object as id?
   description: string;
   filetype: string;
-  type: string; // could be a casebook, dissertation or PMR
+  type: WritingType; // could be a casebook, dissertation or PMR
 }
 
 export const DEFAULT_UPLOAD: Upload = {
@@ -147,16 +147,20 @@ export interface DissertationGrade extends Grade {
   appendices: { title: "Appendices"; } & SubGrade;
 }
 
+export type WritingType = "casebook" | "PMR" | "dissertation" | "";
+
 export interface Writing {
   title: string,
   description?: string,
-  files: Upload[]
+  files: Upload[],
+  type: WritingType
 }
 
 export const DEFAULT_WRITING: Writing = {
   title: "",
   description: "",
-  files: [ Object.assign({}, DEFAULT_UPLOAD) ]
+  files: [ Object.assign({}, DEFAULT_UPLOAD) ],
+  type: ""
 }
 
 export interface AcademicWriting {
@@ -168,24 +172,24 @@ export interface AcademicWriting {
   gradesByExaminer: Grade[];
   title: string;
   files: Upload[];
-  type: "Dissertation" | "Casebook" | "PMR" | ""
+  type: WritingType
 }
 
 export interface Dissertation extends AcademicWriting {
   gradesByExaminer: DissertationGrade[];
   abstract: string;
 }
-const dissertation: Dissertation = {
+export const DISSERTATION: Dissertation = {
   abstract: "",
-  title: "",
-  gradesByExaminer: [],
+  title: "(click to edit)",
+  gradesByExaminer: [].slice(),
   candidateEmail: "",
   candidateId: "",
-  examinerEmails: [],
-  examinerIds: [],
+  examinerEmails: [].slice(),
+  examinerIds: [].slice(),
   wacpNo: "",
-  files: [],
-  type: "Dissertation"
+  files: [].slice(),
+  type: "dissertation"
 };
 
 export interface PMR extends AcademicWriting {
