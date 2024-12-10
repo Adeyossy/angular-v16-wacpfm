@@ -41,10 +41,10 @@ export class EditFellowshipComponent implements OnInit {
     return { title: upload.title, subtitle: upload.type, text: `${index}` }
   }
 
-  showWriting(writing: AcademicWriting) {
+  showWriting(writing: AcademicWriting, id: string) {
     this.helper.setComponentDialogData({
       course: Object.assign({}, DEFAULT_UPDATE_COURSE),
-      courseId: "writing",
+      courseId: id,
       lecture: Object.assign({}, DEFAULT_LECTURE),
       lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
@@ -54,7 +54,7 @@ export class EditFellowshipComponent implements OnInit {
 
   addDissertation(fellowship: FellowshipExamRecord) {
     fellowship.dissertation.push(Object.assign({}, DISSERTATION));
-    this.showWriting(fellowship.dissertation[fellowship.dissertation.length - 1]);
+    this.showWriting(fellowship.dissertation[fellowship.dissertation.length - 1], fellowship.candidateId);
 
     this.helper.toggleDialog(1);
   }
