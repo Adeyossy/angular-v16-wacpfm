@@ -124,7 +124,7 @@
     </div>
   </div> -->
   <div *ngIf="updateTracker$ === null; else update">
-    <button class="wacpfm-primary-button" (click)="update$()">Submit</button>
+    <button class="wacpfm-primary-button" (click)="update$(candidate)">Submit</button>
   </div>
   <ng-template #update>
     <div *ngIf="updateTracker$ | async as tracker; else loading">

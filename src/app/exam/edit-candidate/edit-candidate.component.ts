@@ -128,7 +128,7 @@ export class EditCandidateComponent implements OnInit {
     )
   }
 
-  update$() {
+  update$(candidate: Candidate) {
     // this.updateTracker$ = this.candidate$.pipe(
     //   concatMap(candidate => this.authService.addDocWithID$(CANDIDATES, candidate.userId, 
     //     candidate, true)),
@@ -136,22 +136,23 @@ export class EditCandidateComponent implements OnInit {
     //   catchError(_err => of(false))
     // );
 
-    this.updateTracker$ = this.candidate$.pipe(
-      concatMap(candidate => this.authService.batchWriteDocs$([
-        {
-          path: `${CANDIDATES}/${candidate.candidateId}`, data: candidate, type: "set"
+    this.updateTracker$ = this.authService.batchWriteDocs$([
+      {
+        path: `${CANDIDATES}/${candidate.candidateId.concat(candidate.examAlias)}`, 
+        data: candidate, 
+        type: "set"
+      },
+      {
+        path: `${EXAMS}/${candidate.examAlias}`,
+        data: {
+          [candidate.category]: {
+            candidates: arrayUnion(candidate.candidateId)
+          }
         },
-        {
-          path: `${EXAMS}/${candidate.examAlias}`,
-          data: {
-            [candidate.category]: {
-              candidates: arrayUnion(candidate.candidateId)
-            }
-          },
-          type: "update"
-        }
-      ])),
-      concatMap(res => res !== "" ? this.router.navigate(['upload'], {relativeTo: this.activeRoute}) : of(false)),
+        type: "update"
+      }
+    ]).pipe(
+      concatMap(res => res !== "" ? this.router.navigate(['upload'], { relativeTo: this.activeRoute }) : of(false)),
       catchError(err => {
         console.log("error => ", err);
         this.updateTracker$ = null;
