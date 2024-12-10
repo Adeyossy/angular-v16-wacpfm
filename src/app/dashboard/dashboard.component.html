@@ -20,7 +20,8 @@
           <app-resource-person *ngIf="helper.data.lecturer.updateCourseId === helper.data.courseId"
             [resourcePerson]="helper.data.lecturer"></app-resource-person>
           <app-title-subtitle-file *ngIf="helper.data.writing.title" [title]="helper.data.writing.title"
-          [subtitle]="helper.data.writing.description" [files]="helper.data.writing.files"></app-title-subtitle-file>
+          [subtitle]="helper.data.writing.description" [files]="helper.data.writing.files"
+          [context]="helper.data.writing.type"></app-title-subtitle-file>
         </app-component-overlay>
       </div>
       <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown === 0">
