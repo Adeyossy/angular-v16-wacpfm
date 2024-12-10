@@ -113,6 +113,17 @@ export class HelperService {
     this.data = data;
   }
 
+  resetComponentDialogData() {
+    this.data = {
+      courseId: "",
+      lecture: Object.assign({}, DEFAULT_LECTURE),
+      payment: Object.assign({}, DEFAULT_COURSE_RECORD),
+      course: Object.assign({}, DEFAULT_UPDATE_COURSE),
+      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
+      writing: Object.assign({}, DEFAULT_WRITING)
+    };
+  }
+
   sortCourseType(record1: UpdateCourseRecord, record2: UpdateCourseRecord) {
     if(record1.courseType === "Membership") return -1;
     if(record2.courseType === "Membership") return 1;
