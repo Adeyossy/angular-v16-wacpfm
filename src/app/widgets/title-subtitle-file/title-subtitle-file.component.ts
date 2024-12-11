@@ -25,6 +25,14 @@ export class TitleSubtitleFileComponent {
     return newFile;
   }
 
+  setTitle(title: string) {
+    this.writing[0][this.writing[1]].title = title;
+  }
+
+  setDescription(description: string) {
+    this.writing[0][this.writing[1]].description = description;
+  }
+
   /**
    * Converts files in FilePlus format for storage as Upload object as part of an AcademicWriting
    * @param filesPlus files from file-upload component
@@ -48,6 +56,7 @@ export class TitleSubtitleFileComponent {
 
   cancel() {
     this.helper.resetComponentDialogData();
+    this.helper.toggleDialog(-1);
   }
 
   parseWriting() {
@@ -62,7 +71,7 @@ export class TitleSubtitleFileComponent {
     // Update the appropriate firestore document
     const writing = this.parseWriting();
     this.authService.addDocWithID$(CANDIDATES, this.helper.data.courseId, {
-      [writing.type.toLowerCase()]: []
+      [writing.type.toLowerCase()]: this.writing[0]
     }, true)
   }
 }

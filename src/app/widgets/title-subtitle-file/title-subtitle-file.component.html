@@ -3,11 +3,11 @@
   <br><br>
   <label for="wacpfm-disertation-title">Title</label>
   <input type="text" name="disertation-title" id="wacpfm-disertation-title" required 
-  [ngModel]="parseWriting().title" (ngModelChange)="titleEmitter.emit($event)">
+  [ngModel]="parseWriting().title" (ngModelChange)="setTitle($event)">
   <br><br>
   <label for="wacpfm-disertation-subtitle">Description</label>
   <input type="text" name="disertation-subtitle" id="wacpfm-disertation-subtitle" required 
-  [ngModel]="parseWriting().description" (ngModelChange)="subtitleEmitter.emit($event)">
+  [ngModel]="parseWriting().description" (ngModelChange)="setDescription($event)">
   <br><br>
   <app-file-upload [files]="parseWriting().files.map(toFilePlus)"></app-file-upload>
 </div>
