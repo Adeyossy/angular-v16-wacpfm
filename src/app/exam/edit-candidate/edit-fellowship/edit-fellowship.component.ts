@@ -48,7 +48,7 @@ export class EditFellowshipComponent implements OnInit {
       lecture: Object.assign({}, DEFAULT_LECTURE),
       lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
-      writing: writing
+      writing: [[], -1]
     });
   }
 

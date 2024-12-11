@@ -27,7 +27,7 @@ export class ComponentOverlayComponent extends OverlayComponent {
         payment: Object.assign({}, DEFAULT_COURSE_RECORD),
         course: this.helper.data.course,
         lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-        writing: Object.assign({}, DEFAULT_WRITING)
+        writing: [[], -1]
       }
     );
     this.helper.toggleDialog(-1);

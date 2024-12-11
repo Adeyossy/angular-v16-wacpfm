@@ -3,7 +3,7 @@ import { UpdateCourseLectureComponent } from '../update-course/update-course-lec
 import { DEFAULT_LECTURE, DEFAULT_UPDATE_COURSE, UpdateCourse, UpdateCourseLecture } from '../models/update_course';
 import { DEFAULT_COURSE_RECORD, UpdateCourseRecord } from '../models/update_course_record';
 import { DEFAULT_RESOURCE_PERSON, ResourcePerson } from '../models/user';
-import { DEFAULT_WRITING, Writing } from '../models/candidate';
+import { AcademicWriting, DEFAULT_ACADEMIC_WRITING, DEFAULT_WRITING, Writing } from '../models/candidate';
 
 export interface ComponentDialogInfo {
   type: string,
@@ -17,7 +17,7 @@ export interface ComponentDialogData {
   payment: UpdateCourseRecord,
   course: UpdateCourse,
   lecturer: ResourcePerson,
-  writing: Writing
+  writing: [AcademicWriting[], number]
 }
 
 @Injectable({
@@ -35,7 +35,7 @@ export class HelperService {
     payment: Object.assign({}, DEFAULT_COURSE_RECORD),
     course: Object.assign({}, DEFAULT_UPDATE_COURSE),
     lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-    writing: Object.assign({}, DEFAULT_WRITING)
+    writing: [[], -1]
   }
 
   dialog = {
@@ -120,7 +120,7 @@ export class HelperService {
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
       course: Object.assign({}, DEFAULT_UPDATE_COURSE),
       lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-      writing: Object.assign({}, DEFAULT_WRITING)
+      writing: [[], -1]
     };
   }
 

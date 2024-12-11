@@ -215,7 +215,7 @@ export class AdminComponent implements OnInit {
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
       course: this.helper.data.course,
       lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-      writing: Object.assign({}, DEFAULT_WRITING)
+      writing: [[], -1]
     });
 
     this.helper.toggleDialog(1);
@@ -229,7 +229,7 @@ export class AdminComponent implements OnInit {
       payment: record,
       course: this.currentCourse!,
       lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-      writing: Object.assign({}, DEFAULT_WRITING)
+      writing: [[], -1]
     });
 
     this.helper.toggleDialog(1);
@@ -242,7 +242,7 @@ export class AdminComponent implements OnInit {
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
       course: this.currentCourse!,
       lecturer: resourcePerson,
-      writing: Object.assign({}, DEFAULT_WRITING)
+      writing: [[], -1]
     });
 
     this.helper.toggleDialog(1);
