@@ -176,10 +176,24 @@ export interface AcademicWriting {
   type: WritingType
 }
 
+export const DEFAULT_ACADEMIC_WRITING: AcademicWriting = {
+  title: "(click to edit)",
+  description: "",
+  gradesByExaminer: [].slice(),
+  candidateEmail: "",
+  candidateId: "",
+  examinerEmails: [].slice(),
+  examinerIds: [].slice(),
+  wacpNo: "",
+  files: [].slice(),
+  type: "dissertation"
+};
+
 export interface Dissertation extends AcademicWriting {
   gradesByExaminer: DissertationGrade[];
   abstract: string;
 }
+
 export const DISSERTATION: Dissertation = {
   abstract: "",
   title: "(click to edit)",
