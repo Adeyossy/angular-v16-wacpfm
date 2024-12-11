@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, 
 import { map, NEVER, Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
-interface FilePlus extends File {
+export interface FilePlus extends File {
   blobURL: string;
   cloudURL: string;
 }
@@ -21,8 +21,8 @@ export class FileUploadComponent implements OnInit {
   @Input() files: FilePlus[] = [];
   @Output() fileEmitter = new EventEmitter<FilePlus>();
   @Output() createEmitter = new EventEmitter<FilePlus>();
-  @Output() deleteEmitter = new EventEmitter<FilePlus>();
-  @Output() linkEmitter = new EventEmitter<string>();
+  @Output() updateEmitter = new EventEmitter<[FilePlus, number]>();
+  @Output() deleteEmitter = new EventEmitter<number>();
   uploadState$: Observable<number> = NEVER;
   uploadStates: Observable<number>[] = [];
   deleteState$: Observable<boolean> | null = null;
@@ -45,16 +45,17 @@ export class FileUploadComponent implements OnInit {
   }
 
   insertNewFile() {
-    this.files.unshift(this.createNewFile());
+    // this.files.unshift(this.createNewFile());
+    this.createEmitter.emit(this.createNewFile());
   }
 
-  deleteFromApp(filePlus: FilePlus) {
-    this.deleteEmitter.emit(filePlus);
+  deleteFromApp(index: number) {
+    this.deleteEmitter.emit(index);
   }
 
-  deleteFromCloud$(filePlus: FilePlus) {
+  deleteFromCloud$(filePlus: FilePlus, index: number) {
     this.authService.deleteFile$(filePlus.cloudURL).pipe(
-      map(_v => { this.deleteFromApp(filePlus) })
+      map(_v => { this.deleteFromApp(index) })
     )
   }
 
@@ -87,7 +88,7 @@ export class FileUploadComponent implements OnInit {
           blobURL: URL.createObjectURL(file),
           cloudURL: ""
         };
-        this.createEmitter.emit(filePlus);
+        // this.createEmitter.emit(filePlus);
         console.log("file.name => ", file.name);
         console.log("filePlus.name => ", filePlus.name);
         this.files = this.files.map((f, i) => index === i ? file : f);
@@ -101,7 +102,7 @@ export class FileUploadComponent implements OnInit {
         if (isNaN(parseFloat(output))) {
           console.log("url? => ", output);
           file.cloudURL = output;
-          this.linkEmitter.emit(output);
+          this.updateEmitter.emit([file, index]);
           this.uploadStates[index] = NEVER;
           return 100;
         } else {

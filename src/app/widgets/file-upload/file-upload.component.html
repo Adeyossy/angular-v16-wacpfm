@@ -34,7 +34,7 @@
               (click)="upload(file, i)">
                 <i class="bi bi-cloud-arrow-up"></i>
               </label>
-              <label class="icon wacpfm-subheading bg-danger" *ngIf="file.cloudURL" (click)="deleteFromCloud$(file)">
+              <label class="icon wacpfm-subheading bg-danger" *ngIf="file.cloudURL" (click)="deleteFromCloud$(file, i)">
                 <span><i class="bi bi-trash3 text-white"></i></span>
               </label>
             </div>
