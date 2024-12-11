@@ -19,7 +19,7 @@
             [record]="helper.data.payment" [updateCourse]="this.helper.data.course"></app-payment-viewer>
           <app-resource-person *ngIf="helper.data.lecturer.updateCourseId === helper.data.courseId"
             [resourcePerson]="helper.data.lecturer"></app-resource-person>
-          <app-title-subtitle-file *ngIf="helper.data.writing.title" [writing]="helper.data.writing"
+          <app-title-subtitle-file *ngIf="helper.data.writing[1] >= 0" [writing]="helper.data.writing"
           ></app-title-subtitle-file>
         </app-component-overlay>
       </div>
