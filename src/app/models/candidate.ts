@@ -99,7 +99,7 @@ export interface MembershipExamRecord extends Candidate {
   osce: Subexam;
   logbook: Subexam;
   orals: Subexam;
-  pmr: Subexam;
+  pmrs: AcademicWriting[];
   isTheoryBanked: boolean;
 }
 
