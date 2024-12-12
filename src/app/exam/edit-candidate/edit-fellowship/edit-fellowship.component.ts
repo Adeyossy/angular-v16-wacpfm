@@ -48,14 +48,14 @@ export class EditFellowshipComponent implements OnInit {
       lecture: Object.assign({}, DEFAULT_LECTURE),
       lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
-      writing: [fellowship.dissertation, index]
+      writing: [fellowship.dissertations, index]
     });
 
     this.helper.toggleDialog(1);
   }
 
   addDissertation(fellowship: FellowshipExamRecord) {
-    fellowship.dissertation.push(Object.assign({}, DISSERTATION));
-    this.showWriting(fellowship, fellowship.dissertation.length - 1);
+    fellowship.dissertations.push(Object.assign({}, DISSERTATION));
+    this.showWriting(fellowship, fellowship.dissertations.length - 1);
   }
 }

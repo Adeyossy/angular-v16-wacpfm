@@ -8,8 +8,8 @@
     <h1 class="wacpfm-heading-small mb-2">Dissertation</h1>
     <button class="icon small" (click)="addDissertation(fellowship)"><i class="bi bi-plus-circle"></i> Add Dissertation</button>
     <br><hr><br>
-    <app-card-list *ngFor="let diss of fellowship.dissertation.map(toCardList); index as i" 
-    [item]="diss" [index]="i" [control]="fellowship.dissertation[i].files.length > 0"
+    <app-card-list *ngFor="let diss of fellowship.dissertations.map(toCardList); index as i" 
+    [item]="diss" [index]="i" [control]="fellowship.dissertations[i].files.length > 0"
     (click)="showWriting(fellowship, i)"></app-card-list>
   </div>
   <br><br>

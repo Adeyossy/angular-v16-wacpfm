@@ -105,8 +105,8 @@ export interface MembershipExamRecord extends Candidate {
 
 export interface FellowshipExamRecord extends Candidate {
   candidateId: string;
-  dissertation: Dissertation[];
-  casebooks: AcademicWriting[];
+  dissertations: Dissertation[];
+  casebooks: AcademicWriting[]; // Will be used for PMRs in the new curriculum
   defense: any;
   previousDissertations: number;
   previousPMRs: number;
@@ -114,7 +114,7 @@ export interface FellowshipExamRecord extends Candidate {
 
 export const NEW_FELLOWSHIP_CANDIDATE: FellowshipExamRecord = {
   ...(Object.assign({}, NEW_CANDIDATE)),
-  dissertation: [],
+  dissertations: [],
   casebooks: [],
   defense: null,
   examNo: "",
@@ -147,7 +147,7 @@ export interface DissertationGrade extends Grade {
   appendices: { title: "Appendices"; } & SubGrade;
 }
 
-export type WritingType = "casebook" | "PMR" | "dissertation" | "";
+export type WritingType = "casebooks" | "pmrs" | "dissertation" | "";
 
 export interface Writing {
   title: string,
