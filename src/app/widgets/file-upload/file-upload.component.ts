@@ -88,7 +88,7 @@ export class FileUploadComponent implements OnInit {
           blobURL: URL.createObjectURL(file),
           cloudURL: ""
         };
-        // this.createEmitter.emit(filePlus);
+        this.updateEmitter.emit([filePlus, index]);
         console.log("file.name => ", file.name);
         console.log("filePlus.name => ", filePlus.name);
         this.files = this.files.map((f, i) => index === i ? file : f);
