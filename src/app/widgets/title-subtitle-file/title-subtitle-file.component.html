@@ -2,28 +2,35 @@
   <h1 class="wacpfm-heading-small">Enter Details Below</h1>
   <br><br>
   <label for="wacpfm-disertation-title">Title</label>
-  <input type="text" name="disertation-title" id="wacpfm-disertation-title" required 
-  [ngModel]="parseWriting().title" (ngModelChange)="setTitle($event)">
+  <input type="text" name="disertation-title" id="wacpfm-disertation-title" required [ngModel]="parseWriting().title"
+    (ngModelChange)="setTitle($event)">
   <br><br>
   <label for="wacpfm-disertation-subtitle">Description</label>
-  <input type="text" name="disertation-subtitle" id="wacpfm-disertation-subtitle" required 
-  [ngModel]="parseWriting().description" (ngModelChange)="setDescription($event)">
+  <input type="text" name="disertation-subtitle" id="wacpfm-disertation-subtitle" required
+    [ngModel]="parseWriting().description" (ngModelChange)="setDescription($event)">
   <br><br>
-  <app-file-upload [files]="parseWriting().files.map(toFilePlus)"></app-file-upload>
+  <app-file-upload [files]="filesPlus" (createEmitter)="createFilePlus()"
+    (deleteEmitter)="deleteFilePlus($event)" (updateEmitter)="updateFilePlus($event)"></app-file-upload>
 </div>
-<ng-template #buttons>
-  <div class="container-fluid p-0">
-    <div class="row">
-      <div class="col-6">
-        <button class="bg-danger text-white border-danger" (click)="cancel()" [disabled]="false">
-          <i class="bi bi-x-circle"></i> Cancel
-        </button>
-      </div>
-      <div class="col-6">
-        <button class="wacpfm-primary-button" (click)="update()" [disabled]="false">
-          <i class="bi bi-check-circle"></i> Update
-        </button>
-      </div>
+<div class="container-fluid p-0" *ngIf="updateWriting$ === null; else updateBlock">
+  <div class="row">
+    <div class="col-6">
+      <button class="bg-danger text-white border-danger" (click)="cancel()" [disabled]="false">
+        <i class="bi bi-x-circle"></i> Cancel
+      </button>
+    </div>
+    <div class="col-6">
+      <button class="wacpfm-primary-button" (click)="update()" 
+      [disabled]="false">
+        <i class="bi bi-check-circle"></i> Update
+      </button>
     </div>
   </div>
+</div>
+<ng-template #updateBlock>
+  <button *ngIf="updateWriting$ | async as updateDone; else loadingCircles" 
+  class="wacpfm-primary-button">Done</button>
+  <ng-template #loadingCircles>
+    <app-loading-circles></app-loading-circles>
+  </ng-template>
 </ng-template>
