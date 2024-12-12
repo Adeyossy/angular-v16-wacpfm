@@ -41,7 +41,6 @@ export interface Candidate {
   dateOfRegistration: FieldValue;
   category: string; /** exam category: either membership or fellowship */
   curriculum: string;
-  presenceInTrainingCentre: string; // Yes or No
   nameOfTrainingCentre: string;
   previousAttemptsDetails: PreviousAttempt[];
   physicalHandicap: string;
@@ -65,7 +64,6 @@ export const NEW_CANDIDATE: Candidate = {
   dateOfRegistration: serverTimestamp(),
   category: "",
   curriculum: "",
-  presenceInTrainingCentre: "",
   nameOfTrainingCentre: "",
   previousAttemptsDetails: [],
   physicalHandicap: "",
@@ -99,7 +97,7 @@ export interface MembershipExamRecord extends Candidate {
   osce: Subexam;
   logbook: Subexam;
   orals: Subexam;
-  pmrs: AcademicWriting[];
+  pmrs: AcademicWriting[]; // if curriculum is new
   isTheoryBanked: boolean;
 }
 
@@ -107,7 +105,7 @@ export interface FellowshipExamRecord extends Candidate {
   candidateId: string;
   dissertations: Dissertation[];
   casebooks: AcademicWriting[]; // Will be used for PMRs in the new curriculum
-  defense: any;
+  defense: any; // Will be used in new curriculum?
   previousDissertations: number;
   previousPMRs: number;
 }
