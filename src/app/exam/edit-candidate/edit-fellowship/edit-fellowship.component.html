@@ -10,7 +10,7 @@
     <br><hr><br>
     <app-card-list *ngFor="let diss of fellowship.dissertation.map(toCardList); index as i" 
     [item]="diss" [index]="i" [control]="fellowship.dissertation[i].files.length > 0"
-    (click)="showWriting(fellowship.dissertation, fellowship.candidateId, i)"></app-card-list>
+    (click)="showWriting(fellowship, i)"></app-card-list>
   </div>
   <br><br>
   <div class="wacpfm-card">
@@ -19,7 +19,7 @@
     <br><hr><br>
     <app-card-list *ngFor="let book of fellowship.casebooks.map(toCardList); index as i" 
     [item]="book" [index]="i" [control]="fellowship.casebooks[i].files.length > 0"
-    (click)="showWriting(fellowship.casebooks, fellowship.candidateId, i)"></app-card-list>
+    (click)="showWriting(fellowship, i)"></app-card-list>
   </div>
 </div>
 <ng-template #fetching>

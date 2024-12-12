@@ -138,7 +138,7 @@ export class EditCandidateComponent implements OnInit {
 
     this.updateTracker$ = this.authService.batchWriteDocs$([
       {
-        path: `${CANDIDATES}/${candidate.candidateId.concat(candidate.examAlias)}`, 
+        path: `${CANDIDATES}/${this.examService.parseCandidateExamId(candidate)}`, 
         data: candidate, 
         type: "set"
       },
