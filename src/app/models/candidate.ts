@@ -5,7 +5,7 @@ import { environment } from "src/environments/environment";
 export const CANDIDATES = environment.candidates;
 
 export interface Upload {
-  uploadDate: FieldValue;
+  uploadDate: number;
   url: string;
   id: number; // Use the lastModified attribute of the file object as id?
   description: string;
@@ -14,7 +14,7 @@ export interface Upload {
 }
 
 export const DEFAULT_UPLOAD: Upload = {
-  uploadDate: serverTimestamp(),
+  uploadDate: Date.now(),
   url: "",
   id: 0,
   description: "",
@@ -78,7 +78,7 @@ export const NEW_CANDIDATE: Candidate = {
     description: "",
     filetype: "",
     id: 0,
-    uploadDate: serverTimestamp(),
+    uploadDate: Date.now(),
     url: "",
     type: ""
   },
