@@ -4,7 +4,7 @@ import { EXAMINERS } from '../models/exam';
 import { Examiner } from "../models/examiner";
 import { map, Observable, of } from 'rxjs';
 import { QueryFieldFilterConstraint } from 'firebase/firestore';
-import { FellowshipExamRecord, MembershipExamRecord } from '../models/candidate';
+import { Candidate, FellowshipExamRecord, MembershipExamRecord } from '../models/candidate';
 
 type Cache = {
   [collection: string]: unknown[];
@@ -126,5 +126,9 @@ export class ExamService {
   getExaminer$<Type>() {
     if (this.cache[EXAMINERS]) return of(this.cache[EXAMINERS]) as Observable<Type>;
     return this.authService.getDocByUserId$<Type>(EXAMINERS);
+  }
+
+  parseCandidateExamId(candidate: Candidate) {
+    return candidate.candidateId.concat("_", candidate.examAlias);
   }
 }
