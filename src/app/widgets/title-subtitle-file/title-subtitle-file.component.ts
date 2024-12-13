@@ -5,6 +5,7 @@ import { serverTimestamp } from 'firebase/firestore';
 import { HelperService } from 'src/app/services/helper.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { catchError, map, Observable, of } from 'rxjs';
+import { EXAMS } from 'src/app/models/exam';
 
 @Component({
   selector: 'app-title-subtitle-file',
@@ -13,23 +14,15 @@ import { catchError, map, Observable, of } from 'rxjs';
 })
 export class TitleSubtitleFileComponent implements OnInit {
   @Input() writing: [AcademicWriting[], number] = [[], -1];
+  path = "";
   filesPlus: FilePlus[] = [];
-  @Output() writingEmitter = new EventEmitter<Writing>();
-  @Output() titleEmitter = new EventEmitter<string>();
-  @Output() subtitleEmitter = new EventEmitter<string>();
   updateWriting$: Observable<boolean> | null = null;
 
   constructor(private helper: HelperService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.filesPlus = this.parseWriting().files.map(this.toFilePlus);
-  }
-
-  toFilePlus = (upload: Upload) => {
-    const newFile = new File([], "empty") as FilePlus;
-    newFile.blobURL = "";
-    newFile.cloudURL = upload.url;
-    return newFile;
+    const writing = this.parseWriting();
+    this.path = `${EXAMS}/${writing.examAlias}/${writing.candidateId}`
   }
 
   setTitle(title: string) {
@@ -40,55 +33,8 @@ export class TitleSubtitleFileComponent implements OnInit {
     this.writing[0][this.writing[1]].description = description;
   }
 
-  createFilePlus() {
-    const obj: Upload = JSON.parse(JSON.stringify(DEFAULT_UPLOAD));
-    this.filesPlus.unshift(this.toFilePlus(obj));
-  }
-
-  createUpload() {
-    const obj: Upload = JSON.parse(JSON.stringify(DEFAULT_UPLOAD));
-    this.writing[0][this.writing[1]].files.push(obj);
-    // this.filesPlus.unshift(this.toFilePlus(obj));
-  }
-
-  updateFilePlus([filePlus, index]: [FilePlus, number]) {
-    this.filesPlus[index] = filePlus;
-  }
-
-  updateUpload([filePlus, index]: [FilePlus, number]) {
-    this.writing[0][this.writing[1]].files[index] = this.filePlusToUpload(filePlus);
-
-  }
-
-  deleteFilePlus(index: number) {
-    this.filesPlus.splice(index, 1);
-  }
-
-  deleteUpload(index: number) {
-    this.writing[0][this.writing[1]].files.splice(index, 1);
-  }
-
-  filePlusToUpload = (filePlus: FilePlus) => {
-    const [writings, index] = this.writing;
-    const writing = writings[index];
-    const upload: Upload = {
-      description: filePlus.name,
-      filetype: filePlus.type,
-      id: filePlus.lastModified,
-      type: writing.type,
-      uploadDate: Date.now(),
-      url: filePlus.cloudURL
-    }
-    return upload;
-  }
-
-  /**
-   * Converts files in FilePlus format for storage as Upload object as part of an AcademicWriting
-   * @param filesPlus files from file-upload component
-   * @returns void
-   */
-  filesPlusToUploads(filesPlus: FilePlus[]) {
-    this.writing[0][this.writing[1]].files = filesPlus.map(this.filePlusToUpload);
+  updateUploads(uploads: Upload[]) {
+    this.writing[0][this.writing[1]].files = uploads;
   }
 
   cancel() {
@@ -106,7 +52,7 @@ export class TitleSubtitleFileComponent implements OnInit {
    */
   update() {
     // Update the appropriate firestore document
-    this.filesPlusToUploads(this.filesPlus);
+    // this.filesPlusToUploads(this.filesPlus);
     const writing = this.parseWriting();
     this.updateWriting$ = this.authService.addDocWithID$(CANDIDATES, this.helper.data.courseId, {
       [writing.type.toLowerCase()]: this.writing[0]

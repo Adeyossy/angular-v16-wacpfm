@@ -9,8 +9,8 @@
   <input type="text" name="disertation-subtitle" id="wacpfm-disertation-subtitle" required
     [ngModel]="parseWriting().description" (ngModelChange)="setDescription($event)">
   <br><br>
-  <app-file-upload [files]="filesPlus" (createEmitter)="createFilePlus()"
-    (deleteEmitter)="deleteFilePlus($event)" (updateEmitter)="updateFilePlus($event)"></app-file-upload>
+  <app-file-upload [uploads]="parseWriting().files" (uploadsEmitter)="updateUploads($event)"
+  [path]="path"></app-file-upload>
 </div>
 <div class="container-fluid p-0" *ngIf="updateWriting$ === null; else updateBlock">
   <div class="row">

@@ -7,17 +7,19 @@
       </div>
     </div>
     <div class="col-md-6 col-lg-4 wacpfm-match-height p-3" *ngFor="let file of files; index as i">
-      <div class="wacpfm-card position-relative">
+      <div class="wacpfm-card wacpfm-card-2 position-relative">
         <div #animate class="wacpfm-upload-animator" style="height: 0%;"></div>
-        <p class="position-relative">
-          <span *ngIf="file.blobURL.trim() === ''; else filename" class="opacity-50">
+        <p class="position-relative mb-0">
+          <span *ngIf="file.blobURL.trim() === '' && file.cloudURL.trim() === ''; else filename" class="opacity-50">
             Click the <i class="bi bi-folder2-open"></i> icon below to choose a file.
           </span>
           <ng-template #filename>
-            <span>{{ file.name }}</span>
+            <span *ngIf="file.name">{{ file.name }} </span>
             <span *ngIf="uploadStates[i] | async as progress"> ({{ progress }}%)</span>
+            <i *ngIf="file.cloudURL" class="bi bi-check-circle-fill text-success"></i>
             <br><br>
-            <p class="wacpfm-smaller-text opacity-50">Click the <i class="bi bi-cloud-arrow-up"></i> icon to upload. </p>
+            <p *ngIf="file.blobURL && file.cloudURL.trim() === ''" class="wacpfm-smaller-text opacity-50"
+            >Click the <i class="bi bi-cloud-arrow-up text-primary"></i> icon to upload. </p>
           </ng-template>
         </p>
         <div class="container-fluid p-0">
@@ -30,9 +32,9 @@
               </label>
             </div>
             <div class="col-4" *ngIf="file.blobURL || file.cloudURL">
-              <label class="icon wacpfm-subheading" *ngIf="file.blobURL && !file.cloudURL"
+              <label class="icon wacpfm-subheading bg-primary" *ngIf="file.blobURL && !file.cloudURL"
               (click)="upload(file, i)">
-                <i class="bi bi-cloud-arrow-up"></i>
+                <i class="bi bi-cloud-arrow-up text-white"></i>
               </label>
               <label class="icon wacpfm-subheading bg-danger" *ngIf="file.cloudURL" (click)="deleteFromCloud$(file, i)">
                 <span><i class="bi bi-trash3 text-white"></i></span>

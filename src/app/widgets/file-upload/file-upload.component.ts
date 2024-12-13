@@ -1,10 +1,13 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { map, NEVER, Observable } from 'rxjs';
+import { Upload, WritingType } from 'src/app/models/candidate';
+import { EXAMS } from 'src/app/models/exam';
 import { AuthService } from 'src/app/services/auth.service';
 
 export interface FilePlus extends File {
   blobURL: string;
   cloudURL: string;
+  uploadType: WritingType;
 }
 
 @Component({
@@ -14,15 +17,18 @@ export interface FilePlus extends File {
 })
 export class FileUploadComponent implements OnInit {
   @Input() formats = "";
-  @Input() path = "test";
+  @Input() context: WritingType = "";
+  @Input() path = EXAMS;
   @ViewChild('file') uploadFile: ElementRef = new ElementRef('input');
   @ViewChildren('file') uploadFiles!: QueryList<ElementRef>;
   @ViewChildren('animate') animators!: QueryList<ElementRef>;
   @Input() files: FilePlus[] = [];
+  @Input() uploads: Upload[] = [];
   @Output() fileEmitter = new EventEmitter<FilePlus>();
   @Output() createEmitter = new EventEmitter<FilePlus>();
   @Output() updateEmitter = new EventEmitter<[FilePlus, number]>();
   @Output() deleteEmitter = new EventEmitter<number>();
+  @Output() uploadsEmitter = new EventEmitter<Upload[]>();
   uploadState$: Observable<number> = NEVER;
   uploadStates: Observable<number>[] = [];
   deleteState$: Observable<boolean> | null = null;
@@ -30,27 +36,32 @@ export class FileUploadComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    // if (this.files.length === 0) {
-    //   this.files = [ this.createNewFile() ];
-    // }
+    this.files = this.uploads.map(this.toFilePlus);
   }
 
-  createNewFile() {
-    const file = new File([], "");
-    return {
-      ...file,
-      blobURL: "",
-      cloudURL: ""
-    }
+  createNewFile = () => this.toFilePlus();
+
+  toFilePlus = (upload?: Upload) => {
+    const newFile = new File([], upload ? upload.description : "", {
+      lastModified: upload ? upload.id : 0,
+      type: upload ? upload.filetype : ""
+    }) as FilePlus;
+    
+    newFile.blobURL = "";
+    newFile.cloudURL = upload ? upload.url : "";
+    newFile.uploadType = this.context;
+    return newFile;
+  
   }
 
   insertNewFile() {
-    // this.files.unshift(this.createNewFile());
-    this.createEmitter.emit(this.createNewFile());
+    this.files.push(this.createNewFile());
   }
 
   deleteFromApp(index: number) {
-    this.deleteEmitter.emit(index);
+    this.files.splice(index, 1);
+    // this.deleteEmitter.emit(index);
+    // this.uploadsEmitter.emit(this.files.map(this.filePlusToUpload))
   }
 
   deleteFromCloud$(filePlus: FilePlus, index: number) {
@@ -66,7 +77,8 @@ export class FileUploadComponent implements OnInit {
       const filePlus: FilePlus = {
         ...file,
         blobURL: URL.createObjectURL(file),
-        cloudURL: ""
+        cloudURL: "",
+        uploadType: ""
       };
       this.createEmitter.emit(filePlus);
     }
@@ -83,17 +95,33 @@ export class FileUploadComponent implements OnInit {
         const file = fileElement.files[0] as FilePlus;
         file.blobURL = URL.createObjectURL(file);
         file.cloudURL = "";
-        const filePlus: FilePlus = {
-          ...file,
-          blobURL: URL.createObjectURL(file),
-          cloudURL: ""
-        };
-        this.updateEmitter.emit([filePlus, index]);
+        file.uploadType = this.context;
         console.log("file.name => ", file.name);
-        console.log("filePlus.name => ", filePlus.name);
         this.files = this.files.map((f, i) => index === i ? file : f);
+        this.updateEmitter.emit([file, index]);
       }
     }
+  }
+
+  filePlusToUpload = (filePlus: FilePlus) => {
+    const upload: Upload = {
+      description: filePlus.name,
+      filetype: filePlus.type,
+      id: filePlus.lastModified,
+      type: filePlus.uploadType,
+      uploadDate: Date.now(),
+      url: filePlus.cloudURL
+    }
+    return upload;
+  }
+
+  /**
+   * Converts files in FilePlus format for storage as Upload object as part of an AcademicWriting
+   * @param filesPlus files from file-upload component
+   * @returns void
+   */
+  filesPlusToUploads(filesPlus: FilePlus[]) {
+    return filesPlus.map(this.filePlusToUpload);
   }
 
   getUploader$(file: FilePlus, index: number) {
@@ -102,7 +130,8 @@ export class FileUploadComponent implements OnInit {
         if (isNaN(parseFloat(output))) {
           console.log("url? => ", output);
           file.cloudURL = output;
-          this.updateEmitter.emit([file, index]);
+          // this.updateEmitter.emit([file, index]);
+          this.uploadsEmitter.emit(this.files.map(this.filePlusToUpload));
           this.uploadStates[index] = NEVER;
           return 100;
         } else {
