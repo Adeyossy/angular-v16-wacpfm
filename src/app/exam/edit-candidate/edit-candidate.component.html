@@ -48,6 +48,10 @@
     [selected]="candidate.nameOfTrainingCentre === centre">{{ centre }}</option>
   </select>
   <br><br>
+  <label for="wacpfm-candidate-centre">Choose exam centre</label>
+  <app-select (emitItems)="candidate.examCentre = $event[0]" mode="single" [items]="examService.examVenues"
+  [itemsSelectionState]="toSelectionState(examService.examVenues, candidate.examCentre)"></app-select>
+  <br><br>
   <label for="wacpfm-candidate-previous-attempts">How many previous attempts have you had at this exam?</label>
   <input type="number" name="wacpfm-candidate-previous-attempts" id="wacpfm-candidate-previous-attempts" required
     [(ngModel)]="previousAttempts">
