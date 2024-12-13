@@ -50,6 +50,7 @@ export class EditMembershipComponent implements OnInit {
     const pmr: AcademicWriting = {
       candidateId: membership.candidateId,
       candidateEmail: membership.userEmail,
+      examAlias: membership.examAlias,
       examinerEmails: [],
       examinerIds: [],
       files: [],

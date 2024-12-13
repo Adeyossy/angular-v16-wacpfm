@@ -41,14 +41,14 @@ export class EditFellowshipComponent implements OnInit {
     return { title: upload.title, subtitle: upload.type, text: `${index}` }
   }
 
-  showWriting(fellowship: FellowshipExamRecord, index: number) {
+  showWriting(fellowship: FellowshipExamRecord, index: number, writings: AcademicWriting[]) {
     this.helper.setComponentDialogData({
       course: Object.assign({}, DEFAULT_UPDATE_COURSE),
       courseId: this.examService.parseCandidateExamId(fellowship),
       lecture: Object.assign({}, DEFAULT_LECTURE),
       lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
-      writing: [fellowship.dissertations, index]
+      writing: [writings, index]
     });
 
     this.helper.toggleDialog(1);
@@ -59,6 +59,7 @@ export class EditFellowshipComponent implements OnInit {
       abstract: "",
       candidateId: fellowship.candidateId,
       candidateEmail: fellowship.userEmail,
+      examAlias: fellowship.examAlias,
       examinerEmails: [],
       examinerIds: [],
       files: [],
@@ -69,13 +70,14 @@ export class EditFellowshipComponent implements OnInit {
       description: ""
     };
     fellowship.dissertations.push(dissertation);
-    this.showWriting(fellowship, fellowship.dissertations.length - 1);
+    this.showWriting(fellowship, fellowship.dissertations.length - 1, fellowship.dissertations);
   }
 
   addCasebook(fellowship: FellowshipExamRecord) {
     const casebook: AcademicWriting = {
       candidateEmail: fellowship.userEmail,
       candidateId: fellowship.candidateId,
+      examAlias: fellowship.examAlias,
       examinerEmails: [],
       examinerIds: [],
       files: [],
@@ -86,6 +88,6 @@ export class EditFellowshipComponent implements OnInit {
       description: ""
     };
     fellowship.casebooks.push(casebook);
-    this.showWriting(fellowship, fellowship.casebooks.length);
+    this.showWriting(fellowship, fellowship.casebooks.length - 1, fellowship.casebooks);
   }
 }
