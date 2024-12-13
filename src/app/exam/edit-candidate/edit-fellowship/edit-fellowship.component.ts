@@ -55,7 +55,37 @@ export class EditFellowshipComponent implements OnInit {
   }
 
   addDissertation(fellowship: FellowshipExamRecord) {
-    fellowship.dissertations.push(Object.assign({}, DISSERTATION));
+    const dissertation: Dissertation = {
+      abstract: "",
+      candidateId: fellowship.candidateId,
+      candidateEmail: fellowship.userEmail,
+      examinerEmails: [],
+      examinerIds: [],
+      files: [],
+      gradesByExaminer: [],
+      title: "",
+      type: "dissertations",
+      wacpNo: "",
+      description: ""
+    };
+    fellowship.dissertations.push(dissertation);
     this.showWriting(fellowship, fellowship.dissertations.length - 1);
+  }
+
+  addCasebook(fellowship: FellowshipExamRecord) {
+    const casebook: AcademicWriting = {
+      candidateEmail: fellowship.userEmail,
+      candidateId: fellowship.candidateId,
+      examinerEmails: [],
+      examinerIds: [],
+      files: [],
+      gradesByExaminer: [],
+      title: "",
+      type: "casebooks",
+      wacpNo: fellowship.wacpNo,
+      description: ""
+    };
+    fellowship.casebooks.push(casebook);
+    this.showWriting(fellowship, fellowship.casebooks.length);
   }
 }
