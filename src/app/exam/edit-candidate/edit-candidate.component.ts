@@ -7,6 +7,7 @@ import { EXAM_DESCRIPTION, EXAMS } from 'src/app/models/exam';
 import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ExamService } from 'src/app/services/exam.service';
+import { FilePlus } from 'src/app/widgets/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-edit-candidate',
@@ -20,6 +21,12 @@ export class EditCandidateComponent implements OnInit {
   candidateCurriculum = ["New", "Old"];
   yesNo = ["Yes", "No"];
   user$: Observable<AppUser> = of();
+  filePlus: FilePlus = {
+    ...new File([], ""),
+    blobURL: "",
+    cloudURL: "",
+    uploadType: ""
+  }
 
   handicap = ["None", "Use of a wheelchair", "Use of walking frame or crutches", `Visual acuity 
     worse than 3/60 despite correction`, `Severe hearing impairment`, `Stammering`,
@@ -41,6 +48,8 @@ export class EditCandidateComponent implements OnInit {
         return "";
       })
     );
+    
+    this.user$ = this.authService.getAppUser$();
 
     this.candidate$ = this.activeRoute.paramMap.pipe(
       concatMap(this.paramsToCandidate),
@@ -57,10 +66,16 @@ export class EditCandidateComponent implements OnInit {
           if (candidateId) candidate.candidateId = candidateId;
           return candidate
         })
+      )),
+      concatMap(candidate => this.user$.pipe(
+        map(user => {
+          candidate.userEmail = user.email;
+          candidate.gender = user.gender;
+          return candidate;
+        })
       ))
     );
 
-    this.user$ = this.authService.getAppUser$();
   }
 
   newPreviousAttempt(): PreviousAttempt {
@@ -128,6 +143,10 @@ export class EditCandidateComponent implements OnInit {
     )
   }
 
+  fetchUploadPath(candidate: Candidate) {
+    return `${EXAMS}/${candidate.examAlias}/${candidate.candidateId}`
+  }
+
   update$(candidate: Candidate) {
     // this.updateTracker$ = this.candidate$.pipe(
     //   concatMap(candidate => this.authService.addDocWithID$(CANDIDATES, candidate.userId, 
@@ -135,6 +154,8 @@ export class EditCandidateComponent implements OnInit {
     //   map(_void => true),
     //   catchError(_err => of(false))
     // );
+
+    console.log("candidate => ", candidate);
 
     this.updateTracker$ = this.authService.batchWriteDocs$([
       {
@@ -146,7 +167,7 @@ export class EditCandidateComponent implements OnInit {
         path: `${EXAMS}/${candidate.examAlias}`,
         data: {
           [candidate.category]: {
-            candidates: arrayUnion(candidate.candidateId)
+            candidates: arrayUnion(candidate.userEmail)
           }
         },
         type: "update"

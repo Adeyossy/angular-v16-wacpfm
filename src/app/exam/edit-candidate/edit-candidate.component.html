@@ -120,6 +120,12 @@
       [items]="yesNo" [itemsSelectionState]="toSelectionState(yesNo, candidate.thirdTrimester)"></app-select>
     <br><br>
   </div>
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-heading-small">Upload Certificate</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <app-file-upload [uploads]="candidate.certificates" [path]="fetchUploadPath(candidate)"
+  (uploadsEmitter)="candidate.certificates = $event"></app-file-upload>
   <!-- <div *ngIf="candidateType$ | async as type">
     <div *ngIf="type === 'membership'"></div>
     <div *ngIf="type === 'fellowship'">
