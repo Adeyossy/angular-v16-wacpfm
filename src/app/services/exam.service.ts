@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { EXAMINERS } from '../models/exam';
-import { Examiner } from "../models/examiner";
+import { Examiner, NEW_EXAMINER } from "../models/examiner";
 import { map, Observable, of } from 'rxjs';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { Candidate, CANDIDATES, FellowshipExamRecord, MembershipExamRecord } from '../models/candidate';
@@ -132,6 +132,18 @@ export class ExamService {
     ]).pipe(
       map(records => {
         if (records.length === 0) return Object.assign({}, instance);
+        return records[0];
+      })
+    )
+  }
+
+  queryExaminer$<Type>(examAlias: string, candidateId: string) {
+    return this.queryItem$<Type>(CANDIDATES, [
+      where("examAlias", "==", examAlias),
+      where("userId", "==", candidateId)
+    ]).pipe(
+      map(records => {
+        if (records.length === 0) return JSON.parse(JSON.stringify(NEW_EXAMINER)) as Type;
         return records[0];
       })
     )
