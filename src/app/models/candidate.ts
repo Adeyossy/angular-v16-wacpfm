@@ -1,5 +1,5 @@
 import { FieldValue, serverTimestamp } from "firebase/firestore";
-import { Subexam } from "./exam";
+import { DEFAULT_SUBEXAM, Subexam } from "./exam";
 import { environment } from "src/environments/environment";
 
 export const CANDIDATES = environment.candidates;
@@ -101,8 +101,17 @@ export interface MembershipExamRecord extends Candidate {
   isTheoryBanked: boolean;
 }
 
+export const NEW_MEMBERSHIP_CANDIDATE: MembershipExamRecord = {
+  ...(Object.assign({}, NEW_CANDIDATE)),
+  theory: Object.assign({}, DEFAULT_SUBEXAM),
+  osce: Object.assign({}, DEFAULT_SUBEXAM),
+  logbook: Object.assign({}, DEFAULT_SUBEXAM),
+  orals: Object.assign({}, DEFAULT_SUBEXAM),
+  pmrs: [],
+  isTheoryBanked: false
+}
+
 export interface FellowshipExamRecord extends Candidate {
-  candidateId: string;
   dissertations: Dissertation[];
   casebooks: AcademicWriting[]; // Will be used for PMRs in the new curriculum
   defense: any; // Will be used in new curriculum?
@@ -145,7 +154,7 @@ export interface DissertationGrade extends Grade {
   appendices: { title: "Appendices"; } & SubGrade;
 }
 
-export type WritingType = "casebooks" | "pmrs" | "dissertation" | "";
+export type WritingType = "casebooks" | "pmrs" | "dissertations" | "";
 
 export interface Writing {
   title: string,
@@ -184,7 +193,7 @@ export const DEFAULT_ACADEMIC_WRITING: AcademicWriting = {
   examinerIds: [].slice(),
   wacpNo: "",
   files: [].slice(),
-  type: "dissertation"
+  type: "casebooks"
 };
 
 export interface Dissertation extends AcademicWriting {
@@ -202,7 +211,7 @@ export const DISSERTATION: Dissertation = {
   examinerIds: [].slice(),
   wacpNo: "",
   files: [].slice(),
-  type: "dissertation"
+  type: "dissertations"
 };
 
 export interface PMR extends AcademicWriting {
