@@ -1,46 +1,54 @@
 import { FieldValue, serverTimestamp } from "firebase/firestore";
 import { environment } from "src/environments/environment";
+import { Upload } from "./candidate";
 
 export const EXAMINERS = environment.examiner;
 export type Geopolitical = "North Central" | "North East" | "North West" | "South West" | "South East" | "South South" | "";
 
 export interface Examiner {
-  userId: string;
-  userEmail: string;
-  examId: string; // e.g. second2024, first2025, second2025 etc based on 2 exams per year
-  name: string;
-  contactPhoneNumber: string;
-  country: string;
-  dateOfBirth: string;
-  dateOfRegistration: FieldValue;
-  nameOfInstitution: string;
-  geopolitical: Geopolitical;
-  wacpMembershipStatus: string;
-  residentDoctorsNo: number;
-  trainingCentre: string;
-  currentEmploymentStatus: string;
+  userId: string; //
+  userEmail: string; //
+  examAlias: string; // e.g. second2024, first2025, second2025 etc based on 2 exams per year
+  name: string; //
+  contactPhoneNumber: string; //
+  country: string; //
+  dateOfBirth: string; //
+  dateOfRegistration: FieldValue; //
+  nameOfInstitution: string; //
+  geopolitical: Geopolitical; //
+  wacpMembershipStatus: string; //
+  noOfMembershipResidents: number; //
+  noOfFellowshipResidents: number; //
+  noOfTrainers: number; //
+  currentEmploymentStatus: string; //
+  yearOfFellowship: number; //
+  numberOfYearsAsFellow: number; //
+  daeTrainingStatus: string; //
+  daeCertificate: Upload[];
+  trainerCertificationStatus: string; //
+  invitationsInLast3Exams: number; //
+  dissertationsSupervised: number; //
+  casebooksSupervised: number; //
+  publications: number; //
+  trainingResponsibilities: string; //
+  institutionsWorked: string; //
+  collegeAGSMAttendance10: number; //
+  attendanceAtFacultyTOT5: number; //
+  trainingCentre: string; //
   wacpResponsibilities: boolean;
-  yearOfFellowship: number;
-  firstYearAsExaminer: number;
-  timesPartakenInExam: number;
-  trainerCertificationStatus: string;
-  doctorsEducatorsTrainingStatus: string;
-  dissertationsSupervised: number;
-  prbSupervised: number;
-  fellowshipSupervised: number;
-  fellowsSupervised: number;
-  publications: number;
-  previousMgtExperience: boolean;
-  specifyMgtExperience: string;
-  trainingResponsibilities: string;
-  residentsMentored: number;
-  referees: Referee[];
+  firstYearAsExaminer: number; //
+  timesPartakenInExam: number; //
+  fellowshipSupervised: number; //
+  fellowsSupervised: number; //
+  previousMgtExperience: boolean; //
+  specifyMgtExperience: string; //
+  referees: Referee[]; //
 }
 
 export const NEW_EXAMINER: Examiner = {
   userEmail: "",
   userId: "",
-  examId: "",
+  examAlias: "",
   name: "",
   contactPhoneNumber: "",
   country: "",
@@ -49,7 +57,6 @@ export const NEW_EXAMINER: Examiner = {
   dateOfRegistration: serverTimestamp(),
   nameOfInstitution: "",
   wacpMembershipStatus: "",
-  residentDoctorsNo: 0,
   trainingCentre: "",
   currentEmploymentStatus: "",
   wacpResponsibilities: false,
@@ -57,16 +64,24 @@ export const NEW_EXAMINER: Examiner = {
   firstYearAsExaminer: 0,
   timesPartakenInExam: 0,
   trainerCertificationStatus: "None",
-  doctorsEducatorsTrainingStatus: "Not done",
+  daeTrainingStatus: "Not done",
+  daeCertificate: [],
+  attendanceAtFacultyTOT5: 0,
+  collegeAGSMAttendance10: 0,
+  institutionsWorked: "",
+  invitationsInLast3Exams: 0,
+  noOfMembershipResidents: 0,
+  noOfFellowshipResidents: 0,
+  noOfTrainers: 0,
+  numberOfYearsAsFellow: 0,
   dissertationsSupervised: 0,
-  prbSupervised: 0,
+  casebooksSupervised: 0,
   fellowshipSupervised: 0,
   fellowsSupervised: 0,
   publications: 0,
   previousMgtExperience: false,
   specifyMgtExperience: "",
   trainingResponsibilities: "",
-  residentsMentored: 0,
   referees: []
 };
 

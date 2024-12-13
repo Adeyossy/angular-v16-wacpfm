@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { serverTimestamp, where } from 'firebase/firestore';
 import { concatMap, map, Observable, of } from 'rxjs';
 import { EXAMINERS } from 'src/app/models/exam';
 import { Examiner, Geopolitical, NEW_EXAMINER, Referee } from "src/app/models/examiner";
+import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ExamService } from 'src/app/services/exam.service';
 
@@ -12,22 +14,22 @@ import { ExamService } from 'src/app/services/exam.service';
   styleUrls: ['./edit-examiner.component.css']
 })
 export class EditExaminerComponent implements OnInit {
-  examiner$: Observable<Examiner> = of(NEW_EXAMINER);
+  examiner$: Observable<Examiner> = new Observable();
   updateTracker$: Observable<boolean> | null = null;
+  user$: Observable<AppUser> = new Observable();
 
   geopolitical = ["North Central", "North East", "North West", "South West", "South East",
     "South South"] as const;
 
-  wacpMembershipStatus = ["Life member", "Paid-up currently", "Paid-up last year",
-    "Paid-up 2 years ago"] as const;
+  wacpMembershipStatus = ["Life member", "Paid up", "Not paid up"] as const;
 
-  currentEmploymentStatus = ["Employed", "Retired"] as const;
+  currentEmploymentStatus = ["Visiting", "Full time"] as const;
 
   trainerCertificationStatus = ["Current", "Lapsed", "None"];
 
-  doctorsEducatorsTrainingStatus = ["Done", "Not done", "Equivalent"];
+  doctorsEducatorsTrainingStatus = ["Yes", "Equivalent", "No"];
 
-  trainingResponsibilities = ["Institutional Residency TC", "CME Coordinator", "Mentor to Residents"];
+  trainingResponsibilities = ["Institutional Residency TC", "Head of Department", "None"];
 
   accreditation = [
     "44 NAR, Hosp., Kaduna", "ABUTH, Zaria", "AKTH, Kano", "Askoro District Hospital, FCT",
@@ -51,19 +53,38 @@ export class EditExaminerComponent implements OnInit {
     "UUTH, Uyo", "Blue Cross Hospital, Sierra Leone", "Liberia"
   ].sort();
 
-  constructor(private authService: AuthService, private examService: ExamService) { }
+  constructor(private authService: AuthService, private examService: ExamService,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.examiner$.pipe(
+    this.examiner$ = this.activatedRoute.paramMap.pipe(
+      concatMap(this.paramsToExaminer),
       concatMap(examiner => this.authService.getAppUser$().pipe(map(appUser => {
-        examiner.userId = appUser.userId;
-        examiner.userEmail = appUser.email;
-        examiner.name = `${appUser.firstname} ${appUser.lastname}`;
-        examiner.country = appUser.country;
-        examiner.contactPhoneNumber = appUser.phoneNumber;
+        if (!examiner.userEmail) examiner.userEmail = appUser.email;
+        if (!examiner.name) examiner.name = `${appUser.firstname} ${appUser.lastname}`;
+        if (!examiner.country) examiner.country = appUser.country;
+        if (!examiner.contactPhoneNumber) examiner.contactPhoneNumber = appUser.phoneNumber;
         return examiner;
       })))
-    )
+    );
+  }
+
+  paramsToExaminer = (params: ParamMap) => {
+    const examAlias = params.get("examAlias");
+    const userId = params.get("userId");
+    const defaultExaminer = Object.assign({}, NEW_EXAMINER);
+
+    if (userId !== null && examAlias !== null) {
+      defaultExaminer.examAlias = examAlias;
+      defaultExaminer.userId = userId;
+      return this.examService.queryItem$<Examiner>(EXAMINERS, [
+        where("examAlias", "==", examAlias),
+        where("userId", "==", userId)
+      ]).pipe(
+        map(examiners => examiners.length === 0 ? defaultExaminer : examiners[0])
+      );
+    }
+    return of(defaultExaminer);
   }
 
   getExaminer$() {
@@ -83,7 +104,7 @@ export class EditExaminerComponent implements OnInit {
 
   update$() {
     this.updateTracker$ = this.examiner$.pipe(
-      concatMap(examiner => this.authService.addDocWithID$(EXAMINERS, examiner.userId, 
+      concatMap(examiner => this.authService.addDocWithID$(EXAMINERS, examiner.userId,
         examiner, true)),
       map(_void => true)
     )
