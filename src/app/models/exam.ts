@@ -14,6 +14,13 @@ export interface Subexam {
   assessorId: string;
 }
 
+export const DEFAULT_SUBEXAM: Subexam = {
+  score: -1,
+  totalMarksObtainable: -1,
+  remarks: "",
+  assessorId: ""
+}
+
 type ExamSpecifics = {
   curriculum: string;
   candidates: string[];
