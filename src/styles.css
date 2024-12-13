@@ -202,8 +202,8 @@ i.fitted, span.fitted {
 }
 
 label > i.bi {
-  color: var(--wacpfm-accent-colour-orange);
-  text-shadow: 1px 1px var(--wacpfm-primary-colour);
+  color: var(--wacpfm-primary-colour);
+  /* text-shadow: 1px 1px var(--wacpfm-primary-colour); */
 }
 
 button {
@@ -343,6 +343,7 @@ button:active {
 .wacpfm-card.wacpfm-card-2 {
   background-color: var(--wacpfm-background-colour-white);
   border-color: var(--wacpfm-background-colour-darker);
+  padding: var(--wacpfm-spacing-small);
 }
 
 .wacpfm-loading-circle {
