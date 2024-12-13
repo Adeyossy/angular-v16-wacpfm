@@ -3,8 +3,8 @@ import { AuthService } from './auth.service';
 import { EXAMINERS } from '../models/exam';
 import { Examiner } from "../models/examiner";
 import { map, Observable, of } from 'rxjs';
-import { QueryFieldFilterConstraint } from 'firebase/firestore';
-import { Candidate, FellowshipExamRecord, MembershipExamRecord } from '../models/candidate';
+import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
+import { Candidate, CANDIDATES, FellowshipExamRecord, MembershipExamRecord } from '../models/candidate';
 
 type Cache = {
   [collection: string]: unknown[];
@@ -53,7 +53,9 @@ export class ExamService {
     "UUTH, Uyo", "Blue Cross Hospital, Sierra Leone", "Liberia"
   ].sort();
 
-  constructor(private authService: AuthService) {}
+  examVenues = ["Ibadan", "Abuja", "Accra"];
+
+  constructor(private authService: AuthService) { }
 
   getExamItem$<Type extends Examiner | MembershipExamRecord | FellowshipExamRecord>(
     collectionName: string, cacheKey: "examiner" | "membership_candidate" | "fellowship_candidate"
@@ -74,7 +76,7 @@ export class ExamService {
           case "fellowship_candidate":
             cachedItem = [examItem] as Type[];
             return cachedItem;
-          
+
           default:
             return null;
         }
@@ -88,7 +90,7 @@ export class ExamService {
    * @returns Observable of the Type based on the collection
    */
   getItem$<Type>(collection: string) {
-    if (this.cache[collection] && this.cache[collection].length) 
+    if (this.cache[collection] && this.cache[collection].length)
       return of(this.cache[collection]) as Observable<Type[]>;
     return this.authService.getDocByUserId$<Type>(collection).pipe(
       map(data => {
@@ -108,7 +110,7 @@ export class ExamService {
 
   queryItem$<Type>(collection: string, [where1]: QueryFieldFilterConstraint[]): Observable<Type[]>
   queryItem$<Type>(collection: string, [where1, where2]: QueryFieldFilterConstraint[]):
-  Observable<Type[]> {
+    Observable<Type[]> {
     if (this.cache[collection] && this.cache[collection].length) {
       console.log("Calling cache => collection: ", collection);
       return of(this.cache[collection]) as Observable<Type[]>;
@@ -121,6 +123,18 @@ export class ExamService {
         map(data => this.queryToDocuments(data, collection))
       )
     }
+  }
+
+  queryCandidate$<Type>(examAlias: string, candidateId: string, instance: Type) {
+    return this.queryItem$<Type>(CANDIDATES, [
+      where("examAlias", "==", examAlias),
+      where("candidateId", "==", candidateId)
+    ]).pipe(
+      map(records => {
+        if (records.length === 0) return Object.assign({}, instance);
+        return records[0];
+      })
+    )
   }
 
   getExaminer$<Type>() {
