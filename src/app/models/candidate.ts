@@ -49,7 +49,7 @@ export interface Candidate {
   exclusivelyBreastfedBaby: string; // if female, response is Yes or No
   thirdTrimester: string; // if female, response is Yes or No
   examCentre: string;
-  certificate: Upload; // certificate of training
+  certificates: Upload[]; // certificate of training
   examNo: string;
   examAlias: string;
 }
@@ -72,14 +72,7 @@ export const NEW_CANDIDATE: Candidate = {
   exclusivelyBreastfedBaby: "",
   thirdTrimester: "",
   examCentre: "",
-  certificate: {
-    description: "",
-    filetype: "",
-    id: 0,
-    uploadDate: Date.now(),
-    url: "",
-    type: ""
-  },
+  certificates: [],
   examAlias: "",
   examNo: ""
 };
@@ -176,6 +169,7 @@ export interface AcademicWriting {
   candidateEmail: string;
   examinerIds: string[];
   examinerEmails: string[];
+  examAlias: string;
   gradesByExaminer: Grade[];
   title: string;
   description?: string;
@@ -191,6 +185,7 @@ export const DEFAULT_ACADEMIC_WRITING: AcademicWriting = {
   candidateId: "",
   examinerEmails: [].slice(),
   examinerIds: [].slice(),
+  examAlias: "",
   wacpNo: "",
   files: [].slice(),
   type: "casebooks"
@@ -209,6 +204,7 @@ export const DISSERTATION: Dissertation = {
   candidateId: "",
   examinerEmails: [].slice(),
   examinerIds: [].slice(),
+  examAlias: "",
   wacpNo: "",
   files: [].slice(),
   type: "dissertations"
