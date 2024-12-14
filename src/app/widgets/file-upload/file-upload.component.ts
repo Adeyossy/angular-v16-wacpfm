@@ -37,6 +37,7 @@ export class FileUploadComponent implements OnInit {
 
   ngOnInit(): void {
     this.files = this.uploads.map(this.toFilePlus);
+    this.uploadStates = this.uploads.map(upload => NEVER);
   }
 
   createNewFile = () => this.toFilePlus();
@@ -60,13 +61,17 @@ export class FileUploadComponent implements OnInit {
 
   deleteFromApp(index: number) {
     this.files.splice(index, 1);
+    this.uploadsEmitter.emit(this.files.map(this.filePlusToUpload))
     // this.deleteEmitter.emit(index);
-    // this.uploadsEmitter.emit(this.files.map(this.filePlusToUpload))
   }
 
   deleteFromCloud$(filePlus: FilePlus, index: number) {
-    this.authService.deleteFile$(filePlus.cloudURL).pipe(
-      map(_v => { this.deleteFromApp(index) })
+    this.deleteState$ = this.authService.deleteFile$(filePlus.cloudURL).pipe(
+      map(_v => { 
+        this.deleteFromApp(index);
+        this.deleteState$ = null;
+        return true 
+      })
     )
   }
 
