@@ -157,4 +157,8 @@ export class ExamService {
   parseCandidateExamId(candidate: Candidate) {
     return candidate.candidateId.concat("_", candidate.examAlias);
   }
+
+  parseExaminerExamId(examiner: Examiner) {
+    return examiner.userId.concat("_", examiner.examAlias);
+  }
 }
