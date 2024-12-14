@@ -475,6 +475,11 @@ button:active {
     border-color: var(--wacpfm-primary-shadow);
   }
 
+  .wacpfm-card.wacpfm-card-2:hover {
+    background-color: var(--wacpfm-background-colour);
+    border-color: var(--wacpfm-light-grey);
+  }
+
   .wacpfm-toggle:hover {
     color: var(--wacpfm-primary-colour);
   }
