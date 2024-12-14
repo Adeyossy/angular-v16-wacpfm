@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { serverTimestamp, where } from 'firebase/firestore';
+import { arrayUnion, serverTimestamp, where } from 'firebase/firestore';
 import { catchError, concatMap, map, Observable, of } from 'rxjs';
 import { EXAMINERS, EXAMS } from 'src/app/models/exam';
 import { Examiner, Geopolitical, NEW_EXAMINER, Referee } from "src/app/models/examiner";
@@ -107,16 +107,27 @@ export class EditExaminerComponent implements OnInit {
   }
 
   update$(examiner: Examiner) {
-    this.updateTracker$ = this.authService.addDocWithID$(EXAMINERS,
-      this.examService.parseExaminerExamId(examiner),
-      examiner, true).pipe(
-        concatMap(_void => this.router.navigateByUrl('/dashboard/exam')),
-        catchError(err => {
-          console.log("error => ", err);
-          this.updateTracker$ = null;
-          return of(false);
-        })
-      );
+    this.updateTracker$ = this.authService.batchWriteDocs$([
+      {
+        path: `${EXAMINERS}/${this.examService.parseExaminerExamId(examiner)}`,
+        data: examiner,
+        type: "set"
+      },
+      {
+        path: `${EXAMS}/${examiner.examAlias}`,
+        data: {
+          candidates: arrayUnion(examiner.userEmail)
+        },
+        type: "update"
+      }
+    ]).pipe(
+      concatMap(_void => this.router.navigateByUrl('/dashboard/exam')),
+      catchError(err => {
+        console.log("error => ", err);
+        this.updateTracker$ = null;
+        return of(false);
+      })
+    );
   }
 
   newReferee() {
