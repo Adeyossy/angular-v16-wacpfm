@@ -5,6 +5,13 @@ import { DEFAULT_COURSE_RECORD, UpdateCourseRecord } from '../models/update_cour
 import { DEFAULT_RESOURCE_PERSON, ResourcePerson } from '../models/user';
 import { AcademicWriting, DEFAULT_ACADEMIC_WRITING, DEFAULT_WRITING, Writing } from '../models/candidate';
 
+export interface SimpleDialog {
+  title: string,
+  message: string,
+  buttonText: string,
+  navUrl?: string
+}
+
 export interface ComponentDialogInfo {
   type: string,
   data: UpdateCourseLecture | UpdateCourseRecord | null,
@@ -38,7 +45,7 @@ export class HelperService {
     writing: [[], -1]
   }
 
-  dialog = {
+  dialog: SimpleDialog = {
     title: "",
     message: "",
     buttonText: ""
@@ -93,8 +100,18 @@ export class HelperService {
     this.isDialogShown = state;
   }
 
-  setDialog(dialog: {title: string, message: string, buttonText: string}) {
+  setDialog(dialog: SimpleDialog) {
     this.dialog = dialog;
+  }
+
+  resetDialog() {
+    this.dialog = {
+      title: "",
+      message: "",
+      buttonText: ""
+    };
+
+    this.isDialogShown = -1;
   }
 
   getDialogComponent(type: string) {
