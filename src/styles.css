@@ -228,6 +228,7 @@ button.small {
 }
 
 label.icon, button.icon {
+  cursor: pointer;
   width: auto;
   height: auto;
   padding: var(--wacpfm-border-radius) var(--wacpfm-font-text) ;
@@ -397,7 +398,7 @@ button:active {
 }
 
 .flash-bg-color {
-  animation: flashing 2s ease-in infinite alternate;
+  animation: flashing 1s ease-in infinite alternate;
 }
 
 @keyframes slideLefttoRight {
@@ -457,11 +458,11 @@ button:active {
 
 @keyframes flashing {
   from {
-    background-color: var(--wacpfm-primary-colour);
+    transform: scale(0.9);
   }
 
   to {
-    background-color: var(--wacpfm-primary-colour-contrast);
+    transform: scale(1.1);
   }
 }
 
@@ -505,6 +506,10 @@ button:active {
 
   .wacpfm-toggle.toggled:hover {
     color: white;
+  }
+
+  label.icon:hover {
+    background-color: var(--wacpfm-grey);
   }
 }
 
