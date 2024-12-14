@@ -16,9 +16,10 @@ import { HelperService } from 'src/app/services/helper.service';
 })
 export class EditFellowshipComponent implements OnInit {
   fellowship$: Observable<FellowshipExamRecord> = of();
+  updateTracker$: Observable<boolean> | null = null;
 
-  constructor(private examService: ExamService, private route: ActivatedRoute, 
-    private helper: HelperService) {}
+  constructor(private examService: ExamService, private route: ActivatedRoute,
+    private helper: HelperService) { }
 
   ngOnInit(): void {
     this.fellowship$ = this.route.paramMap.pipe(
@@ -90,4 +91,24 @@ export class EditFellowshipComponent implements OnInit {
     fellowship.casebooks.push(casebook);
     this.showWriting(fellowship, fellowship.casebooks.length - 1, fellowship.casebooks);
   }
+
+  done() {
+    this.examService.showDoneMessage();
+  }
+
+  // update$(membership: MembershipExamRecord) {
+  //   this.updateTracker$ = this.authService.addDocWithID$(CANDIDATES,
+  //     this.examService.parseCandidateExamId(membership), membership, true).pipe(
+  //       map(_void => {
+  //         this.helper.setDialog({
+  //           title: "Registration Complete",
+  //           message: "Your registration is complete. Click the button below to continue.",
+  //           buttonText: "Continue",
+  //           navUrl: "/dashboard/exam"
+  //         });
+  //         return true;
+  //       }),
+  //       catchError(_err => of(false))
+  //     );
+  // }
 }

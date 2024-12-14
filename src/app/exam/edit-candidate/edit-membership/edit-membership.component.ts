@@ -80,12 +80,7 @@ export class EditMembershipComponent implements OnInit {
     this.updateTracker$ = this.authService.addDocWithID$(CANDIDATES, 
       this.examService.parseCandidateExamId(membership), membership, true).pipe(
       map(_void => {
-        this.helper.setDialog({
-          title: "Registration Complete",
-          message: "Your registration is complete. Click the button below to continue.",
-          buttonText: "Continue",
-          navUrl: "/dashboard/exam"
-        });
+        this.examService.showDoneMessage();
         return true;
       }),
       catchError(_err => of(false))

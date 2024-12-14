@@ -21,6 +21,8 @@
     [item]="book" [index]="i" [control]="fellowship.casebooks[i].files.length > 0"
     (click)="showWriting(fellowship, i, fellowship.casebooks)" [state]="!!fellowship.casebooks[i].title"></app-card-list>
   </div>
+  <br><br>
+  <button class="wacpfm-primary-button" (click)="done()">FINISH</button>
 </div>
 <ng-template #fetching>
   <div class="wacpfm-card">

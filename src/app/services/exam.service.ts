@@ -5,6 +5,7 @@ import { Examiner, NEW_EXAMINER } from "../models/examiner";
 import { map, Observable, of } from 'rxjs';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { Candidate, CANDIDATES, FellowshipExamRecord, MembershipExamRecord } from '../models/candidate';
+import { HelperService } from './helper.service';
 
 type Cache = {
   [collection: string]: unknown[];
@@ -55,7 +56,7 @@ export class ExamService {
 
   examVenues = ["Ibadan", "Abuja", "Accra"];
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private helper: HelperService) { }
 
   getExamItem$<Type extends Examiner | MembershipExamRecord | FellowshipExamRecord>(
     collectionName: string, cacheKey: "examiner" | "membership_candidate" | "fellowship_candidate"
@@ -160,5 +161,15 @@ export class ExamService {
 
   parseExaminerExamId(examiner: Examiner) {
     return examiner.userId.concat("_", examiner.examAlias);
+  }
+
+  showDoneMessage() {
+    this.helper.setDialog({
+      title: "Registration Complete",
+      message: "Your registration is complete. Click the button below to continue.",
+      buttonText: "Continue",
+      navUrl: "/dashboard/exam"
+    });
+    this.helper.toggleDialog(0);
   }
 }

@@ -121,7 +121,7 @@ export class EditExaminerComponent implements OnInit {
         type: "update"
       }
     ]).pipe(
-      concatMap(_void => this.router.navigateByUrl('/dashboard/exam')),
+      map(_void => {this.examService.showDoneMessage(); return true}),
       catchError(err => {
         console.log("error => ", err);
         this.updateTracker$ = null;
