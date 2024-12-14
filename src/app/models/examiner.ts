@@ -8,7 +8,7 @@ export type Geopolitical = "North Central" | "North East" | "North West" | "Sout
 export interface Examiner {
   userId: string; //
   userEmail: string; //
-  examAlias: string; // e.g. second2024, first2025, second2025 etc based on 2 exams per year
+  examAlias: string; // e.g. second_2024, first_2025, second_2025 etc based on 2 exams per year
   name: string; //
   contactPhoneNumber: string; //
   country: string; //
