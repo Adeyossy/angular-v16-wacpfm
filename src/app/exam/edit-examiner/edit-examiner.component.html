@@ -91,6 +91,10 @@
   <app-select [items]="doctorsEducatorsTrainingStatus.slice()" mode="single"
     (emitItems)="examiner.daeTrainingStatus = $event[0]"></app-select>
   <br><br>
+  <label for="">Doctors as educators certificate</label>
+  <app-file-upload [uploads]="examiner.daeCertificate" [path]="fetchUploadPath(examiner)"
+  (uploadsEmitter)="examiner.daeCertificate = $event"></app-file-upload>
+  <br><br>
   <label for="wacpfm-examiner-dissertations"><i class="bi"></i> Number of dissertations supervised</label>
   <input type="number" name="examiner-dissertations" id="wacpfm-examiner-dissertations" required
     [(ngModel)]="examiner.dissertationsSupervised">

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { serverTimestamp, where } from 'firebase/firestore';
 import { catchError, concatMap, map, Observable, of } from 'rxjs';
-import { EXAMINERS } from 'src/app/models/exam';
+import { EXAMINERS, EXAMS } from 'src/app/models/exam';
 import { Examiner, Geopolitical, NEW_EXAMINER, Referee } from "src/app/models/examiner";
 import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -100,6 +100,10 @@ export class EditExaminerComponent implements OnInit {
   toBoolean(dichot: string[]) {
     if (dichot.includes("Yes")) return true;
     return false;
+  }
+
+  fetchUploadPath(examiner: Examiner) {
+    return `${EXAMS}/${examiner.examAlias}/${examiner.userId}`
   }
 
   update$(examiner: Examiner) {
