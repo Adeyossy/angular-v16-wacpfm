@@ -190,11 +190,13 @@
   </button>
   <br><br>
   <div *ngIf="updateTracker$ === null; else update">
-    <button class="wacpfm-primary-button" routerLink="/dashboard/examination">Continue</button>
+    <button class="wacpfm-primary-button" (click)="update$(examiner)">Submit</button>
   </div>
   <ng-template #update>
-    <button *ngIf="updateTracker$ | async as tracker; else loading" class="wacpfm-primary-button"
-      (click)="update$()">Submit</button>
+    <div *ngIf="updateTracker$ | async as tracker; else loading">
+      <button *ngIf="tracker && true" class="wacpfm-primary-button" 
+      routerLink="./upload">Continue</button>
+    </div>
     <ng-template #loading>
       <app-loading-circles></app-loading-circles>
     </ng-template>

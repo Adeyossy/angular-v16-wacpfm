@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { serverTimestamp, where } from 'firebase/firestore';
-import { concatMap, map, Observable, of } from 'rxjs';
+import { catchError, concatMap, map, Observable, of } from 'rxjs';
 import { EXAMINERS } from 'src/app/models/exam';
 import { Examiner, Geopolitical, NEW_EXAMINER, Referee } from "src/app/models/examiner";
 import { AppUser } from 'src/app/models/user';
@@ -54,7 +54,7 @@ export class EditExaminerComponent implements OnInit {
   ].sort();
 
   constructor(private authService: AuthService, private examService: ExamService,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     this.examiner$ = this.activatedRoute.paramMap.pipe(
@@ -102,12 +102,17 @@ export class EditExaminerComponent implements OnInit {
     return false;
   }
 
-  update$() {
-    this.updateTracker$ = this.examiner$.pipe(
-      concatMap(examiner => this.authService.addDocWithID$(EXAMINERS, examiner.userId,
-        examiner, true)),
-      map(_void => true)
-    )
+  update$(examiner: Examiner) {
+    this.updateTracker$ = this.authService.addDocWithID$(EXAMINERS,
+      this.examService.parseExaminerExamId(examiner),
+      examiner, true).pipe(
+        concatMap(_void => this.router.navigateByUrl('/dashboard/exam')),
+        catchError(err => {
+          console.log("error => ", err);
+          this.updateTracker$ = null;
+          return of(false);
+        })
+      );
   }
 
   newReferee() {
