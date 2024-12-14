@@ -22,17 +22,17 @@
             >Click the <i class="bi bi-cloud-arrow-up text-primary"></i> icon to upload. </p>
           </ng-template>
         </p>
-        <div class="container-fluid p-0">
+        <div class="container-fluid p-0" *ngIf="uploadStates[i] === never$; else loadSmallCircles">
           <div class="row">  
             <div class="col-4">
               <label for="wacpfm-file-{{files.length - 1 - i}}" class="icon wacpfm-subheading">
                 <i class="bi bi-folder2-open"></i>
-                <input #file type="file" name="wacpfm-file" id="wacpfm-file-{{files.length - 1 - i}}"
+                <input #fileUpload type="file" name="wacpfm-file" id="wacpfm-file-{{files.length - 1 - i}}"
                   class="d-none" (change)="onFileChosenInList($event.target, i)">
               </label>
             </div>
             <div class="col-4" *ngIf="file.blobURL || file.cloudURL">
-              <label class="icon wacpfm-subheading bg-primary" *ngIf="file.blobURL && !file.cloudURL"
+              <label class="icon wacpfm-subheading bg-primary flash-bg-color" *ngIf="file.blobURL && !file.cloudURL"
               (click)="upload(file, i)">
                 <i class="bi bi-cloud-arrow-up text-white"></i>
               </label>
@@ -42,6 +42,9 @@
             </div>
           </div>
         </div>
+        <ng-template #loadSmallCircles>
+          <app-loading-small-circles></app-loading-small-circles>
+        </ng-template>
       </div>
     </div>
   </div>

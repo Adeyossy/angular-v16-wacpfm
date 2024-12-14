@@ -354,6 +354,11 @@ button:active {
   animation: loading 300ms ease infinite alternate;
 }
 
+.wacpfm-loading-circle.wacpfm-loading-small-circle {
+  width: 8px;
+  height: 8px;
+}
+
 .wacpfm-loading-circle.second {
   animation-delay: 150ms;
   background-color: var(--wacpfm-accent-colour-orange);
@@ -389,6 +394,10 @@ button:active {
 .wacpfm-four-lines {
   line-height: 1rem;
   height: 4rem;
+}
+
+.flash-bg-color {
+  animation: flashing 2s ease-in infinite alternate;
 }
 
 @keyframes slideLefttoRight {
@@ -443,6 +452,16 @@ button:active {
 
   to {
     transform: translateY(-16px);
+  }
+}
+
+@keyframes flashing {
+  from {
+    background-color: var(--wacpfm-primary-colour);
+  }
+
+  to {
+    background-color: var(--wacpfm-primary-colour-contrast);
   }
 }
 

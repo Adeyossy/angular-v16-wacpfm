@@ -19,17 +19,17 @@ export class FileUploadComponent implements OnInit {
   @Input() formats = "";
   @Input() context: WritingType = "";
   @Input() path = EXAMS;
-  @ViewChild('file') uploadFile: ElementRef = new ElementRef('input');
-  @ViewChildren('file') uploadFiles!: QueryList<ElementRef>;
+  @ViewChild('fileUpload') uploadFile: ElementRef = new ElementRef('input');
+  @ViewChildren('fileUpload') uploadFiles!: QueryList<ElementRef>;
   @ViewChildren('animate') animators!: QueryList<ElementRef>;
   @Input() files: FilePlus[] = [];
   @Input() uploads: Upload[] = [];
   @Output() fileEmitter = new EventEmitter<FilePlus>();
-  @Output() createEmitter = new EventEmitter<FilePlus>();
-  @Output() updateEmitter = new EventEmitter<[FilePlus, number]>();
-  @Output() deleteEmitter = new EventEmitter<number>();
+  // @Output() createEmitter = new EventEmitter<FilePlus>();
+  // @Output() updateEmitter = new EventEmitter<[FilePlus, number]>();
+  // @Output() deleteEmitter = new EventEmitter<number>();
   @Output() uploadsEmitter = new EventEmitter<Upload[]>();
-  uploadState$: Observable<number> = NEVER;
+  never$ = NEVER;
   uploadStates: Observable<number>[] = [];
   deleteState$: Observable<boolean> | null = null;
 
@@ -80,7 +80,6 @@ export class FileUploadComponent implements OnInit {
         cloudURL: "",
         uploadType: ""
       };
-      this.createEmitter.emit(filePlus);
     }
   }
 
@@ -98,7 +97,7 @@ export class FileUploadComponent implements OnInit {
         file.uploadType = this.context;
         console.log("file.name => ", file.name);
         this.files = this.files.map((f, i) => index === i ? file : f);
-        this.updateEmitter.emit([file, index]);
+        // this.updateEmitter.emit([file, index]);
       }
     }
   }
