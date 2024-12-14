@@ -91,7 +91,8 @@ export interface MembershipExamRecord extends Candidate {
   logbook: Subexam;
   orals: Subexam;
   pmrs: AcademicWriting[]; // if curriculum is new
-  isTheoryBanked: boolean;
+  isTheoryBanked: string; // yes or no
+  bankedTheoryDate: string;
 }
 
 export const NEW_MEMBERSHIP_CANDIDATE: MembershipExamRecord = {
@@ -101,7 +102,8 @@ export const NEW_MEMBERSHIP_CANDIDATE: MembershipExamRecord = {
   logbook: Object.assign({}, DEFAULT_SUBEXAM),
   orals: Object.assign({}, DEFAULT_SUBEXAM),
   pmrs: [],
-  isTheoryBanked: false
+  isTheoryBanked: "",
+  bankedTheoryDate: ""
 }
 
 export interface FellowshipExamRecord extends Candidate {
