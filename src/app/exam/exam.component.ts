@@ -36,7 +36,7 @@ export class ExamComponent implements OnInit {
     {
       title: "Home",
       description: "",
-      link: ":examAlias/:userType/:userId"
+      link: ":examAlias/:userType/:userId/home"
     }
   ]
 
@@ -59,10 +59,10 @@ export class ExamComponent implements OnInit {
   }
 
   getUserType(exam: Exam, userEmail: string) {
-    if (exam.fellowship.candidates.includes(userEmail)) return "fellowship";
+    if (exam.fellowship.candidates.includes(userEmail)) return "candidate/fellowship";
     else {
       if (exam.examiners.includes(userEmail)) return "examiner";
-      else if (exam.membership.candidates.includes(userEmail)) return "membership";
+      else if (exam.membership.candidates.includes(userEmail)) return "candidate/membership";
       else return ""
     }
   }

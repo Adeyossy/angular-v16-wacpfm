@@ -39,8 +39,6 @@
   [itemsSelectionState]="toSelectionState(candidateCurriculum, candidate.curriculum)"></app-select>
   <br><br>
   <label for="wacpfm-candidate-trainingcentre-name">Name of Training Centre</label>
-  <!-- <input type="text" name="wacpfm-candidate-trainingcentre-name" id="wacpfm-candidate-trainingcentre-name" required
-    [(ngModel)]="candidate.nameOfTrainingCentre"> -->
   <select name="wacpfm-candidate-trainingcentre-name" id="wacpfm-candidate-trainingcentre-name" 
   [(ngModel)]="candidate.nameOfTrainingCentre">
     <option *ngFor="let centre of examService.accreditation" [ngValue]="centre"

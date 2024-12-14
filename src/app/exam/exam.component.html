@@ -7,11 +7,11 @@
       </div>
       <br>
       <h1 class="wacpfm-heading-small wacpfm-font-arial wacpfm-three-lines">{{ exam.title }}</h1>
-      <br>
       <div *ngIf="appUser$ | async as user">
         <!-- If the user is not registered, display registration links -->
         <div *ngIf="getUserType(exam, user.email) as userType; else register">
           <app-card-grid [items]="replaceHome(exam.alias, userType, user.userId)"></app-card-grid>
+          <button class="icon small">Registered <i class="bi bi-check-circle-fill"></i></button>
         </div>
         <ng-template #register>
           <app-card-grid [items]="replaceReg(exam.alias, user.userId)"></app-card-grid>
