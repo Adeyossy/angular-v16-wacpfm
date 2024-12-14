@@ -46,6 +46,7 @@ import { EditMembershipComponent } from './exam/edit-candidate/edit-membership/e
 import { TitleSubtitleFileComponent } from './widgets/title-subtitle-file/title-subtitle-file.component';
 import { DashboardHomeComponent } from './dashboard/dashboard-home/dashboard-home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { LoadingSmallCirclesComponent } from './widgets/loading-small-circles/loading-small-circles.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     EditMembershipComponent,
     TitleSubtitleFileComponent,
     DashboardHomeComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    LoadingSmallCirclesComponent
   ],
   imports: [
     BrowserModule,
