@@ -8,7 +8,13 @@
   <input type="text" name="examiner-name" id="wacpfm-examiner-name" required [(ngModel)]="examiner.name" placeholder=""
     disabled>
   <br><br>
-  <label for="wacpfm-examiner-dob"><i class="bi bi-key-fill"></i> Date of Birth</label>
+  <div *ngIf="user$ | async as user">
+    <label for="wacpfm-examiner-country">Country</label>
+    <input type="text" name="examiner-country" id="wacpfm-examiner-country" required [(ngModel)]="user.country"
+      placeholder="" disabled>
+    <br><br>
+  </div>
+  <label for="wacpfm-examiner-dob">Date of Birth</label>
   <input type="date" name="examiner-dob" id="wacpfm-examiner-dob" required [(ngModel)]="examiner.dateOfBirth"
     placeholder="dd/mm/yyyy">
   <br><br>
@@ -22,12 +28,14 @@
   <div *ngIf="examiner.country.toLowerCase() === 'nigeria'">
     <label for="">Geo-political Zone</label>
     <app-select [items]="geopolitical.slice()" mode="single"
-      (emitItems)="examiner.geopolitical = geopoliticise($event)"></app-select>
+      (emitItems)="examiner.geopolitical = geopoliticise($event)"
+      [itemsSelectionState]="toSelectionState(geopolitical.slice(), examiner.geopolitical)"></app-select>
     <br><br>
   </div>
   <label for="">WACP Membership Status</label>
   <app-select [items]="wacpMembershipStatus.slice()" mode="single"
-    (emitItems)="examiner.wacpMembershipStatus = $event[0]"></app-select>
+    (emitItems)="examiner.wacpMembershipStatus = $event[0]"
+    [itemsSelectionState]="toSelectionState(wacpMembershipStatus.slice(), examiner.wacpMembershipStatus)"></app-select>
   <br><br>
   <label for="wacpfm-membership-residents">Number of membership residents in your institution</label>
   <input type="number" name="membership-residents" id="wacpfm-membership-residents" required
@@ -43,7 +51,8 @@
   <br><br>
   <label for="">Current employment status</label>
   <app-select [items]="currentEmploymentStatus.slice()" mode="single"
-    (emitItems)="examiner.currentEmploymentStatus = $event[0]"></app-select>
+    (emitItems)="examiner.currentEmploymentStatus = $event[0]"
+    [itemsSelectionState]="toSelectionState(currentEmploymentStatus.slice(), examiner.currentEmploymentStatus)"></app-select>
   <br><br>
   <!--   Insert current employment status here   -->
   <label for="wacpfm-examiner-fellowshipyear"><i class="bi"></i> Year of Fellowship</label>
@@ -84,16 +93,18 @@
   <!-- Insert training status here -->
   <label for="">Training certification status</label>
   <app-select [items]="trainerCertificationStatus.slice()" mode="single"
-    (emitItems)="examiner.trainerCertificationStatus = $event[0]"></app-select>
+    (emitItems)="examiner.trainerCertificationStatus = $event[0]"
+    [itemsSelectionState]="toSelectionState(trainerCertificationStatus.slice(), examiner.trainerCertificationStatus)"></app-select>
   <br><br>
   <!-- Insert Doctors as Educators training status here -->
   <label for="">Doctors as educators training status</label>
   <app-select [items]="doctorsEducatorsTrainingStatus.slice()" mode="single"
-    (emitItems)="examiner.daeTrainingStatus = $event[0]"></app-select>
+    (emitItems)="examiner.daeTrainingStatus = $event[0]"
+    [itemsSelectionState]="toSelectionState(doctorsEducatorsTrainingStatus.slice(), examiner.daeTrainingStatus)"></app-select>
   <br><br>
   <label for="">Doctors as educators certificate</label>
   <app-file-upload [uploads]="examiner.daeCertificate" [path]="fetchUploadPath(examiner)"
-  (uploadsEmitter)="examiner.daeCertificate = $event"></app-file-upload>
+    (uploadsEmitter)="examiner.daeCertificate = $event"></app-file-upload>
   <br><br>
   <label for="wacpfm-examiner-dissertations"><i class="bi"></i> Number of dissertations supervised</label>
   <input type="number" name="examiner-dissertations" id="wacpfm-examiner-dissertations" required
@@ -122,8 +133,9 @@
     [(ngModel)]="examiner.publications">
   <br><br>
   <label for="">Previous management experience</label>
-  <app-select [items]="['Yes', 'No']" mode="single"
-    (emitItems)="examiner.previousMgtExperience = toBoolean($event)"></app-select>
+  <app-select [items]="yesNo" mode="single"
+    (emitItems)="examiner.previousMgtExperience = toBoolean($event)"
+    [itemsSelectionState]="toSelectionState(yesNo, examiner.previousMgtExperience ? 'Yes' : 'No')"></app-select>
   <br><br>
   <label for="wacpfm-examiner-specifymgtexperience">
     <i class="bi"></i> Please specify previous management experience
@@ -150,7 +162,9 @@
   <br><br>
   <label for="">Training responsibilities in institution</label>
   <app-select [items]="trainingResponsibilities.slice()" mode="single"
-    (emitItems)="examiner.trainingResponsibilities = $event[0]"></app-select>
+    (emitItems)="examiner.trainingResponsibilities = $event[0]"
+    [itemsSelectionState]="toSelectionState(trainingResponsibilities.slice(), 
+    examiner.trainingResponsibilities)"></app-select>
   <br><br>
   <div class="wacpfm-heading-underline">
     <h2 class="wacpfm-heading-small">Referee Information</h2>
@@ -198,8 +212,7 @@
   </div>
   <ng-template #update>
     <div *ngIf="updateTracker$ | async as tracker; else loading">
-      <button *ngIf="tracker && true" class="wacpfm-primary-button" 
-      routerLink="./upload">Continue</button>
+      <button *ngIf="tracker && true" class="wacpfm-primary-button" routerLink="./upload">Continue</button>
     </div>
     <ng-template #loading>
       <app-loading-circles></app-loading-circles>

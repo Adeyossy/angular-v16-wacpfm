@@ -17,6 +17,7 @@ export class EditExaminerComponent implements OnInit {
   examiner$: Observable<Examiner> = new Observable();
   updateTracker$: Observable<boolean> | null = null;
   user$: Observable<AppUser> = new Observable();
+  yesNo = ['Yes', 'No'];
 
   geopolitical = ["North Central", "North East", "North West", "South West", "South East",
     "South South"] as const;
@@ -67,11 +68,13 @@ export class EditExaminerComponent implements OnInit {
         return examiner;
       })))
     );
+
+    this.user$ = this.authService.getAppUser$();
   }
 
   paramsToExaminer = (params: ParamMap) => {
     const examAlias = params.get("examAlias");
-    const userId = params.get("userId");
+    const userId = params.get("examinerId");
     const defaultExaminer = Object.assign({}, NEW_EXAMINER);
 
     if (userId !== null && examAlias !== null) {
@@ -102,11 +105,16 @@ export class EditExaminerComponent implements OnInit {
     return false;
   }
 
+  toSelectionState(items: string[], value: string) {
+    return items.map(item => item.toLowerCase().trim() === value.toLowerCase().trim())
+  }
+
   fetchUploadPath(examiner: Examiner) {
     return `${EXAMS}/${examiner.examAlias}/${examiner.userId}`
   }
 
   update$(examiner: Examiner) {
+    console.log("examiner => ", examiner);
     this.updateTracker$ = this.authService.batchWriteDocs$([
       {
         path: `${EXAMINERS}/${this.examService.parseExaminerExamId(examiner)}`,
@@ -116,7 +124,7 @@ export class EditExaminerComponent implements OnInit {
       {
         path: `${EXAMS}/${examiner.examAlias}`,
         data: {
-          candidates: arrayUnion(examiner.userEmail)
+          examiners: arrayUnion(examiner.userEmail)
         },
         type: "update"
       }
