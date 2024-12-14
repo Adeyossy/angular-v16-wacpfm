@@ -1,6 +1,6 @@
 <div *ngIf="membership$ | async as membership; else fetching">
   <div class="wacpfm-heading-underline">
-    <h1 class="wacpfm-heading">Fellowship Uploads</h1>
+    <h1 class="wacpfm-heading">Membership</h1>
     <div class="wacpfm-underline"></div>
   </div>
   <br><br>
@@ -9,7 +9,7 @@
     <app-select (emitItems)="membership.isTheoryBanked = $event[0]" mode="single" [items]="yesNo"
       [itemsSelectionState]="toSelectionState(yesNo, membership.isTheoryBanked)"></app-select>
     <br><br>
-    <div *ngIf="toBoolean(membership.isTheoryBanked)">
+    <div *ngIf="membership.isTheoryBanked === 'Yes'">
       <label for="wacpfm-banked-theory">Month and Year of Banked Theory</label>
       <input type="month" name="wacpfm-banked-theory" id="wacpfm-banked-theory" placeholder="month"
         [(ngModel)]="membership.bankedTheoryDate" required>
