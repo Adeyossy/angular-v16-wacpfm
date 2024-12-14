@@ -405,7 +405,7 @@ export class AuthService {
   deleteFile$(url: string) {
     return this.getFirebaseApp$().pipe(
       map(app => getStorage(app)),
-      concatMap(str => deleteObject(ref(str, encodeURI(url))))
+      concatMap(str => deleteObject(ref(str, url)))
     )
   }
 
