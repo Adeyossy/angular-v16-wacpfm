@@ -4,7 +4,7 @@ import { AsyncSubject, Observable, concatMap, from, iif, map, of, zip } from 'rx
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut, updateProfile, IdTokenResult } from 'firebase/auth';
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
 import { DocumentReference, Firestore, Query, QueryFieldFilterConstraint, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
-import { UploadTask, getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
+import { UploadTask, deleteObject, getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { AppUser, IndexType, USERS } from '../models/user';
 import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
@@ -15,6 +15,7 @@ import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_cou
 export class AuthService {
   backendUrl = "/.netlify/functions";
   asyncSubject = new AsyncSubject<FirebaseOptions>();
+  appUser: AppUser | null = null;
 
   FIRESTORE_NULL_DOCUMENT = "firestore/document does not exist";
 
@@ -22,12 +23,20 @@ export class AuthService {
     this.httpClient.get(`${this.backendUrl}/index`).subscribe(this.asyncSubject);
   }
 
+  /**
+   * Fetches the firebase config object from the Netlify environment variables
+   * @returns An observable of the Firebase app config object
+   */
   getFirebaseConfig$(): AsyncSubject<FirebaseOptions> {
     if (this.asyncSubject.closed)
       this.httpClient.get(`${this.backendUrl}/index`).subscribe(this.asyncSubject);
     return this.asyncSubject;
   }
 
+  /**
+   * Fetches the emails of medical elders who should be given access to the faculty app
+   * @returns An observable emails
+   */
   fetchElders$(): Observable<IndexType> {
     return this.httpClient.get<IndexType>(`${this.backendUrl}/elders`);
   }
@@ -200,6 +209,32 @@ export class AuthService {
     )
   }
 
+  /**
+   * Writes batch of documents to firebase cloud firestore with support for set, update and delete
+   * operations.
+   * @param refAndData Array of objects describing the document reference and data for cloud write
+   * @returns Observable<string>
+   */
+  batchWriteDocs$(refAndData: {path: string, data: object, 
+    type: "set" | "update" | "delete"}[]) {
+    return this.getFirestore$().pipe(
+      concatMap(db => {
+        const batch = writeBatch(db);
+        refAndData.forEach(rd => {
+          let ref = doc(db, rd.path);
+          if (rd.type === "set") {
+            batch.set(ref, rd.data);
+          } else {
+            if (rd.type === "update") batch.update(ref, rd.data);
+            else batch.delete(ref)
+          }
+        });
+        return batch.commit();
+      }),
+      map(_void => "done")
+    )
+  }
+
   getDoc$<Type>(collectionName: string, docId: string) {
     return this.getFirestore$().pipe(
       concatMap(db => getDoc(doc(db, collectionName, docId))),
@@ -222,8 +257,11 @@ export class AuthService {
         if (user.uid) return this.getFirestore$().pipe(
           concatMap(db => getDoc(doc(db, collectionName, user.uid))),
           map(doc => {
-            if (doc.exists()) return doc.data() as Type;
-            else throw AuthErrorCodes.NULL_USER
+            if (doc.exists()) {
+              const data = doc.data() as Type;
+              if (collectionName === USERS) this.appUser = data as AppUser;
+              return data;
+            } else throw AuthErrorCodes.NULL_USER
           }
           )
         );
@@ -233,6 +271,7 @@ export class AuthService {
   }
 
   getAppUser$() {
+    if (this.appUser !== null) return of(this.appUser);
     return this.getDocByUserId$<AppUser>(USERS);
   }
 
@@ -275,11 +314,9 @@ export class AuthService {
     );
   }
 
-  queryCollections$<Type>(collectionName: string, property: string,
-    comparator: WhereFilterOp, value: string | boolean | number) {
+  queryCollections$<Type>(collectionName: string, where: QueryFieldFilterConstraint) {
     return this.getFirestore$().pipe(
-      concatMap(db => getDocs(query(collection(db, collectionName),
-        where(property, comparator, value)))),
+      concatMap(db => getDocs(query(collection(db, collectionName), where))),
       map(docs => docs.docs.map(doc => doc.data() as Type))
     );
   }
@@ -371,13 +408,20 @@ export class AuthService {
     )
   }
 
-  UploadFileResumably$<Type>(folderName: string, file: File, id: string) {
+  uploadFileResumably$<Type>(file: File, path: string) {
     // Use this for the lecturer's contents
     return this.getFirebaseApp$().pipe(
       map(app => getStorage(app)),
-      map(str => ref(str, `${folderName}/${id}/${file.name}`)),
+      map(str => ref(str, path)),
       map(strRef => uploadBytesResumable(strRef, file)),
       concatMap(this.uploadListener$)
+    )
+  }
+
+  deleteFile$(url: string) {
+    return this.getFirebaseApp$().pipe(
+      map(app => getStorage(app)),
+      concatMap(str => deleteObject(ref(str, url)))
     )
   }
 

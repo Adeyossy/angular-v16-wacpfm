@@ -15,14 +15,15 @@ export class SelectComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.itemsSelectionState.length === 0) this.itemsSelectionState = this.items.map(_item => false);
+    this.overallState = !!this.itemsSelectionState.find(this.findPredicate);
   }
 
   toggleItem(index: number) {
-    ++this.noOfClicks;
     if (this.mode === "single") {
       const itemState = this.itemsSelectionState[index];
       this.itemsSelectionState = this.itemsSelectionState.fill(false);
       this.itemsSelectionState[index] = !itemState;
+      this.overallState = !itemState;
     } else {
       this.itemsSelectionState[index] = !this.itemsSelectionState[index];
     }
@@ -30,7 +31,10 @@ export class SelectComponent implements OnInit {
   }
 
   showItem(index: number): boolean {
-    if (this.noOfClicks % 2 === 1) {
+    const truth = this.itemsSelectionState.find(this.findPredicate);
+    console.log(this.itemsSelectionState);
+    console.log("Truth => ", truth);
+    if (truth) {
       return this.itemsSelectionState[index];
     } else {
       return !this.itemsSelectionState[index];
@@ -38,7 +42,13 @@ export class SelectComponent implements OnInit {
   }
 
   showAll() {
-    this.noOfClicks = 0;
+    console.log("show all");
+    this.overallState = false;
     this.itemsSelectionState.fill(false);
+    console.log("all state => ", this.itemsSelectionState);
+  }
+
+  findPredicate = (state: boolean) => {
+    return state
   }
 }

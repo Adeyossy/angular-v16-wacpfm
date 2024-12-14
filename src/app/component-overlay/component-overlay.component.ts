@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { OverlayComponent } from '../overlay/overlay.component';
 import { UpdateCourseLectureComponent } from '../update-course/update-course-lecture/update-course-lecture.component';
 import { HelperService } from '../services/helper.service';
 import { DEFAULT_LECTURE } from '../models/update_course';
 import { DEFAULT_COURSE_RECORD } from '../models/update_course_record';
 import { DEFAULT_RESOURCE_PERSON } from '../models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-component-overlay',
@@ -15,7 +16,7 @@ export class ComponentOverlayComponent extends OverlayComponent {
   @Input() component: typeof UpdateCourseLectureComponent | null = UpdateCourseLectureComponent;
 
   constructor(private helper: HelperService) {
-    super();
+    super(inject(Router));
   }
 
   closeDialog() {
@@ -25,7 +26,8 @@ export class ComponentOverlayComponent extends OverlayComponent {
         lecture: Object.assign({}, DEFAULT_LECTURE),
         payment: Object.assign({}, DEFAULT_COURSE_RECORD),
         course: this.helper.data.course,
-        lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON)
+        lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
+        writing: [[], -1]
       }
     );
     this.helper.toggleDialog(-1);

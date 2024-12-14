@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.helper.toggleDialog(-1);
     if (this.isAuthFinished) {
       console.log("navigating");
-      this.router.navigateByUrl("/dashboard/updatecourse");
+      this.router.navigateByUrl("/dashboard/home");
     }
     this.loginSubscription.unsubscribe();
   }

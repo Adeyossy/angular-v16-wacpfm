@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { where } from 'firebase/firestore';
 import { NEVER, Observable, concatMap, map, of } from 'rxjs';
+import { DEFAULT_WRITING } from 'src/app/models/candidate';
 import { DEFAULT_LECTURE, UPDATE_COURSES_LECTURES, UpdateCourseLecture } from 'src/app/models/update_course';
 import { DEFAULT_COURSE_RECORD, UPDATE_COURSE_TYPES, UpdateCourseType } from 'src/app/models/update_course_record';
 import { DEFAULT_RESOURCE_PERSON, RESOURCE_PERSONS, RESOURCE_PERSON_TITLES, ResourcePerson } from 'src/app/models/user';
@@ -31,7 +33,7 @@ export class ResourcePersonComponent implements OnInit {
     this.courseSelection = this.courseTypes.map(type => type === this.resourcePerson.courseType);
     if (this.resourcePerson.userEmail) {
       this.lectures$ = this.authService.queryCollections$<UpdateCourseLecture>(
-        UPDATE_COURSES_LECTURES, "lecturerEmail", "==", this.resourcePerson.userEmail
+        UPDATE_COURSES_LECTURES, where("lecturerEmail", "==", this.resourcePerson.userEmail)
       )
     }
     this.createNewLecture();
@@ -76,7 +78,8 @@ export class ResourcePersonComponent implements OnInit {
       lecture,
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
       course: this.helper.data.course,
-      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON)
+      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
+      writing: [[], -1]
     });
 
     this.helper.toggleDialog(1);

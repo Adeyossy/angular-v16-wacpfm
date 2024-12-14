@@ -1,0 +1,32 @@
+<div *ngIf="fellowship$ | async as fellowship; else fetching">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-heading">Fellowship Uploads</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br><br>
+  <div class="wacpfm-card">
+    <h1 class="wacpfm-heading-small mb-2">Dissertation</h1>
+    <button class="icon small" (click)="addDissertation(fellowship)"><i class="bi bi-plus-circle"></i> Add Dissertation</button>
+    <br><hr><br>
+    <app-card-list *ngFor="let diss of fellowship.dissertations.map(toCardList); index as i" 
+    [item]="diss" [index]="i" [control]="fellowship.dissertations[i].files.length > 0"
+    (click)="showWriting(fellowship, i, fellowship.dissertations)" [state]="!!fellowship.dissertations[i].title"></app-card-list>
+  </div>
+  <br><br>
+  <div class="wacpfm-card">
+    <h1 class="wacpfm-heading-small mb-2">Casebooks</h1>
+    <button class="icon small" (click)="addCasebook(fellowship)"><i class="bi bi-plus-circle"></i> Add Casebooks</button>
+    <br><hr><br>
+    <app-card-list *ngFor="let book of fellowship.casebooks.map(toCardList); index as i" 
+    [item]="book" [index]="i" [control]="fellowship.casebooks[i].files.length > 0"
+    (click)="showWriting(fellowship, i, fellowship.casebooks)" [state]="!!fellowship.casebooks[i].title"></app-card-list>
+  </div>
+  <br><br>
+  <button class="wacpfm-primary-button" (click)="done()">FINISH</button>
+</div>
+<ng-template #fetching>
+  <div class="wacpfm-card">
+    <h1 class="wacpfm subheading fw-bold">Checking your details...</h1>
+    <app-loading-circles></app-loading-circles>
+  </div>
+</ng-template>

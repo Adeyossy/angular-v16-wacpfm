@@ -1,10 +1,11 @@
 <div class="container-fluid p-0">
   <div class="row g-0">
-    <div class="col-4 col-md-3 col-lg-2 p-2" *ngFor="let item of items; index as i" [ngClass]="i > 0 ? '' : ''"
-      [ngClass]="showItem(i) ? 'd-block' : 'd-none'">
+    <div class="col-4 col-md-3 col-lg-2 p-2" *ngFor="let item of items; index as i" 
+      [ngClass]="i > 0 ? '' : ''" [ngClass]="itemsSelectionState[i] || !overallState ? 'd-block' : 'd-none'">
       <button [ngClass]="itemsSelectionState[i] ? 'wacpfm-primary-button' : ''"
       (click)="toggleItem(i)" class="wacpfm-font-arial wacpfm-smaller-text">{{ item }}</button>
     </div>
   </div>
 </div>
-<p class="wacpfm-small-text wacpfm-showall p-2 d-inline-block" *ngIf="noOfClicks % 2 === 1" (click)="showAll()">Choose another</p>
+<p class="wacpfm-small-text wacpfm-showall p-2 d-inline-block" (click)="showAll()"
+  *ngIf="overallState">Choose another</p>

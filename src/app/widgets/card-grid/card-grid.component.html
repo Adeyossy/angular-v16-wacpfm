@@ -1,0 +1,7 @@
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <div class="col-md-6 col-xl-4 px-2 py-3" *ngFor="let item of items" [routerLink]="item.link">
+      <app-card-grid-item [title]="item.title" [description]="item.description" [link]="item.link"></app-card-grid-item>
+    </div>
+  </div>
+</div>

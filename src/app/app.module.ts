@@ -34,6 +34,19 @@ import { ResourcePersonComponent } from './update-course/resource-person/resourc
 import { PaymentViewerComponent } from './widgets/payment-viewer/payment-viewer.component';
 import { CourseTypeComponent } from './widgets/course-type/course-type.component';
 import { ResourcePersonsDashComponent } from './dashboard/resource-persons-dash/resource-persons-dash.component';
+import { ExamComponent } from './exam/exam.component';
+import { EditExaminerComponent } from './exam/edit-examiner/edit-examiner.component';
+import { EditExamComponent } from './exam/edit-exam/edit-exam.component';
+import { EditCandidateComponent } from './exam/edit-candidate/edit-candidate.component';
+import { FileUploadComponent } from './widgets/file-upload/file-upload.component';
+import { CardGridItemComponent } from './widgets/card-grid-item/card-grid-item.component';
+import { EditFellowshipComponent } from './exam/edit-candidate/edit-fellowship/edit-fellowship.component';
+import { CardGridComponent } from './widgets/card-grid/card-grid.component';
+import { EditMembershipComponent } from './exam/edit-candidate/edit-membership/edit-membership.component';
+import { TitleSubtitleFileComponent } from './widgets/title-subtitle-file/title-subtitle-file.component';
+import { DashboardHomeComponent } from './dashboard/dashboard-home/dashboard-home.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { LoadingSmallCirclesComponent } from './widgets/loading-small-circles/loading-small-circles.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +78,20 @@ import { ResourcePersonsDashComponent } from './dashboard/resource-persons-dash/
     ResourcePersonComponent,
     PaymentViewerComponent,
     CourseTypeComponent,
-    ResourcePersonsDashComponent
+    ResourcePersonsDashComponent,
+    ExamComponent,
+    EditExaminerComponent,
+    EditExamComponent,
+    EditCandidateComponent,
+    FileUploadComponent,
+    CardGridItemComponent,
+    EditFellowshipComponent,
+    CardGridComponent,
+    EditMembershipComponent,
+    TitleSubtitleFileComponent,
+    DashboardHomeComponent,
+    NotFoundComponent,
+    LoadingSmallCirclesComponent
   ],
   imports: [
     BrowserModule,

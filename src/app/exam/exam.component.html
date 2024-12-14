@@ -1,0 +1,39 @@
+<div class="wacpfm-card">
+  <div *ngIf="exam$ | async as exam; else loading">
+    <div *ngIf="exam.alias.trim(); else noExam">
+      <div class="wacpfm-heading-underline mb-3">
+        <h1 class="fw-bold wacpfm-small-text">{{ exam.alias.replace('-', ' ').toUpperCase() }}</h1>
+        <div class="wacpfm-underline"></div>
+      </div>
+      <br>
+      <h1 class="wacpfm-heading-small wacpfm-font-arial wacpfm-three-lines">{{ exam.title }}</h1>
+      <div *ngIf="appUser$ | async as user">
+        <!-- If the user is not registered, display registration links -->
+        <div *ngIf="getUserType(exam, user.email) as userType; else register">
+          <!-- <app-card-grid [items]="replaceHome(exam.alias, userType, user.userId)"></app-card-grid> -->
+          <button class="icon small">Registered <i class="bi bi-check-circle-fill"></i></button>
+        </div>
+        <ng-template #register>
+          <app-card-grid [items]="replaceReg(exam.alias, user.userId)"></app-card-grid>
+        </ng-template>
+      </div>
+    </div>
+    <ng-template #noExam>
+      <div class="wacpfm-heading-underline mb-3">
+        <h1 class="fw-bold wacpfm-small-text">NO EXAM</h1>
+        <div class="wacpfm-underline"></div>
+      </div>
+      <h1 class="wacpfm-heading-small wacpfm-font-arial">
+        There is no exam at the moment. Kindly check back during the next examination period.
+      </h1>
+      <!-- Insert other tasks users can do here such as installing the app and update course tasks -->
+    </ng-template>
+  </div>
+</div>
+<ng-template #loading>
+  <app-loading-ui></app-loading-ui>
+  <br><br>
+  <app-loading-ui></app-loading-ui>
+  <br><br>
+  <app-loading-ui></app-loading-ui>
+</ng-template>

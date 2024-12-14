@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Subscription, concatMap, filter, from, of } from 'rxjs';
+import { Subscription, concatMap } from 'rxjs';
 import { AuthErrorCodes } from 'firebase/auth';
 import { AppUser, USERS } from '../models/user';
 import { serverTimestamp } from 'firebase/firestore';
@@ -149,7 +149,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         console.log("Successful! Received void");
         this.message = "Your profile was saved successfully. Click the button below to continue";
         this.navText = "Continue";
-        this.navLink = "/dashboard/updatecourse";
+        this.navLink = "/dashboard";
         this.done = true;
         // this.navLink = "/dashboard";
       },

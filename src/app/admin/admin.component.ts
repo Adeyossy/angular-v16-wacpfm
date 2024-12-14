@@ -6,6 +6,7 @@ import { CardList } from '../widgets/card-list/card-list.component';
 import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLecture, DEFAULT_LECTURE } from '../models/update_course';
 import { HelperService } from '../services/helper.service';
 import { DEFAULT_RESOURCE_PERSON, RESOURCE_PERSONS, ResourcePerson } from '../models/user';
+import { DEFAULT_WRITING } from '../models/candidate';
 
 @Component({
   selector: 'app-admin',
@@ -214,7 +215,8 @@ export class AdminComponent implements OnInit {
       lecture,
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
       course: this.helper.data.course,
-      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON)
+      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
+      writing: [[], -1]
     });
 
     this.helper.toggleDialog(1);
@@ -227,7 +229,8 @@ export class AdminComponent implements OnInit {
       lecture: Object.assign({}, DEFAULT_LECTURE),
       payment: record,
       course: this.currentCourse!,
-      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON)
+      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
+      writing: [[], -1]
     });
 
     this.helper.toggleDialog(1);
@@ -239,7 +242,8 @@ export class AdminComponent implements OnInit {
       lecture: Object.assign({}, DEFAULT_LECTURE),
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
       course: this.currentCourse!,
-      lecturer: resourcePerson
+      lecturer: resourcePerson,
+      writing: [[], -1]
     });
 
     this.helper.toggleDialog(1);

@@ -8,6 +8,7 @@
   --wacpfm-accent-colour-orange: #ff7300;
   --wacpfm-accent-colour-red: #e60000;
   --wacpfm-background-colour-hover: rgba(248, 250, 252, 0.5);
+  --wacpfm-background-colour-white: #FFF;
   --wacpfm-background-colour-lighter: #F8FAFC;
   --wacpfm-background-colour: #F5F7FA;
   --wacpfm-background-colour-darker: #F1F3F6;
@@ -144,7 +145,7 @@ label {
   margin-bottom: 6px;
 }
 
-input, .label-as-input {
+input, .label-as-input, select {
   width: 100%;
   display: block;
   padding: 16px 24px;
@@ -155,16 +156,16 @@ input, .label-as-input {
   transition: border 200ms ease-in;
 }
 
-input:hover, .label-as-input:hover {
+input:hover, .label-as-input:hover, select:hover {
   border-color: var(--wacpfm-accent-colour-orange);
 }
 
-input:valid {
+input:valid, select:valid {
   border-color: var(--wacpfm-primary-colour);
   border-left: 4px solid var(--wacpfm-accent-colour-correct);
 }
 
-input:invalid {
+input:invalid, select:invalid {
   border-left: 4px solid var(--wacpfm-accent-colour-red);
 }
 
@@ -201,8 +202,8 @@ i.fitted, span.fitted {
 }
 
 label > i.bi {
-  color: var(--wacpfm-accent-colour-orange);
-  text-shadow: 1px 1px var(--wacpfm-primary-colour);
+  color: var(--wacpfm-primary-colour);
+  /* text-shadow: 1px 1px var(--wacpfm-primary-colour); */
 }
 
 button {
@@ -224,6 +225,16 @@ button.small {
   padding: 8px 4px;
   border: 2px solid var(--wacpfm-primary-colour);
   font-weight: 400;
+}
+
+label.icon, button.icon {
+  cursor: pointer;
+  width: auto;
+  height: auto;
+  padding: var(--wacpfm-border-radius) var(--wacpfm-font-text) ;
+  border: none;
+  border-radius: var(--wacpfm-border-radius);
+  background-color: var(--wacpfm-light-grey);
 }
 
 button.wacpfm-primary-button {
@@ -320,6 +331,7 @@ button:active {
   background-color: var(--wacpfm-background-colour-lighter);
   padding: var(--wacpfm-spacing-default);
   border: 2px solid var(--wacpfm-primary-colour-light);
+  border-radius: var(--wacpfm-border-radius);
   /* box-shadow: 8px 8px var(--wacpfm-primary-shadow); */
   transition: background-color 200ms ease-in;
 }
@@ -329,12 +341,23 @@ button:active {
   border-color: var(--wacpfm-primary-colour);
 }
 
+.wacpfm-card.wacpfm-card-2 {
+  background-color: var(--wacpfm-background-colour-white);
+  border-color: var(--wacpfm-background-colour-darker);
+  padding: var(--wacpfm-spacing-small);
+}
+
 .wacpfm-loading-circle {
   width: 16px;
   height: 16px;
   border-radius: 50%;
   background-color: var(--wacpfm-accent-colour-red);
   animation: loading 300ms ease infinite alternate;
+}
+
+.wacpfm-loading-circle.wacpfm-loading-small-circle {
+  width: 8px;
+  height: 8px;
 }
 
 .wacpfm-loading-circle.second {
@@ -357,6 +380,25 @@ button:active {
 
 .wacpfm-border-tot {
   border-color: var(--wacpfm-primary-colour);
+}
+
+.wacpfm-two-lines {
+  line-height: 1rem;
+  height: 2rem;
+}
+
+.wacpfm-three-lines {
+  line-height: 1rem;
+  height: 3rem;
+}
+
+.wacpfm-four-lines {
+  line-height: 1rem;
+  height: 4rem;
+}
+
+.flash-bg-color {
+  animation: flashing 1s ease-in infinite alternate;
 }
 
 @keyframes slideLefttoRight {
@@ -414,6 +456,16 @@ button:active {
   }
 }
 
+@keyframes flashing {
+  from {
+    transform: scale(0.9);
+  }
+
+  to {
+    transform: scale(1.1);
+  }
+}
+
 @keyframes middleKeyframes {
   from {
     width: 66.6667vw;
@@ -463,12 +515,21 @@ button:active {
     border-color: var(--wacpfm-primary-shadow);
   }
 
+  .wacpfm-card.wacpfm-card-2:hover {
+    background-color: var(--wacpfm-background-colour);
+    border-color: var(--wacpfm-light-grey);
+  }
+
   .wacpfm-toggle:hover {
     color: var(--wacpfm-primary-colour);
   }
 
   .wacpfm-toggle.toggled:hover {
     color: white;
+  }
+
+  label.icon:hover {
+    background-color: var(--wacpfm-grey);
   }
 }
 

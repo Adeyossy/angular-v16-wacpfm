@@ -1,0 +1,45 @@
+<div *ngIf="membership$ | async as membership; else fetching">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-heading">Membership</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br><br>
+  <div class="wacpfm-card">
+    <label for="wacpfm-candidate-theory-banked">Is your theory banked?</label>
+    <app-select (emitItems)="membership.isTheoryBanked = $event[0]" mode="single" [items]="yesNo"
+      [itemsSelectionState]="toSelectionState(yesNo, membership.isTheoryBanked)"></app-select>
+    <br><br>
+    <div *ngIf="membership.isTheoryBanked === 'Yes'">
+      <label for="wacpfm-banked-theory">Month and Year of Banked Theory</label>
+      <input type="month" name="wacpfm-banked-theory" id="wacpfm-banked-theory" placeholder="month"
+        [(ngModel)]="membership.bankedTheoryDate" required>
+    </div>
+  </div>
+  <br><br>
+  <div *ngIf="membership.curriculum === 'new'" class="wacpfm-card">
+    <h1 class="wacpfm-heading-small mb-2">PMRs</h1>
+    <button class="icon small" (click)="addPMR(membership)"><i class="bi bi-plus-circle"></i> Add PMRs</button>
+    <br>
+    <hr><br>
+    <app-card-list *ngFor="let pmr of membership.pmrs.map(toCardList); index as i" [item]="pmr" [index]="i"
+      [control]="membership.pmrs[i].files.length > 0" (click)="showWriting(membership, i)"></app-card-list>
+  </div>
+  <div *ngIf="updateTracker$ === null; else update">
+    <button class="wacpfm-primary-button" (click)="update$(membership)">Submit</button>
+  </div>
+  <ng-template #update>
+    <div *ngIf="updateTracker$ | async as tracker; else loading">
+      <button *ngIf="tracker && true" class="wacpfm-primary-button" 
+      routerLink="/dashboard/exam">Continue</button>
+    </div>
+    <ng-template #loading>
+      <app-loading-circles></app-loading-circles>
+    </ng-template>
+  </ng-template>
+</div>
+<ng-template #fetching>
+  <div class="wacpfm-card">
+    <h1 class="wacpfm subheading fw-bold">Checking your details...</h1>
+    <app-loading-circles></app-loading-circles>
+  </div>
+</ng-template>

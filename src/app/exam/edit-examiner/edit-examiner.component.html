@@ -1,0 +1,221 @@
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small fw-bold">Examiner Registration</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+<br>
+<div *ngIf="examiner$ | async as examiner">
+  <label for="wacpfm-examiner-name"><i class="bi bi-key-fill"></i> Name</label>
+  <input type="text" name="examiner-name" id="wacpfm-examiner-name" required [(ngModel)]="examiner.name" placeholder=""
+    disabled>
+  <br><br>
+  <div *ngIf="user$ | async as user">
+    <label for="wacpfm-examiner-country">Country</label>
+    <input type="text" name="examiner-country" id="wacpfm-examiner-country" required [(ngModel)]="user.country"
+      placeholder="" disabled>
+    <br><br>
+  </div>
+  <label for="wacpfm-examiner-dob">Date of Birth</label>
+  <input type="date" name="examiner-dob" id="wacpfm-examiner-dob" required [(ngModel)]="examiner.dateOfBirth"
+    placeholder="dd/mm/yyyy">
+  <br><br>
+  <label for="wacpfm-candidate-trainingcentre-name">Name of Training Centre</label>
+  <select name="wacpfm-candidate-trainingcentre-name" id="wacpfm-candidate-trainingcentre-name"
+    [(ngModel)]="examiner.trainingCentre">
+    <option *ngFor="let centre of accreditation" [ngValue]="centre" (click)="examiner.trainingCentre = centre"
+      [selected]="examiner.trainingCentre === centre">{{ centre }}</option>
+  </select>
+  <br><br>
+  <div *ngIf="examiner.country.toLowerCase() === 'nigeria'">
+    <label for="">Geo-political Zone</label>
+    <app-select [items]="geopolitical.slice()" mode="single"
+      (emitItems)="examiner.geopolitical = geopoliticise($event)"
+      [itemsSelectionState]="toSelectionState(geopolitical.slice(), examiner.geopolitical)"></app-select>
+    <br><br>
+  </div>
+  <label for="">WACP Membership Status</label>
+  <app-select [items]="wacpMembershipStatus.slice()" mode="single"
+    (emitItems)="examiner.wacpMembershipStatus = $event[0]"
+    [itemsSelectionState]="toSelectionState(wacpMembershipStatus.slice(), examiner.wacpMembershipStatus)"></app-select>
+  <br><br>
+  <label for="wacpfm-membership-residents">Number of membership residents in your institution</label>
+  <input type="number" name="membership-residents" id="wacpfm-membership-residents" required
+    [(ngModel)]="examiner.noOfMembershipResidents">
+  <br><br>
+  <label for="wacpfm-fellowship-residents">Number of fellowship residents in your institution</label>
+  <input type="number" name="fellowship-residents" id="wacpfm-fellowship-residents" required
+    [(ngModel)]="examiner.noOfFellowshipResidents">
+  <br><br>
+  <label for="wacpfm-fellowship-residents">Number of trainers in your institution</label>
+  <input type="number" name="fellowship-residents" id="wacpfm-fellowship-residents" required
+    [(ngModel)]="examiner.noOfTrainers">
+  <br><br>
+  <label for="">Current employment status</label>
+  <app-select [items]="currentEmploymentStatus.slice()" mode="single"
+    (emitItems)="examiner.currentEmploymentStatus = $event[0]"
+    [itemsSelectionState]="toSelectionState(currentEmploymentStatus.slice(), examiner.currentEmploymentStatus)"></app-select>
+  <br><br>
+  <!--   Insert current employment status here   -->
+  <label for="wacpfm-examiner-fellowshipyear"><i class="bi"></i> Year of Fellowship</label>
+  <input type="text" inputmode="numeric" name="examiner-fellowshipyear" id="wacpfm-examiner-fellowshipyear"
+    [(ngModel)]="examiner.yearOfFellowship" required>
+  <br><br>
+  <label for="wacpfm-years-as-fellow">Number of years as Fellows</label>
+  <input type="number" name="years-as-fellow" id="wacpfm-years-as-fellow" required
+    [(ngModel)]="examiner.numberOfYearsAsFellow">
+  <br><br><br>
+  <!--   Examiner experience section   -->
+  <div class="wacpfm-heading-underline">
+    <h2 class="wacpfm-heading-small">Examiner Experience</h2>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br><br>
+  <label for="wacpfm-examiner-firstinvitation">Year of first invitation as examiner</label>
+  <input type="text" name="examiner-firstinvitation" id="wacpfm-examiner-firstinvitation"
+    [(ngModel)]="examiner.firstYearAsExaminer" inputmode="numeric" required>
+  <br><br>
+  <label for="wacpfm-examiner-timespartakeninexam">
+    Number of times that you partook in an examination (please note that there are 2 examinations per year)
+  </label>
+  <input type="number" name="examiner-timespartakeninexam" id="wacpfm-examiner-timespartakeninexam"
+    [(ngModel)]="examiner.timesPartakenInExam" inputmode="numeric" required>
+  <br><br>
+  <label for="wacpfm-examiner-invitations">
+    Number of times invited as examiner in the last three exams
+  </label>
+  <input type="number" name="examiner-invitations" id="wacpfm-examiner-invitations"
+    [(ngModel)]="examiner.invitationsInLast3Exams" inputmode="numeric" required>
+  <br><br><br>
+  <div class="wacpfm-heading-underline">
+    <h2 class="wacpfm-heading-small">Examiner Training Experience</h2>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br>
+  <!-- Insert training status here -->
+  <label for="">Training certification status</label>
+  <app-select [items]="trainerCertificationStatus.slice()" mode="single"
+    (emitItems)="examiner.trainerCertificationStatus = $event[0]"
+    [itemsSelectionState]="toSelectionState(trainerCertificationStatus.slice(), examiner.trainerCertificationStatus)"></app-select>
+  <br><br>
+  <!-- Insert Doctors as Educators training status here -->
+  <label for="">Doctors as educators training status</label>
+  <app-select [items]="doctorsEducatorsTrainingStatus.slice()" mode="single"
+    (emitItems)="examiner.daeTrainingStatus = $event[0]"
+    [itemsSelectionState]="toSelectionState(doctorsEducatorsTrainingStatus.slice(), examiner.daeTrainingStatus)"></app-select>
+  <br><br>
+  <label for="">Doctors as educators certificate</label>
+  <app-file-upload [uploads]="examiner.daeCertificate" [path]="fetchUploadPath(examiner)"
+    (uploadsEmitter)="examiner.daeCertificate = $event"></app-file-upload>
+  <br><br>
+  <label for="wacpfm-examiner-dissertations"><i class="bi"></i> Number of dissertations supervised</label>
+  <input type="number" name="examiner-dissertations" id="wacpfm-examiner-dissertations" required
+    [(ngModel)]="examiner.dissertationsSupervised">
+  <br><br>
+  <label for="wacpfm-examiner-casebooks"><i class="bi"></i> Number of casebooks supervised</label>
+  <input type="number" name="examiner-casebooks" id="wacpfm-examiner-casebooks" required
+    [(ngModel)]="examiner.casebooksSupervised">
+  <br><br>
+  <label for="wacpfm-examiner-fellowshipsupervisor">
+    <i class="bi"></i> Number of supervised fellowship candidates (cumulative)
+  </label>
+  <input type="number" name="examiner-fellowshipsupervisor" id="wacpfm-examiner-fellowshipsupervisor" required
+    [(ngModel)]="examiner.fellowshipSupervised">
+  <br><br>
+  <label for="wacpfm-examiner-fellowssupervised">
+    <i class="bi"></i> Number of Fellows supervised (cumulative)
+  </label>
+  <input type="number" name="examiner-fellowssupervised" id="wacpfm-examiner-fellowssupervised" required
+    [(ngModel)]="examiner.fellowsSupervised">
+  <br><br>
+  <label for="wacpfm-examiner-publications">
+    <i class="bi"></i> How many publications do you have?
+  </label>
+  <input type="number" name="examiner-publications" id="wacpfm-examiner-publications" required
+    [(ngModel)]="examiner.publications">
+  <br><br>
+  <label for="">Previous management experience</label>
+  <app-select [items]="yesNo" mode="single"
+    (emitItems)="examiner.previousMgtExperience = toBoolean($event)"
+    [itemsSelectionState]="toSelectionState(yesNo, examiner.previousMgtExperience ? 'Yes' : 'No')"></app-select>
+  <br><br>
+  <label for="wacpfm-examiner-specifymgtexperience">
+    <i class="bi"></i> Please specify previous management experience
+  </label>
+  <input type="text" name="examiner-specifymgtexperience" id="wacpfm-examiner-specifymgtexperience" required
+    [(ngModel)]="examiner.specifyMgtExperience">
+  <br><br>
+  <label for="wacpfm-institutions-worked">Institutions you have worked in last 20 years</label>
+  <input type="text" name="institutions-worked" id="wacpfm-institutions-worked" required
+    [(ngModel)]="examiner.institutionsWorked">
+  <br><br>
+  <label for="wacpfm-agsm-attendance">
+    How many times have you attended College AGSM in the last 10 years
+  </label>
+  <input type="number" name="agsm-attendance" id="wacpfm-agsm-attendance" required
+    [(ngModel)]="examiner.collegeAGSMAttendance10">
+  <br><br>
+  <br><br>
+  <label for="wacpfm-tot-attendance">
+    How many times have you attended Faculty ToT in the last 5 years
+  </label>
+  <input type="number" name="tot-attendance" id="wacpfm-tot-attendance" required
+    [(ngModel)]="examiner.attendanceAtFacultyTOT5">
+  <br><br>
+  <label for="">Training responsibilities in institution</label>
+  <app-select [items]="trainingResponsibilities.slice()" mode="single"
+    (emitItems)="examiner.trainingResponsibilities = $event[0]"
+    [itemsSelectionState]="toSelectionState(trainingResponsibilities.slice(), 
+    examiner.trainingResponsibilities)"></app-select>
+  <br><br>
+  <div class="wacpfm-heading-underline">
+    <h2 class="wacpfm-heading-small">Referee Information</h2>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <details class="wacpfm-card wacpfm-examiner-referee" *ngFor="let referee of examiner.referees; index as i">
+    <summary class="wacpfm-subheading fw-bold">Referee {{ i + 1 }}</summary>
+    <br>
+    <label for="wacpfm-examiner-refereename">
+      <i class="bi"></i> Name of guarantor
+    </label>
+    <input type="text" name="examiner-refereename" id="wacpfm-examiner-refereename" required [(ngModel)]="referee.name">
+    <br><br>
+    <label for="wacpfm-examiner-refereeinstitution">
+      <i class="bi"></i> Institution of guarantor
+    </label>
+    <input type="text" name="examiner-refereeinstitution" id="wacpfm-examiner-refereeinstitution" required
+      [(ngModel)]="referee.institution">
+    <br><br>
+    <label for="wacpfm-examiner-refereeemail">
+      <i class="bi"></i> E-mail of guarantor
+    </label>
+    <input type="email" name="examiner-refereeemail" id="wacpfm-examiner-refereeemail" required
+      [(ngModel)]="referee.email">
+    <br><br>
+    <label for="wacpfm-examiner-refereephone">
+      <i class="bi"></i> Telephone Number of guarantor
+    </label>
+    <input type="tel" name="examiner-refereephone" id="wacpfm-examiner-refereephone" required
+      [(ngModel)]="referee.phoneNumber">
+    <br><br>
+    <div class="text-end">
+      <button class="small text-end w-auto px-4 text-danger border-danger" (click)="examiner.referees.splice(i, 1)"><i
+          class="bi bi-trash3-fill"></i> Delete Referee
+      </button>
+    </div>
+  </details>
+  <br>
+  <button class="small w-auto px-4" (click)="examiner.referees.splice(examiner.referees.length, 0, newReferee())">
+    <i class="bi bi-plus-circle-fill"></i> Add Referee
+  </button>
+  <br><br>
+  <div *ngIf="updateTracker$ === null; else update">
+    <button class="wacpfm-primary-button" (click)="update$(examiner)">Submit</button>
+  </div>
+  <ng-template #update>
+    <div *ngIf="updateTracker$ | async as tracker; else loading">
+      <button *ngIf="tracker && true" class="wacpfm-primary-button" routerLink="./upload">Continue</button>
+    </div>
+    <ng-template #loading>
+      <app-loading-circles></app-loading-circles>
+    </ng-template>
+  </ng-template>
+</div>

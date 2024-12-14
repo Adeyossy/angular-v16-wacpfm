@@ -19,12 +19,14 @@
             [record]="helper.data.payment" [updateCourse]="this.helper.data.course"></app-payment-viewer>
           <app-resource-person *ngIf="helper.data.lecturer.updateCourseId === helper.data.courseId"
             [resourcePerson]="helper.data.lecturer"></app-resource-person>
+          <app-title-subtitle-file *ngIf="helper.data.writing[1] >= 0" [writing]="helper.data.writing"
+          ></app-title-subtitle-file>
         </app-component-overlay>
       </div>
       <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown === 0">
         <app-overlay [title]="helper.dialog.title" [description]="helper.dialog.message"
           bi="bi-gear-wide wacpfm-loading" [navText]="helper.dialog.buttonText" 
-          (clickEmitter)="helper.toggleDialog(-1)">
+          (clickEmitter)="helper.resetDialog()" [navUrl]="helper.dialog.navUrl">
         </app-overlay>
       </div>
     </div>

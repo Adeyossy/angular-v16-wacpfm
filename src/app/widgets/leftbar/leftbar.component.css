@@ -40,3 +40,8 @@ span {
   color: inherit;
   font-size: 16px;
 }
+
+summary {
+  display: list-item;
+  list-style: none;
+}

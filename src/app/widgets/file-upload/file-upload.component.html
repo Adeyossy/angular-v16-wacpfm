@@ -1,0 +1,60 @@
+<div class="container-fluid p-0">
+  <div class="row">
+    <div class="col-md-6 col-lg-4 wacpfm-match-height p-3">
+      <div (click)="insertNewFile()" class="w-100 wacpfm-match-height text-center wacpfm-card">
+          <i class="bi bi-plus-circle-fill wacpfm-heading-small"></i>
+          <p class="wacpfm-small-text">Add File</p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4 wacpfm-match-height p-3" *ngFor="let file of files; index as i">
+      <div class="wacpfm-card wacpfm-card-2 position-relative">
+        <div #animate class="wacpfm-upload-animator" style="height: 0%;"></div>
+        <p class="position-relative mb-0">
+          <span *ngIf="file.blobURL.trim() === '' && file.cloudURL.trim() === ''; else filename" class="opacity-50">
+            Click the <i class="bi bi-folder2-open"></i> icon below to choose a file.
+          </span>
+          <ng-template #filename>
+            <span *ngIf="file.name">{{ file.name }} </span>
+            <span *ngIf="uploadStates[i] | async as progress"> ({{ progress }}%)</span>
+            <i *ngIf="file.cloudURL" class="bi bi-check-circle-fill text-success"></i>
+            <br><br>
+            <p *ngIf="file.blobURL && file.cloudURL.trim() === ''" class="wacpfm-smaller-text opacity-50"
+            >Click the <i class="bi bi-cloud-arrow-up text-primary"></i> icon to upload. </p>
+          </ng-template>
+        </p>
+        <div class="container-fluid p-0" *ngIf="!uploadStates[i] || uploadStates[i] === never$; else loadSmallCircles">
+          <div class="row">  
+            <div class="col-4">
+              <label for="wacpfm-file-{{files.length - 1 - i}}" class="icon wacpfm-subheading">
+                <i class="bi bi-folder2-open"></i>
+                <input #fileUpload type="file" name="wacpfm-file" id="wacpfm-file-{{files.length - 1 - i}}"
+                  class="d-none" (change)="onFileChosenInList($event.target, i)">
+              </label>
+            </div>
+            <div class="col-4" *ngIf="file.blobURL || file.cloudURL">
+              <label class="icon wacpfm-subheading bg-primary flash-bg-color" *ngIf="file.blobURL && !file.cloudURL"
+              (click)="upload(file, i)">
+                <i class="bi bi-cloud-arrow-up text-white"></i>
+              </label>
+              <div *ngIf="deleteState$ === null; else spinning">
+                <label class="icon wacpfm-subheading bg-danger" *ngIf="file.cloudURL" (click)="deleteFromCloud$(file, i)">
+                  <span><i class="bi bi-trash3 text-white"></i></span>
+                </label>
+              </div>
+              <ng-template #spinning>
+                <label for="spinning-gear" class="icon" *ngIf="deleteState$ | async">
+                  <span class="wacpfm-loading d-inline-block fitted">
+                    <i class="bi bi-gear-fill fitted"></i>
+                  </span>
+                </label>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <ng-template #loadSmallCircles>
+          <app-loading-small-circles></app-loading-small-circles>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,6 +3,14 @@ import { UpdateCourseLectureComponent } from '../update-course/update-course-lec
 import { DEFAULT_LECTURE, DEFAULT_UPDATE_COURSE, UpdateCourse, UpdateCourseLecture } from '../models/update_course';
 import { DEFAULT_COURSE_RECORD, UpdateCourseRecord } from '../models/update_course_record';
 import { DEFAULT_RESOURCE_PERSON, ResourcePerson } from '../models/user';
+import { AcademicWriting, DEFAULT_ACADEMIC_WRITING, DEFAULT_WRITING, Writing } from '../models/candidate';
+
+export interface SimpleDialog {
+  title: string,
+  message: string,
+  buttonText: string,
+  navUrl?: string
+}
 
 export interface ComponentDialogInfo {
   type: string,
@@ -15,7 +23,8 @@ export interface ComponentDialogData {
   lecture: UpdateCourseLecture,
   payment: UpdateCourseRecord,
   course: UpdateCourse,
-  lecturer: ResourcePerson
+  lecturer: ResourcePerson,
+  writing: [AcademicWriting[], number]
 }
 
 @Injectable({
@@ -32,14 +41,21 @@ export class HelperService {
     lecture: Object.assign({}, DEFAULT_LECTURE),
     payment: Object.assign({}, DEFAULT_COURSE_RECORD),
     course: Object.assign({}, DEFAULT_UPDATE_COURSE),
-    lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON)
+    lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
+    writing: [[], -1]
   }
 
-  dialog = {
+  dialog: SimpleDialog = {
     title: "",
     message: "",
     buttonText: ""
   }
+
+  countries = [
+    'Benin', 'Burkina Faso', 'Gambia', 'Ghana', 'Guinea',
+    'Ivory Coast', 'Liberia', 'Niger', 'Nigeria', 'Senegal', 
+    'Sierra Leone', 'Togo'
+  ];
 
   constructor() { }
 
@@ -84,8 +100,18 @@ export class HelperService {
     this.isDialogShown = state;
   }
 
-  setDialog(dialog: {title: string, message: string, buttonText: string}) {
+  setDialog(dialog: SimpleDialog) {
     this.dialog = dialog;
+  }
+
+  resetDialog() {
+    this.dialog = {
+      title: "",
+      message: "",
+      buttonText: ""
+    };
+
+    this.isDialogShown = -1;
   }
 
   getDialogComponent(type: string) {
@@ -104,9 +130,28 @@ export class HelperService {
     this.data = data;
   }
 
+  resetComponentDialogData() {
+    this.data = {
+      courseId: "",
+      lecture: Object.assign({}, DEFAULT_LECTURE),
+      payment: Object.assign({}, DEFAULT_COURSE_RECORD),
+      course: Object.assign({}, DEFAULT_UPDATE_COURSE),
+      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
+      writing: [[], -1]
+    };
+  }
+
   sortCourseType(record1: UpdateCourseRecord, record2: UpdateCourseRecord) {
     if(record1.courseType === "Membership") return -1;
     if(record2.courseType === "Membership") return 1;
     return record1.courseType.charCodeAt(0) - record2.courseType.charCodeAt(0);
+  }
+
+  toDateString(millis: number) {
+    return new Date(millis).toLocaleDateString("en-NG").split("/").reverse().join("-");
+  }
+
+  parseToMillis(date: string) {
+    return Date.parse(date);
   }
 }

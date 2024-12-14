@@ -2,20 +2,25 @@
   <!-- <div class="wacpfm-leftbar-header wacpfm-leftbar-item m-1">
     <h1 class="wacpfm-subheading text-white">Dashboard</h1>
   </div> -->
-  <div class="wacpfm-leftbar-item wacpfm-leftbar-link" *ngIf="appUser$|async"
+  <details class="wacpfm-leftbar-item wacpfm-leftbar-link" *ngIf="appUser$|async"
     routerLink="/dashboard/admin" routerLinkActive="active"
     (click)="helper.toggleSidebar(false)">
-    <i class="bi bi-gear-wide-connected"></i> <span>Admin</span>
-  </div>
-  <div class="wacpfm-leftbar-item wacpfm-leftbar-link" 
+    <summary><i class="bi bi-gear-wide-connected"></i> <span>Admin</span></summary>
+  </details>
+  <details class="wacpfm-leftbar-item wacpfm-leftbar-link" [open]="true"
     routerLink="/dashboard/updatecourse" routerLinkActive="active"
     (click)="helper.toggleSidebar(false)">
-    <i class="bi bi-mortarboard-fill"></i> <span>Update Course</span>
-  </div>
-  <div class="wacpfm-leftbar-item wacpfm-leftbar-link opacity-50" disabled
-     routerLinkActive="wacpfm-primary-button">
-    <i class="bi bi-person-vcard-fill"></i> <span>Examination</span>
-  </div>
+    <summary><i class="bi bi-mortarboard-fill"></i> <span>Update Course</span></summary>
+  </details>
+  <details class="wacpfm-leftbar-item wacpfm-leftbar-link"
+    routerLink="/dashboard/exam" routerLinkActive="active" [open]="true">
+    <summary><i class="bi bi-person-vcard-fill"></i> <span>Examination</span></summary>
+    <!-- <div class="wacpfm-leftbar-subitems ps-5">
+      <p class="wacpfm-leftbar-subitem wacpfm-small-text py-3">
+        <i class="bi bi-circle-fill"></i> Registration
+      </p>
+    </div> -->
+  </details>
   <!-- <div class="wacpfm-leftbar-item wacpfm-leftbar-link opacity-50" 
     routerLinkActive="wacpfm-primary-button">
     <i class="bi bi-journal-bookmark-fill"></i> <span>Resource Person</span>
