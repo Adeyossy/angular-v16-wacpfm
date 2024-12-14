@@ -29,7 +29,7 @@ type ExamSpecifics = {
 
 export interface Exam {
   id: string;
-  alias: string; // format: first|second{year} e.g. first2024
+  alias: string; // format: first|second{year} e.g. first_2024
   title: string;
   dateCreated: FieldValue; // date in milliseconds
   registrationStartDate: number; // date registration starts
@@ -44,7 +44,7 @@ export interface Exam {
 
 export const NEW_EXAM: Exam = {
   id: "",
-  alias: "first2024",
+  alias: "first_2024",
   title: "For testing purposes only",
   dateCreated: serverTimestamp(),
   registrationStartDate: Date.now(),
