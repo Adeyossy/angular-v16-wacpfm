@@ -45,6 +45,7 @@ import { CardGridComponent } from './widgets/card-grid/card-grid.component';
 import { EditMembershipComponent } from './exam/edit-candidate/edit-membership/edit-membership.component';
 import { TitleSubtitleFileComponent } from './widgets/title-subtitle-file/title-subtitle-file.component';
 import { DashboardHomeComponent } from './dashboard/dashboard-home/dashboard-home.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { DashboardHomeComponent } from './dashboard/dashboard-home/dashboard-hom
     CardGridComponent,
     EditMembershipComponent,
     TitleSubtitleFileComponent,
-    DashboardHomeComponent
+    DashboardHomeComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
