@@ -44,6 +44,7 @@ import { EditFellowshipComponent } from './exam/edit-candidate/edit-fellowship/e
 import { CardGridComponent } from './widgets/card-grid/card-grid.component';
 import { EditMembershipComponent } from './exam/edit-candidate/edit-membership/edit-membership.component';
 import { TitleSubtitleFileComponent } from './widgets/title-subtitle-file/title-subtitle-file.component';
+import { DashboardHomeComponent } from './dashboard/dashboard-home/dashboard-home.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import { TitleSubtitleFileComponent } from './widgets/title-subtitle-file/title-
     EditFellowshipComponent,
     CardGridComponent,
     EditMembershipComponent,
-    TitleSubtitleFileComponent
+    TitleSubtitleFileComponent,
+    DashboardHomeComponent
   ],
   imports: [
     BrowserModule,
