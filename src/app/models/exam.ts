@@ -38,7 +38,8 @@ export interface Exam {
   lastExamDate: number;
   membership: ExamSpecifics;
   fellowship: ExamSpecifics & {dissertationShareDate: number}; // date dissertation is shared with examiners
-  examiners: string[]; // invited examiners
+  examiners: string[]; // examiners registered for this exam
+  invitedExaminers: string[] // invited examiners
 }
 
 export const NEW_EXAM: Exam = {
@@ -61,7 +62,8 @@ export const NEW_EXAM: Exam = {
     pmrShareDate: Date.now(),
     dissertationShareDate: Date.now()
   },
-  examiners: []
+  examiners: [],
+  invitedExaminers: []
 }
 
 export const EXAM_DESCRIPTION = {
