@@ -373,13 +373,13 @@ export class AuthService {
 
   queryByUserId$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
-      concatMap(user => this.queryCollections$<Type>(collectionName, "userId", "==", user.uid))
+      concatMap(user => this.queryCollections$<Type>(collectionName, where("userId", "==", user.uid)))
     );
   }
 
   queryByUserEmail$<Type>(collectionName: string) {
     return this.getFirebaseUser$().pipe(
-      concatMap(user => this.queryCollections$<Type>(collectionName, "userEmail", "==", user.email!))
+      concatMap(user => this.queryCollections$<Type>(collectionName, where("userEmail", "==", user.email!)))
     );
   }
 
@@ -447,13 +447,13 @@ export class AuthService {
   }
 
   getDetails$(courseId: string) {
-    return this.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS, "updateCourseId",
-      "==", courseId).pipe(
+    return this.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS, where("updateCourseId",
+      "==", courseId)).pipe(
         concatMap(records => zip(records.filter(record => record.userEmail !== "adeyossy1@gmail.com").
           filter(record => record.userEmail !== "adeyosolamustapha@outlook.com").filter(record => 
             record.userEmail !== "amustapha133@stu.ui.edu.ng")
           .map(record => this.queryCollections$<AppUser>(
-          USERS, "email", "==", record.userEmail).pipe(
+          USERS, where("email", "==", record.userEmail)).pipe(
           map(([appUser]) => {
             return {
               user_email: appUser.email,
