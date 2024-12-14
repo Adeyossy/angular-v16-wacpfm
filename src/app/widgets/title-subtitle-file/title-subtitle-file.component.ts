@@ -54,18 +54,27 @@ export class TitleSubtitleFileComponent implements OnInit {
     // Update the appropriate firestore document
     // this.filesPlusToUploads(this.filesPlus);
     const writing = this.parseWriting();
-    this.updateWriting$ = this.authService.addDocWithID$(CANDIDATES, this.helper.data.courseId, {
-      [writing.type.toLowerCase()]: this.writing[0]
-    }, true).pipe(
-      map(_v => {
-        this.cancel();
-        return true;
-      }),
-      catchError(err => {
-        console.log("error updating writing => ", err);
-        this.updateWriting$ = null;
-        return of(false);
-      })
-    )
+    if (writing.files.length > 0) {
+      this.updateWriting$ = this.authService.addDocWithID$(CANDIDATES, this.helper.data.courseId, {
+        [writing.type.toLowerCase()]: this.writing[0]
+      }, true).pipe(
+        map(_v => {
+          this.cancel();
+          return true;
+        }),
+        catchError(err => {
+          console.log("error updating writing => ", err);
+          this.updateWriting$ = null;
+          return of(false);
+        })
+      )
+    } else {
+      this.helper.setDialog({
+        title: "Missing Upload",
+        message: "It seems you have not uploaded a required file. Maybe you picked a file but forgot to upload it?",
+        buttonText: "Upload"
+      });
+      this.helper.toggleDialog(0);
+    }
   }
 }

@@ -102,7 +102,7 @@ export class ExamService {
   }
 
   queryToDocuments<Type>(data: Type[], collection: string) {
-    console.log(collection, " collection: convert query to document => ", data);
+    // console.log(collection, " collection: convert query to document => ", data);
     if (data.length) {
       this.cache[collection] = data;
     }
@@ -113,7 +113,7 @@ export class ExamService {
   queryItem$<Type>(collection: string, [where1, where2]: QueryFieldFilterConstraint[]):
     Observable<Type[]> {
     if (this.cache[collection] && this.cache[collection].length) {
-      console.log("Calling cache => collection: ", collection);
+      // console.log("Calling cache => collection: ", collection);
       return of(this.cache[collection]) as Observable<Type[]>;
     } else {
       if (where2 === undefined) {
@@ -169,6 +169,15 @@ export class ExamService {
       message: "Your registration is complete. Click the button below to continue.",
       buttonText: "Continue",
       navUrl: "/dashboard/exam"
+    });
+    this.helper.toggleDialog(0);
+  }
+
+  alert() {
+    this.helper.setDialog({
+      title: "Missing Upload",
+      message: "It seems you have not uploaded a required file. Maybe you picked a file but forgot to upload it?",
+      buttonText: "Upload"
     });
     this.helper.toggleDialog(0);
   }

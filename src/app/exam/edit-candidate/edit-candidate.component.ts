@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { arrayUnion, doc, where, writeBatch } from 'firebase/firestore';
 import { catchError, concatMap, map, Observable, of } from 'rxjs';
-import { Candidate, CANDIDATES, FellowshipExamRecord, NEW_CANDIDATE, NEW_FELLOWSHIP_CANDIDATE, PreviousAttempt } from "src/app/models/candidate";
+import { Candidate, CANDIDATES, FellowshipExamRecord, NEW_CANDIDATE, NEW_FELLOWSHIP_CANDIDATE, NEW_MEMBERSHIP_CANDIDATE, PreviousAttempt } from "src/app/models/candidate";
 import { EXAM_DESCRIPTION, EXAMS } from 'src/app/models/exam';
 import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -48,7 +48,7 @@ export class EditCandidateComponent implements OnInit {
         return "";
       })
     );
-    
+
     this.user$ = this.authService.getAppUser$();
 
     this.candidate$ = this.activeRoute.paramMap.pipe(
@@ -106,7 +106,7 @@ export class EditCandidateComponent implements OnInit {
         if (candidates.length === 0) {
           switch (category.toLowerCase().trim()) {
             case "membership":
-              candidate = Object.assign({}, NEW_CANDIDATE);
+              candidate = Object.assign({}, NEW_MEMBERSHIP_CANDIDATE);
               break;
 
             case "fellowship":
@@ -148,37 +148,33 @@ export class EditCandidateComponent implements OnInit {
   }
 
   update$(candidate: Candidate) {
-    // this.updateTracker$ = this.candidate$.pipe(
-    //   concatMap(candidate => this.authService.addDocWithID$(CANDIDATES, candidate.userId, 
-    //     candidate, true)),
-    //   map(_void => true),
-    //   catchError(_err => of(false))
-    // );
-
-    console.log("candidate => ", candidate);
-
-    this.updateTracker$ = this.authService.batchWriteDocs$([
-      {
-        path: `${CANDIDATES}/${this.examService.parseCandidateExamId(candidate)}`, 
-        data: candidate, 
-        type: "set"
-      },
-      {
-        path: `${EXAMS}/${candidate.examAlias}`,
-        data: {
-          [candidate.category]: {
-            candidates: arrayUnion(candidate.userEmail)
-          }
+    // Check for specific uploads
+    if (candidate.certificates.length > 0) {
+      this.updateTracker$ = this.authService.batchWriteDocs$([
+        {
+          path: `${CANDIDATES}/${this.examService.parseCandidateExamId(candidate)}`,
+          data: candidate,
+          type: "set"
         },
-        type: "update"
-      }
-    ]).pipe(
-      concatMap(res => res !== "" ? this.router.navigate(['upload'], { relativeTo: this.activeRoute }) : of(false)),
-      catchError(err => {
-        console.log("error => ", err);
-        this.updateTracker$ = null;
-        return of(false);
-      })
-    )
+        {
+          path: `${EXAMS}/${candidate.examAlias}`,
+          data: {
+            [candidate.category]: {
+              candidates: arrayUnion(candidate.userEmail)
+            }
+          },
+          type: "update"
+        }
+      ]).pipe(
+        concatMap(res => res !== "" ? this.router.navigate(['upload'], { relativeTo: this.activeRoute }) : of(false)),
+        catchError(err => {
+          console.log("error => ", err);
+          this.updateTracker$ = null;
+          return of(false);
+        })
+      )
+    } else {
+      this.examService.alert();
+    }
   }
 }
