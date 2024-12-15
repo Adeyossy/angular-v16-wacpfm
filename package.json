@@ -22,6 +22,7 @@
     "@middy/core": "^6.0.0",
     "@middy/http-header-normalizer": "^6.0.0",
     "@middy/http-urlencode-body-parser": "^6.0.0",
+    "@paystack/inline-js": "^2.22.1",
     "firebase": "^10.7.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
