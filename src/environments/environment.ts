@@ -5,5 +5,6 @@ export const environment = {
   updateCourseLecture: "update_course_lectures",
   examiner: "examiners",
   exam: "exams",
-  candidates: "candidates"
+  candidates: "candidates",
+  secret_key: "PAYSTACK_LIVE_SECRET_KEY"
 };
