@@ -11,3 +11,10 @@ export interface PaystackInitResponse {
     reference: string
   }
 }
+
+export interface PaystackConfig {
+  test_pk: string,
+  live_pk: string,
+  test_sk: string,
+  live_sk: string
+};
