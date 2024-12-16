@@ -8,6 +8,7 @@ import { UploadTask, deleteObject, getDownloadURL, getStorage, ref, uploadBytes,
 import { AppUser, IndexType, USERS } from '../models/user';
 import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
+import { PaystackInitResponse } from '../models/payment';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,10 @@ export class AuthService {
    */
   fetchElders$(): Observable<IndexType> {
     return this.httpClient.get<IndexType>(`${this.backendUrl}/elders`);
+  }
+
+  initialiseTransaction(data: unknown): Observable<PaystackInitResponse> {
+    return this.httpClient.post<PaystackInitResponse>(`${this.backendUrl}/pay`, data);
   }
 
   getFirebaseApp$(): Observable<FirebaseApp> {
