@@ -34,7 +34,7 @@
               Receipt</button>
           </div>
           <div class="col-lg-6 p-2">
-            <button *ngIf="payWithCard$ === null; else initialising" (click)="payNow()">
+            <button *ngIf="payWithCard$ === null; else initialising" (click)="newTransaction()">
               <i class="bi bi-credit-card-fill color-accent"></i> Pay Now
             </button>
             <ng-template #initialising>

@@ -55,11 +55,11 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
         throw "Param does not exist";
       }),
       concatMap(id => this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
-       where( "updateCourseId", "==", id))),
+        where("updateCourseId", "==", id))),
       map(res => res.filter(rec => rec.paymentEvidence)),
       concatMap(res => this.authService.getFirebaseUser$().pipe(
-        map(user => res.filter(r => r.userEmail.toLowerCase().trim() === 
-        user!.email?.toLowerCase().trim()))
+        map(user => res.filter(r => r.userEmail.toLowerCase().trim() ===
+          user!.email?.toLowerCase().trim()))
       ))
       // timeout({ first: 10000, with: () => NEVER }),
       // catchError((err, caught) => { console.log("error => ", err); return NEVER }),
@@ -103,10 +103,10 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     // When payment receipt upload is done
     this.uploadStarted = true;
     this.helper.toggleDialog(0);
-    
+
     this.helper.setDialog({
-      title: "Uploading...", 
-      message: "Your receipt is being uploaded", 
+      title: "Uploading...",
+      message: "Your receipt is being uploaded",
       buttonText: "Please wait"
     });
 
@@ -176,21 +176,59 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     if (pay === 'done') this.router.navigateByUrl('/dashboard/updatecourse')
   }
 
+  newTransaction() {
+    const popup = new PaystackPop();
+    this.payWithCard$ = this.activatedRoute.paramMap.pipe(
+      map(params => {
+        return {
+          category: params.get("category") ? params.get("category") as string : "",
+          uCourseId: params.get("updateCourseId") ? params.get("updateCourseId") as string : ""
+        }
+      }),
+      concatMap(obj => this.authService.getAppUser$().pipe(
+        map(user => {
+          return {
+            userId: user.userId, category: obj.category,
+            uCourseId: obj.uCourseId, email: user.email
+          }
+        })
+      )),
+      concatMap(vals => this.authService.fetchPaystackConfig$().pipe(
+        map(config => {
+          popup.newTransaction({
+            key: config[environment.public_key as 'test_pk' | 'live_pk'],
+            amount: 25000 * 100,
+            email: vals.email,
+            reference: `${vals.userId}_${vals.uCourseId}_${Date.now()}`
+          })
+        })
+      )),
+      map(_void => true)
+    )
+  }
+
   payNow() {
     this.payWithCard$ = this.authService.getAppUser$().pipe(
       concatMap(user => this.authService.initialiseTransaction({
         email: user.email,
-        amount: 25000*100,
+        amount: 25000 * 100,
         reference: user.userId.concat("_", Date.now().toString()),
-        secret_key: environment.secret_key
+        secret_key: environment.secret_key,
+        metadata: {
+          updateCourseId: "",
+          updateCourseType: ""
+        }
       })),
       map(res => {
         // console.log("res => ", res);
-        typeof(res);
+        typeof (res);
         console.log("res.data => ", res.data);
         console.log("res.data.access_code => ", res.data.access_code);
         const popup = new PaystackPop();
-        popup.resumeTransaction(res.data.access_code as unknown as ResumeOptions)
+        // popup.newTransaction({})
+        // let rs = popup.resumeTransaction as
+        const popupTransaction = popup.resumeTransaction(res.data.access_code as unknown as ResumeOptions);
+        popupTransaction.getStatus().status === "success";
         return true
       })
     )
