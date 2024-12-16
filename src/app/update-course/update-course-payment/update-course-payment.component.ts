@@ -7,6 +7,13 @@ import { NEVER, Observable, Subscription, catchError, concatMap, map, of, timeou
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
+import PaystackPop from '@paystack/inline-js';
+import { PaystackInitResponse } from 'src/app/models/payment';
+import { environment } from 'src/environments/environment';
+
+interface ResumeOptions {
+  accessCode: string
+}
 
 @Component({
   selector: 'app-update-course-payment',
@@ -32,6 +39,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   };
 
   courseRecords$: Observable<UpdateCourseRecord[]> = new Observable();
+  payWithCard$: Observable<boolean> | null = null;
 
   uploadStarted = false;
 
@@ -166,5 +174,25 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     this.paymentSub$ = NEVER;
     this.uploadStarted = false;
     if (pay === 'done') this.router.navigateByUrl('/dashboard/updatecourse')
+  }
+
+  payNow() {
+    this.payWithCard$ = this.authService.getAppUser$().pipe(
+      concatMap(user => this.authService.initialiseTransaction({
+        email: user.email,
+        amount: 25000*100,
+        reference: user.userId.concat("_", Date.now().toString()),
+        secret_key: environment.secret_key
+      })),
+      map(res => {
+        // console.log("res => ", res);
+        typeof(res);
+        console.log("res.data => ", res.data);
+        console.log("res.data.access_code => ", res.data.access_code);
+        const popup = new PaystackPop();
+        popup.resumeTransaction(res.data.access_code as unknown as ResumeOptions)
+        return true
+      })
+    )
   }
 }

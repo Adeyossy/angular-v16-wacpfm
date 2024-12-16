@@ -30,11 +30,17 @@
       <div class="container-fluid p-0">
         <div class="row g-0">
           <div class="col-lg-6 p-2">
-            <button (click)="uploadChosen = true"><i class="bi bi-cloud-arrow-up-fill color-accent"></i> Upload
+            <button (click)="uploadChosen = true" disabled><i class="bi bi-cloud-arrow-up-fill color-accent"></i> Upload
               Receipt</button>
           </div>
           <div class="col-lg-6 p-2">
-            <button disabled><i class="bi bi-credit-card-fill color-accent"></i> Pay Now</button>
+            <button *ngIf="payWithCard$ === null; else initialising" (click)="payNow()">
+              <i class="bi bi-credit-card-fill color-accent"></i> Pay Now
+            </button>
+            <ng-template #initialising>
+              <span *ngIf="payWithCard$ | async as payWithCard">{{ payWithCard }}</span>
+              <app-loading-small-circles></app-loading-small-circles>
+            </ng-template>
           </div>
         </div>
       </div>
