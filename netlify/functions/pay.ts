@@ -3,29 +3,34 @@ import middy from "@middy/core";
 import urlEncodeBodyParser from "@middy/http-urlencode-body-parser";
 import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import { HandlerResponse } from "@netlify/functions/dist/function/handler_response";
+import { environment } from "src/environments/environment";
+import httpCors from "@middy/http-cors";
 
-const sk = process.env['PAYSTACK_TEST_SECRET_KEY'];
 
 const baseHandler: Handler = async (event: HandlerEvent, context: HandlerContext): Promise<HandlerResponse> => {
   console.log("pay endpoint event.body => ", event.body);
   const body = event.body ? JSON.parse(event.body) : null;
-
+  
   if (body) {
     const email = body.hasOwnProperty('email') ? body.email : '';
     const amount = body.hasOwnProperty('amount') ? body.amount : '';
     const reference = body.hasOwnProperty('reference') ? body.reference : '';
-    const callback_url = body.hasOwnProperty('callback_url') ? body.callback_url : '';
+    const secret_key = body.hasOwnProperty('secret_key') ? body.secret_key : '';
+    const sk = process.env[secret_key];
+    // const callback_url = body.hasOwnProperty('callback_url') ? body.callback_url : '';
 
     const params = JSON.stringify({
       "email": email,
       "amount": amount,
       "currency": "NGN",
-      "reference": reference,
-      "callback_url": callback_url
+      "reference": reference
     });
+
+    console.log("secret key => ", sk);
 
     const options = {
       method: 'POST',
+      port: 443,
       headers: {
         Authorization: `Bearer ${sk}`,
         'Content-Type': 'application/json'
@@ -58,6 +63,11 @@ const baseHandler: Handler = async (event: HandlerEvent, context: HandlerContext
 
 }
 
-const handler = middy(baseHandler).use(httpHeaderNormalizer()).use(urlEncodeBodyParser());
+const handler = middy(baseHandler)
+.use(httpCors())
+.use(httpHeaderNormalizer())
+.use(urlEncodeBodyParser({
+  disableContentTypeError: true
+}));
 
 export { handler }
