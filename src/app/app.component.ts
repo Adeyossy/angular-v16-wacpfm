@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
       map(event => {
         if (event.type === EventType.NavigationEnd || event.type === EventType.NavigationError ||
           event.type === EventType.NavigationCancel || event.type === EventType.Scroll) {
-            console.log("navigation ended");
+            // console.log("navigation ended");
             return false;
         }
         return true;
