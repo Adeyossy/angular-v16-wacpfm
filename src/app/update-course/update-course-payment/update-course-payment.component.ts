@@ -149,8 +149,10 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
 
       case "tot-resident":
         return this.authService.addDocsInBulk$([
-          this.create("Membership", params.uCourseId, params.user, params.result),
-          this.create("Fellowship", params.uCourseId, params.user, params.result),
+          this.create("Membership", params.uCourseId, params.user, params.result,
+            params.paymentId, params.approved),
+          this.create("Fellowship", params.uCourseId, params.user, params.result,
+            params.paymentId, params.approved),
           this.create("ToT", params.uCourseId, params.user, params.result,
             params.paymentId, params.approved),
         ], UPDATE_COURSES_RECORDS);
