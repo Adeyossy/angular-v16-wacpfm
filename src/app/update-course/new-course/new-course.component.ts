@@ -47,7 +47,7 @@ export class NewCourseComponent implements OnInit {
         map(user => { this.updateCourse.creator = user.uid; return docRef; }),
         concatMap(docRef => this.authService.addDocWithRef$(docRef, this.updateCourse).pipe(
           map(_void => { 
-            this.router.navigateByUrl("/dashboard/updatecourse/${docRef.id}/details");
+            this.router.navigateByUrl(`/dashboard/updatecourse/${docRef.id}/details`);
             return docRef.id;
           })
         ))
