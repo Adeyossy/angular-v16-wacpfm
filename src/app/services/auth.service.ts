@@ -50,6 +50,12 @@ export class AuthService {
     return this.httpClient.post<PaystackInitResponse>(`${this.backendUrl}/pay`, data);
   }
 
+  verifyTransaction(data: {reference: string}) {
+    return this.httpClient.post<{data: {status: string, amount: number}}>(
+      `${this.backendUrl}/verify`, data
+    )
+  }
+
   getFirebaseApp$(): Observable<FirebaseApp> {
     return this.getFirebaseConfig$().pipe(map(config => initializeApp(config)));
   }
