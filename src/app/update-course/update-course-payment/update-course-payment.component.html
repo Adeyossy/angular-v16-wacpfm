@@ -8,7 +8,13 @@
     <div class="container-fluid p-0" *ngIf="courseRecords.length > 0; else uploadView">
       <div class="row wacpfm-card">
         <div class="col-lg-6">
-          <img [src]="courseRecords[0].paymentEvidence" alt="Payment receipt for this update course" class="img-fluid">
+          <img *ngIf="courseRecords[0].paymentEvidence; else paystackPayment" 
+          [src]="courseRecords[0].paymentEvidence" 
+          alt="Payment receipt for this update course" class="img-fluid">
+          <ng-template #paystackPayment>
+            <h1 class="wacpfm-heading-medium">Card</h1>
+            <h1 class="wacpfm-heading-medium">Payment</h1>
+          </ng-template>
         </div>
         <div class="col-lg-6 py-2">
           <div class="wacpfm-heading-underline">
