@@ -1,6 +1,6 @@
 <div>
   <div class="wacpfm-heading-underline">
-    <h1 class="wacpfm-heading-small fw-bold">Update Course: Payment</h1>
+    <h1 class="wacpfm-heading-medium fw-bold">Update Course: Payment</h1>
     <div class="wacpfm-underline"></div>
   </div>
   <br>
@@ -12,8 +12,8 @@
           [src]="courseRecords[0].paymentEvidence" 
           alt="Payment receipt for this update course" class="img-fluid">
           <ng-template #paystackPayment>
-            <h1 class="wacpfm-heading-medium">Card</h1>
-            <h1 class="wacpfm-heading-medium">Payment</h1>
+            <h1 class="wacpfm-heading-medium text-uppercase fw-bold">Card</h1>
+            <h1 class="wacpfm-heading-medium text-uppercase fw-bold">Payment</h1>
           </ng-template>
         </div>
         <div class="col-lg-6 py-2">
@@ -30,15 +30,17 @@
       </div>
     </div>
     <ng-template #uploadView>
-      <h1 class="wacpfm-subheading">How would you like to pay?</h1>
-      <p class="wacpfm-small-text">Uploading proof of payment is the only option available for this current Update Course</p>
+      <h1 class="wacpfm-heading-small">How would you like to pay?</h1>
+      <p class="wacpfm-small-text">
+        Payment for the update course is made through a payment provider called Mystical Morning.
+      </p>
       <br>
       <div class="container-fluid p-0">
         <div class="row g-0">
-          <div class="col-lg-6 p-2">
+          <!-- <div class="col-lg-6 p-2">
             <button (click)="uploadChosen = true" disabled><i class="bi bi-cloud-arrow-up-fill color-accent"></i> Upload
               Receipt</button>
-          </div>
+          </div> -->
           <div class="col-lg-6 p-2">
             <button *ngIf="payWithCard$ === null; else initialising" (click)="newTransaction()">
               <i class="bi bi-credit-card-fill color-accent"></i> Pay Now
