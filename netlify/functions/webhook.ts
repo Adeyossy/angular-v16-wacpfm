@@ -1,3 +1,7 @@
+import middy from "@middy/core";
+import httpCors from "@middy/http-cors";
+import httpHeaderNormalizer from "@middy/http-header-normalizer";
+import urlEncodeBodyParser from "@middy/http-urlencode-body-parser";
 import { Handler, HandlerContext, HandlerEvent } from "@netlify/functions";
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, doc, getFirestore, writeBatch } from "firebase/firestore";
@@ -81,3 +85,12 @@ const baseHandler: Handler = async (event: HandlerEvent, context: HandlerContext
     }
   }
 }
+
+const handler = middy(baseHandler)
+.use(httpCors())
+.use(httpHeaderNormalizer())
+.use(urlEncodeBodyParser({
+  disableContentTypeError: true
+}));
+
+export { handler }
