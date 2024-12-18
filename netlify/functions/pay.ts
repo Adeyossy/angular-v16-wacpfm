@@ -8,7 +8,7 @@ import httpCors from "@middy/http-cors";
 
 
 const baseHandler: Handler = async (event: HandlerEvent, context: HandlerContext): Promise<HandlerResponse> => {
-  console.log("pay endpoint event.body => ", event.body);
+  // console.log("pay endpoint event.body => ", event.body);
   const body = event.body ? JSON.parse(event.body) : null;
   
   if (body) {
@@ -26,7 +26,7 @@ const baseHandler: Handler = async (event: HandlerEvent, context: HandlerContext
       "reference": reference
     });
 
-    console.log("secret key => ", sk);
+    // console.log("secret key => ", sk);
 
     const options = {
       method: 'POST',
