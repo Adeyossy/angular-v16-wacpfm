@@ -36,7 +36,7 @@ const baseHandler: Handler = async (event: HandlerEvent, context: HandlerContext
     
     const batch = writeBatch(db);
     courseType.forEach(type => {
-      const document = doc(collection(db, "update_course_records"));
+      const document = doc(collection(db, "test_update_course_records"));
       let record: UpdateCourseRecord = {
         courseType: type,
         id: document.id,
@@ -44,8 +44,7 @@ const baseHandler: Handler = async (event: HandlerEvent, context: HandlerContext
         updateCourseId: updateCourseId,
         userEmail: body.data.customer.email,
         userId: userId,
-        approved: true,
-        paymentEvidence: ""
+        approved: true
       }
       batch.set(document, record);
     });
