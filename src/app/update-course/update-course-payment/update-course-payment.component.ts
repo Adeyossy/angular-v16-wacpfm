@@ -4,7 +4,7 @@ import { AuthErrorCodes, User } from 'firebase/auth';
 import { where } from 'firebase/firestore';
 import { UploadResult } from 'firebase/storage';
 import { NEVER, Observable, Subscription, catchError, concatMap, map, of, timeout } from 'rxjs';
-import { UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
+import { BY_CATEGORY, UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 import PaystackPop from '@paystack/inline-js';
@@ -42,36 +42,6 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   payWithCard$: Observable<boolean> | null = null;
 
   uploadStarted = false;
-
-  byCategory = {
-    jnr: {
-      amount: 25945.37 * 100,
-      name: "Membership",
-      fee: 25000 * 100
-    },
-    snr: {
-      amount: 25945.37 * 100,
-      name: "Fellowship",
-      fee: 25000 * 100
-    },
-    tot: {
-      amount: 10945.37 * 100,
-      name: "ToT",
-      fee: 10000 * 100
-    },
-    'tot-resident': {
-      amount: 20945.37 * 100,
-      name: "ToT & Resident",
-      fee: 20000 * 100
-    }
-  }
-
-  courseTypeByCategory = {
-    jnr: "Membership",
-    snr: "Fellowship",
-    tot: "ToT",
-    'tot-resident': "T"
-  }
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
     private router: Router, public helper: HelperService) {
@@ -333,19 +303,19 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
           popup.newTransaction({
             key: config[environment.public_key as 'test_pk' | 'live_pk'],
             channels: ["card"],
-            amount: this.byCategory[vals.category].amount,
+            amount: BY_CATEGORY[vals.category].amount,
             email: vals.email,
             metadata: {
               custom_fields: [
                 {
                   display_name: "Category",
                   variable_name: "category",
-                  value: this.byCategory[vals.category].name
+                  value: BY_CATEGORY[vals.category].name
                 },
                 {
                   display_name: "Fee",
                   variable_name: "fee",
-                  value: this.byCategory[vals.category].fee
+                  value: BY_CATEGORY[vals.category].fee
                 },
                 {
                   display_name: "Course ID",

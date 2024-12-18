@@ -26,3 +26,26 @@ export const DEFAULT_COURSE_RECORD: UpdateCourseRecord = {
   userId: "",
   paymentEvidence: ""
 };
+
+export const BY_CATEGORY = {
+  jnr: {
+    amount: 25945.37 * 100,
+    name: "Membership",
+    fee: 25000 * 100
+  },
+  snr: {
+    amount: 25954.37 * 100,
+    name: "Fellowship",
+    fee: 25000 * 100
+  },
+  tot: {
+    amount: 10945.37 * 100,
+    name: "ToT",
+    fee: 10000 * 100
+  },
+  'tot-resident': {
+    amount: 20945.37 * 100,
+    name: "ToT & Resident",
+    fee: 20000 * 100
+  }
+}
