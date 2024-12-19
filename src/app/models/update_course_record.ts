@@ -47,5 +47,10 @@ export const BY_CATEGORY = {
     amount: 20945.37 * 100,
     name: "ToT & Resident",
     fee: 20000 * 100
+  },
+  developer: {
+    amount: 100*100,
+    name: "Developer",
+    fee: 20000 * 100
   }
 }

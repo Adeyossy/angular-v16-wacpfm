@@ -42,6 +42,8 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   payWithCard$: Observable<boolean> | null = null;
 
   uploadStarted = false;
+  popup: PaystackPop = new PaystackPop();
+  
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
     private router: Router, public helper: HelperService) {
@@ -128,11 +130,12 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
         ], UPDATE_COURSES_RECORDS);
 
       default:
-        throw new Error("Error Uploading");
+        return this.addNewRecord("" as unknown as UpdateCourseType, params.uCourseId, 
+          params.user, params.result, params.paymentId, params.approved);
     }
   }
 
-  aggregateParams$(result: string) {
+  aggregateParams$ = (result: string) => {
     return this.activatedRoute.paramMap.pipe(
       map(params => {
         return {
@@ -282,7 +285,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   newTransaction() {
-    const popup = new PaystackPop();
+    this.popup = new PaystackPop();
     this.payWithCard$ = this.activatedRoute.paramMap.pipe(
       map(params => {
         return {
@@ -293,14 +296,14 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       concatMap(obj => this.authService.getAppUser$().pipe(
         map(user => {
           return {
-            userId: user.userId, category: obj.category as 'jnr' | 'snr' | 'tot' | 'tot-resident',
+            userId: user.userId, category: obj.category as 'jnr' | 'snr' | 'tot' | 'tot-resident' | 'developer',
             uCourseId: obj.uCourseId, email: user.email
           }
         })
       )),
       concatMap(vals => this.authService.fetchPaystackConfig$().pipe(
         map(config => {
-          popup.newTransaction({
+          const newPopup = this.popup.newTransaction({
             key: config[environment.public_key as 'test_pk' | 'live_pk'],
             channels: ["card"],
             amount: BY_CATEGORY[vals.category].amount,
@@ -327,7 +330,9 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
             reference: `${vals.userId}_${vals.uCourseId}_${Date.now()}`,
             onSuccess: this.onSuccess,
             onCancel: this.cancel
-          })
+          });
+          console.log("getStatus response =>", newPopup.getStatus);
+          
         })
       )),
       map(_void => true)
