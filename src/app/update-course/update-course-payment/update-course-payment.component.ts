@@ -243,6 +243,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   cancel = () => {
+    console.log("Cancelled");
     this.showCancelDialog();
     this.payWithCard$ = null;
   }
@@ -262,8 +263,11 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     this.payWithCard$ = this.verifyTransaction(transaction, this.showErrorDialog);
   }
 
-  error = (type: string, message: string) => {
-    this.showErrorDialog(message);
+  error = (error: {type: string, message: string}) => {
+    console.log("An error occurred");
+    console.log("Error type =>", error.type);
+    console.log("Error message =>", error.message);
+    this.showErrorDialog(error.message);
     this.payWithCard$ = null;
   }
 
@@ -278,6 +282,8 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   onSuccess = (transaction: PaystackTransaction) => {
+    console.log("onSuccess called");
+    console.log("transaction in onSuccess =>", transaction);
     this.payWithCard$ = this.verifyTransaction(
       transaction,
       this.showSuccessDialog
@@ -303,6 +309,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       )),
       concatMap(vals => this.authService.fetchPaystackConfig$().pipe(
         map(config => {
+          console.log("Payment started");
           const newPopup = this.popup.newTransaction({
             key: config[environment.public_key as 'test_pk' | 'live_pk'],
             channels: ["card"],
@@ -329,6 +336,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
             },
             reference: `${vals.userId}_${vals.uCourseId}_${Date.now()}`,
             onSuccess: this.onSuccess,
+            onError: this.error,
             onCancel: this.cancel
           });
           console.log("getStatus response =>", newPopup.getStatus);
