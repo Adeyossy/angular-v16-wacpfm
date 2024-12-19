@@ -7,8 +7,10 @@ const sk = process.env['PAYSTACK_TEST_SECRET_KEY'];
 
 const verifyHandler: Handler = async (event: HandlerEvent, content: HandlerContext) => {
   const body = event.body ? JSON.parse(event.body) : null;
+  console.log("event.body =>", event.body);
   if (body && body.hasOwnProperty('reference')) {
     const reference = body.reference as string;
+    console.log("reference =>", reference);
     const options = {
       method: 'GET',
       port: 443,

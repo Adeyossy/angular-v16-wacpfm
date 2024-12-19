@@ -202,6 +202,8 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   verifyTransaction = (transaction: PaystackTransaction, callback: () => boolean) => {
+    console.log("transaction in verifyTransaction => ", transaction);
+    console.log("transaction reference in verifyTransaction => ", transaction.reference);
     return this.authService.verifyTransaction({ reference: transaction.reference }).pipe(
       concatMap(res => {
         console.log("res => ", res);
