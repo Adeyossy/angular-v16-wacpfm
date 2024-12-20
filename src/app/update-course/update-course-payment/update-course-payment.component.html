@@ -109,7 +109,7 @@
             placeholder="enter reference here" [(ngModel)]="enteredReference">
             <br>
             <button class="icon p-3" (click)="parseReference(enteredReference, customer)"
-            *ngIf="verifyAgain$ === null; else subscribe" [disabled]="enteredReference.split('-').length < 3"
+            *ngIf="verifyAgain$ === null; else subscribe"
             ><i class="bi bi-credit-card-fill color-accent"></i> Verify</button>
             <ng-template #subscribe>
               <span *ngIf="verifyAgain$ | async as verify">{{ verify }}</span>
