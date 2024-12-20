@@ -8,7 +8,7 @@ import { UploadTask, deleteObject, getDownloadURL, getStorage, ref, uploadBytes,
 import { AppUser, IndexType, USERS } from '../models/user';
 import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
-import { PaystackConfig, PaystackInitResponse } from '../models/payment';
+import { BasicResponse, CustomerResponse, ParsedCustomerResponse, PaystackConfig, PaystackInitResponse } from '../models/payment';
 
 @Injectable({
   providedIn: 'root'
@@ -51,8 +51,14 @@ export class AuthService {
   }
 
   verifyTransaction(data: {reference: string}) {
-    return this.httpClient.post<{data: {status: string, amount: number}}>(
+    return this.httpClient.post<BasicResponse>(
       `${this.backendUrl}/verify`, data
+    )
+  }
+
+  getPaystackCustomer(data: {email: string}) {
+    return this.httpClient.post<CustomerResponse>(
+      `${this.backendUrl}/get-customer`, data
     )
   }
 

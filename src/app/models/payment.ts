@@ -49,6 +49,16 @@ export interface PaystackResponse {
   }
 }
 
+export interface BasicResponse { 
+  data: { 
+    status: string, 
+    amount: number, 
+    customer: { 
+      email: string 
+    } 
+  } 
+}
+
 export interface PaystackConfig {
   test_pk: string,
   live_pk: string,
@@ -65,4 +75,21 @@ export interface PaystackTransaction {
   trans: string;
   transaction: string;
   trxref: string;
+}
+
+export interface CustomerResponse {
+  status: boolean,
+  message: string,
+  data?: {
+    email: string,
+    firstname: string | null,
+    lastname: string | null,
+    transactions: PaystackTransaction[]
+  }
+}
+
+export interface ParsedCustomerResponse {
+  status: boolean,
+  message: string,
+  email: string
 }
