@@ -283,6 +283,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
             console.log("Caught error => ", err);
             this.showErrorDialog();
             this.payWithCard$ = null;
+            this.verifyAgain$ = null;
             return of("Verification Failed");
           })
         )
