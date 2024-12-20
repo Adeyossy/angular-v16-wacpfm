@@ -107,9 +107,9 @@
             <label for="transaction-reference">Paste the reference in the receipt sent to your email below</label>
             <input type="text" name="transaction-reference" id="transaction-reference"
             placeholder="enter reference here" [(ngModel)]="enteredReference">
-            <br><br>
+            <br>
             <button class="icon p-3" (click)="parseReference(enteredReference, customer)"
-            *ngIf="verifyAgain$ === null; else subscribe" [disabled]="enteredReference.split('_').length < 3"
+            *ngIf="verifyAgain$ === null; else subscribe" [disabled]="enteredReference.split('-').length < 3"
             ><i class="bi bi-credit-card-fill color-accent"></i> Verify</button>
             <ng-template #subscribe>
               <span *ngIf="verifyAgain$ | async as verify">{{ verify }}</span>

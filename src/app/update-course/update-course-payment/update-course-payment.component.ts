@@ -378,7 +378,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   parseReference(reference: string, customer: CustomerResponse) {
-    const [userId, updateCourseId, timestamp] = reference.split("_");
+    const [userId, updateCourseId, timestamp] = reference.split("-");
     this.verifyAgain$ = this.aggregateParams$("").pipe(
       concatMap(params => {
         if (userId === params.user.uid && updateCourseId === params.uCourseId &&
@@ -400,7 +400,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
             return courseId ? courseId : "";
           }),
           map(courseId => customer.data!.transactions.find(
-            transaction => transaction.reference.split("_")[1] === courseId)),
+            transaction => transaction.reference.split("-")[1] === courseId)),
           concatMap(transaction => {
             console.log("transaction => ", transaction);
             if (transaction !== undefined) {
@@ -460,7 +460,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
                 }
               ]
             },
-            reference: `${vals.userId}_${vals.uCourseId}_${Date.now()}`,
+            reference: `${vals.userId}-${vals.uCourseId}-${Date.now()}`,
             onSuccess: this.onSuccess,
             onError: this.error,
             onCancel: this.cancel
