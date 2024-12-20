@@ -70,7 +70,10 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
           const filteredRecords = res.filter(r => r.userEmail.toLowerCase().trim() ===
             user!.email?.toLowerCase().trim());
           if (filteredRecords.length === 0) {
-            this.paystackCustomer$ = this.authService.getPaystackCustomer({ email: user.email! })
+            this.paystackCustomer$ = this.authService.getPaystackCustomer({
+              email: user.email!,
+              secret_key: environment.secret_key
+            })
           }
           return filteredRecords;
         })
@@ -255,7 +258,10 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   verifyTransaction = (transaction: PaystackTransaction, callback: () => boolean) => {
     console.log("transaction in verifyTransaction => ", transaction);
     console.log("transaction reference in verifyTransaction => ", transaction.reference);
-    return this.authService.verifyTransaction({ reference: transaction.reference }).pipe(
+    return this.authService.verifyTransaction({
+      reference: transaction.reference,
+      secret_key: environment.secret_key
+    }).pipe(
       concatMap(response => {
         console.log("response => ", response);
         return this.aggregateParams$("").pipe(
@@ -379,7 +385,9 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   parseReference(reference: string, customer: CustomerResponse) {
-    const [userId, updateCourseId, timestamp] = reference.split("-");
+    console.log("customer => ", customer);
+    const segments = reference.split("-");
+    const [userId, updateCourseId, timestamp] = segments.length === 3 ? segments : reference.split("_");
     this.verifyAgain$ = this.aggregateParams$("").pipe(
       concatMap(params => {
         if (userId === params.user.uid && updateCourseId === params.uCourseId &&
@@ -401,7 +409,9 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
             return courseId ? courseId : "";
           }),
           map(courseId => customer.data!.transactions.find(
-            transaction => transaction.reference.split("-")[1] === courseId)),
+            transaction => transaction.reference.split("-")[1] === courseId ||
+              transaction.reference.split("_")[1] === courseId)
+          ),
           concatMap(transaction => {
             console.log("transaction => ", transaction);
             if (transaction !== undefined) {
