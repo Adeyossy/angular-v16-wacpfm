@@ -68,9 +68,9 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       concatMap(res => this.authService.getFirebaseUser$().pipe(
         map(user => {
           const filteredRecords = res.filter(r => r.userEmail.toLowerCase().trim() ===
-          user!.email?.toLowerCase().trim());
+            user!.email?.toLowerCase().trim());
           if (filteredRecords.length === 0) {
-            this.paystackCustomer$ = this.authService.getPaystackCustomer({email: user.email!})
+            this.paystackCustomer$ = this.authService.getPaystackCustomer({ email: user.email! })
           }
           return filteredRecords;
         })
@@ -263,8 +263,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
             if (response && response.data && response.data.status === "success" &&
               response.data.amount === BY_CATEGORY[params.category as Category].amount
               && response.data.customer && response.data.customer.email.trim() ===
-              params.user.email?.trim()) 
-            {
+              params.user.email?.trim()) {
               const val = this.createApprovedRecord(params, response, transaction);
               console.log("Created approved records =>", val);
               return this.authService.addDocsInBulk$(val, UPDATE_COURSES_RECORDS);
@@ -357,8 +356,8 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     }, 5000);
   }
 
-  verifyFromReference = (reference: string) => {
-    this.onSuccess({
+  toTransaction = (reference: string) => {
+    return {
       id: "",
       message: "",
       redirecturl: "",
@@ -367,7 +366,28 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       trans: "",
       transaction: "",
       trxref: ""
-    })
+    }
+  }
+
+  parseTimestamp(timestamp: string) {
+    const epochOffset = parseInt(timestamp);
+    const nan = isNaN(epochOffset);
+    if (!nan) {
+      return (new Date().getMonth() - new Date(epochOffset).getMonth()) <= 4
+    } return nan;
+  }
+
+  parseReference(reference: string, customer: CustomerResponse) {
+    const [userId, updateCourseId, timestamp] = reference.split("_");
+    this.verifyAgain$ = this.aggregateParams$("").pipe(
+      concatMap(params => {
+        if (userId === params.user.uid && updateCourseId === params.uCourseId &&
+          this.parseTimestamp(timestamp) && customer.status) {
+          return this.verifyTransaction(this.toTransaction(reference), this.showSuccessDialog)
+        }
+        return of("Error occurred");
+      })
+    );
   }
 
   verifyFromCustomerData = (customer: CustomerResponse) => {
@@ -385,8 +405,8 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
             console.log("transaction => ", transaction);
             if (transaction !== undefined) {
               return this.verifyTransaction(transaction, this.showSuccessDialog);
-            } 
-            
+            }
+
             return of("Failed");
           })
         )
