@@ -3,7 +3,7 @@ import httpHeaderNormalizer from "@middy/http-header-normalizer";
 import urlEncodeBodyParser from "@middy/http-urlencode-body-parser";
 import { Handler, HandlerContext, HandlerEvent } from "@netlify/functions";
 
-const sk = process.env['PAYSTACK_TEST_SECRET_KEY'];
+// const sk = process.env['PAYSTACK_TEST_SECRET_KEY'];
 
 const verifyHandler: Handler = async (event: HandlerEvent, content: HandlerContext) => {
   const body = event.body ? JSON.parse(event.body) : null;
@@ -11,6 +11,8 @@ const verifyHandler: Handler = async (event: HandlerEvent, content: HandlerConte
   if (body && body.hasOwnProperty('reference')) {
     const reference = body.reference as string;
     console.log("reference =>", reference);
+    const secret_key = body.hasOwnProperty('secret_key') ? body.secret_key : '';
+    const sk = process.env[secret_key];
     const options = {
       method: 'GET',
       port: 443,

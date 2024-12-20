@@ -50,13 +50,13 @@ export class AuthService {
     return this.httpClient.post<PaystackInitResponse>(`${this.backendUrl}/pay`, data);
   }
 
-  verifyTransaction(data: {reference: string}) {
+  verifyTransaction(data: {reference: string, secret_key: string}) {
     return this.httpClient.post<BasicResponse>(
       `${this.backendUrl}/verify`, data
     )
   }
 
-  getPaystackCustomer(data: {email: string}) {
+  getPaystackCustomer(data: {email: string, secret_key: string}) {
     return this.httpClient.post<CustomerResponse>(
       `${this.backendUrl}/get-customer`, data
     )
