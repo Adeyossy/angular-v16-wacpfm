@@ -8,9 +8,8 @@
     <div class="container-fluid p-0" *ngIf="courseRecords.length > 0; else uploadView">
       <div class="row wacpfm-card">
         <div class="col-lg-6">
-          <img *ngIf="courseRecords[0].paymentEvidence; else paystackPayment" 
-          [src]="courseRecords[0].paymentEvidence" 
-          alt="Payment receipt for this update course" class="img-fluid">
+          <img *ngIf="courseRecords[0].paymentEvidence; else paystackPayment" [src]="courseRecords[0].paymentEvidence"
+            alt="Payment receipt for this update course" class="img-fluid">
           <ng-template #paystackPayment>
             <h1 class="wacpfm-heading-medium text-uppercase fw-bold">Card</h1>
             <h1 class="wacpfm-heading-medium text-uppercase fw-bold">Payment</h1>
@@ -30,8 +29,9 @@
       </div>
     </div>
     <ng-template #uploadView>
-      <h1 class="wacpfm-heading-small">How would you like to pay?</h1>
-      <p class="wacpfm-small-text">
+      <h1 class="wacpfm-heading-small fw-bold">Pay for this Update Course</h1>
+      <br>
+      <p class="wacpfm-subheading">
         Payment for the update course is facilitated by Mystical Morning, a payment provider.
       </p>
       <br>
@@ -50,6 +50,10 @@
               <app-loading-small-circles></app-loading-small-circles>
             </ng-template>
           </div>
+          <div class="col-lg-6 p-2">
+            <button (click)="hasVerificationFailed = true"><i class="bi bi-check-circle-fill"></i> Verify
+              Payment</button>
+          </div>
         </div>
       </div>
       <br><br>
@@ -62,7 +66,7 @@
           <h1 class="fw-bold wacpfm-subheading">Upload Your Receipt</h1>
           <p class="wacpfm-subheading">
             Receipts can be uploaded in picture format only (i.e jpeg, jpg, png).
-            If you have a receipt as a PDF, please take a screenshot showing the details of the transfer 
+            If you have a receipt as a PDF, please take a screenshot showing the details of the transfer
             and upload that instead of the PDF.
           </p>
           <div class="wacpfm-underline"></div>
@@ -76,14 +80,39 @@
               <label for="wacpfm-receipt" class="label-as-input w-50 text-center">
                 <i class="bi bi-cloud-arrow-up-fill"></i> Choose a File
               </label>
-              <input #receipt type="file" name="wacpfm-receipt" id="wacpfm-receipt" placeholder="Choose a file" class="d-none"
-                accept=".png, .jpg, .jpeg" [ngModel]="what" (ngModelChange)="onChange($event)" required>
+              <input #receipt type="file" name="wacpfm-receipt" id="wacpfm-receipt" placeholder="Choose a file"
+                class="d-none" accept=".png, .jpg, .jpeg" [ngModel]="what" (ngModelChange)="onChange($event)" required>
             </div>
             <div class="col-lg-6">
-              <button *ngIf="receiptURL" class="wacpfm-primary-button w-100" (click)="uploadReceipt()">Upload Receipt</button>
+              <button *ngIf="receiptURL" class="wacpfm-primary-button w-100" (click)="uploadReceipt()">Upload
+                Receipt</button>
             </div>
           </div>
         </div>
+      </div>
+      <div class="wacpfm-card" *ngIf="hasVerificationFailed">
+        <div class="wacpfm-heading-underline">
+          <h1 class="wacpfm-heading fw-bold">Verify Payment</h1>
+          <div class="wacpfm-underline"></div>
+        </div>
+        <br>
+        <p class="wacpfm-subheading">
+          It seems automatic verification was not successful. Click the verify button below to try again.
+        </p>
+        <br>
+        <button class="icon" *ngIf="transaction && transaction.reference; else fetchCustomer"
+          (click)="onSuccess(transaction)"><i class="bi bi-credit-card-fill color-accent"></i> Verify</button>
+        <ng-template #fetchCustomer>
+          <div *ngIf="paystackCustomer$ | async as customer">
+            <button class="icon" (click)="verifyFromCustomerData(customer)"
+            *ngIf="verifyAgain$ === null; else subscribe"
+            ><i class="bi bi-credit-card-fill color-accent"></i> Verify</button>
+            <ng-template #subscribe>
+              <span *ngIf="verifyAgain$ | async as verify">{{ verify }}</span>
+              <app-loading-small-circles></app-loading-small-circles>
+            </ng-template>
+          </div>
+        </ng-template>
       </div>
     </ng-template>
   </div>
