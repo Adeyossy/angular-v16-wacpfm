@@ -18,7 +18,8 @@
         <div class="container-fluid p-0" *ngIf="user; else loadingCircles">
           <div class="row g-0">
             <div class="col-6 col-md-6 col-lg-4 py-2">
-              <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true" *ngIf="!newCourse.tot.participants.includes(user!.email) &&
+              <button class="wacpfm-primary-button small w-auto px-4" (click)="openCategoryUI = true" 
+              *ngIf="!newCourse.tot.participants.includes(user!.email) &&
                 !newCourse.fellowship.participants.includes(user!.email) &&
                 !newCourse.membership.participants.includes(user!.email) && 
                 newCourse.endDate > today">
@@ -49,7 +50,7 @@
           <app-loading-circles></app-loading-circles>
         </ng-template>
       </div>
-      <div class="wacpfm-ongoing-course-register wacpfm-padding-default"
+      <div class="wacpfm-ongoing-course-register wacpfm-padding-default bg-white"
         [ngClass]="openCategoryUI && newCourse.endDate > today ? 'd-block' : 'd-none'">
         <div class="container-fluid p-0">
           <div class="row g-0">
