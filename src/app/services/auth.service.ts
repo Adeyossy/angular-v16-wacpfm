@@ -244,7 +244,7 @@ export class AuthService {
         refAndData.forEach(rd => {
           let ref = doc(db, rd.path);
           if (rd.type === "set") {
-            batch.set(ref, rd.data);
+            batch.set(ref, rd.data, {merge: true});
           } else {
             if (rd.type === "update") batch.update(ref, rd.data);
             else batch.delete(ref)
