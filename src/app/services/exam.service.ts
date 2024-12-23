@@ -6,6 +6,7 @@ import { map, Observable, of } from 'rxjs';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { Candidate, CANDIDATES, FellowshipExamRecord, MembershipExamRecord } from '../models/candidate';
 import { HelperService } from './helper.service';
+import { CacheService } from './cache.service';
 
 type Cache = {
   [collection: string]: unknown[];
@@ -14,23 +15,11 @@ type Cache = {
 @Injectable({
   providedIn: 'root'
 })
-export class ExamService {
+export class ExamService extends CacheService {
   // exam registration
   // exam information
   // exam progress
   examinerCache: Examiner | null = null;
-
-  /**
-   * Stores information on the current exam: the exam itself, examiner and/or candidate.
-   * 
-   * TODO: Link this cache to a particular exam using its alias so several exams can be cached
-   * and not just the current one.
-   */
-  cache: Cache = {
-    examiners: [],
-    candidates: [],
-    exams: []
-  }
 
   accreditation = [
     "44 NAR, Hosp., Kaduna", "ABUTH, Zaria", "AKTH, Kano", "Askoro District Hospital, FCT",
@@ -56,35 +45,6 @@ export class ExamService {
 
   examVenues = ["Ibadan", "Abuja", "Accra"];
 
-  constructor(private authService: AuthService, private helper: HelperService) { }
-
-  getExamItem$<Type extends Examiner | MembershipExamRecord | FellowshipExamRecord>(
-    collectionName: string, cacheKey: "examiner" | "membership_candidate" | "fellowship_candidate"
-  ) {
-    let cachedItem = this.cache[cacheKey];
-    if (cachedItem !== null) return of(cachedItem);
-    return this.authService.getDocByUserId$<Type>(collectionName).pipe(
-      map(examItem => {
-        switch (cacheKey) {
-          case "examiner":
-            cachedItem = [examItem] as Type[];
-            return cachedItem;
-
-          case "membership_candidate":
-            cachedItem = [examItem] as Type[];
-            return cachedItem;
-
-          case "fellowship_candidate":
-            cachedItem = [examItem] as Type[];
-            return cachedItem;
-
-          default:
-            return null;
-        }
-      })
-    );
-  }
-
   /**
    * Fetch exam-related item from collection either from the cloud or from cache
    * @param collection name of the Firebase collection
@@ -99,31 +59,6 @@ export class ExamService {
         return this.cache[collection];
       })
     )
-  }
-
-  queryToDocuments<Type>(data: Type[], collection: string) {
-    // console.log(collection, " collection: convert query to document => ", data);
-    if (data.length) {
-      this.cache[collection] = data;
-    }
-    return data;
-  }
-
-  queryItem$<Type>(collection: string, [where1]: QueryFieldFilterConstraint[]): Observable<Type[]>
-  queryItem$<Type>(collection: string, [where1, where2]: QueryFieldFilterConstraint[]):
-    Observable<Type[]> {
-    if (this.cache[collection] && this.cache[collection].length) {
-      // console.log("Calling cache => collection: ", collection);
-      return of(this.cache[collection]) as Observable<Type[]>;
-    } else {
-      if (where2 === undefined) {
-        return this.authService.queryCollections$<Type>(collection, where1).pipe(
-          map(data => this.queryToDocuments(data, collection))
-        )
-      } else return this.authService.queriesCollections$<Type>(collection, [where1, where2]).pipe(
-        map(data => this.queryToDocuments(data, collection))
-      )
-    }
   }
 
   queryCandidate$<Type>(examAlias: string, candidateId: string, instance: Type) {
@@ -148,11 +83,6 @@ export class ExamService {
         return records[0];
       })
     )
-  }
-
-  getExaminer$<Type>() {
-    if (this.cache[EXAMINERS]) return of(this.cache[EXAMINERS]) as Observable<Type>;
-    return this.authService.getDocByUserId$<Type>(EXAMINERS);
   }
 
   parseCandidateExamId(candidate: Candidate) {
