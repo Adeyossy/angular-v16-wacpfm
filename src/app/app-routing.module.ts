@@ -27,6 +27,7 @@ import { EditFellowshipComponent } from './exam/edit-candidate/edit-fellowship/e
 import { EditMembershipComponent } from './exam/edit-candidate/edit-membership/edit-membership.component';
 import { DashboardHomeComponent } from './dashboard/dashboard-home/dashboard-home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { PreviousCoursesComponent } from './update-course/previous-courses/previous-courses.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
@@ -46,7 +47,9 @@ const routes: Routes = [
       { path: "home", component: DashboardHomeComponent },
       { path: "updatecourse", component: UpdateCourseComponent },
       { path: "updatecourse/new", component: NewCourseComponent },
+      { path: "updatecourse/previous", component: PreviousCoursesComponent },
       { path: "updatecourse/:updateCourseId/details", component: UpdateCourseDetailsComponent },
+      { path: "updatecourse/previous/:updateCourseId/details", component: UpdateCourseDetailsComponent },
       { path: "updatecourse/:updateCourseId/details/payment/:category", component: UpdateCoursePaymentComponent },
       { path: "updatecourse/:updateCourseId/details/edit", component: NewCourseComponent },
       { path: "updatecourse/:updateCourseId/resourcepersons", component: ResourcePersonsDashComponent },

@@ -51,26 +51,11 @@
       </div>
     </div>
   </div>
-  <br><br>
-  <div class="row g-0">
-    <div class="col-12">
-      <div class="wacpfm-heading-underline">
-        <h1 class="fw-bold wacpfm-subheading">Previous Courses</h1>
-        <div class="wacpfm-underline"></div>
-      </div>
-    </div>
-  </div>
   <br>
-  <div class="row" *ngIf="(previousCourses | async) as results">
-    <div class="col-lg-6" *ngFor="let result of results">
-      <div class="wacpfm-card wacpfm-match-height" routerLink="./{{result.updateCourseId}}/details">
-        <p class="wacpfm-previous-course-title">{{ result.title }}</p>
-        <div class="wacpfm-page-divider"></div>
-        <br>
-        <p class="wacpfm-small-text wacpfm-font-arial">{{ getDate(result.startDate) }}</p>
-      </div>
-    </div>
-  </div>
+  <app-card-grid [items]="[{
+    title: 'Previous Courses', 
+    description: 'View past update courses',
+    link: './previous'}]"></app-card-grid>
   <br><br>
   <div class="row g-0 wacpfm-card wacpfm-course-details">
     <div class="col-12">
