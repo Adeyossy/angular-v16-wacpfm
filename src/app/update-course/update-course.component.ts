@@ -5,6 +5,7 @@ import { DEFAULT_COURSE_RECORD, UPDATE_COURSES_RECORDS, UpdateCourseRecord } fro
 import { QueryDocumentSnapshot, where } from 'firebase/firestore';
 import { DEFAULT_UPDATE_COURSE, UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { AppUser, USERS } from '../models/user';
+import { UpdateCourseService } from '../services/update-course.service';
 
 @Component({
   selector: 'app-update-course',
@@ -18,7 +19,7 @@ export class UpdateCourseComponent implements OnInit {
 
   private readonly twoWeeks = 2 * 7 * 24 * 60 * 60 * 1000;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private updateService: UpdateCourseService) {
   }
 
   ngOnInit(): void {
@@ -35,15 +36,15 @@ export class UpdateCourseComponent implements OnInit {
     //       )))
     // );
 
-    this.previousCourses = this.authService.queryCollections$<UpdateCourse>(UPDATE_COURSES, 
-      where("endDate", "<", Date.now() - this.twoWeeks)).pipe(
+    this.previousCourses = this.updateService.queryItem$<UpdateCourse>(UPDATE_COURSES, 
+      [where("endDate", "<", Date.now() - this.twoWeeks)]).pipe(
         map(courses => courses.sort((a, b) => b.endDate - a.endDate))
       );
 
     // pipe an observable of Update Courses that has not ended
     // the user may or may not have registered
-    this.ongoing = this.authService.queryCollections$<UpdateCourse>
-    (UPDATE_COURSES, where("endDate", ">=", Date.now() - (2 * 7 * 24 * 60 * 60 * 1000))).pipe(
+    this.ongoing = this.updateService.queryItem$<UpdateCourse>
+    (UPDATE_COURSES, [where("endDate", ">=", Date.now() - (2 * 7 * 24 * 60 * 60 * 1000))]).pipe(
         map(result => result.length === 0 ? Object.assign({}, DEFAULT_UPDATE_COURSE) : result[0])
       )
   }

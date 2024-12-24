@@ -74,7 +74,8 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             certificate: uCourse.fellowshipCertificate,
             cpd: uCourse.fellowshipCPD,
             lectures: uCourse.fellowshipLectures,
-            participants: uCourse.fellowshipParticipants.split(", "),
+            participants: typeof(uCourse.fellowshipParticipants) === "string" ? 
+              uCourse.fellowshipParticipants.split(", ") : uCourse.fellowshipParticipants,
             releaseResources: uCourse.fellowshipRelease,
             theme: uCourse.fellowshipTheme,
             groupLink: uCourse?.fellowshipGroupLink,
@@ -84,7 +85,8 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             certificate: uCourse.membershipCertificate,
             cpd: uCourse.membershipCPD,
             lectures: uCourse.membershipLectures,
-            participants: uCourse.membershipParticipants.split(", "),
+            participants: typeof(uCourse.membershipParticipants) === "string" ? 
+            uCourse.membershipParticipants.split(", ") : uCourse.membershipParticipants,
             releaseResources: uCourse.membershipRelease,
             theme: uCourse.membershipTheme,
             groupLink: uCourse?.membershipGroupLink,
@@ -94,7 +96,8 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             certificate: uCourse.totCertificate,
             cpd: uCourse.totCPD,
             lectures: uCourse.totLectures,
-            participants: uCourse.totParticipants.split(", "),
+            participants: typeof(uCourse.totParticipants) === "string" ? 
+            uCourse.totParticipants.split(", ") : uCourse.totParticipants,
             releaseResources: uCourse.totRelease,
             theme: uCourse.totTheme,
             groupLink: uCourse?.totGroupLink,
