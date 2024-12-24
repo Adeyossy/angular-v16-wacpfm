@@ -18,7 +18,7 @@ export class UpdateCourseService extends CacheService {
     );
   }
 
-  participantsToArray(course: UpdateCourse) {
+  participantsToArray = (course: UpdateCourse) => {
     if (typeof (course.membershipParticipants) === "string") {
       this.shouldUpgradeDB = true;
       course.membershipParticipants = course.membershipParticipants.split(", ");
@@ -37,7 +37,7 @@ export class UpdateCourseService extends CacheService {
     return course;
   }
 
-  defineMissing(course: UpdateCourse): UpdateCourse {
+  defineMissing = (course: UpdateCourse): UpdateCourse => {
     const c: UpdateCourse = JSON.parse(JSON.stringify(DEFAULT_UPDATE_COURSE));
 
     return {
@@ -101,7 +101,7 @@ export class UpdateCourseService extends CacheService {
     }
   }
 
-  backup(courses: UpdateCourse[]) {
+  backup = (courses: UpdateCourse[]) => {
     return this.authService.batchWriteDocs$(
       courses.map(course => {
         return {
@@ -113,7 +113,7 @@ export class UpdateCourseService extends CacheService {
     )
   }
 
-  writeUpgradeToDB(courses: UpdateCourse[]) {
+  writeUpgradeToDB = (courses: UpdateCourse[]) => {
     return this.authService.batchWriteDocs$(
       courses.map(course => {
         return {
@@ -125,7 +125,7 @@ export class UpdateCourseService extends CacheService {
     ).pipe(map(_res => courses))
   }
 
-  upgradeDB(courses: UpdateCourse[]): Observable<UpdateCourse[]> {
+  upgradeDB = (courses: UpdateCourse[]): Observable<UpdateCourse[]> => {
     console.log("Upgrading the collection in database");
     return this.backup(courses).pipe(
       map(res => {
