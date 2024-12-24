@@ -28,7 +28,7 @@ export type UpdateCourse = {
   membershipCPD: string;
   membershipLectures: string[];
   membershipTheme: string;
-  membershipParticipants: string;
+  membershipParticipants: string | string[];
   membershipGroupLink: string;
   membershipClassLink: string[];
   fellowshipRelease: boolean;
@@ -36,7 +36,7 @@ export type UpdateCourse = {
   fellowshipCPD: string;
   fellowshipLectures: string[];
   fellowshipTheme: string;
-  fellowshipParticipants: string;
+  fellowshipParticipants: string | string[];
   fellowshipGroupLink: string;
   fellowshipClassLink: string[];
   totRelease: boolean;
@@ -44,7 +44,7 @@ export type UpdateCourse = {
   totCPD: string;
   totLectures: string[];
   totTheme: string;
-  totParticipants: string;
+  totParticipants: string | string[];
   totGroupLink: string;
   totClassLink: string[];
   resourcePersons: string[];
@@ -91,7 +91,7 @@ export const DEFAULT_UPDATE_COURSE: UpdateCourse = {
   membershipCPD: "",
   membershipLectures: [],
   membershipTheme: "",
-  membershipParticipants: "",
+  membershipParticipants: [],
   membershipGroupLink: "",
   membershipClassLink: [],
   fellowshipRelease: false,
@@ -99,7 +99,7 @@ export const DEFAULT_UPDATE_COURSE: UpdateCourse = {
   fellowshipCPD: "",
   fellowshipLectures: [],
   fellowshipTheme: "",
-  fellowshipParticipants: "",
+  fellowshipParticipants: [],
   fellowshipGroupLink: "",
   fellowshipClassLink: [],
   totRelease: false,
@@ -107,7 +107,7 @@ export const DEFAULT_UPDATE_COURSE: UpdateCourse = {
   totCPD: "",
   totLectures: [],
   totTheme: "",
-  totParticipants: "",
+  totParticipants: [],
   totGroupLink: "",
   totClassLink: [],
   resourcePersons: []
