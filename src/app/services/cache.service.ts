@@ -45,4 +45,12 @@ export class CacheService {
       )
     }
   }
+
+  /**
+   * Reset the cache when there's a write to the collection parameter
+   * @param collection firestore collection name which acts as the key for the cache
+   */
+  resetCache(collection: string) {
+    this.cache[collection] = [];
+  }
 }
