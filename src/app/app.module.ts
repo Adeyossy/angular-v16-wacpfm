@@ -47,6 +47,7 @@ import { TitleSubtitleFileComponent } from './widgets/title-subtitle-file/title-
 import { DashboardHomeComponent } from './dashboard/dashboard-home/dashboard-home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { LoadingSmallCirclesComponent } from './widgets/loading-small-circles/loading-small-circles.component';
+import { PreviousCoursesComponent } from './update-course/previous-courses/previous-courses.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { LoadingSmallCirclesComponent } from './widgets/loading-small-circles/lo
     TitleSubtitleFileComponent,
     DashboardHomeComponent,
     NotFoundComponent,
-    LoadingSmallCirclesComponent
+    LoadingSmallCirclesComponent,
+    PreviousCoursesComponent
   ],
   imports: [
     BrowserModule,
