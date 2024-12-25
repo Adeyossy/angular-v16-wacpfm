@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthErrorCodes, User } from 'firebase/auth';
-import { where } from 'firebase/firestore';
+import { arrayUnion, FieldValue, where } from 'firebase/firestore';
 import { UploadResult } from 'firebase/storage';
 import { NEVER, Observable, Subscription, catchError, concatMap, map, of, timeout } from 'rxjs';
 import { BY_CATEGORY, UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
@@ -10,6 +10,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import PaystackPop from '@paystack/inline-js';
 import { BasicResponse, CustomerResponse, Payment, PaystackInitResponse, PaystackResponse, PaystackTransaction } from 'src/app/models/payment';
 import { environment } from 'src/environments/environment';
+import { UPDATE_COURSES } from 'src/app/models/update_course';
 
 interface ResumeOptions {
   accessCode: string
@@ -92,7 +93,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   handleEvent(event: any) {
-    console.log("upload event => ", event);
+    // console.log("upload event => ", event);
     // console.log("instance of event => ", );
   }
 
@@ -206,7 +207,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       const file = r.files[0];
       this.receiptFile = file;
       this.receiptURL = URL.createObjectURL(file);
-      console.log('r.files => ', URL.createObjectURL(r.files[0]));
+      // console.log('r.files => ', URL.createObjectURL(r.files[0]));
     }
   }
 
@@ -236,6 +237,16 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       });
   }
 
+  updateCourseUpdate = (records: UpdateCourseRecord[]) => {
+    const update: {[p: string]: FieldValue} = {};
+    records.forEach(r => {
+      if (r.courseType === "Membership") update["membershipParticipants"] = arrayUnion(r.userEmail);
+      if (r.courseType === "Fellowship") update["fellowshipParticipants"] = arrayUnion(r.userEmail);
+      if (r.courseType === "ToT") update["totParticipants"] = arrayUnion(r.userEmail);
+    });
+    return update;
+  }
+
   createDeclinedRecord = (params: { user: User, uCourseId: string, category: string },
     response: BasicResponse, transaction: PaystackTransaction): UpdateCourseRecord[] => {
     return BY_CATEGORY[params.category as Category]
@@ -256,14 +267,14 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   verifyTransaction = (transaction: PaystackTransaction, callback: () => boolean) => {
-    console.log("transaction in verifyTransaction => ", transaction);
-    console.log("transaction reference in verifyTransaction => ", transaction.reference);
+    // console.log("transaction in verifyTransaction => ", transaction);
+    // console.log("transaction reference in verifyTransaction => ", transaction.reference);
     return this.authService.verifyTransaction({
       reference: transaction.reference,
       secret_key: environment.secret_key
     }).pipe(
       concatMap(response => {
-        console.log("response => ", response);
+        // console.log("response => ", response);
         return this.aggregateParams$("").pipe(
           concatMap(params => {
             if (response && response.data && response.data.status === "success" &&
@@ -271,11 +282,17 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
               && response.data.customer && response.data.customer.email.trim() ===
               params.user.email?.trim()) {
               const val = this.createApprovedRecord(params, response, transaction);
-              console.log("Created approved records =>", val);
-              return this.authService.addDocsInBulk$(val, UPDATE_COURSES_RECORDS);
+              // console.log("Created approved records =>", val);
+              return this.authService.addDocsInBulk$(val, UPDATE_COURSES_RECORDS).pipe(
+                concatMap(_v => this.authService.batchWriteDocs$([{
+                  path: `${UPDATE_COURSES}/${params.uCourseId}`,
+                  data: this.updateCourseUpdate(val),
+                  type: "update"
+                }]))
+              );
             } else {
               const val = this.createDeclinedRecord(params, response, transaction);
-              console.log("Created declined records =>", val);
+              // console.log("Created declined records =>", val);
               return this.authService.addDocsInBulk$(val, UPDATE_COURSES_RECORDS);
             }
           }),
@@ -286,7 +303,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
           }),
           map(state => state ? "Successful" : "Verification Failed"),
           catchError(err => {
-            console.log("Caught error => ", err);
+            // console.log("Caught error => ", err);
             this.showErrorDialog();
             this.payWithCard$ = null;
             this.verifyAgain$ = null;
@@ -317,7 +334,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   cancel = () => {
-    console.log("Cancelled");
+    // console.log("Cancelled");
     this.showCancelDialog();
     this.payWithCard$ = null;
   }
@@ -334,9 +351,9 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   error = (error: { type: string, message: string }) => {
-    console.log("An error occurred");
-    console.log("Error type =>", error.type);
-    console.log("Error message =>", error.message);
+    // console.log("An error occurred");
+    // console.log("Error type =>", error.type);
+    // console.log("Error message =>", error.message);
     this.showErrorDialog(error.message);
     this.payWithCard$ = null;
   }
@@ -352,15 +369,13 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   onSuccess = (transaction: PaystackTransaction) => {
-    console.log("onSuccess called");
-    console.log("transaction in onSuccess =>", transaction);
+    // console.log("onSuccess called");
+    // console.log("transaction in onSuccess =>", transaction);
     this.transaction = transaction;
-    setTimeout(() => {
-      this.payWithCard$ = this.verifyTransaction(
-        transaction,
-        this.showSuccessDialog
-      );
-    }, 5000);
+    this.payWithCard$ = this.verifyTransaction(
+      transaction,
+      this.showSuccessDialog
+    );
   }
 
   toTransaction = (reference: string) => {
@@ -385,7 +400,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   parseReference(reference: string, customer: CustomerResponse) {
-    console.log("customer => ", customer);
+    // console.log("customer => ", customer);
     const segments = reference.split("-");
     const [userId, updateCourseId, timestamp] = segments.length === 3 ? segments : reference.split("_");
     this.verifyAgain$ = this.aggregateParams$("").pipe(
@@ -400,7 +415,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   verifyFromCustomerData = (customer: CustomerResponse) => {
-    console.log("customer =>", customer);
+    // console.log("customer =>", customer);
     if (customer.status) {
       if (customer.data && customer.data.transactions.length > 0) {
         this.verifyAgain$ = this.activatedRoute.paramMap.pipe(
@@ -413,7 +428,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
               transaction.reference.split("_")[1] === courseId)
           ),
           concatMap(transaction => {
-            console.log("transaction => ", transaction);
+            // console.log("transaction => ", transaction);
             if (transaction !== undefined) {
               return this.verifyTransaction(transaction, this.showSuccessDialog);
             }
@@ -446,7 +461,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       )),
       concatMap(vals => this.authService.fetchPaystackConfig$().pipe(
         map(config => {
-          console.log("Payment started");
+          // console.log("Payment started");
           const newPopup = this.popup.newTransaction({
             key: config[environment.public_key as 'test_pk' | 'live_pk'],
             channels: ["card"],
@@ -476,7 +491,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
             onError: this.error,
             onCancel: this.cancel
           });
-          console.log("getStatus response =>", newPopup.getStatus);
+          // console.log("getStatus response =>", newPopup.getStatus);
 
         })
       )),
@@ -499,8 +514,8 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       map(res => {
         // console.log("res => ", res);
         typeof (res);
-        console.log("res.data => ", res.data);
-        console.log("res.data.access_code => ", res.data.access_code);
+        // console.log("res.data => ", res.data);
+        // console.log("res.data.access_code => ", res.data.access_code);
         const popup = new PaystackPop();
         // popup.newTransaction({})
         // let rs = popup.resumeTransaction as
