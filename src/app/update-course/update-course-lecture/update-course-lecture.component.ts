@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { where } from 'firebase/firestore';
-import { NEVER, Observable, Subscription, map, of } from 'rxjs';
+import { NEVER, Observable, Subscription, catchError, map, of } from 'rxjs';
 import { DEFAULT_LECTURE, UPDATE_COURSES_LECTURES, UpdateCourseLecture } from 'src/app/models/update_course';
 import { UPDATE_COURSE_TYPES, UpdateCourseType } from 'src/app/models/update_course_record';
 import { AppUser, RESOURCE_PERSONS, ResourcePerson, USERS } from 'src/app/models/user';
@@ -121,8 +121,7 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
   }
 
   uploadMaterial() {
-    const path = `Materials/${this.lecture.updateCourseId}/${this.lecture.courseType}
-      /${this.materialFile!.name}`;
+    const path = `Materials/${this.lecture.updateCourseId}/${this.lecture.courseType}/${this.materialFile!.name}`;
     this.materialUpload$ = this.authService.uploadFileResumably$(this.materialFile!, path).pipe(
         map(output => {
           console.log("lecturerEmail => ", this.lecture.lecturerEmail);
@@ -141,6 +140,10 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
             // div.style.width = `${output}%`;
             return percent * 100;
           }
+        }),
+        catchError(err => {
+          console.log("error uploading => ", err);
+          return of();
         })
       )
   }
