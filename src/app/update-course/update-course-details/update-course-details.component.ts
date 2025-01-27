@@ -250,7 +250,8 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
       courseType: courseType,
       paymentId: "",
       updateCourseId: uCourse!.updateCourseId,
-      paymentEvidence: ""
+      paymentEvidence: "",
+      approved: true
     } as UpdateCourseRecord
   }
 
