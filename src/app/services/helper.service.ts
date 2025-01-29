@@ -85,7 +85,11 @@ export class HelperService {
   }
 
   millisToHour(millis: string) {
-    return new Date(parseInt(millis)).getHours().toString().concat(":00");
+    const asInt = parseInt(millis);
+    const date = new Date(asInt);
+    let minutes = date.getMinutes().toString();
+    if (minutes.length == 1) minutes = minutes + "0";
+    return date.getHours().toString().concat(":", minutes);
   }
 
   toggleDashboard(state: boolean) {
