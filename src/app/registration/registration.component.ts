@@ -48,6 +48,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     sierra_leone: "+232", togo: "+216"
   }
 
+  designations = [
+    'Trainer', 'Fellow', 'Senior Resident', 'Junior Resident', 'Diploma (FM)', 'Doctor (PP)'
+  ];
+
   chapters = {
     benin: "WACP-BEN", burkina_faso: "WACP-BFA", gambia: "WACP-GMB", ghana: "WACP-GHA", guinea: "WACP-GIN",
     ivory_coast: "WACP-CIV", liberia: "WACP-LBR", niger: "WACP-NER", nigeria: "WACP-NGA", senegal: "WACP-SEN",
