@@ -17,6 +17,7 @@ import { emailGuard } from './email.guard';
 import { CertificateComponent } from './certificate/certificate.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { AdminComponent } from './admin/admin.component';
+import { AdminComponent as ExamAdminComponent } from './exam/admin/admin.component';
 import { adminGuard } from './admin/admin.guard';
 import { ResourcePersonsDashComponent } from './dashboard/resource-persons-dash/resource-persons-dash.component';
 import { ExamComponent } from './exam/exam.component';
@@ -55,7 +56,8 @@ const routes: Routes = [
       { path: "updatecourse/:updateCourseId/resourcepersons", component: ResourcePersonsDashComponent },
       { path: "updatecourse/previous/:updateCourseId/details/certificate/:recordId", component: CertificateComponent },
       { path: "updatecourse/:updateCourseId/details/certificate/:recordId", component: CertificateComponent },
-      { path: "admin", component: AdminComponent, canActivate: [adminGuard] },
+      { path: "admin/updatecourse", component: AdminComponent, canActivate: [adminGuard] },
+      { path: "admin/exam", component: ExamAdminComponent, title: "Exam Admin | FM App" },
       { path: "exam", component: ExamComponent, title: "Examination | Faculty of Family Medicine App" },
       { path: "exam/:examAlias/edit", component: EditExamComponent, title: "Edit Exam Details | FM App" },
       { path: "exam/:examAlias/examiner/:examinerId/edit", component: EditExaminerComponent, title: "Examiner Profile" },

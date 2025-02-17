@@ -3,7 +3,7 @@
     <h1 class="wacpfm-subheading text-white">Dashboard</h1>
   </div> -->
   <details class="wacpfm-leftbar-item wacpfm-leftbar-link" *ngIf="appUser$|async"
-    routerLink="/dashboard/admin" routerLinkActive="active"
+    routerLink="/dashboard/admin/updatecourse" routerLinkActive="active"
     (click)="helper.toggleSidebar(false)">
     <summary><i class="bi bi-gear-wide-connected"></i> <span>Admin</span></summary>
   </details>
@@ -12,13 +12,14 @@
     (click)="helper.toggleSidebar(false)">
     <summary><i class="bi bi-mortarboard-fill"></i> <span>Update Course</span></summary>
   </details>
-  <details 
-    routerLink="/dashboard/exam" routerLinkActive="active" [open]="true">
-    <summary class="wacpfm-leftbar-item wacpfm-leftbar-link">
+  <details [open]="true">
+    <summary class="wacpfm-leftbar-item wacpfm-leftbar-link"
+    routerLink="/dashboard/exam" routerLinkActive="active">
       <i class="bi bi-person-vcard-fill"></i> <span>Examination</span>
     </summary>
     <div class="wacpfm-leftbar-subitems">
-      <p class="wacpfm-leftbar-item wacpfm-leftbar-subitem wacpfm-leftbar-link wacpfm-small-text">
+      <p class="wacpfm-leftbar-item wacpfm-leftbar-subitem wacpfm-leftbar-link wacpfm-small-text"
+      routerLink="/dashboard/admin/exam">
         <i class="bi bi-circle-fill"></i> <i class="bi bi-circle-fill color-accent"></i> Admin
       </p>
     </div>
