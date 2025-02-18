@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { EXAMINERS } from '../models/exam';
+import { Exam, EXAMINERS, EXAMS } from '../models/exam';
 import { Examiner, NEW_EXAMINER } from "../models/examiner";
-import { map, Observable, of } from 'rxjs';
+import { concatMap, map, Observable, of } from 'rxjs';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { Candidate, CANDIDATES, FellowshipExamRecord, MembershipExamRecord } from '../models/candidate';
 import { HelperService } from './helper.service';
@@ -61,6 +61,8 @@ export class ExamService extends CacheService {
     )
   }
 
+  refineQuery<Type>(exams: Exam[]) {}
+
   queryCandidate$<Type>(examAlias: string, candidateId: string, instance: Type) {
     return this.queryItem$<Type>(CANDIDATES, [
       where("examAlias", "==", examAlias),
@@ -73,14 +75,26 @@ export class ExamService extends CacheService {
     )
   }
 
-  queryExaminer$<Type>(examAlias: string, candidateId: string) {
-    return this.queryItem$<Type>(CANDIDATES, [
+  queryExaminer$<Type>(examAlias: string, examinerId: string) {
+    return this.queryItem$<Type>(EXAMINERS, [
       where("examAlias", "==", examAlias),
-      where("userId", "==", candidateId)
+      where("userId", "==", examinerId)
     ]).pipe(
       map(records => {
         if (records.length === 0) return JSON.parse(JSON.stringify(NEW_EXAMINER)) as Type;
         return records[0];
+      })
+    )
+  }
+
+  queryExam$<Type>(examAlias: string) {
+    const exams = this.queryItem$<Exam>(EXAMS, [where("examAlias", "==", examAlias)]).pipe(
+      concatMap(exams => {
+        const exam = exams.find(exam => exam.alias === examAlias);
+        if (exam !== undefined) return of([exam]);
+        else return this.authService.queryCollections$<Exam>(EXAMS, where(
+          "examAlias", "==", examAlias)
+        )
       })
     )
   }
