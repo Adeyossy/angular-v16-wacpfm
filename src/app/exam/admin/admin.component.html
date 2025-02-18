@@ -1,1 +1,24 @@
-<p>admin works!</p>
+<div class="wacpfm-card">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-heading-medium fw-bold">Examinations</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br>
+  <div *ngIf="exams$ | async as exams; else loading">
+    <div *ngIf="exams.length > 0; else noExam">
+      <app-card-grid [items]="exams.sort(sorter).map(toCardGrid)"></app-card-grid>
+    </div>
+    <ng-template #noExam>
+      <h2 class="wacpfm-heading-small wacpfm-font-arial">
+        No examination records found!
+      </h2>
+    </ng-template>
+  </div>
+</div>
+<ng-template #loading>
+  <app-loading-ui></app-loading-ui>
+  <br><br>
+  <app-loading-ui></app-loading-ui>
+  <br><br>
+  <app-loading-ui></app-loading-ui>
+</ng-template>
