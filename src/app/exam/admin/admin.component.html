@@ -4,9 +4,9 @@
     <div class="wacpfm-underline"></div>
   </div>
   <br>
-  <div *ngIf="exams$ | async as exams; else loading">
-    <div *ngIf="exams.length > 0; else noExam">
-      <app-card-grid [items]="exams.sort(sorter).map(toCardGrid)"></app-card-grid>
+  <div *ngIf="cardGridItems$ | async as items; else loading">
+    <div *ngIf="items.length > 0; else noExam">
+      <app-card-grid [items]="items"></app-card-grid>
     </div>
     <ng-template #noExam>
       <h2 class="wacpfm-heading-small wacpfm-font-arial">
