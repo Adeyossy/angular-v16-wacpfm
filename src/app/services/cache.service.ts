@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { QueryFieldFilterConstraint } from 'firebase/firestore';
+import { QueryFieldFilterConstraint, WhereFilterOp, where } from 'firebase/firestore';
 import { Observable, of, map } from 'rxjs';
 import { AuthService } from './auth.service';
 import { HelperService } from './helper.service';
+import { EXAMS } from '../models/exam';
 
 type Cache = {
   [collection: string]: unknown[];
@@ -21,6 +22,12 @@ export class CacheService {
 
   constructor(protected authService: AuthService, protected helper: HelperService) {}
 
+  /**
+   * Caches results of firestore queries for local use
+   * @param data array of Type to be cached from query
+   * @param collection firestore collection containing the data, used as the key in cache
+   * @returns data passed to the method
+   */
   queryToDocuments<Type>(data: Type[], collection: string) {
     // console.log(collection, " collection: convert query to document => ", data);
     if (data.length) {
@@ -44,6 +51,24 @@ export class CacheService {
         map(data => this.queryToDocuments(data, collection))
       )
     }
+  }
+
+  /**
+   * Queries the cache first for the requested document. If not found in cache,
+   * firestore collection is queried and the query result returned without caching it, 
+   * for compatibility purposes.
+   * @param collection firestore collection to query; Also used as key for cache
+   * @param key property of the expected document to query by
+   * @param compare comparator of the type WhereFilterOp specifying equality or inequality operator
+   * @param value value of the key argument to query for
+   * @returns Observable<Type[]>
+   */
+  queryCacheFirst$<Type extends {[key: string]: string | number}>(collection: string, 
+    key: string, compare: WhereFilterOp, value: string | number) {
+    const cache = this.cache[collection] as Type[];
+    let item: Type | undefined = cache?.find(c => c[key] == value);
+    if (item !== undefined) return of([item]);
+    else return this.authService.queryCollections$<Type>(collection, where(key, compare, value));
   }
 
   /**

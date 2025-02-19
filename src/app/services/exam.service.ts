@@ -87,16 +87,8 @@ export class ExamService extends CacheService {
     )
   }
 
-  queryExam$<Type>(examAlias: string) {
-    const exams = this.queryItem$<Exam>(EXAMS, [where("examAlias", "==", examAlias)]).pipe(
-      concatMap(exams => {
-        const exam = exams.find(exam => exam.alias === examAlias);
-        if (exam !== undefined) return of([exam]);
-        else return this.authService.queryCollections$<Exam>(EXAMS, where(
-          "examAlias", "==", examAlias)
-        )
-      })
-    )
+  queryExam$(examAlias: string): Observable<Exam[]> {
+    return this.queryCacheFirst$<Exam & {[key: string]: number}>(EXAMS, "examAlias", "==", examAlias);
   }
 
   parseCandidateExamId(candidate: Candidate) {
