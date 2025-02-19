@@ -49,6 +49,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { LoadingSmallCirclesComponent } from './widgets/loading-small-circles/loading-small-circles.component';
 import { PreviousCoursesComponent } from './update-course/previous-courses/previous-courses.component';
 import { AdminComponent as ExamAdminComponent } from './exam/admin/admin.component';
+import { AdminActionComponent } from './exam/admin-action/admin-action.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { AdminComponent as ExamAdminComponent } from './exam/admin/admin.compone
     NotFoundComponent,
     LoadingSmallCirclesComponent,
     PreviousCoursesComponent,
-    ExamAdminComponent
+    ExamAdminComponent,
+    AdminActionComponent
   ],
   imports: [
     BrowserModule,
