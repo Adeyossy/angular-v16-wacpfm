@@ -75,16 +75,20 @@ export class ExamService extends CacheService {
     )
   }
 
-  queryExaminer$<Type>(examAlias: string, examinerId: string) {
-    return this.queryItem$<Type>(EXAMINERS, [
+  queryExaminer$(examAlias: string, examinerId: string) {
+    return this.queryItem$<Examiner>(EXAMINERS, [
       where("examAlias", "==", examAlias),
       where("userId", "==", examinerId)
     ]).pipe(
       map(records => {
-        if (records.length === 0) return JSON.parse(JSON.stringify(NEW_EXAMINER)) as Type;
+        if (records.length === 0) return JSON.parse(JSON.stringify(NEW_EXAMINER)) as Examiner;
         return records[0];
       })
     )
+  }
+
+  queryExaminers$(examAlias: string): Observable<Examiner[]> {
+    return this.queryItem$<Examiner>(EXAMINERS, [where("examAlias", "==", examAlias)])
   }
 
   queryExam$(examAlias: string): Observable<Exam[]> {
