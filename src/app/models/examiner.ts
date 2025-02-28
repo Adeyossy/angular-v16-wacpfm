@@ -4,6 +4,11 @@ import { Upload } from "./candidate";
 
 export const EXAMINERS = environment.examiner;
 export type Geopolitical = "North Central" | "North East" | "North West" | "South West" | "South East" | "South South" | "";
+export type WACPMembershipStatus = "Life member" | "Paid up" | "Not paid up";
+export type CurrentEmploymentStatus = "Visiting" | "Full time";
+export type TrainerCertificationStatus = "Current" | "Lapsed" | "None";
+export type DAETrainingStatus = "Yes" | "Equivalent" | "No";
+export type TrainingResponsibilities = "Institutional Residency TC" | "Head of Department" | "None";
 
 export interface Examiner {
   userId: string; //
