@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Exam, EXAMINERS, EXAMS } from '../models/exam';
-import { Examiner, NEW_EXAMINER } from "../models/examiner";
+import { CurrentEmploymentStatus, DAETrainingStatus, Examiner, NEW_EXAMINER, TrainerCertificationStatus, TrainingResponsibilities, WACPMembershipStatus } from "../models/examiner";
 import { concatMap, map, Observable, of } from 'rxjs';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { Candidate, CANDIDATES, FellowshipExamRecord, MembershipExamRecord } from '../models/candidate';
@@ -124,5 +124,185 @@ export class ExamService extends CacheService {
       buttonText: "Upload"
     });
     this.helper.toggleDialog(0);
+  }
+
+  scoreJuniors(juniors: number, trainers: number) {
+    if (juniors > 0 && (juniors/trainers) <= 4) {
+      return 2;
+    } else return 0;
+  }
+
+  scoreSeniors(seniors: number, trainers: number) {
+    if (seniors > 0 && (seniors/trainers) <= 2) return 2;
+    return 0;
+  }
+
+  scoreCurrentEmploymentStatus(status: CurrentEmploymentStatus) {
+    switch (status) {
+      case "Full time":
+        return 2;
+
+      case "Visiting":
+      default:
+        return 1;
+    }
+  }
+
+  scorePostFellowship(years: number) {
+    if (years >= 5 && years <= 14) return 2;
+    else {
+      if (years >= 15 && years <= 24) return 4;
+      else {
+        if (years >= 25 && years <= 34) return 3;
+        else {
+          if (years >= 35 && years <= 40) return 2;
+          else {
+            if (years >= 41) return 1;
+            else return 0;
+          }
+        }
+      }
+    }
+  }
+
+  scoreDAEStatus(status: DAETrainingStatus) {
+    switch (status) {
+      case "Yes":
+        return 5;
+
+      case "Equivalent":
+        return 3;
+
+      case "No":
+      default:
+        return 0;
+    }
+  }
+
+  scoreTrainingCertificationStatus(status: TrainerCertificationStatus) {
+    switch(status) {
+      case "Current":
+        return 5;
+
+      case "Lapsed":
+        return 2;
+
+      case "None":
+      default:
+        return 0;
+    }
+  }
+
+  scoreInvitations(invitations: number) {
+    switch(invitations) {
+      case 0:
+        return 3;
+
+      case 1:
+        return 2;
+
+      case 2:
+        return 1;
+
+      case 3:
+      default:
+        return 0;
+    }
+  }
+
+  /**
+   * Takes the total number of casebooks or dissertations an examiner has supervised.
+   * @param supervisions type: number. The number of casebooks or dissertations supervised
+   * @returns score (type: number) based on exam committee's algorithm.
+   */
+  scoreSupervisions(supervisions: number) {
+    if (supervisions >= 1 && supervisions <= 3) return 2;
+    else {
+      if (supervisions >= 4 && supervisions <= 6) return 4;
+      else {
+        if (supervisions >= 7 && supervisions <= 9) return 6;
+        else {
+          if (supervisions >= 10) return 8;
+          else return 0;
+        }
+      }
+    }
+  }
+
+  scorePublications(publications: number) {
+    if (publications >= 1 && publications <= 3) return 1;
+    else {
+      if (publications >= 4 && publications <= 6) return 2;
+      else {
+        if (publications >= 7 && publications <= 9) return 3;
+        else {
+          if (publications >= 10) return 4;
+          else return 0;
+        }
+      }
+    }
+  }
+
+  scoreResponsibilities(roles: TrainingResponsibilities) {
+    switch(roles) {
+      case "Institutional Residency TC":
+        return 4;
+
+      case "Head of Department":
+        return 2;
+
+      case "None":
+      default:
+        return 0;
+    }
+  }
+
+  /**
+   * Takes the attendance at College/Chapter AGSM or ToT and returns a score respectively.
+   * @param attendance type: number. Total number of times attended college events in last 10 years
+   * Attendance could be (1) College AGSM. (2) Chapter AGSM. (3) Faculty ToT.
+   * @returns score
+   */
+  scoreAttendance(attendance: number) {
+    if (attendance >= 1 && attendance <= 3) return 2;
+    else {
+      if (attendance >= 4 && attendance <= 6) return 4;
+      else {
+        if (attendance >= 7) return 6;
+        else return 0;
+      }
+    }
+  }
+
+  scoreWACPMembershipStatus(status: WACPMembershipStatus) {
+    switch(status as "Life member" | "Paid up" | "Not paid up") {
+      case "Life member":
+        return 5;
+
+      case "Paid up":
+        return 3;
+
+      case "Not paid up":
+      default:
+        return 0;
+    }
+  }
+
+  scoreExaminer(examiner: Examiner) {
+    let score = 0;
+
+    // 1. score wacp membership status
+    
+
+    // old: score number of trainers
+    // const trainers = examiner.noOfTrainers;
+    // if (trainers >= 1 && trainers <= 5) score += 2;
+    // else {
+    //   if (trainers >= 6 && trainers <= 10) score += 4;
+    //   else if (trainers >= 11 && trainers <= 15) score += 2;
+    // }
+
+    // 3. score juniors
+    score += this.scoreJuniors(examiner.noOfMembershipResidents, examiner.noOfTrainers);
   }
 }
