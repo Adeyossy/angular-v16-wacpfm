@@ -1,3 +1,25 @@
-<div class="wacpfm-heading-underline">
-  <h1 class="wacpfm-heading-medium fw-bold"></h1>
+<div class="wacpfm-card">
+  <div class="wacpfm-card-exam">
+    <div class="wacpfm-heading-underline">
+      <h1 class="wacpfm-heading-medium fw-bold">Examinations</h1>
+      <div class="wacpfm-underline"></div>
+    </div>
+  </div>
 </div>
+<br>
+<details class="wacpfm-card">
+  <summary class="wacpfm-heading wacpfm-heading-medium fw-bold">Invite</summary>
+  <br>
+  <a href="mailto:" class="wacpfm-small-text wacpfm-link-card">
+    Email Invited Examiners
+  </a>
+  <br>
+  <hr><br>
+  <div *ngIf="examinersList$ | async as examinersList; else fetching">
+    <app-card-list *ngFor="let examinerItem of examinersList; index as i" [item]="examinerItem"
+    [index]="i+1"></app-card-list>
+  </div>
+  <ng-template #fetching>
+    <app-loading-circles></app-loading-circles>
+  </ng-template>
+</details>
