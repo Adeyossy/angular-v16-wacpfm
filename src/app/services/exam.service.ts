@@ -75,6 +75,10 @@ export class ExamService extends CacheService {
     )
   }
 
+  queryCandidates$(examAlias: string) {
+    return this.queryItem$<Candidate>(CANDIDATES, [where("examAlias", "==", examAlias)]);
+  }
+
   queryExaminer$(examAlias: string, examinerId: string) {
     return this.queryItem$<Examiner>(EXAMINERS, [
       where("examAlias", "==", examAlias),
