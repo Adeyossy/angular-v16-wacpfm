@@ -29,6 +29,7 @@ import { EditMembershipComponent } from './exam/edit-candidate/edit-membership/e
 import { DashboardHomeComponent } from './dashboard/dashboard-home/dashboard-home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PreviousCoursesComponent } from './update-course/previous-courses/previous-courses.component';
+import { AdminActionComponent } from './exam/admin-action/admin-action.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
@@ -58,7 +59,7 @@ const routes: Routes = [
       { path: "updatecourse/:updateCourseId/details/certificate/:recordId", component: CertificateComponent },
       { path: "admin/updatecourse", component: AdminComponent, canActivate: [adminGuard] },
       { path: "admin/exams", component: ExamAdminComponent, title: "Exam Admin | FM App" },
-      { path: "admin/exams/:examId", component: ExamAdminComponent, title: "Exam Admin | FM App" },
+      { path: "admin/exams/:examAlias", component: AdminActionComponent, title: "Exam Admin Actions | FM App" },
       { path: "exam", component: ExamComponent, title: "Examination | Faculty of Family Medicine App" },
       { path: "exam/:examAlias/edit", component: EditExamComponent, title: "Edit Exam Details | FM App" },
       { path: "exam/:examAlias/examiner/:examinerId/edit", component: EditExaminerComponent, title: "Examiner Profile" },
