@@ -292,17 +292,57 @@ export class ExamService extends CacheService {
     let score = 0;
 
     // 1. score wacp membership status
+    score += this.scoreWACPMembershipStatus(examiner.wacpMembershipStatus as WACPMembershipStatus);
     
-
-    // old: score number of trainers
-    // const trainers = examiner.noOfTrainers;
-    // if (trainers >= 1 && trainers <= 5) score += 2;
-    // else {
-    //   if (trainers >= 6 && trainers <= 10) score += 4;
-    //   else if (trainers >= 11 && trainers <= 15) score += 2;
-    // }
+    // 2. Number of trainers does not need independent scoring but used as a threshold.
 
     // 3. score juniors
     score += this.scoreJuniors(examiner.noOfMembershipResidents, examiner.noOfTrainers);
+
+    // 4. Score seniors
+    score += this.scoreSeniors(examiner.noOfFellowshipResidents, examiner.noOfTrainers);
+
+    // 5. Score current employment status
+    score += this.scoreCurrentEmploymentStatus(
+      examiner.currentEmploymentStatus as CurrentEmploymentStatus
+    );
+
+    // 6. Score years as fellow
+    score += this.scorePostFellowship(examiner.numberOfYearsAsFellow);
+
+    // 7. Score DAE training status
+    score += this.scoreDAEStatus(examiner.daeTrainingStatus as DAETrainingStatus);
+
+    // 8. Score training certification status
+    score += this.scoreTrainingCertificationStatus(
+      examiner.trainerCertificationStatus as TrainerCertificationStatus
+    );
+
+    // 9. Score invitations as examiner
+    score += this.scoreInvitations(examiner.invitationsInLast3Exams);
+
+    // 10. Score number of dissertations supervised
+    score += this.scoreSupervisions(examiner.dissertationsSupervised);
+
+    // 11. Was scraped.
+    // 12. Score number of casebooks supervised
+    score += this.scoreSupervisions(examiner.casebooksSupervised); // for casebooks
+
+    // 13. Was scraped.
+    // 14. Score number of publications
+    score += this.scorePublications(examiner.publications);
+
+    // 15. Score responsibilities
+    score += this.scoreResponsibilities(
+      examiner.trainingResponsibilities as TrainingResponsibilities
+    );
+
+    // 16. Score college AGSM attendance
+    score += this.scoreAttendance(examiner.collegeAGSMAttendance10);
+
+    // Attendance at chapter AGSM was not captured.
+
+    // 17. Score faculty ToT attendance
+    score += this.scoreAttendance(examiner.attendanceAtFacultyTOT5);
   }
 }
