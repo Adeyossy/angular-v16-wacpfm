@@ -41,11 +41,19 @@ export class AdminActionComponent implements OnInit {
           return {
             title: examiner.name,
             subtitle: examiner.country,
-            text: examiner.userEmail
+            text: `Score: ${this.examService.scoreExaminer(examiner)}`
           }
         });
         return of(examinersList);
       })
     )
+  }
+
+  toCardListItem = (examiner: Examiner) => {
+    return {
+      title: examiner.name,
+      subtitle: examiner.country,
+      text: `Score: ${this.examService.scoreExaminer(examiner)}`
+    }
   }
 }
