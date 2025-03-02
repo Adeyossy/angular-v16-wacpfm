@@ -22,9 +22,9 @@ export class EditExaminerComponent implements OnInit {
   geopolitical = ["North Central", "North East", "North West", "South West", "South East",
     "South South"] as const;
 
-  wacpMembershipStatus: WACPMembershipStatus[] = ["Life member", "Paid up", "Not paid up"] as const;
+  wacpMembershipStatus = ["Life member", "Paid up", "Not paid up"] as const;
 
-  currentEmploymentStatus: CurrentEmploymentStatus[] = ["Visiting", "Full time"] as const;
+  currentEmploymentStatus = ["Visiting", "Full time"] as const;
 
   trainerCertificationStatus: TrainerCertificationStatus[] = ["Current", "Lapsed", "None"];
 
