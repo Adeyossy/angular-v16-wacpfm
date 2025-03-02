@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap, map, Observable, of } from 'rxjs';
-import { Candidate } from 'src/app/models/candidate';
+import { Candidate, FellowshipExamRecord, MembershipExamRecord } from 'src/app/models/candidate';
 import { Exam } from 'src/app/models/exam';
 import { Examiner } from 'src/app/models/examiner';
 import { ExamService } from 'src/app/services/exam.service';
@@ -16,7 +16,7 @@ export class AdminActionComponent implements OnInit {
   exam$: Observable<Exam[]> = of([]);
   examiners$: Observable<Examiner[]> = of([]);
   examinersList$: Observable<CardList[]> = of([]);
-  candidates$: Observable<Candidate[]> = of([]);
+  candidates$: Observable<Array<MembershipExamRecord | FellowshipExamRecord>> = of([]);
   candidatesList$: Observable<CardList[]> = of([]);
 
   constructor(private examService: ExamService, private activatedRoute: ActivatedRoute) {}
@@ -47,13 +47,29 @@ export class AdminActionComponent implements OnInit {
         return of(examinersList);
       })
     )
+
+    this.candidates$ = examAlias$.pipe(
+      concatMap(examAlias => this.examService.queryCandidates$(examAlias)),
+      map(candidates => candidates.filter(this.candidateFilter))
+    )
   }
 
-  toCardListItem = (examiner: Examiner) => {
-    return {
-      title: examiner.name,
-      subtitle: examiner.country,
-      text: `Score: ${this.examService.scoreExaminer(examiner)}`
+  toCardListItem = (user: Candidate | Examiner) => {
+    if ("yearOfFellowship" in user) return {
+      title: user.name,
+      subtitle: user.country,
+      text: `Score: ${this.examService.scoreExaminer(user)}`
+    }; 
+    else return {
+      title: user.wacpNo,
+      subtitle: user.category,
+      text: user.examCentre
     }
+  }
+
+  candidateFilter = (candidate: MembershipExamRecord | FellowshipExamRecord) => {
+    if ("pmrs" in candidate) {
+      return candidate.pmrs.length > 0;
+    } return candidate.casebooks.length > 0 || candidate.dissertations.length > 0
   }
 }
