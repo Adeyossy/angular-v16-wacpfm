@@ -14,6 +14,7 @@
     </div>
     <div class="col-2 offset-lg-1 col-lg-1 text-end wacpfm-heading-small" *ngIf="control">
       <i class="bi bi-check-circle-fill text-success" *ngIf="state; else negative"></i>
+      <ng-content></ng-content>
       <ng-template #negative>
         <i class="bi bi-x-circle-fill text-danger"></i>
       </ng-template>

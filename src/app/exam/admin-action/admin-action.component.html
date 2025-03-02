@@ -15,9 +15,13 @@
   </a>
   <br>
   <hr><br>
-  <div *ngIf="examinersList$ | async as examinersList; else fetching">
-    <app-card-list *ngFor="let examinerItem of examinersList; index as i" [item]="examinerItem"
-    [index]="i+1"></app-card-list>
+  <div *ngIf="examiners$ | async as examiners; else fetching">
+    <app-card-list *ngFor="let examiner of examiners; index as i" [item]="toCardListItem(examiner)"
+    [index]="i" [state]="examiner.venue !== undefined" [control]="true">
+      <p class="wacpfm-small-text" *ngIf="examiner.venue !== undefined">
+        {{ examiner.venue.toUpperCase() }}
+      </p>
+    </app-card-list>
   </div>
   <ng-template #fetching>
     <app-loading-circles></app-loading-circles>
