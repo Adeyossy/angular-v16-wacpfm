@@ -11,10 +11,14 @@ import { HelperService } from 'src/app/services/helper.service';
 })
 export class LeftbarComponent {
   appUser$: Observable<boolean> = of(false);
+  examAdmin$: Observable<boolean> = of(false);
   constructor(private authService: AuthService, public helper: HelperService) {
     this.appUser$ = authService.getAppUser$().pipe(
-      map(appUser => appUser.updateCourseRole === "admin" || EXAM_COMMITTEE
-        .includes(appUser.examinationRole as ExamCommittee))
+      map(appUser => appUser.updateCourseRole === "admin")
     );
+
+    this.examAdmin$ = authService.getAppUser$().pipe(
+      map(user => EXAM_COMMITTEE.includes(user.examinationRole as ExamCommittee))
+    )
   }
 }

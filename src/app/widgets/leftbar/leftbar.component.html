@@ -19,7 +19,7 @@
     </summary>
     <div class="wacpfm-leftbar-subitems">
       <p class="wacpfm-leftbar-item wacpfm-leftbar-subitem wacpfm-leftbar-link wacpfm-small-text"
-      routerLink="/dashboard/admin/exams">
+      routerLink="/dashboard/admin/exams" routerLinkActive="active" *ngIf="examAdmin$|async">
         <i class="bi bi-circle-fill"></i> <i class="bi bi-circle-fill color-accent"></i> Admin
       </p>
     </div>
