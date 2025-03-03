@@ -346,5 +346,7 @@ export class ExamService extends CacheService {
 
     // 17. Score faculty ToT attendance
     score += this.scoreAttendance(examiner.attendanceAtFacultyTOT5);
+
+    return score;
   }
 }
