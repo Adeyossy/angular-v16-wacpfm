@@ -210,43 +210,27 @@ export class AdminComponent implements OnInit {
   }
 
   showLecture(lecture: UpdateCourseLecture) {
-    this.helper.setComponentDialogData({
-      courseId: this.currentCourse!.updateCourseId,
-      lecture,
-      payment: Object.assign({}, DEFAULT_COURSE_RECORD),
-      course: this.helper.data.course,
-      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-      writing: [[], -1]
-    });
-
-    this.helper.toggleDialog(1);
+    const data = this.helper.resetComponentDialogData();
+    data.courseId = this.currentCourse!.updateCourseId;
+    data.course = this.helper.data.course;
+    this.helper.setComponentDialogData(data);
     this.createNewLecture();
   }
 
   showPayment(record: UpdateCourseRecord) {
-    this.helper.setComponentDialogData({
-      courseId: this.currentCourse!.updateCourseId,
-      lecture: Object.assign({}, DEFAULT_LECTURE),
-      payment: record,
-      course: this.currentCourse!,
-      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-      writing: [[], -1]
-    });
-
-    this.helper.toggleDialog(1);
+    const data = this.helper.resetComponentDialogData();
+    data.courseId = this.currentCourse!.updateCourseId;
+    data.payment = record;
+    data.course = this.currentCourse!;
+    this.helper.setComponentDialogData(data);
   }
 
   showResourcePerson(resourcePerson: ResourcePerson) {
-    this.helper.setComponentDialogData({
-      courseId: this.currentCourse!.updateCourseId,
-      lecture: Object.assign({}, DEFAULT_LECTURE),
-      payment: Object.assign({}, DEFAULT_COURSE_RECORD),
-      course: this.currentCourse!,
-      lecturer: resourcePerson,
-      writing: [[], -1]
-    });
-
-    this.helper.toggleDialog(1);
+    const data = this.helper.resetComponentDialogData();
+    data.courseId = this.currentCourse!.updateCourseId;
+    data.course = this.currentCourse!;
+    data.lecturer = resourcePerson;
+    this.helper.setComponentDialogData(data);
   }
 
   byCourseType(courseType: UpdateCourseType, emails: string) {

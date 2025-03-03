@@ -37,14 +37,10 @@ export class EditMembershipComponent implements OnInit {
   }
 
   showWriting(membership: MembershipExamRecord, index: number) {
-    this.helper.setComponentDialogData({
-      course: Object.assign({}, DEFAULT_UPDATE_COURSE),
-      courseId: this.examService.parseCandidateExamId(membership),
-      lecture: Object.assign({}, DEFAULT_LECTURE),
-      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-      payment: Object.assign({}, DEFAULT_COURSE_RECORD),
-      writing: [membership.pmrs, index]
-    });
+    const data = this.helper.resetComponentDialogData();
+    data.courseId = this.examService.parseCandidateExamId(membership);
+    data.writing = [membership.pmrs, index];
+    this.helper.setComponentDialogData(data);
 
     this.helper.toggleDialog(1);
   }

@@ -20,16 +20,6 @@ export class ComponentOverlayComponent extends OverlayComponent {
   }
 
   closeDialog() {
-    this.helper.setComponentDialogData(
-      {
-        courseId: "",
-        lecture: Object.assign({}, DEFAULT_LECTURE),
-        payment: Object.assign({}, DEFAULT_COURSE_RECORD),
-        course: this.helper.data.course,
-        lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-        writing: [[], -1]
-      }
-    );
-    this.helper.toggleDialog(-1);
+    this.helper.resetComponentDialogData();
   }
 }

@@ -39,7 +39,6 @@ export class TitleSubtitleFileComponent implements OnInit {
 
   cancel() {
     this.helper.resetComponentDialogData();
-    this.helper.toggleDialog(-1);
   }
 
   parseWriting() {
