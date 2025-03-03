@@ -32,9 +32,23 @@
   <summary class="wacpfm-heading wacpfm-heading-small fw-bold">Assign</summary>
   <br>
   <hr><br>
-  <div *ngIf="candidates$ | async as candidates; else fetching">
-    <app-card-list *ngFor="let candidate of candidates; index as i" [item]="toCardListItem(candidate)"
-    [index]="i">
+  <div *ngIf="writings$ | async as writings; else fetching">
+    <app-card-list *ngFor="let writing of writings; index as i" [item]="writingToCardListItem(writing)"
+    [index]="i" [control]="true" [state]="writing.examinerEmails.length > 0">
+    </app-card-list>
+  </div>
+  <ng-template #fetching>
+    <app-loading-circles></app-loading-circles>
+  </ng-template>
+</details>
+<br>
+<details class="wacpfm-card">
+  <summary class="wacpfm-heading wacpfm-heading-small fw-bold">Monitor</summary>
+  <br>
+  <hr><br>
+  <div *ngIf="writings$ | async as writings; else fetching">
+    <app-card-list *ngFor="let writing of writings; index as i" [item]="writingToCardListItem(writing)"
+    [index]="i" [control]="true" [state]="writing.examinerEmails.length > 0">
     </app-card-list>
   </div>
   <ng-template #fetching>
