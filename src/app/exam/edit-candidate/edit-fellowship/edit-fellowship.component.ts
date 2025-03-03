@@ -67,7 +67,7 @@ export class EditFellowshipComponent implements OnInit {
       gradesByExaminer: [],
       title: "",
       type: "dissertations",
-      wacpNo: "",
+      wacpNo: fellowship.examNo,
       description: ""
     };
     fellowship.dissertations.push(dissertation);
@@ -85,7 +85,7 @@ export class EditFellowshipComponent implements OnInit {
       gradesByExaminer: [],
       title: "",
       type: "casebooks",
-      wacpNo: fellowship.wacpNo,
+      wacpNo: fellowship.examNo,
       description: ""
     };
     fellowship.casebooks.push(casebook);
