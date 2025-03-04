@@ -50,6 +50,7 @@ import { LoadingSmallCirclesComponent } from './widgets/loading-small-circles/lo
 import { PreviousCoursesComponent } from './update-course/previous-courses/previous-courses.component';
 import { AdminComponent as ExamAdminComponent } from './exam/admin/admin.component';
 import { AdminActionComponent } from './exam/admin-action/admin-action.component';
+import { ExaminerProfileComponent } from './exam/examiner-profile/examiner-profile.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { AdminActionComponent } from './exam/admin-action/admin-action.component
     LoadingSmallCirclesComponent,
     PreviousCoursesComponent,
     ExamAdminComponent,
-    AdminActionComponent
+    AdminActionComponent,
+    ExaminerProfileComponent
   ],
   imports: [
     BrowserModule,
