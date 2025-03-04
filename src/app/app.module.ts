@@ -51,6 +51,7 @@ import { PreviousCoursesComponent } from './update-course/previous-courses/previ
 import { AdminComponent as ExamAdminComponent } from './exam/admin/admin.component';
 import { AdminActionComponent } from './exam/admin-action/admin-action.component';
 import { ExaminerProfileComponent } from './exam/examiner-profile/examiner-profile.component';
+import { InviteExaminerComponent } from './exam/invite-examiner/invite-examiner.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { ExaminerProfileComponent } from './exam/examiner-profile/examiner-profi
     PreviousCoursesComponent,
     ExamAdminComponent,
     AdminActionComponent,
-    ExaminerProfileComponent
+    ExaminerProfileComponent,
+    InviteExaminerComponent
   ],
   imports: [
     BrowserModule,
