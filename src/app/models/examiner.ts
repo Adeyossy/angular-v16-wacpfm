@@ -48,7 +48,7 @@ export interface Examiner {
   previousMgtExperience: boolean; //
   specifyMgtExperience: string; //
   referees: Referee[]; //
-  venue?: "Ibadan" | "Abuja" | "Accra"
+  venue?: "Ibadan" | "Abuja" | "Accra" | ""
 }
 
 export const NEW_EXAMINER: Examiner = {
