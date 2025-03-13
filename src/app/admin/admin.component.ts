@@ -1,5 +1,5 @@
 import { Component, DoCheck, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService, RefinedData } from '../services/auth.service';
 import { NEVER, Observable, concatMap, map, of, timer } from 'rxjs';
 import { DEFAULT_COURSE_RECORD, UPDATE_COURSES_RECORDS, UPDATE_COURSE_TYPES, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
 import { CardList } from '../widgets/card-list/card-list.component';
@@ -282,7 +282,21 @@ export class AdminComponent implements OnInit {
   fetchData$() {
     this.data$ = this.authService.getDetails$(this.currentCourse!.updateCourseId).pipe(
       map(data => {
-        const rows = data.map(d => Object.values(d).join(";")).join("\r\n");
+        let refined: RefinedData[] = [];
+        for (let i = 0; i < data.length; i++) {
+          const d = data[i];
+          if (refined.find(r => r.user_email === d.user_email)) continue;
+          for (let j = i+1; j < data.length; j++) {
+            const next = data[j];
+            if (d.user_email === next.user_email) {
+              if (!d.category.includes(next.category)) {
+                d.category = d.category.concat(", ", next.category) as UpdateCourseType;
+              }
+            }
+          }
+          refined.push(d);
+        }
+        const rows = refined.map(d => Object.values(d).join(";")).join("\r\n");
         const final = Object.keys(data[0]).join(";").concat("\r\n", rows);
         const json = JSON.stringify(data);
         return URL.createObjectURL(new Blob([final], {type: "text/csv"}))

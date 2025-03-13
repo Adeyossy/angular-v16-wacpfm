@@ -10,6 +10,22 @@ import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
 import { BasicResponse, CustomerResponse, ParsedCustomerResponse, PaystackConfig, PaystackInitResponse } from '../models/payment';
 
+export interface RefinedData {
+  user_email: string,
+  record_email: string,
+  first_name: string,
+  middle_name: string,
+  last_name: string,
+  course_id: string,
+  category: string,
+  gender: string,
+  country: string,
+  designation: string,
+  place_of_practice: string,
+  college: string,
+  has_paid: boolean | undefined
+}
+
 @Injectable({
   providedIn: 'root'
 })
