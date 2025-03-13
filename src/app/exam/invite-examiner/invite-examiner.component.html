@@ -1,1 +1,32 @@
-<p>invite-examiner works!</p>
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-medium fw-bold">Invite Examiner</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+<br>
+<app-examiner-profile [examiner]="examiner"></app-examiner-profile>
+<br>
+<div class="wacpfm-card">
+  <h1 class="wacpfm-heading-small fw-bold">Choose Venue</h1>
+  <br>
+  <hr><br>
+  <app-select [items]="venues" [itemsSelectionState]="venuesSelection" mode="single"
+    (emitItems)="changeVenue($event)"></app-select>
+  <div *ngIf="hasVenueChanged">
+    <div *ngIf="updateTracker$ === null; else working">
+      <button class="wacpfm-primary-button small d-inline-block me-3" (click)="effectChange()"
+      *ngIf="examiner.venue; else revoke">Confirm Venue</button>
+      <ng-template #revoke>
+        <button class="wacpfm-primary-button small d-inline-block me-3" 
+        (click)="revokeInvitation()">Revoke Invitation</button>
+      </ng-template>
+    </div>
+    <ng-template #working>
+      <div *ngIf="updateTracker$ | async; else loading">
+        <button class="wacpfm-primary-button small">Done</button>
+      </div>
+      <ng-template #loading>
+        <app-loading-circles></app-loading-circles>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>
