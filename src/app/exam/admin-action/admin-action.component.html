@@ -17,7 +17,8 @@
   <hr><br>
   <div *ngIf="examiners$ | async as examiners; else fetching">
     <app-card-list *ngFor="let examiner of examiners; index as i" [item]="toCardListItem(examiner)"
-    [index]="i" [state]="examiner.venue !== undefined" [control]="true">
+    [index]="i" [state]="examiner.venue !== undefined" [control]="true" 
+    (click)="showInviteExaminer(examiner)">
       <p class="wacpfm-small-text" *ngIf="examiner.venue !== undefined">
         {{ examiner.venue.toUpperCase() }}
       </p>

@@ -5,6 +5,7 @@ import { AcademicWriting, Candidate, FellowshipExamRecord, MembershipExamRecord 
 import { Exam } from 'src/app/models/exam';
 import { Examiner } from 'src/app/models/examiner';
 import { ExamService } from 'src/app/services/exam.service';
+import { HelperService } from 'src/app/services/helper.service';
 import { CardList } from 'src/app/widgets/card-list/card-list.component';
 
 @Component({
@@ -20,7 +21,8 @@ export class AdminActionComponent implements OnInit {
   candidatesList$: Observable<CardList[]> = of([]);
   writings$: Observable<AcademicWriting[]> = of([]);
 
-  constructor(private examService: ExamService, private activatedRoute: ActivatedRoute) {}
+  constructor(private examService: ExamService, private activatedRoute: ActivatedRoute, 
+    private helper: HelperService) {}
 
   ngOnInit(): void {
     const examAlias$ = this.activatedRoute.paramMap.pipe(
@@ -96,5 +98,12 @@ export class AdminActionComponent implements OnInit {
   replaceWacpNo = (examNo: string, writing: AcademicWriting) => {
     writing.wacpNo = examNo;
     return writing;
+  }
+
+  showInviteExaminer(examiner: Examiner) {
+    const data = this.helper.resetComponentDialogData();
+    data.courseId = examiner.userId,
+    data.examiner = examiner;
+    this.helper.setComponentDialogData(data);
   }
 }
