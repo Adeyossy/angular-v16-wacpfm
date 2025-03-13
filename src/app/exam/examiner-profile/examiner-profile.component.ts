@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { of } from 'rxjs';
 import { Examiner, NEW_EXAMINER } from 'src/app/models/examiner';
 import { CardList } from 'src/app/widgets/card-list/card-list.component';
@@ -9,7 +9,7 @@ import { CardList } from 'src/app/widgets/card-list/card-list.component';
   styleUrls: ['./examiner-profile.component.css']
 })
 export class ExaminerProfileComponent implements OnInit {
-  examiner: Examiner = Object.assign({}, NEW_EXAMINER);
+  @Input() examiner: Examiner = Object.assign({}, NEW_EXAMINER);
   list: CardList[] = [];
 
   ngOnInit(): void {
