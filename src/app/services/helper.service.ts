@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UpdateCourseLectureComponent } from '../update-course/update-course-lecture/update-course-lecture.component';
 import { DEFAULT_LECTURE, DEFAULT_UPDATE_COURSE, UpdateCourse, UpdateCourseLecture } from '../models/update_course';
-import { DEFAULT_COURSE_RECORD, UpdateCourseRecord } from '../models/update_course_record';
+import { DEFAULT_COURSE_RECORD, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
 import { DEFAULT_RESOURCE_PERSON, ResourcePerson } from '../models/user';
 import { AcademicWriting, DEFAULT_ACADEMIC_WRITING, DEFAULT_WRITING, Writing } from '../models/candidate';
 
@@ -145,10 +145,14 @@ export class HelperService {
     };
   }
 
+  sortByUpdateCourseType(type1: UpdateCourseType, type2: UpdateCourseType) {
+    if(type1 === "Membership") return -1;
+    if(type2 === "Membership") return 1;
+    return type1.charCodeAt(0) - type2.charCodeAt(0);
+  }
+
   sortCourseType(record1: UpdateCourseRecord, record2: UpdateCourseRecord) {
-    if(record1.courseType === "Membership") return -1;
-    if(record2.courseType === "Membership") return 1;
-    return record1.courseType.charCodeAt(0) - record2.courseType.charCodeAt(0);
+    return this.sortByUpdateCourseType(record1.courseType, record2.courseType);
   }
 
   toDateString(millis: number) {

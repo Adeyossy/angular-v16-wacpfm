@@ -290,14 +290,21 @@ export class AdminComponent implements OnInit {
             const next = data[j];
             if (d.user_email === next.user_email) {
               if (!d.category.includes(next.category)) {
-                d.category = d.category.concat(", ", next.category) as UpdateCourseType;
+                // Get the sort value. The order of the arguments matter
+                const sortNumber = this.helper.sortByUpdateCourseType(d.category, next.category);
+                
+                // If the sortNumber is negative, concat in the order of the arguments,
+                // else concat in the reverse order.
+                d.category = sortNumber < 0 ? 
+                  d.category.concat(", ", next.category) as UpdateCourseType :
+                  next.category.concat(", ", d.category) as UpdateCourseType;
               }
             }
           }
           refined.push(d);
         }
         const rows = refined.map(d => Object.values(d).join(";")).join("\r\n");
-        const final = Object.keys(data[0]).join(";").concat("\r\n", rows);
+        const final = Object.keys(refined[0]).join(";").concat("\r\n", rows);
         const json = JSON.stringify(data);
         return URL.createObjectURL(new Blob([final], {type: "text/csv"}))
       })
