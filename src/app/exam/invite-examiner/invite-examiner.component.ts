@@ -64,6 +64,7 @@ export class InviteExaminerComponent implements OnInit {
   }
 
   revokeInvitation() {
+    this.examiner.venue = "";
     this.updateTracker$ = this.authService.batchWriteDocs$([
       {
         path: `${EXAMINERS}/${this.examiner.userId.concat("_", this.examiner.examAlias)}`,

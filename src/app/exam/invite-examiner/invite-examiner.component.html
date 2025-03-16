@@ -11,22 +11,22 @@
   <hr><br>
   <app-select [items]="venues" [itemsSelectionState]="venuesSelection" mode="single"
     (emitItems)="changeVenue($event)"></app-select>
-  <div *ngIf="hasVenueChanged">
-    <div *ngIf="updateTracker$ === null; else working">
-      <button class="wacpfm-primary-button small d-inline-block me-3" (click)="effectChange()"
-      *ngIf="examiner.venue; else revoke">Confirm Venue</button>
-      <ng-template #revoke>
-        <button class="wacpfm-primary-button small d-inline-block me-3" 
-        (click)="revokeInvitation()">Revoke Invitation</button>
-      </ng-template>
-    </div>
-    <ng-template #working>
-      <div *ngIf="updateTracker$ | async; else loading">
-        <button class="wacpfm-primary-button small">Done</button>
-      </div>
-      <ng-template #loading>
-        <app-loading-circles></app-loading-circles>
-      </ng-template>
+  <div *ngIf="updateTracker$ === null; else working">
+    <button class="wacpfm-primary-button small d-inline-block me-3 w-auto" 
+    (click)="effectChange()" *ngIf="hasVenueChanged">
+      Confirm Venue
+    </button>
+    <button class="wacpfm-primary-button small d-inline-block w-auto" 
+    (click)="revokeInvitation()" *ngIf="examiner.venue">Revoke Invitation</button>
+    <ng-template #revoke>
     </ng-template>
   </div>
+  <ng-template #working>
+    <div *ngIf="updateTracker$ | async; else loading">
+      <button class="wacpfm-primary-button small">Done</button>
+    </div>
+    <ng-template #loading>
+      <app-loading-circles></app-loading-circles>
+    </ng-template>
+  </ng-template>
 </div>
