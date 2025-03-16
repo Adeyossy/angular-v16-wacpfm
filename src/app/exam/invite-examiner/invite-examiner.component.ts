@@ -4,6 +4,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { EXAMS } from 'src/app/models/exam';
 import { Examiner, EXAMINERS, NEW_EXAMINER } from 'src/app/models/examiner';
 import { AuthService } from 'src/app/services/auth.service';
+import { HelperService } from 'src/app/services/helper.service';
 
 type Venue = "Ibadan" | "Accra" | "Abuja" | undefined | "";
 
@@ -20,7 +21,7 @@ export class InviteExaminerComponent implements OnInit {
   hasVenueChanged = false;
   updateTracker$: Observable<boolean> | null = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, public helper: HelperService) {}
 
   ngOnInit(): void {
     this.initialVenue = this.examiner.venue;
@@ -79,7 +80,10 @@ export class InviteExaminerComponent implements OnInit {
         type: "update"
       }
     ]).pipe(
-      map(response => response === "done"),
+      map(response => {
+        this.helper.resetComponentDialogData();
+        return response === "done"
+      }),
       catchError(err => {
         console.log("error => ", err);
         this.updateTracker$ = null;

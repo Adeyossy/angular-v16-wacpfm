@@ -12,18 +12,18 @@
   <app-select [items]="venues" [itemsSelectionState]="venuesSelection" mode="single"
     (emitItems)="changeVenue($event)"></app-select>
   <div *ngIf="updateTracker$ === null; else working">
-    <button class="wacpfm-primary-button small d-inline-block me-3 w-auto" 
+    <button class="wacpfm-primary-button small d-inline-block px-3 me-3 w-auto" 
     (click)="effectChange()" *ngIf="hasVenueChanged">
       Confirm Venue
     </button>
-    <button class="wacpfm-primary-button small d-inline-block w-auto" 
+    <button class="wacpfm-primary-button small d-inline-block w-auto px-3 bg-danger border-danger" 
     (click)="revokeInvitation()" *ngIf="examiner.venue">Revoke Invitation</button>
     <ng-template #revoke>
     </ng-template>
   </div>
   <ng-template #working>
     <div *ngIf="updateTracker$ | async; else loading">
-      <button class="wacpfm-primary-button small">Done</button>
+      <button class="wacpfm-primary-button small" (click)="helper.resetComponentDialogData()">Done</button>
     </div>
     <ng-template #loading>
       <app-loading-circles></app-loading-circles>
