@@ -52,6 +52,7 @@ import { AdminComponent as ExamAdminComponent } from './exam/admin/admin.compone
 import { AdminActionComponent } from './exam/admin-action/admin-action.component';
 import { ExaminerProfileComponent } from './exam/examiner-profile/examiner-profile.component';
 import { InviteExaminerComponent } from './exam/invite-examiner/invite-examiner.component';
+import { ExaminersListComponent } from './exam/examiners-list/examiners-list.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +102,8 @@ import { InviteExaminerComponent } from './exam/invite-examiner/invite-examiner.
     ExamAdminComponent,
     AdminActionComponent,
     ExaminerProfileComponent,
-    InviteExaminerComponent
+    InviteExaminerComponent,
+    ExaminersListComponent
   ],
   imports: [
     BrowserModule,
