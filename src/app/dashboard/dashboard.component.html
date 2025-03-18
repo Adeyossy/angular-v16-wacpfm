@@ -24,6 +24,8 @@
           <app-invite-examiner *ngIf="helper.data.courseId === helper.data.examiner.userId"
             [examiner]="helper.data.examiner">
           </app-invite-examiner>
+          <app-examiners-list *ngIf="helper.data.allWritings.length > 0"
+            [writing]="helper.data.academicWriting" [allWritings]="helper.data.allWritings"></app-examiners-list>
         </app-component-overlay>
       </div>
       <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown === 0">

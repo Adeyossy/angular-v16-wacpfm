@@ -102,8 +102,16 @@ export class AdminActionComponent implements OnInit {
 
   showInviteExaminer(examiner: Examiner) {
     const data = this.helper.resetComponentDialogData();
-    data.courseId = examiner.userId,
+    data.courseId = examiner.userId;
     data.examiner = examiner;
+    this.helper.setComponentDialogData(data);
+  }
+
+  showAssignmentDialog(writings: AcademicWriting[], writing: AcademicWriting) {
+    const data = this.helper.resetComponentDialogData();
+    data.courseId = writing.wacpNo;
+    data.academicWriting = writing;
+    data.allWritings = writings;
     this.helper.setComponentDialogData(data);
   }
 }

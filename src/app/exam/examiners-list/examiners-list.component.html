@@ -1,1 +1,26 @@
-<p>examiners-list works!</p>
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-medium fw-bold">Choose Supervisor</h1>
+  <div class="wacpfm-heading-underline">
+    <h2 class="wacpfm-subheading fw-bold">Select from invited examiners</h2>
+    <div class="wacpfm-underline"></div>
+  </div>
+</div>
+<br>
+<app-card-list *ngFor="let examiner of examiners$ | async; index as i" [item]="toCardListItem(examiner)" [index]="i"
+  [state]="writing.examinerEmails.includes(examiner.userEmail)" (click)="selectExaminer(examiner)"
+  [control]="writing.examinerEmails.includes(examiner.userEmail)">
+  <div class="d-flex" *ngIf="getSupervisions(examiner) as supervisions"
+    [class.d-none]="supervisions.length === 0">
+    <div *ngIf="selecting$ === null; else selecting">
+      <button class="icon small me-3 mt-2" *ngFor="let supervision of supervisions">
+        <i class="bi bi-book-fill"></i> {{supervision}}
+      </button>
+    </div>
+    <ng-template #selecting>
+      <div *ngIf="selecting$ | async; else loading"></div>
+      <ng-template #loading>
+        <app-loading-circles></app-loading-circles>
+      </ng-template>
+    </ng-template>
+  </div>
+</app-card-list>

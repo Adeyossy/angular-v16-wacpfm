@@ -101,6 +101,10 @@ export class ExamService extends CacheService {
     return this.queryCacheFirst$<Exam & {[key: string]: number}>(EXAMS, "examAlias", "==", examAlias);
   }
 
+  parseIdToExamId(id: string, examAlias: string) {
+    return id.concat("_", examAlias);
+  }
+
   parseCandidateExamId(candidate: Candidate) {
     return candidate.candidateId.concat("_", candidate.examAlias);
   }

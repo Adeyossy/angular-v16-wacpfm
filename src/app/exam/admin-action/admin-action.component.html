@@ -35,7 +35,8 @@
   <hr><br>
   <div *ngIf="writings$ | async as writings; else fetching">
     <app-card-list *ngFor="let writing of writings; index as i" [item]="writingToCardListItem(writing)"
-    [index]="i" [control]="true" [state]="writing.examinerEmails.length > 0">
+    [index]="i" [control]="true" [state]="writing.examinerEmails.length > 0"
+    (click)="showAssignmentDialog(writings, writing)">
     </app-card-list>
   </div>
   <ng-template #fetching>

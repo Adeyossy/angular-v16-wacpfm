@@ -27,6 +27,7 @@ export interface ComponentDialogData {
   lecturer: ResourcePerson,
   examiner: Examiner,
   academicWriting: AcademicWriting,
+  allWritings: AcademicWriting[],
   writing: [AcademicWriting[], number]
 }
 
@@ -141,6 +142,7 @@ export class HelperService {
       lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
       examiner: Object.assign({}, NEW_EXAMINER),
       academicWriting: Object.assign({}, DEFAULT_ACADEMIC_WRITING),
+      allWritings: [] as AcademicWriting[],
       writing: [[], -1] as [AcademicWriting[], number]
     }
   }
