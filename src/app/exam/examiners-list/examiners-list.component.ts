@@ -5,6 +5,7 @@ import { AcademicWriting, CANDIDATES, DEFAULT_ACADEMIC_WRITING } from 'src/app/m
 import { Examiner } from 'src/app/models/examiner';
 import { AuthService } from 'src/app/services/auth.service';
 import { ExamService } from 'src/app/services/exam.service';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-examiners-list',
@@ -19,7 +20,8 @@ export class ExaminersListComponent implements OnInit {
 
   selecting$: Observable<string> | null = null;
 
-  constructor(private authService: AuthService, private examService: ExamService) { }
+  constructor(private authService: AuthService, private examService: ExamService,
+    public helper: HelperService) { }
 
   ngOnInit(): void {
     this.oldWriting = JSON.parse(JSON.stringify(this.writing));
@@ -69,7 +71,7 @@ export class ExaminersListComponent implements OnInit {
       writing.examinerIds.push(examiner.userId.toLowerCase().trim());
     }
 
-    this.writeToDoc(writing)
+    this.writeToDoc(writing);
   }
 
   writeToDoc(writing: AcademicWriting) {
@@ -91,7 +93,10 @@ export class ExaminersListComponent implements OnInit {
       }
     ]).pipe(
       map(r => {
-        this.writing = writing;
+        // back up old writing
+        this.oldWriting = JSON.parse(JSON.stringify(this.writing));
+        this.writing.examinerEmails = writing.examinerEmails;
+        this.writing.examinerIds = writing.examinerIds;
         this.selecting$ = null;
         return r;        
       }),

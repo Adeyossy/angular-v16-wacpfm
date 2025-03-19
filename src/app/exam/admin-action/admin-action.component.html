@@ -37,6 +37,9 @@
     <app-card-list *ngFor="let writing of writings; index as i" [item]="writingToCardListItem(writing)"
     [index]="i" [control]="true" [state]="writing.examinerEmails.length > 0"
     (click)="showAssignmentDialog(writings, writing)">
+      <div class="mt-2 d-flex">
+        <button class="icon small text-success me-3">{{ writing.examinerEmails.length }} Examiner(s)</button>
+      </div>
     </app-card-list>
   </div>
   <ng-template #fetching>

@@ -1,7 +1,7 @@
 <div class="wacpfm-heading-underline">
-  <h1 class="wacpfm-heading-medium fw-bold">Choose Supervisor</h1>
+  <h1 class="wacpfm-heading-small fw-bold">{{writing.title}}</h1>
   <div class="wacpfm-heading-underline">
-    <h2 class="wacpfm-subheading fw-bold">Select from invited examiners</h2>
+    <h2 class="wacpfm-subheading fw-bold">Choose Supervisor from invited examiners</h2>
     <div class="wacpfm-underline"></div>
   </div>
 </div>
@@ -24,3 +24,5 @@
     </ng-template>
   </div>
 </app-card-list>
+<br>
+<button class="wacpfm-primary-button" (click)="helper.resetComponentDialogData()">Done</button>
