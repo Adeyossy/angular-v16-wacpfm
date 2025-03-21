@@ -76,8 +76,8 @@ export class AdminActionComponent implements OnInit {
 
   writingToCardListItem = (writing: AcademicWriting) => {
     return {
-      title: writing.wacpNo,
-      subtitle: writing.title,
+      title: writing.title,
+      subtitle: writing.wacpNo,
       text: writing.type
     }
   }
