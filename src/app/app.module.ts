@@ -53,8 +53,8 @@ import { AdminActionComponent } from './exam/admin-action/admin-action.component
 import { ExaminerProfileComponent } from './exam/examiner-profile/examiner-profile.component';
 import { InviteExaminerComponent } from './exam/invite-examiner/invite-examiner.component';
 import { ExaminersListComponent } from './exam/examiners-list/examiners-list.component';
-import { DissertationComponent } from './dissertation/dissertation.component';
-import { CasebookComponent } from './casebook/casebook.component';
+import { DissertationComponent } from './exam/dissertation/dissertation.component';
+import { CasebookComponent } from './exam/casebook/casebook.component';
 
 @NgModule({
   declarations: [
