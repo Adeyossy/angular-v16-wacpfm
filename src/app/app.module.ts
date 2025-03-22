@@ -54,6 +54,7 @@ import { ExaminerProfileComponent } from './exam/examiner-profile/examiner-profi
 import { InviteExaminerComponent } from './exam/invite-examiner/invite-examiner.component';
 import { ExaminersListComponent } from './exam/examiners-list/examiners-list.component';
 import { DissertationComponent } from './dissertation/dissertation.component';
+import { CasebookComponent } from './casebook/casebook.component';
 
 @NgModule({
   declarations: [
@@ -105,7 +106,8 @@ import { DissertationComponent } from './dissertation/dissertation.component';
     ExaminerProfileComponent,
     InviteExaminerComponent,
     ExaminersListComponent,
-    DissertationComponent
+    DissertationComponent,
+    CasebookComponent
   ],
   imports: [
     BrowserModule,
