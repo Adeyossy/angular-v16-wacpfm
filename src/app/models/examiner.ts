@@ -48,7 +48,8 @@ export interface Examiner {
   previousMgtExperience: boolean; //
   specifyMgtExperience: string; //
   referees: Referee[]; //
-  venue?: "Ibadan" | "Abuja" | "Accra" | ""
+  venue?: "Ibadan" | "Abuja" | "Accra" | "",
+  candidates?: string[]; // added 21/03/2025 3:58am. Stores the ids of candidates
 }
 
 export const NEW_EXAMINER: Examiner = {
