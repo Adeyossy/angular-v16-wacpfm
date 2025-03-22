@@ -53,6 +53,7 @@ import { AdminActionComponent } from './exam/admin-action/admin-action.component
 import { ExaminerProfileComponent } from './exam/examiner-profile/examiner-profile.component';
 import { InviteExaminerComponent } from './exam/invite-examiner/invite-examiner.component';
 import { ExaminersListComponent } from './exam/examiners-list/examiners-list.component';
+import { DissertationComponent } from './dissertation/dissertation.component';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,8 @@ import { ExaminersListComponent } from './exam/examiners-list/examiners-list.com
     AdminActionComponent,
     ExaminerProfileComponent,
     InviteExaminerComponent,
-    ExaminersListComponent
+    ExaminersListComponent,
+    DissertationComponent
   ],
   imports: [
     BrowserModule,
