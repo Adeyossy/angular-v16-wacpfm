@@ -132,10 +132,24 @@ export interface Grade {
   totalMarksObtainable: number;
   comment: string;
 }
-type SubGrade = {
+
+export const NEW_GRADE: Grade = {
+  examinerId: "",
+  examinerEmail: "",
+  score: 0,
+  totalMarksObtainable: 0,
+  comment: ""
+}
+
+export type SubGrade = {
   score: number;
   comment: string;
 };
+
+const NEW_SUBGRADE: SubGrade = {
+  score: 0,
+  comment: ""
+}
 
 export interface DissertationGrade extends Grade {
   abstract: { title: "Abstract"; } & SubGrade;
@@ -148,6 +162,18 @@ export interface DissertationGrade extends Grade {
   references: { title: "References"; } & SubGrade;
   appendices: { title: "Appendices"; } & SubGrade;
 }
+
+export const NEW_DISSERTATION_GRADE: DissertationGrade = Object.assign({
+  abstract: { title: "Abstract" as const, score: 0, comment: "" },
+  preliminaryPages: Object.assign({ title: "Preliminary Pages" } as const, NEW_SUBGRADE),
+  introduction: Object.assign({ title: "Chapter 1: Introduction" } as const, NEW_SUBGRADE),
+  literatureReview: Object.assign({title: "Chapter 2: Literature Review"} as const, NEW_SUBGRADE),
+  method: Object.assign({title: "Chapter 3: Method"} as const, NEW_SUBGRADE),
+  results: Object.assign({title: "Chapter 4: Results" as const}, NEW_SUBGRADE),
+  discussion: Object.assign({title: "Chapter 5: Discussion" as const}, NEW_SUBGRADE),
+  references: Object.assign({title: "References" as const}, NEW_SUBGRADE),
+  appendices: Object.assign({title: "Appendices" as const}, NEW_SUBGRADE)
+}, NEW_GRADE);
 
 export type WritingType = "casebooks" | "pmrs" | "dissertations" | "";
 
