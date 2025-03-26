@@ -1,1 +1,32 @@
-<p>dissertation works!</p>
+<div class="wacpfm-card">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-subheading fw-bold">{{dissertation.type}}</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <h2 class="wacpfm-heading-small fw-bold">{{dissertation.title}}</h2>
+  <p>{{dissertation.description}}</p>
+</div>
+<br>
+<div class="wacpfm-card" *ngFor="let grade of dissertation.gradesByExaminer">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-heading-small fw-bold">Grade</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br>
+  <div *ngIf="(getUserDetails$(grade.examinerEmail) | async) as appUser">
+    <h2 class="wacpfm-subheading fw-bold">
+      {{ appUser[0].firstname }} {{ appUser[0].lastname }}
+    </h2>
+    <br>
+    <hr><br>
+    <div *ngIf="user$ | async as user">
+      <details *ngFor="let item of gradeToCardList(grade); index as i">
+        <summary>
+          <app-card-list [item]="item" [index]="i"></app-card-list>
+        </summary>
+        <input type="number" name="wacpfm-grade-score" id="wacpfm-grade-score" 
+          [(ngModel)]="this.getSections(grade)[i].score" [disabled]="appUser[0].email !== user.email">
+      </details>
+    </div>
+  </div>
+</div>
