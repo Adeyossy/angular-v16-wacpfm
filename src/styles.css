@@ -401,6 +401,11 @@ button:active {
   animation: flashing 1s ease-in infinite alternate;
 }
 
+.summary-no-marker {
+  display: list-item;
+  list-style: none;
+}
+
 @keyframes slideLefttoRight {
   from {
     opacity: 0.5;
