@@ -76,8 +76,8 @@ export class ExaminersListComponent implements OnInit {
 
   writeToDoc(writing: AcademicWriting) {
     const path = `${CANDIDATES}/${this.examService.parseIdToExamId(writing.candidateId, writing.examAlias)}`;
-    console.log("path =>", path);
-    console.log("writing =>", writing);
+    // console.log("path =>", path);
+    // console.log("writing =>", writing);
     this.selecting$ = this.authService.batchWriteDocs$([
       {
         path,
