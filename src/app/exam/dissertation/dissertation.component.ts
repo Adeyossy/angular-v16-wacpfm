@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'firebase/auth';
 import { Observable } from 'rxjs';
-import { DISSERTATION, Dissertation, DissertationGrade, SubGrade } from 'src/app/models/candidate';
+import { CANDIDATES, DISSERTATION, Dissertation, DissertationGrade, SubGrade } from 'src/app/models/candidate';
 import { AppUser, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { ExamService } from 'src/app/services/exam.service';
 import { CardList } from 'src/app/widgets/card-list/card-list.component';
 
 @Component({
@@ -20,8 +21,9 @@ export class DissertationComponent implements OnInit {
   declare user$: Observable<User>;
   gradesBySection: CardList[][] = [];
   sections: SubGrade[] = [];
+  updateStatus$: Observable<boolean> | null = null;
   
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private examService: ExamService) {}
 
   ngOnInit(): void {
     this.oldBook = JSON.parse(JSON.stringify(this.dissertation));
@@ -50,6 +52,20 @@ export class DissertationComponent implements OnInit {
 
   gradesToCardList = (grade: DissertationGrade) => {
     return this.getSections(grade).map(this.subGradeToCardList)
+  }
+
+  update() {
+    const toExamId = this.examService.parseIdToExamId(this.dissertation.candidateId, 
+      this.dissertation.examAlias);
+    const path = `${CANDIDATES}/${toExamId}`;
+    // this.updateStatus$ = this.authService.batchWriteDocs$([
+    //   {
+    //     path,
+    //     data: {
+    //       [this.dissertation.type]: 
+    //     }
+    //   }
+    // ])
   }
 
   gradeToCardList = (grade: DissertationGrade) => {
