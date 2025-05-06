@@ -29,35 +29,44 @@ export const DEFAULT_COURSE_RECORD: UpdateCourseRecord = {
   paymentEvidence: ""
 };
 
+const JNR_FEE = 25000 * 100;
+const SNR_FEE = 25000 * 100;
+const TOT_FEE = 15000 * 100;
+const TOT_RESIDENT_FEE = 25000 * 100;
+
+const calculateTotal = (fee: number) => {
+  return Math.ceil((100 * (fee + 110000)) / 98.5);
+}
+
 export const BY_CATEGORY = {
   jnr: {
-    amount: 25945.37 * 100,
+    amount: calculateTotal(JNR_FEE),
     name: "Membership",
-    fee: 25000 * 100,
+    fee: JNR_FEE,
     items: ["Membership"]
   },
   snr: {
-    amount: 25954.37 * 100,
+    amount: calculateTotal(SNR_FEE),
     name: "Fellowship",
-    fee: 25000 * 100,
+    fee: SNR_FEE,
     items: ["Fellowship"]
   },
   tot: {
-    amount: 10945.37 * 100,
+    amount: calculateTotal(TOT_FEE),
     name: "ToT",
-    fee: 10000 * 100,
+    fee: TOT_FEE,
     items: ["ToT"]
   },
   'tot-resident': {
-    amount: 20945.37 * 100,
+    amount: calculateTotal(TOT_RESIDENT_FEE),
     name: "ToT & Resident",
-    fee: 20000 * 100,
+    fee: TOT_RESIDENT_FEE,
     items: ["Membership", "Fellowship", "ToT"]
   },
   developer: {
-    amount: 100*100,
+    amount: calculateTotal(300000),
     name: "Developer",
-    fee: 20000 * 100,
+    fee: 300000,
     items: ["Membership"]
   }
 }
