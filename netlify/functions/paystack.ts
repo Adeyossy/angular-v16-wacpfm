@@ -1,10 +1,10 @@
 import { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 
 const paystackConfig = {
-  test_pk: process.env['PAYSTACK_TEST_PUBLIC_KEY'],
-  live_pk: process.env['PAYSTACK_LIVE_PUBLIC_KEY'],
-  test_sk: process.env['PAYSTACK_TEST_SECRET_KEY'],
-  live_sk: process.env['PAYSTACK_LIVE_SECRET_KEY']
+  test_pk: process.env['PAYSTACK_TEST_PK'],
+  live_pk: process.env['PAYSTACK_LIVE_PK'],
+  test_sk: process.env['PAYSTACK_TEST_SK'],
+  live_sk: process.env['PAYSTACK_LIVE_SK']
 };
 
 
