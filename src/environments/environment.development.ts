@@ -6,6 +6,6 @@ export const environment = {
   examiner: "test_examiners",
   exam: "test_exams",
   candidates: "test_candidates",
-  secret_key: "PAYSTACK_TEST_SECRET_KEY",
+  secret_key: "PAYSTACK_TEST_SK",
   public_key: "test_pk"
 };
