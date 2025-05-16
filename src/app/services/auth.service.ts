@@ -59,7 +59,7 @@ export class AuthService {
   }
 
   fetchPaystackConfig$() {
-    return this.httpClient.get<PaystackConfig>(`${this.backendUrl}/paystack`);
+    return this.httpClient.get<PaystackConfig>(`${this.backendUrl}/payment-config`);
   }
 
   initialiseTransaction(data: unknown): Observable<PaystackInitResponse> {

@@ -49,21 +49,33 @@ export interface PaystackResponse {
   }
 }
 
-export interface BasicResponse { 
-  data: { 
-    status: string, 
-    amount: number, 
-    customer: { 
-      email: string 
-    } 
-  } 
+export interface BasicResponse {
+  data: {
+    status: string,
+    amount: number,
+    customer: {
+      email: string
+    }
+  }
+}
+
+export interface PaymentDetails {
+  amount: number,
+  name: UpdateCourseType,
+  fee: number,
+  items: UpdateCourseType[]
 }
 
 export interface PaystackConfig {
   test_pk: string,
   live_pk: string,
   test_sk: string,
-  live_sk: string
+  live_sk: string,
+  jnr: PaymentDetails,
+  snr: PaymentDetails,
+  tot: PaymentDetails,
+  'tot-resident': PaymentDetails,
+  developer: PaymentDetails
 };
 
 export interface PaystackTransaction {

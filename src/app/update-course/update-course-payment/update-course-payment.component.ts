@@ -465,19 +465,19 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
           const newPopup = this.popup.newTransaction({
             key: config[environment.public_key as 'test_pk' | 'live_pk'],
             channels: ["card"],
-            amount: BY_CATEGORY[vals.category].amount,
+            amount: config[vals.category].amount,
             email: vals.email,
             metadata: {
               custom_fields: [
                 {
                   display_name: "Category",
                   variable_name: "category",
-                  value: BY_CATEGORY[vals.category].name
+                  value: config[vals.category].name
                 },
                 {
                   display_name: "Fee",
                   variable_name: "fee",
-                  value: BY_CATEGORY[vals.category].fee
+                  value: config[vals.category].fee
                 },
                 {
                   display_name: "Course ID",
