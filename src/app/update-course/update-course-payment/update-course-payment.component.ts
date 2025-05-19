@@ -464,7 +464,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
           // console.log("Payment started");
           const newPopup = this.popup.newTransaction({
             key: config[environment.public_key as 'test_pk' | 'live_pk'],
-            channels: ["card"],
+            channels: ["card", "bank_transfer"],
             amount: config[vals.category].amount,
             email: vals.email,
             metadata: {
