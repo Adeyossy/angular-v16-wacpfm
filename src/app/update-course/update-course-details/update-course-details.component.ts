@@ -45,12 +45,15 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     this.resourcePersons$ = this.activatedRoute.paramMap.pipe(
       concatMap(params => {
         const id = params.get("updateCourseId");
-        return iif(
-          () => !!id,
-          this.authService.queryCollections$<ResourcePerson>(RESOURCE_PERSONS,
-            where("updateCourseId", "==", id!)),
-          of([])
-        )
+        if (id) {
+          return this.authService.getFirebaseUser$().pipe(
+            concatMap(user => this.authService.queriesCollections$<ResourcePerson>(RESOURCE_PERSONS, [
+              where("updateCourseId", "==", id),
+              where("userEmail", "==", user.email)
+            ]))
+          )
+        }
+        return of([])
       })
     )
 
