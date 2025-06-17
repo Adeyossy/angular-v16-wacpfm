@@ -45,7 +45,7 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    console.log("regex test => ", emailRegex.test(this.lecture.lecturerEmail));
+   // console.log("regex test => ", emailRegex.test(this.lecture.lecturerEmail));
     if (this.lecture.lecturerEmail && emailRegex.test(this.lecture.lecturerEmail)) {
       this.findResourcePerson();
       this.names$ = this.getName$();
@@ -65,7 +65,7 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
 
   templateToDate(datetime: string, time: "startTime" | "endTime") {
     const result = Date.parse(datetime).toString();
-    console.log("calculated data => ", result);
+   // console.log("calculated data => ", result);
     this.lecture[time] = result;
   }
 
@@ -99,24 +99,24 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
 
   onMaterialChange(what: any) {
     const r = this.material.nativeElement as HTMLInputElement;
-    console.log("materialModel => ", this.materialModel);
-    console.log("r => ", r);
+   // console.log("materialModel => ", this.materialModel);
+   // console.log("r => ", r);
     if (r.files && r.files.length) {
       const file = r.files[0];
       this.materialFile = file;
       this.materialBlobURL = URL.createObjectURL(file);
-      console.log('r.files => ', URL.createObjectURL(r.files[0]));
+     // console.log('r.files => ', URL.createObjectURL(r.files[0]));
     }
   }
 
   onVideoChange(what: any) {
     const r = this.video.nativeElement as HTMLInputElement;
-    console.log("videoModel => ", this.videoModel);
+   // console.log("videoModel => ", this.videoModel);
     if (r.files && r.files.length) {
       const file = r.files[0];
       this.videoFile = file;
       this.videoBlobURL = URL.createObjectURL(file);
-      console.log('r.files => ', URL.createObjectURL(r.files[0]));
+     // console.log('r.files => ', URL.createObjectURL(r.files[0]));
     }
   }
 
@@ -124,9 +124,9 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
     const path = `Materials/${this.lecture.updateCourseId}/${this.lecture.courseType}/${this.materialFile!.name}`;
     this.materialUpload$ = this.authService.uploadFileResumably$(this.materialFile!, path).pipe(
         map(output => {
-          console.log("lecturerEmail => ", this.lecture.lecturerEmail);
+         // console.log("lecturerEmail => ", this.lecture.lecturerEmail);
           if (isNaN(parseFloat(output))) {
-            console.log("url? => ", output);
+           // console.log("url? => ", output);
             this.lecture.materialLink = [output];
             return 100;
           } else {
@@ -142,20 +142,19 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
           }
         }),
         catchError(err => {
-          console.log("error uploading => ", err);
+         // console.log("error uploading => ", err);
           return of();
         })
       )
   }
 
   uploadVoiceover() {
-    const path = `Materials/${this.lecture.updateCourseId}/${this.lecture.courseType}
-      /${this.videoFile!.name}`;
+    const path = `Materials/${this.lecture.updateCourseId}/${this.lecture.courseType}/${this.videoFile!.name}`;
     this.videoUpload$ = this.authService.uploadFileResumably$(this.videoFile!, path).pipe(
         map(output => {
           console.log("lecturerEmail => ", this.lecture.lecturerEmail);
           if (isNaN(parseFloat(output))) {
-            console.log("url? => ", output);
+           // console.log("url? => ", output);
             this.lecture.videoLink = output;
             return 100;
           } else {

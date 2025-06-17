@@ -49,8 +49,8 @@
   </div>
   <br>
   <div class="" *ngFor="let link of lecture.materialLink; index as i">
-    <a [href]="link" [download]="lecture.lectureTitle + '.' + (i + 1) + '.pdf'" type="application/pdf"
-      target="_blank" class="wacpfm-link-card fw-bold">
+    <a [href]="link" [download]="lecture.lectureTitle + '.' + (i + 1) + '.pdf'" type="application/pdf" target="_blank"
+      class="wacpfm-link-card fw-bold">
       <i class="bi bi-file-earmark-pdf-fill color-accent"></i> Download PDF
     </a>
   </div>
@@ -61,9 +61,9 @@
     <h2 class="wacpfm-subheading">{{ (materialFile.size/(1024*1000)).toFixed(2) }}MB</h2>
     <br>
   </div>
-  <div #materialIndicator class="wacpfm-upload-progress w-100 d-flex flex-column justify-content-center" 
-  *ngIf="materialUpload$ | async as mUp">
-      <h1 class="wacpfm-heading-small text-center fw-bold wacpfm-text-primary">{{ mUp }}%</h1>
+  <div #materialIndicator class="wacpfm-upload-progress w-100 d-flex flex-column justify-content-center"
+    *ngIf="materialUpload$ | async as mUp">
+    <h1 class="wacpfm-heading-small text-center fw-bold wacpfm-text-primary">{{ mUp }}%</h1>
   </div>
   <div class="container-fluid p-0">
     <div class="row g-0">
@@ -82,37 +82,39 @@
   <br><br>
   <!-- ----------------------------- End of Material Upload section --------------------------- -->
   <!-- --------------------------------- Video Upload section --------------------------------- -->
-  <div class="wacpfm-heading-underline">
-    <div class="wacpfm-heading-small fw-bold">Lecture PPT Voiceover Section</div>
-    <div class="wacpfm-underline"></div>
-  </div>
-  <br>
-  <a [href]="lecture.videoLink" [download]="lecture.lectureTitle + '.pptx'" *ngIf="lecture.videoLink"
-    type="application/vnd.openxmlformats-officedocument.presentationml.presentation"
-    target="_blank" class="wacpfm-link-card fw-bold">
-    <i class="bi bi-file-earmark-ppt-fill color-accent"></i> Download Voiceover
-  </a>
-  <br><br>
-  <div *ngIf="videoFile" class="wacpfm-card wacpfm-header-card">
-    <h1 class="wacpfm-heading-small">{{ videoFile.name }}</h1>
-    <p class="wacpfm-small-text">{{ (videoFile.size/(1024*1000)).toFixed(2) }}MB</p>
-  </div>
-  <div #materialIndicator class="wacpfm-upload-progress w-100 d-flex flex-column justify-content-center" 
-  *ngIf="videoUpload$ | async as vUp">
+  <div class="wacpfm-card">
+    <div class="wacpfm-heading-underline">
+      <div class="wacpfm-heading-small fw-bold">Lecture PPT Voiceover Section</div>
+      <div class="wacpfm-underline"></div>
+    </div>
+    <br>
+    <a [href]="lecture.videoLink" [download]="lecture.lectureTitle + '.pptx'" *ngIf="lecture.videoLink"
+      type="application/vnd.openxmlformats-officedocument.presentationml.presentation" target="_blank"
+      class="wacpfm-link-card fw-bold">
+      <i class="bi bi-file-earmark-ppt-fill color-accent"></i> Download Voiceover
+    </a>
+    <br><br>
+    <div *ngIf="videoFile" class="wacpfm-card wacpfm-header-card">
+      <h1 class="wacpfm-heading-small">{{ videoFile.name }}</h1>
+      <p class="wacpfm-small-text">{{ (videoFile.size/(1024*1000)).toFixed(2) }}MB</p>
+    </div>
+    <div #materialIndicator class="wacpfm-upload-progress w-100 d-flex flex-column justify-content-center"
+      *ngIf="videoUpload$ | async as vUp">
       <h1 class="wacpfm-heading-small text-center fw-bold wacpfm-text-primary">{{ vUp }}%</h1>
-  </div>
-  <div class="container-fluid p-0" *ngIf="!lecture.videoLink">
-    <div class="row g-0">
-      <div class="col-md-6">
-        <label for="wacpfm-video" class="label-as-input w-100 text-center wacpfm-match-height">
-          <i class="bi bi-cloud-arrow-up-fill"></i> Choose Lecture
-        </label>
-        <input #video type="file" name="wacpfm-video" id="wacpfm-video" placeholder="Choose PPT Voiceover" 
-        class="d-none" accept=".ppt, .ppsx, .mp4, .pptx" 
-        (ngModelChange)="onVideoChange($event)" required [ngModel]="videoModel">
-      </div>
-      <div class="col-md-6" *ngIf="videoFile">
-        <button class="wacpfm-primary-button" (click)="uploadVoiceover()">Upload Voiceover</button>
+    </div>
+    <div class="container-fluid p-0" *ngIf="!lecture.videoLink">
+      <div class="row g-0">
+        <div class="col-md-6">
+          <label for="wacpfm-video" class="label-as-input w-100 text-center wacpfm-match-height">
+            <i class="bi bi-cloud-arrow-up-fill"></i> Choose Lecture
+          </label>
+          <input #video type="file" name="wacpfm-video" id="wacpfm-video" placeholder="Choose PPT Voiceover"
+            class="d-none" accept=".ppt, .ppsx, .mp4, .pptx" (ngModelChange)="onVideoChange($event)" required
+            [ngModel]="videoModel">
+        </div>
+        <div class="col-md-6" *ngIf="videoFile">
+          <button class="wacpfm-primary-button" (click)="uploadVoiceover()">Upload Voiceover</button>
+        </div>
       </div>
     </div>
   </div>
