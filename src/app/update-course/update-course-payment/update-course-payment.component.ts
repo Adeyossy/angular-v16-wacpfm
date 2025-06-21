@@ -462,9 +462,13 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       concatMap(vals => this.authService.fetchPaystackConfig$().pipe(
         map(config => {
           // console.log("Payment started");
+          type Channels = ["card", "bank_transfer", "apple_pay", "ussd", "qr", "mobile_money", "eft"];
+          const channels: Channels = [
+            "card", "bank_transfer", "bank", "apple_pay", "ussd", "qr", "mobile_money", "eft"
+          ] as unknown as Channels;
           const newPopup = this.popup.newTransaction({
             key: config[environment.public_key as 'test_pk' | 'live_pk'],
-            channels: ["card", "bank_transfer"],
+            channels,
             amount: config[vals.category].amount,
             email: vals.email,
             metadata: {
