@@ -403,12 +403,15 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     // console.log("customer => ", customer);
     const segments = reference.split("-");
     const [userId, updateCourseId, timestamp] = segments.length === 3 ? segments : reference.split("_");
+    const timetruth = this.parseTimestamp(timestamp);
     this.verifyAgain$ = this.aggregateParams$("").pipe(
       concatMap(params => {
         if (userId === params.user.uid && updateCourseId === params.uCourseId &&
-          this.parseTimestamp(timestamp) && customer.status) {
+          timetruth && customer.status) {
           return this.verifyTransaction(this.toTransaction(reference), this.showSuccessDialog)
         }
+        this.showVerifyErrorDialog();
+        this.verifyAgain$ = null;
         return of("Error occurred");
       })
     );
