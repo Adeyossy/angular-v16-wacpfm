@@ -63,6 +63,7 @@ const routes: Routes = [
       { path: "exam/:examAlias/candidate/membership/:candidateId/edit/upload", component: EditMembershipComponent, title: "Edit Fellowship Details" },
       { path: "exam/:examAlias/candidate/fellowship/:candidateId/edit/upload", component: EditFellowshipComponent, title: "Edit Fellowship Details" },
       { path: "exam/:examAlias/candidate/:category/:candidateId/home", component: ExamComponent },
+      { path: "events", component: UpdateCourseComponent },
       {
         path: "**", component: NotFoundComponent, title: "Not found | Faculty of Family Medicine App"
       }
