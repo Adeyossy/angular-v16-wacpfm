@@ -314,6 +314,15 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     )
   }
 
+  showRefErrorDialog = () => {
+    this.helper.setDialog({
+      title: "Reference Error",
+      message: "Invalid reference pasted. Kindly check the reference again. There should be only 2 hyphens and no space.",
+      buttonText: "Close"
+    });
+    this.helper.toggleDialog(0);
+  }
+
   showVerifyErrorDialog = () => {
     this.helper.setDialog({
       title: "Error",
@@ -410,7 +419,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
           timetruth && customer.status) {
           return this.verifyTransaction(this.toTransaction(reference), this.showSuccessDialog)
         }
-        this.showVerifyErrorDialog();
+        this.showRefErrorDialog();
         this.verifyAgain$ = null;
         return of("Error occurred");
       })
