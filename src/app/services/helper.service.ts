@@ -145,13 +145,13 @@ export class HelperService {
     };
   }
 
-  sortByUpdateCourseType(type1: UpdateCourseType, type2: UpdateCourseType) {
+  sortByUpdateCourseType = (type1: UpdateCourseType, type2: UpdateCourseType) => {
     if(type1 === "Membership") return -1;
     if(type2 === "Membership") return 1;
     return type1.charCodeAt(0) - type2.charCodeAt(0);
   }
 
-  sortCourseType(record1: UpdateCourseRecord, record2: UpdateCourseRecord) {
+  sortCourseType = (record1: UpdateCourseRecord, record2: UpdateCourseRecord) => {
     return this.sortByUpdateCourseType(record1.courseType, record2.courseType);
   }
 
