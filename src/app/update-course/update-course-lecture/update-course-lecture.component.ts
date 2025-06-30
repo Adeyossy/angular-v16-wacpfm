@@ -70,8 +70,13 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
   }
 
   dateToTemplate(datetime: string) {
-    const result = new Date(parseInt(datetime)).toISOString().substring(0, 16);
-    return result;
+    const locale = "en-NG";
+    const date = new Date(parseInt(datetime));
+    const localeDate = date.toLocaleDateString(locale);
+    const toISOString = localeDate.split("/").reverse().join("-")
+    const localeTime = date.toLocaleTimeString(locale);
+    const result = date.toISOString().substring(0, 16);
+    return `${toISOString}T${localeTime}`;
   }
 
   toSelection = (item: UpdateCourseType) => {
