@@ -135,8 +135,8 @@
             <a *ngFor="let link of getCourseTypeDeets(newCourse, record.courseType).classLink as days; index as i"
               [href]="link" class="mb-3">
               <button class="wacpfm-primary-button small">
-                <i class="bi bi-file-earmark-image"></i> Join Training <span *ngIf="days.length > 1">Day {{ i + 1
-                  }}</span>
+                <i class="bi bi-file-earmark-image"></i> 
+                Join Training <span *ngIf="days.length > 1">Day {{ i + 1 }}</span>
               </button>
             </a>
             <button class="wacpfm-primary-button small" routerLink="./certificate/{{record.id}}"
@@ -170,7 +170,7 @@
                       Day 1
                     </p>
                     <p class="wacpfm-toggle wacpfm-smaller-text d-inline-block py-1" [class.toggled]="day[r] === 1"
-                      (click)="toggleDay(r, 1)" [class.d-none]="record.courseType === 'ToT'">
+                      (click)="toggleDay(r, 1)">
                       Day 2
                     </p>
                   </div>
