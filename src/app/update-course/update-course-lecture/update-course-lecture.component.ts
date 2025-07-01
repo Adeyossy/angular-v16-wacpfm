@@ -87,19 +87,29 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
   }
 
   updateLecture() {
-    this.updateState$ = this.authService.addDocWithID$(UPDATE_COURSES_LECTURES, this.lecture.lectureId,
-      this.lecture).pipe(map(_update => true));
+    this.updateState$ = this.authService.addDocWithID$(
+      UPDATE_COURSES_LECTURES, this.lecture.lectureId, this.lecture
+    ).pipe(
+      map(_update => {
+        this.helper.resetDialog();
+        return true;
+      })
+    );
   }
 
   deleteLecture() {
-    let pdfDeleters$: Observable<void>[] = [of()];
+    let pdfDeleters$: Observable<boolean>[] = [of(true)];
     if (this.lecture.materialLink.length) {
-      pdfDeleters$ = this.lecture.materialLink.map(pdf => this.authService.deleteFile$(pdf));
+      pdfDeleters$ = this.lecture.materialLink.map(pdf => this.authService.deleteFile$(pdf).pipe(
+        map(_v => true)
+      ));
     }
 
-    let videoDeleter$: Observable<void> = of();
+    let videoDeleter$: Observable<boolean> = of(true);
     if (this.lecture.videoLink) {
-      videoDeleter$ = this.authService.deleteFile$(this.lecture.videoLink);
+      videoDeleter$ = this.authService.deleteFile$(this.lecture.videoLink).pipe(
+        map(_v => true)
+      );
     }
 
     const deleteDoc$ = this.authService.deleteDoc$(
