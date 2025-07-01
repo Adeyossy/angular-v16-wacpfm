@@ -43,6 +43,7 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
   courseTypes = UPDATE_COURSE_TYPES.slice();
 
   deleteState$: Observable<void> | null = null;
+  deleteVoiceoverState$: Observable<boolean> | null = null;
 
   constructor(private authService: AuthService, public helper: HelperService) { }
 
@@ -95,6 +96,18 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
         return true;
       })
     );
+  }
+
+  deleteVideo() {
+    this.deleteVoiceoverState$ = this.authService.deleteFile$(this.lecture.videoLink).pipe(
+      concatMap(_v => this.authService.updateDoc$(
+        UPDATE_COURSES_LECTURES, this.lecture.lectureId, { videoLink: "" }
+      )),
+      map(_v => {
+        this.lecture.videoLink = "";
+        return true;
+      })
+    )
   }
 
   deleteLecture() {
@@ -197,6 +210,7 @@ export class UpdateCourseLectureComponent implements OnInit, OnDestroy {
         if (isNaN(parseFloat(output))) {
           // console.log("url? => ", output);
           this.lecture.videoLink = output;
+          // this.videoFile = null;
           return 100;
         } else {
           const percent = parseFloat(output);

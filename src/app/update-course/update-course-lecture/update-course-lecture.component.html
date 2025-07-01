@@ -88,13 +88,23 @@
       <div class="wacpfm-underline"></div>
     </div>
     <br>
-    <a [href]="lecture.videoLink" [download]="lecture.lectureTitle + '.pptx'" *ngIf="lecture.videoLink"
-      type="application/vnd.openxmlformats-officedocument.presentationml.presentation" target="_blank"
-      class="wacpfm-link-card fw-bold">
-      <i class="bi bi-file-earmark-ppt-fill color-accent"></i> Download Voiceover
-    </a>
+    <div *ngIf="lecture.videoLink">
+      <a [href]="lecture.videoLink" [download]="lecture.lectureTitle + '.pptx'" *ngIf="lecture.videoLink"
+        type="application/vnd.openxmlformats-officedocument.presentationml.presentation" target="_blank"
+        class="wacpfm-link-card fw-bold">
+        <i class="bi bi-file-earmark-ppt-fill color-accent"></i> Download Voiceover
+      </a>
+      <span> </span>
+      <button class="icon border-danger text-danger ms-2" (click)="deleteVideo()"
+      *ngIf="deleteVoiceoverState$ === null; else deleteVoiceover">
+        <i class="bi bi-trash"></i>
+      </button>
+      <ng-template #deleteVoiceover>
+        <div *ngIf="deleteVoiceoverState$ | async; else loading"></div>
+      </ng-template>
+    </div>
     <br><br>
-    <div *ngIf="videoFile" class="wacpfm-card wacpfm-header-card">
+    <div *ngIf="videoFile && !lecture.videoLink" class="wacpfm-card wacpfm-header-card">
       <h1 class="wacpfm-heading-small">{{ videoFile.name }}</h1>
       <p class="wacpfm-small-text">{{ (videoFile.size/(1024*1000)).toFixed(2) }}MB</p>
     </div>
@@ -131,8 +141,8 @@
     </ng-template>
   </ng-template>
   <br><br>
-  <button class="wacpfm-primary-button bg-danger border-danger" *ngIf="deleteState$ === null; else delete" 
-  (click)="deleteLecture()">
+  <button class="wacpfm-primary-button bg-danger border-danger" *ngIf="deleteState$ === null; else delete"
+    (click)="deleteLecture()">
     Delete Lecture
   </button>
   <ng-template #delete>
