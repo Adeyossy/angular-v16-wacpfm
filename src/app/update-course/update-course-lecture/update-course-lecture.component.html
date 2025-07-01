@@ -119,10 +119,23 @@
     </div>
   </div>
   <br><br>
-  <button class="wacpfm-primary-button" *ngIf="updateState$ === null; else update" (click)="updateLecture()">Update
-    Lecture</button>
+  <button class="wacpfm-primary-button" *ngIf="updateState$ === null; else update" (click)="updateLecture()">
+    Update Lecture
+  </button>
   <ng-template #update>
     <div *ngIf="updateState$! | async as update; else loading">
+      <button class="wacpfm-primary-button" (click)="helper.toggleDialog(-1)">Continue</button>
+    </div>
+    <ng-template #loading>
+      <app-loading-circles></app-loading-circles>
+    </ng-template>
+  </ng-template>
+  <button class="wacpfm-primary-button bg-danger" *ngIf="deleteState$ === null; else delete" 
+  (click)="deleteLecture()">
+    Delete Lecture
+  </button>
+  <ng-template #delete>
+    <div *ngIf="deleteState$ | async as delete; else loading">
       <button class="wacpfm-primary-button" (click)="helper.toggleDialog(-1)">Continue</button>
     </div>
     <ng-template #loading>
