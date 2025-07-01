@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { User } from 'firebase/auth';
 import { collection, doc, runTransaction, where, writeBatch } from 'firebase/firestore';
 import { AsyncSubject, NEVER, Observable, Subscription, concatMap, from, iif, map, of, partition } from 'rxjs';
@@ -205,12 +205,27 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  fetchLecturesByType = (params: ParamMap, courseType: UpdateCourseType) => {
+    return this.authService.queriesCollections$<UpdateCourseLecture>(
+      UPDATE_COURSES_LECTURES, [
+        where("updateCourseId", "==", params.get("updateCourseId") as string),
+        where("courseType", "==", courseType)
+      ]
+    )
+  }
+
+  fetchAllLectures = (params: ParamMap) => {
+    return this.authService.queryCollections$<UpdateCourseLecture>(
+      UPDATE_COURSES_LECTURES, 
+      where("updateCourseId", "==", params.get("updateCourseId") as string)
+    )
+  }
+
   // Get with multiple queries
   // Use a listener
   getCourseLectures() {
     return this.activatedRoute.paramMap.pipe(
-      concatMap(params => this.authService.queryCollections$<UpdateCourseLecture>
-        (UPDATE_COURSES_LECTURES, where("updateCourseId", "==", params.get("updateCourseId") as string))),
+      concatMap(this.fetchAllLectures),
       map(docs => docs.sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime)))
     );
   }
