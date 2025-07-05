@@ -153,7 +153,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         console.log("Successful! Received void");
         this.message = "Your profile was saved successfully. Click the button below to continue";
         this.navText = "Continue";
-        this.navLink = "/dashboard";
+        this.navLink = "/dashboard/home";
         this.done = true;
         // this.navLink = "/dashboard";
       },
