@@ -49,6 +49,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { LoadingSmallCirclesComponent } from './widgets/loading-small-circles/loading-small-circles.component';
 import { PreviousCoursesComponent } from './update-course/previous-courses/previous-courses.component';
 import { EventComponent } from './event/event.component';
+import { EventDetailsComponent } from './event/event-details/event-details.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { EventComponent } from './event/event.component';
     NotFoundComponent,
     LoadingSmallCirclesComponent,
     PreviousCoursesComponent,
-    EventComponent
+    EventComponent,
+    EventDetailsComponent
   ],
   imports: [
     BrowserModule,
