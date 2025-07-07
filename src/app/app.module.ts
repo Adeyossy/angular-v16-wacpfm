@@ -48,6 +48,7 @@ import { DashboardHomeComponent } from './dashboard/dashboard-home/dashboard-hom
 import { NotFoundComponent } from './not-found/not-found.component';
 import { LoadingSmallCirclesComponent } from './widgets/loading-small-circles/loading-small-circles.component';
 import { PreviousCoursesComponent } from './update-course/previous-courses/previous-courses.component';
+import { EventComponent } from './event/event.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +94,8 @@ import { PreviousCoursesComponent } from './update-course/previous-courses/previ
     DashboardHomeComponent,
     NotFoundComponent,
     LoadingSmallCirclesComponent,
-    PreviousCoursesComponent
+    PreviousCoursesComponent,
+    EventComponent
   ],
   imports: [
     BrowserModule,
