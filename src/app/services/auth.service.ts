@@ -197,6 +197,13 @@ export class AuthService {
     )
   }
 
+  getDocById$<Type>(collectionName: string, docId: string) {
+    return this.getFirestore$().pipe(
+      concatMap(db => getDoc(doc(db, collectionName, docId))),
+      map(doc => doc.exists() ? doc.data() as Type : null)
+    )
+  }
+  
   addDoc$(collectionName: string, data: any) {
     return this.getFirestore$().pipe(
       concatMap(db => addDoc(collection(db, collectionName), data))
