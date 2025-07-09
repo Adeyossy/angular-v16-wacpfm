@@ -20,7 +20,7 @@ export class DashboardHomeComponent {
     {
       title: "Event",
       description: "",
-      link: "/dashboard/event"
+      link: "/dashboard/events"
     }
   ]
 }
