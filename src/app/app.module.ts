@@ -51,6 +51,7 @@ import { PreviousCoursesComponent } from './update-course/previous-courses/previ
 import { EventComponent } from './event/event.component';
 import { EventDetailsComponent } from './event/event-details/event-details.component';
 import { EventsComponent } from './event/events/events.component';
+import { UserInfoComponent } from './registration/user-info/user-info.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { EventsComponent } from './event/events/events.component';
     PreviousCoursesComponent,
     EventComponent,
     EventDetailsComponent,
-    EventsComponent
+    EventsComponent,
+    UserInfoComponent
   ],
   imports: [
     BrowserModule,
