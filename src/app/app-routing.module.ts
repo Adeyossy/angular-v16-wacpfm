@@ -28,6 +28,8 @@ import { EditMembershipComponent } from './exam/edit-candidate/edit-membership/e
 import { DashboardHomeComponent } from './dashboard/dashboard-home/dashboard-home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PreviousCoursesComponent } from './update-course/previous-courses/previous-courses.component';
+import { EventDetailsComponent } from './event/event-details/event-details.component';
+import { EventComponent } from './event/event.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
@@ -63,7 +65,11 @@ const routes: Routes = [
       { path: "exam/:examAlias/candidate/membership/:candidateId/edit/upload", component: EditMembershipComponent, title: "Edit Fellowship Details" },
       { path: "exam/:examAlias/candidate/fellowship/:candidateId/edit/upload", component: EditFellowshipComponent, title: "Edit Fellowship Details" },
       { path: "exam/:examAlias/candidate/:category/:candidateId/home", component: ExamComponent },
-      { path: "events", component: UpdateCourseComponent },
+      { path: "events", component: EventComponent },
+      { path: "events/:eventId", component: EventDetailsComponent },
+      { path: "events/:eventId/home", component: EventComponent },
+      { path: "events/:eventId/register", component: RegistrationComponent },
+      { path: "events/:eventId/register/pay", component: RegistrationComponent },
       {
         path: "**", component: NotFoundComponent, title: "Not found | Faculty of Family Medicine App"
       }
