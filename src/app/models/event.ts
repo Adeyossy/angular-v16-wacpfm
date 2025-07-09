@@ -1,6 +1,7 @@
 import { environment } from "src/environments/environment";
 
 export const EVENTS_COLLECTION = environment.event;
+export const EVENT_FEES_COLLECTION = environment.eventFee;
 
 /**
  * Models an event carried out by an organisation.

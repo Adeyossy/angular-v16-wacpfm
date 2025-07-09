@@ -1,7 +1,8 @@
 import { FieldValue, serverTimestamp } from "firebase/firestore";
 import { AppUser, UserInfo } from "./user";
+import { environment } from "src/environments/environment";
 
-export const EVENT_RECORDS_COLLECTION = "event_records";
+export const EVENT_RECORDS_COLLECTION = environment.eventRecord;
 
 /**
  * The ID of a record is a combination of the email and eventId.
