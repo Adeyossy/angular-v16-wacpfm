@@ -13,9 +13,13 @@ import { DEFAULT_NEW_EVENT_RECORD, EVENT_RECORDS_COLLECTION, EventRecord } from 
 })
 export class EventService {
 
-  constructor(private authService: AuthService, private eventService: EventService) { }
+  constructor(private authService: AuthService) { }
+
+  getEvents() {
+    return this.authService.getCollection$<Event>(EVENTS_COLLECTION);
+  }
  
-  getWorkshopId$(paramMap: Observable<ParamMap>) {
+  getEventId$(paramMap: Observable<ParamMap>) {
     return paramMap.pipe(
       map(params => {
         const p = params.get("workshop");
@@ -30,11 +34,11 @@ export class EventService {
     );
   }
 
-  computeWorkshopRecordId(email: string, workshopId: string) {
+  computeEventRecordId(email: string, workshopId: string) {
     return `${email}-${workshopId}`;
   }
 
-  getWorkshopRecordById$(id: string): Observable<EventRecord> {
+  getEventRecordById$(id: string): Observable<EventRecord> {
     return this.authService.getDocById$<EventRecord>(EVENT_RECORDS_COLLECTION, id).pipe(
       map(w => {
         if (w !== null) return w;
@@ -48,7 +52,7 @@ export class EventService {
     );
   }
 
-  setWorkshopRecordById$(eventRecord: EventRecord) {
+  setEventRecordById$(eventRecord: EventRecord) {
     return this.authService.batchWriteDocs$(
       [
         {
@@ -71,10 +75,10 @@ export class EventService {
     return this.authService.getFirebaseUser$();
   }
 
-  getUserWorkshopRecord$(workshopId: string): Observable<EventRecord> {
+  getUserEventRecord$(eventId: string): Observable<EventRecord> {
     return this.getUser$().pipe(
-      map(user => this.computeWorkshopRecordId(user.email!, workshopId)),
-      concatMap(id => this.getWorkshopRecordById$(id))
+      map(user => this.computeEventRecordId(user.email!, eventId)),
+      concatMap(id => this.getEventRecordById$(id))
     );
   }
 }
