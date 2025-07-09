@@ -22,7 +22,7 @@ export class EventDetailsComponent {
   ngOnInit(): void {
     this.event$ = this.activatedRoute.paramMap.pipe(
       map(paramMap => {
-        const p = paramMap.get("event");
+        const p = paramMap.get("eventId");
         return p ? p : ""
       }),
       concatMap(id => this.eventService.getEventById$(id))

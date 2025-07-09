@@ -9,8 +9,8 @@
       <h1 class="wacpfm-small-text fw-bold">TITLE</h1>
       <div class="wacpfm-underline"></div>
     </div>
-    <h2 class="wacpfm-heading-small fw-bold"></h2>
-    <p></p>
+    <h2 class="wacpfm-heading-small fw-bold mb-3">{{ event.title }}</h2>
+    <p>{{ event.summary }}</p>
     <div class="info d-flex flex-wrap">
       <button class="icon small me-2 mb-2">{{parseMillisToDate(event.first_day)}}</button>
       <button class="icon small me-2 mb-2">{{parseCourseDuration(event.course_duration)}}</button>
@@ -41,7 +41,7 @@
     </div>
   </div>
   <br><br>
-  <div class="app-card">
+  <div class="app-card" *ngIf="event.objectives.length">
     <div class="heading-underline">
       <h1 class="fw-bold small-text">OBJECTIVES</h1>
       <div class="underline"></div>
