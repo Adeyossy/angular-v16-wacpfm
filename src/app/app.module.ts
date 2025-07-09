@@ -50,6 +50,7 @@ import { LoadingSmallCirclesComponent } from './widgets/loading-small-circles/lo
 import { PreviousCoursesComponent } from './update-course/previous-courses/previous-courses.component';
 import { EventComponent } from './event/event.component';
 import { EventDetailsComponent } from './event/event-details/event-details.component';
+import { EventsComponent } from './event/events/events.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { EventDetailsComponent } from './event/event-details/event-details.compo
     LoadingSmallCirclesComponent,
     PreviousCoursesComponent,
     EventComponent,
-    EventDetailsComponent
+    EventDetailsComponent,
+    EventsComponent
   ],
   imports: [
     BrowserModule,
