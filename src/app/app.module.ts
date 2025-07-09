@@ -52,6 +52,7 @@ import { EventComponent } from './event/event.component';
 import { EventDetailsComponent } from './event/event-details/event-details.component';
 import { EventsComponent } from './event/events/events.component';
 import { UserInfoComponent } from './registration/user-info/user-info.component';
+import { EventPaymentComponent } from './event/event-payment/event-payment.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +102,8 @@ import { UserInfoComponent } from './registration/user-info/user-info.component'
     EventComponent,
     EventDetailsComponent,
     EventsComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    EventPaymentComponent
   ],
   imports: [
     BrowserModule,
