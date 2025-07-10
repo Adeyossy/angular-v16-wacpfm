@@ -31,6 +31,7 @@ import { PreviousCoursesComponent } from './update-course/previous-courses/previ
 import { EventDetailsComponent } from './event/event-details/event-details.component';
 import { EventComponent } from './event/event.component';
 import { EventsComponent } from './event/events/events.component';
+import { EventPaymentComponent } from './event/event-payment/event-payment.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
@@ -70,7 +71,7 @@ const routes: Routes = [
       { path: "events/:eventId", component: EventDetailsComponent },
       { path: "events/:eventId/home", component: EventComponent },
       { path: "events/:eventId/register", component: RegistrationComponent },
-      { path: "events/:eventId/register/pay", component: RegistrationComponent },
+      { path: "events/:eventId/register/pay", component: EventPaymentComponent },
       {
         path: "**", component: NotFoundComponent, title: "Not found | Faculty of Family Medicine App"
       }

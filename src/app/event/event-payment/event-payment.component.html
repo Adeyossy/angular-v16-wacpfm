@@ -1,1 +1,13 @@
-<p>event-payment works!</p>
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small fw-bold">Workshop Payment</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+<br>
+<p class="wacpfm-heading-small">Pay for this workshop.</p>
+<button class="w-auto" *ngIf="pay$ === null; else initialising" (click)="pay()">Pay Now</button>
+<ng-template #initialising>
+  <span *ngIf="pay$ | async as payNow; else loading">{{ payNow }}</span>
+  <app-loading-small-circles></app-loading-small-circles>
+  <ng-template #loading>
+  </ng-template>
+</ng-template>
