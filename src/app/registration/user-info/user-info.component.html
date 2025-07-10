@@ -1,1 +1,91 @@
-<p>user-info works!</p>
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small wacpfm-heading-primary fw-bold">Faculty App Registration</h1>
+  <div class="wacpfm-heading-underline">
+    <p class="wacpfm-subheading m-0">Complete Your Profile</p>
+    <div class="wacpfm-underline"></div>
+  </div>
+</div>
+<br><br>
+<div *ngIf="eventRecord$ | async as eventRecord; else loading">
+  <label for="wacpfm-profile-email"><i class="bi bi-envelope-fill"></i> Email</label>
+  <input type="email" name="wacpfm-profile-email" id="wacpfm-profile-email" required
+    placeholder="e.g. lagbaja@email.com" [ngModel]="eventRecord.email" autocomplete="off" disabled>
+  <br><br>
+  <label for="wacpfm-profile-firstname"><i class="bi bi-person-fill"></i> Firstname</label>
+  <input type="text" name="wacpfm-profile-firstname" id="wacpfm-profile-firstname" required
+    placeholder="hint: what your friends call you" [(ngModel)]="eventRecord.firstname" autocomplete="off">
+  <br><br>
+  <label for="wacpfm-profile-middlename"><i class="bi bi-file-person-fill"></i> Middlename</label>
+  <input type="text" name="wacpfm-profile-middlename" id="wacpfm-profile-middlename" [(ngModel)]="eventRecord.middlename"
+    autocomplete="off">
+  <br><br>
+  <label for="wacpfm-profile-lastname"><i class="bi bi-person-vcard-fill"></i> Lastname</label>
+  <input type="text" name="wacpfm-profile-lastname" id="wacpfm-profile-lastname" required
+    placeholder="hint: also known as your surname" [(ngModel)]="eventRecord.lastname" autocomplete="off">
+  <br><br>
+  <label for="wacpfm-profile-gender"><i class="bi bi-emoji-neutral-fill"></i> Gender</label>
+  <app-select mode="single" [items]="['Male', 'Female']" (emitItems)="updateGender($event)"></app-select>
+  <br><br>
+  <label for="wacpfm-profile-country"><i class="bi bi-flag-fill"></i> Country</label>
+  <app-select mode="single" [items]="countries" (emitItems)="updateCountry($event)"></app-select>
+  <br><br>
+  <label for="wacpfm-profile-phone"><i class="bi bi-phone-fill"></i> Phone</label>
+  <div class="container-fluid p-0">
+    <div class="row g-0">
+      <div class="col-3 col-lg-2">
+        <button class="wacpfm-primary-button">{{ user.country ? getCountryCode(user) : "" }}</button>
+      </div>
+      <div class="col-9 col-lg-10">
+        <input type="tel" inputmode="numeric" name="wacpfm-profile-phone" id="wacpfm-profile-lastname" required
+          placeholder="80XXXXXXX" [(ngModel)]="eventRecord.phoneNumber" autocomplete="off" pattern="\d+"
+          class="wacpfm-font-arial">
+      </div>
+    </div>
+  </div>
+  <br><br>
+  <label for="wacpfm-profile-whatsapp"><i class="bi bi-whatsapp"></i> WhatsApp</label>
+  <p class="wacpfm-toggle wacpfm-small-text d-inline-block m-3" [ngClass]="phoneToggle ? 'toggled' : ''"
+    (click)="usePhoneForWhatsApp(user)"><i class="bi bi-check-circle-fill text-white" *ngIf="phoneToggle"></i>
+    Same as
+    above</p>
+  <div class="container-fluid p-0">
+    <div class="row g-0">
+      <div class="col-3 col-lg-2">
+        <button class="wacpfm-primary-button">{{ eventRecord.country ? getCountryCode(user) : "" }}</button>
+      </div>
+      <div class="col-9 col-lg-10">
+        <input type="tel" inputmode="numeric" name="wacpfm-profile-whatsapp" id="wacpfm-profile-lastname" required
+          placeholder="80XXXXXXX" [(ngModel)]="eventRecord.whatsapp" autocomplete="off" pattern="\d+"
+          class="wacpfm-font-arial">
+      </div>
+    </div>
+  </div>
+  <br><br>
+  <label for="wacpfm-profile-designation"><i class="bi bi-person-vcard"></i> Designation</label>
+  <app-select mode="single" [items]="designations" (emitItems)="updateField('designation', $event)"></app-select>
+  <br><br>
+  <label for="wacpfm-profile-college"><i class="bi bi-house"></i> Which College do you belong to?</label>
+  <app-select mode="single" [items]="getChapters()" (emitItems)="updateField('college', $event)"></app-select>
+  <br><br>
+  <label for="wacpfm-profile-role"><i class="bi bi-role"></i> Are you going to be teaching in this course?</label>
+  <app-select mode="single" [items]="['Learning', 'Teaching']" (emitItems)="updateRole($event)"></app-select>
+  <br><br>
+  <label for="wacpfm-profile-practice"><i class="bi bi-hospital"></i> Institution/Hospital of Practice</label>
+  <input type="text" name="wacpfm-profile-practice" id="wacpfm-profile-practice" required placeholder="e.g. COMUI"
+    [(ngModel)]="eventRecord.practicePlace">
+  <br><br>
+  <p class="wacpfm-small-text">Click the button below to update your profile on the Faculty App.</p>
+  <br><br>
+  <button class="wacpfm-primary-button" [disabled]="!eventRecord.country || !eventRecord.email || 
+                !eventRecord.firstname || !eventRecord.gender || !eventRecord.lastname ||
+                !eventRecord.phoneNumber || !eventRecord.userId || !eventRecord.whatsapp || !eventRecord.zip ||
+                !eventRecord.college || !eventRecord.practicePlace || !eventRecord.designation"
+    (click)="updateProfile()">Update Profile</button>
+</div>
+<ng-template #loading>
+  <app-loading-ui></app-loading-ui>
+  <br>
+  <div class="w-75"><app-loading-ui></app-loading-ui></div>
+  <br>
+  <div class="w-50"><app-loading-ui></app-loading-ui></div>
+</ng-template>

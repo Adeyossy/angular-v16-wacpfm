@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Subscription, concatMap } from 'rxjs';
+import { Observable, Subscription, catchError, concatMap, map, of } from 'rxjs';
 import { AuthErrorCodes } from 'firebase/auth';
 import { AppUser, USERS } from '../models/user';
 import { serverTimestamp } from 'firebase/firestore';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseError } from 'firebase/app';
 
 @Component({
@@ -35,6 +35,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     updateCourseRole: "participant",
     examinationRole: ""
   }
+
+  appUser$: Observable<AppUser> = of(this.user);
+
+  gender = ['Male', 'Female'];
 
   countries = [
     'Benin', 'Burkina Faso', 'Gambia', 'Ghana', 'Guinea',
@@ -67,9 +71,23 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   profileSubscription = new Subscription();
 
-  constructor(private authService: AuthService, private router: Router) { }
+  updater$: Observable<boolean> | null = null;
+
+  constructor(private authService: AuthService, private router: Router, public activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.appUser$ = this.authService.getAppUser$().pipe(
+      concatMap(appUser => this.authService.getFirebaseUser$().pipe(
+        map(user => {
+          if (user.email) {
+            appUser.email = user.email;
+            appUser.userId = user.uid;
+          }
+          return appUser;
+        })
+      ))
+    );
+
     this.userSubscription = this.authService.getFirebaseUser$().subscribe({
       next: user => {
         if (user) {
@@ -91,48 +109,60 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.profileSubscription.unsubscribe();
   }
 
-  updateGender(value: string[]): void {
-    this.user.gender = value.length ? value[0] : "";
+  toSelectionState(items: string[], value: string) {
+    if (!value) value = "";
+    return items.map(item => item.toLowerCase().trim() === value.toLowerCase().trim())
+  }
+
+  updateGender(value: string[]) {
+    return value.length ? value[0] : "";
   }
 
   updateField(field: "gender" | "designation" | "country" | "college",
-    value: Array<string>): void {
-    this.user[field] = value.length ? value[0] : "";
+    value: Array<string>) {
+    return value.length ? value[0] : "";
   }
 
-  updateCountry(value: string[]): void {
+  updateCountry(value: string[]) {
     if (value.length) {
-      this.user.country = value[0];
       const countryAsProp = this.user.country.replace(" ", "_").toLowerCase();
       if (this.chapters.hasOwnProperty(countryAsProp)) {
         //  this.user.college = this.chapters[countryAsProp];
       }
+      return value[0];
     }
+    return "";
   }
 
   updateRole(value: string[]) {
     if (value.length) {
       const role = value[0];
-      if (role === 'Teaching') this.user.updateCourseRole = 'resource_person';
+      if (role === 'Teaching') return 'resource_person';
     }
+    return ""
   }
 
-  getCountryCode(): string {
-    const code = this.user.country.replace(" ", "_").toLowerCase();
-    this.user.zip = this.countryCodes[code];
+  roleToState(role: string) {
+    if (role === 'resource_person') return "Teaching";
+    return "Learning";
+  }
+
+  getCountryCode(user: AppUser): string {
+    const code = user.country.replace(" ", "_").toLowerCase();
+    user.zip = this.countryCodes[code];
     // this.user.phoneNumber = this.user.zip.concat(this.user.phoneNumber);
     // this.user.whatsapp = this.user.zip.concat(this.user.whatsapp);
-    return this.user.zip;
+    return user.zip;
   }
 
   getChapters(): string[] {
     return Object.values(this.chapters);
   }
 
-  usePhoneForWhatsApp() {
+  usePhoneForWhatsApp(user: AppUser) {
     this.phoneToggle = !this.phoneToggle;
-    if (this.phoneToggle) this.user.whatsapp = this.user.phoneNumber;
-    else this.user.whatsapp = "";
+    if (this.phoneToggle) user.whatsapp = user.phoneNumber;
+    else user.whatsapp = "";
   }
 
   verify(): boolean {
@@ -146,9 +176,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   updateProfile() {
     this.uploadStarted = true;
     this.profileSubscription = this.authService.addDocWithID$(USERS, this.user.userId, this.user, true)
-    .pipe(concatMap(_void => this.authService.updateUserName(
-      `${this.user.firstname} ${this.user.middlename} ${this.user.lastname}`
-    ))).subscribe({
+    .pipe(
+      concatMap(_void => this.authService.updateUserName(
+      `${this.user.firstname} ${this.user.middlename} ${this.user.lastname}`))
+    ).subscribe({
       next: value => {
         console.log("Successful! Received void");
         this.message = "Your profile was saved successfully. Click the button below to continue";
@@ -171,6 +202,51 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         console.log("Completed!");
       }
     });
+  }
+
+  setUpdater$(user: AppUser) {
+    this.updater$ = this.authService.addDocWithID$(USERS, user.userId, user, true)
+    .pipe(
+      concatMap(_void => this.authService.updateUserName(
+      `${user.firstname} ${user.middlename} ${user.lastname}`)),
+      concatMap(_v => this.activatedRoute.queryParamMap.pipe(
+        map(paramMap => {
+          const redirecturl = paramMap.get("redirecturl");
+          console.log("redirecturl =>", redirecturl);
+          console.log("router.url =>", this.router.url);
+          if (redirecturl) {
+            const url = this.router.url.split("?");
+            if (url.length > 0) {
+              this.navLink = `${url[0]}/${redirecturl}`;
+            }
+          }
+        })
+      )),
+      map(_v => {
+        // this.uploadStarted = true;
+        console.log("Successful! Received void");
+        this.message = "Your profile was saved successfully. Click the button below to continue";
+        this.navText = "Continue";
+        if (!this.navLink) {
+          this.navLink = "/dashboard/home";
+        } 
+        this.done = true;
+        this.router.navigateByUrl(this.navLink);
+        return true
+      }),
+      catchError(error => {
+        console.log("error => ", error);
+        if (error instanceof FirebaseError) {
+          if (error.message.trim() === "Failed to get document because the client is offline.") {
+            this.message = `Check your internet connection. 
+            You're either offline or your network is very slow or unstable.`;
+          }
+        } else this.message = "An error occurred while saving your profile.";
+        this.navText = "Dismiss";
+        this.updater$ = null;
+        return of(false);
+      })
+    )
   }
 
   dismissOverlay() {
