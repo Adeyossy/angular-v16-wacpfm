@@ -59,6 +59,11 @@ export interface BasicResponse {
   }
 }
 
+export interface EventPaymentDetails {
+  amount: number,
+  fee: number
+}
+
 export interface PaymentDetails {
   amount: number,
   name: UpdateCourseType,
@@ -66,17 +71,24 @@ export interface PaymentDetails {
   items: UpdateCourseType[]
 }
 
-export interface PaystackConfig {
+export interface BasePaystackConfig {
   test_pk: string,
   live_pk: string,
   test_sk: string,
-  live_sk: string,
+  live_sk: string
+};
+
+export interface PaystackConfig extends BasePaystackConfig {
   jnr: PaymentDetails,
   snr: PaymentDetails,
   tot: PaymentDetails,
   'tot-resident': PaymentDetails,
   developer: PaymentDetails
 };
+
+export interface EventPayment extends BasePaystackConfig {
+  payment: EventPaymentDetails;
+}
 
 export interface PaystackTransaction {
   id: string;
