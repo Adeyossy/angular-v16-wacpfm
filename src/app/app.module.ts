@@ -48,6 +48,11 @@ import { DashboardHomeComponent } from './dashboard/dashboard-home/dashboard-hom
 import { NotFoundComponent } from './not-found/not-found.component';
 import { LoadingSmallCirclesComponent } from './widgets/loading-small-circles/loading-small-circles.component';
 import { PreviousCoursesComponent } from './update-course/previous-courses/previous-courses.component';
+import { EventComponent } from './event/event.component';
+import { EventDetailsComponent } from './event/event-details/event-details.component';
+import { EventsComponent } from './event/events/events.component';
+import { UserInfoComponent } from './registration/user-info/user-info.component';
+import { EventPaymentComponent } from './event/event-payment/event-payment.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +98,12 @@ import { PreviousCoursesComponent } from './update-course/previous-courses/previ
     DashboardHomeComponent,
     NotFoundComponent,
     LoadingSmallCirclesComponent,
-    PreviousCoursesComponent
+    PreviousCoursesComponent,
+    EventComponent,
+    EventDetailsComponent,
+    EventsComponent,
+    UserInfoComponent,
+    EventPaymentComponent
   ],
   imports: [
     BrowserModule,

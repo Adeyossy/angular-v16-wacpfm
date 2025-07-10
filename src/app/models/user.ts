@@ -9,7 +9,7 @@ export interface IndexType {
 export const USERS = "users";
 export const RESOURCE_PERSONS = environment.resourcePersons;
 
-export type AppUser = {
+export interface UserInfo {
   userId: string; // corresponds to Firebase UserId
   firstname: string;
   middlename: string;
@@ -24,6 +24,9 @@ export type AppUser = {
   practicePlace: string;
   college: string;
   dateOfRegistration: FieldValue; // add this timestamp on the server
+}
+
+export interface AppUser extends UserInfo {
   updateCourseRecords: string[];
   examinationRecords: string[];
   updateCourseRole: "admin" | "resource_person" | "college" | "participant" | "";

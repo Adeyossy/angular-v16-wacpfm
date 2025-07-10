@@ -1,0 +1,19 @@
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small fw-bold">Faculty Events</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+<br><br>
+<div *ngIf="events$ | async as events; else loading">
+  <div class="wacpfm-card" *ngFor="let event of events">
+    <h1 class="wacpfm-heading-small fw-bold mb-3">{{ event.title }}</h1>
+    <p class="wacpfm-subheading mb-3">{{ event.summary }}</p>
+    <button class="w-auto wacpfm-primary-button" routerLink="./{{event.id}}">View Event</button>
+  </div>
+</div>
+<ng-template #loading>
+  <app-loading-ui></app-loading-ui>
+  <br>
+  <div class="w-75"><app-loading-ui></app-loading-ui></div>
+  <br>
+  <div class="w-50"><app-loading-ui></app-loading-ui></div>
+</ng-template>

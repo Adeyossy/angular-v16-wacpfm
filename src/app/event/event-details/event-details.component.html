@@ -1,0 +1,76 @@
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small fw-bold">Event Details</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+<br>
+<div class="wacpfm-event-details" *ngIf="event$ | async as event; else empty">
+  <div class="wacpfm-card wacpfm-header-card">
+    <div class="wacpfm-heading-underline mb-3">
+      <h1 class="wacpfm-small-text fw-bold">TITLE</h1>
+      <div class="wacpfm-underline"></div>
+    </div>
+    <h2 class="wacpfm-heading-small fw-bold mb-3">{{ event.title }}</h2>
+    <p class="wacpfm-subheading">{{ event.summary }}</p>
+    <div class="info d-flex flex-wrap">
+      <button class="icon small me-2 mb-2">{{parseMillisToDate(event.first_day)}}</button>
+      <button class="icon small me-2 mb-2">{{parseCourseDuration(event.course_duration)}}</button>
+      <button class="icon small mb-2" [ngClass]="event.registration_closes > today ? 
+      'border-success text-success' : 'border-danger text-danger'">
+        {{ event.registration_closes > today ? "Ongoing" : "Closed" }}
+      </button>
+    </div>
+    <br>
+    <div *ngIf="user$ | async as user">
+      <div *ngIf="today < event.registration_closes">
+        <button class="wacpfm-primary-button w-auto px-3" [routerLink]="['./register']"
+        *ngIf="!event.registered_participants.includes(user.email!); else pay"
+        [queryParams]="{redirecturl: 'pay'}">
+          Register Now
+        </button>
+        <ng-template #pay>
+          <button class="wacpfm-primary-button w-auto px-3" routerLink="./pay"
+            *ngIf="!event.paid_participants.includes(user.email!); else goto">
+            Pay Now
+          </button>
+          <ng-template #goto>
+            <div class="d-flex">
+              <button class="w-auto text-success border-success me-3">
+                <i class="bi bi-check-circle-fill text-success"></i> Registered
+              </button>
+              <button class="wacpfm-primary-button w-auto px-3" routerLink="./home">
+              Go To Meeting
+            </button>
+            </div>
+          </ng-template>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <br><br>
+  <div class="app-card" *ngIf="event.objectives.length">
+    <div class="heading-underline">
+      <h1 class="fw-bold small-text">OBJECTIVES</h1>
+      <div class="underline"></div>
+    </div>
+    <br>
+    <ol>
+      <li *ngFor="let objective of event.objectives">{{ objective }}</li>
+    </ol>
+  </div>
+  <br><br>
+  <!-- <button class="wacpfm-primary-button" routerLink="./register">Register Now</button> -->
+</div>
+<ng-template #nullCourse>
+  <div class="d-flex flex-column justify-content-center align-items-center">
+    <img src="assets/empty.png" alt="No update course in view - vector image by pikisuperstar"
+      class="img-fluid w-50 text-center">
+    <p class="smaller-text">No new update course</p>
+  </div>
+</ng-template>
+<ng-template #empty>
+  <app-loading-ui></app-loading-ui>
+  <br><br>
+  <app-loading-ui></app-loading-ui>
+  <br><br>
+  <app-loading-ui></app-loading-ui>
+</ng-template>
