@@ -52,7 +52,27 @@ export class EventService {
     );
   }
 
-  setEventRecordById$(eventRecord: EventRecord) {
+  approveEventRecord$(eventRecord: EventRecord) {
+    return this.authService.batchWriteDocs$(
+      [
+        {
+          path: `${EVENT_RECORDS_COLLECTION}/${eventRecord.id}`,
+          data: eventRecord,
+          type: 'set'
+        },
+        {
+          path: `${EVENTS_COLLECTION}/${eventRecord.eventId}`,
+          data: {
+            registered_participants: arrayUnion(eventRecord.email),
+            paid_participants: arrayUnion(eventRecord.email)
+          },
+          type: 'update'
+        }
+      ]
+    )
+  }
+
+  declineEventRecord$(eventRecord: EventRecord) {
     return this.authService.batchWriteDocs$(
       [
         {
