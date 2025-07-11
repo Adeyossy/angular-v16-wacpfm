@@ -53,6 +53,7 @@ import { EventDetailsComponent } from './event/event-details/event-details.compo
 import { EventsComponent } from './event/events/events.component';
 import { UserInfoComponent } from './registration/user-info/user-info.component';
 import { EventPaymentComponent } from './event/event-payment/event-payment.component';
+import { EventAdminComponent } from './admin/event-admin/event-admin.component';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,8 @@ import { EventPaymentComponent } from './event/event-payment/event-payment.compo
     EventDetailsComponent,
     EventsComponent,
     UserInfoComponent,
-    EventPaymentComponent
+    EventPaymentComponent,
+    EventAdminComponent
   ],
   imports: [
     BrowserModule,
