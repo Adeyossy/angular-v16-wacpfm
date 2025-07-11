@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-card-grid-item',
@@ -6,7 +7,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./card-grid-item.component.css']
 })
 export class CardGridItemComponent {
-  @Input() link = window.location.href;
+  @Input() link = inject(Router).url;
   @Input() title = "";
   @Input() description = "";
   @Input() linkText = "GO"
