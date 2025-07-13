@@ -3,22 +3,23 @@ import { User } from 'firebase/auth';
 import { concatMap, map, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ParamMap } from '@angular/router';
-import { arrayUnion } from 'firebase/firestore';
+import { arrayUnion, where } from 'firebase/firestore';
 import { Event, DEFAULT_NEW_EVENT, EVENTS_COLLECTION } from '../models/event';
 import { AppUser } from '../models/user';
 import { DEFAULT_NEW_EVENT_RECORD, EVENT_RECORDS_COLLECTION, EventRecord } from '../models/event_record';
+import { HelperService } from './helper.service';
+import { CacheService } from './cache.service';
+import { CardList } from '../widgets/card-list/card-list.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EventService {
-
-  constructor(private authService: AuthService) { }
+export class EventService extends CacheService {
 
   getEvents() {
     return this.authService.getCollection$<Event>(EVENTS_COLLECTION);
   }
- 
+
   getEventId$(paramMap: Observable<ParamMap>) {
     return paramMap.pipe(
       map(params => {
@@ -31,6 +32,24 @@ export class EventService {
   getEventById$(id: string): Observable<Event> {
     return this.authService.getDocById$<Event>(EVENTS_COLLECTION, id).pipe(
       map(w => w !== null ? w : JSON.parse(JSON.stringify(DEFAULT_NEW_EVENT)))
+    );
+  }
+
+  getPayments$(eventId: string) {
+    return this.queryItem$<EventRecord>(EVENT_RECORDS_COLLECTION, [
+      where("eventId", "==", eventId)
+    ]);
+  }
+
+  getPaymentsList$(id: string): Observable<CardList[]> {
+    return this.getPayments$(id).pipe(
+      map(records => records.map(r => {
+        return {
+          title: r.email,
+          subtitle: `${r.firstname} ${r.lastname}`,
+          text: `${r.dateOfRegistration}`
+        }
+      }))
     );
   }
 
