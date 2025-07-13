@@ -47,6 +47,22 @@
     </div>
   </div>
   <br><br>
+  <div *ngIf="user$ | async as user">
+    <div *ngIf="event.paid_participants.includes(user.email!)">
+      <div class="wacpfm-card" id="welcome">
+        <h2 class="wacpfm-subheading fw-bold">Welcome!</h2>
+        <p class="wacpfm-subheading">
+          You have successfully registered for this workshop. 
+          Everything you need for this workshop is on this page.
+          Looking forward to your active participation.
+        </p>
+        <p class="wacpfm-subheading">
+          Thank you!
+        </p>
+      </div>
+    </div>
+  </div>
+  <br><br>
   <div class="app-card" *ngIf="event.objectives.length">
     <div class="heading-underline">
       <h1 class="fw-bold small-text">OBJECTIVES</h1>
