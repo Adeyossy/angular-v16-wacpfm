@@ -17,7 +17,19 @@
     </div>
     <div class="col-lg-6">
       <app-card-list *ngFor="let course of courses$ | async; index as i" [item]="courseToCardList(course)" [index]="i"
-        (click)="setCourse(course)"></app-card-list>
+      (click)="setCourse(course)"></app-card-list>
+    </div>
+  </div>
+  <div class="row wacpfm-card" *ngIf="level === 0">
+    <div class="col-lg-12">
+      <h1 class="wacpfm-heading-medium wacpfm-heading-primary fw-bold">Events</h1>
+      <br>
+      <p class="wacpfm-subheading">Manage events here.</p>
+      <br>
+      <div *ngIf="events$ | async as events; else loading">
+        <app-card-grid [items]="events"></app-card-grid>
+      </div>
+      <!-- <button class="w-auto wacpfm-primary-button" routerLink="./event">Go to Events</button> -->
     </div>
   </div>
   <div class="row" *ngIf="level === 1">

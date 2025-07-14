@@ -16,11 +16,11 @@ export class PaymentService {
 
   constructor(private eventService: EventService, private courseService: UpdateCourseService) { }
 
-  getPaymentList (type: "event" | "workshop" | "updatecourse", id: string) {
-    if (type === "event") {
+  getPaymentList (type: string, id: string) {
+    if (type === "updatecourse") {
       return this.courseService.getPaymentsList$(id);
     }
-    
-    return this.eventService.getPayments$(id);
+
+    return this.eventService.getPaymentsList$(id);
   }
 }

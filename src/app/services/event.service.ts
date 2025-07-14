@@ -3,7 +3,7 @@ import { User } from 'firebase/auth';
 import { concatMap, map, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ParamMap } from '@angular/router';
-import { arrayUnion, where } from 'firebase/firestore';
+import { arrayUnion, Timestamp, where } from 'firebase/firestore';
 import { Event, DEFAULT_NEW_EVENT, EVENTS_COLLECTION } from '../models/event';
 import { AppUser } from '../models/user';
 import { DEFAULT_NEW_EVENT_RECORD, EVENT_RECORDS_COLLECTION, EventRecord } from '../models/event_record';
@@ -44,10 +44,11 @@ export class EventService extends CacheService {
   getPaymentsList$(id: string): Observable<CardList[]> {
     return this.getPayments$(id).pipe(
       map(records => records.map(r => {
+        const t = r.dateOfRegistration as unknown as Timestamp;
         return {
           title: r.email,
           subtitle: `${r.firstname} ${r.lastname}`,
-          text: `${r.dateOfRegistration}`
+          text: `${new Date(Math.round(t.seconds * 1000)).toLocaleDateString("en-NG")}`
         }
       }))
     );

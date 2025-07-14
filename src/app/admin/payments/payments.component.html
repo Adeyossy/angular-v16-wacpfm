@@ -1,1 +1,31 @@
-<p>payments works!</p>
+<div class="wacpfm-card wacpfm-header-card">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-heading-small fw-bold">Payments</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <p class="wacpfm-subheading">
+    View payment information for Faculty App activities.
+  </p>
+</div>
+<br><br>
+<div *ngIf="items$ | async as items; else loading">
+  <div *ngFor="let item of items">
+    <details class="wacpfm-card">
+      <summary class="wacpfm-heading wacpfm-heading-small fw-bold">{{ item[0] }}</summary>
+      <br>
+      <hr><br>
+      <app-card-list *ngFor="let listItem of item[1]; index as i" [item]="listItem"
+        [index]="i" [control]="true"
+        [state]="true"></app-card-list>
+    </details>
+    <br>
+  </div>
+  <div *ngIf="items.length === 0">
+    <div class="wacpfm-card">
+      <h1 class="wacpfm-subheading fw-bold">No one has made payment at the moment.</h1>
+    </div>
+  </div>
+</div>
+<ng-template #loading>
+  <app-loading-circles></app-loading-circles>
+</ng-template>

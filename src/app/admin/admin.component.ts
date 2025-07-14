@@ -7,6 +7,9 @@ import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseLect
 import { HelperService } from '../services/helper.service';
 import { DEFAULT_RESOURCE_PERSON, RESOURCE_PERSONS, ResourcePerson } from '../models/user';
 import { DEFAULT_WRITING } from '../models/candidate';
+import { EventService } from '../services/event.service';
+import { Event } from '../models/event';
+import { CardGridItem } from '../widgets/card-grid/card-grid.component';
 
 @Component({
   selector: 'app-admin',
@@ -28,12 +31,14 @@ export class AdminComponent implements OnInit {
   newLecturer$: Observable<ResourcePerson> = NEVER;
   grantAccess$: Observable<void> = NEVER;
   data$: Observable<string> | null = null;
+  events$: Observable<CardGridItem[]> = of([]);
 
   // should lecture is a flag to let the system knoww that
   // shouldRefresh: "lecture" | "payment" | "resource_person" | "" = "";
   // refreshID = "";
 
-  constructor(private authService: AuthService, public helper: HelperService) { }
+  constructor(private authService: AuthService, public helper: HelperService,
+    private eventService: EventService) { }
 
   ngOnInit(): void {
     // this.records$ = this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
@@ -63,6 +68,15 @@ export class AdminComponent implements OnInit {
     );
     this.createNewLecture();
     this.createNewLecturer();
+    this.events$ = this.eventService.getEvents().pipe(
+      map(events => events.map(event => {
+        return {
+          title: event.title,
+          description: "",
+          link: `./event/${event.id}`
+        }
+      }))
+    );
   }
 
   // ngDoCheck(): void {
