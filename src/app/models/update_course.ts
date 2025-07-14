@@ -64,9 +64,7 @@ export type UpdateCourseRev = {
   resourcePersons: string[];
 }
 
-export type UpdateCourseLecture = {
-  updateCourseId: string;
-  courseType: UpdateCourseType;
+export interface Lecture {
   lectureId: string;
   lectureTitle: string;
   lecturerId: string;
@@ -76,6 +74,11 @@ export type UpdateCourseLecture = {
   endTime: string;
   materialLink: string[];
   videoLink: string;
+}
+
+export interface UpdateCourseLecture extends Lecture {
+  updateCourseId: string;
+  courseType: UpdateCourseType;
 }
 
 export const DEFAULT_UPDATE_COURSE: UpdateCourse = {

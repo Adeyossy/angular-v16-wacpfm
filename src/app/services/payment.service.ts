@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import PaystackPop from '@paystack/inline-js';
-import { environment } from 'src/environments/environment';
-import { AuthService } from './auth.service';
-import { concatMap, map } from 'rxjs';
-import { NewTransactionOptions } from '../models/payment';
+import { EventService } from './event.service';
+import { UpdateCourseService } from './update-course.service';
 
 type Channels = ["card", "bank_transfer", "apple_pay", "ussd", "qr", "mobile_money", "eft"];
 
@@ -16,11 +14,13 @@ export class PaymentService {
     "card", "bank_transfer", "bank", "apple_pay", "ussd", "qr", "mobile_money", "eft"
   ] as unknown as Channels;
 
-  constructor(private authService: AuthService) { }
+  constructor(private eventService: EventService, private courseService: UpdateCourseService) { }
 
-  pay(options: NewTransactionOptions) {
-    return this.authService.fetchPaystackConfig$().pipe(
-      map(config => this.popup.newTransaction(options))
-    );
+  getPaymentList (type: string, id: string) {
+    if (type === "updatecourse") {
+      return this.courseService.getPaymentsList$(id);
+    }
+
+    return this.eventService.getPaymentsList$(id);
   }
 }

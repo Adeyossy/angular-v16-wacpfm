@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { QueryFieldFilterConstraint } from 'firebase/firestore';
+import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { Observable, of, map, concatMap, catchError } from 'rxjs';
 import { CacheService } from './cache.service';
 import { DEFAULT_UPDATE_COURSE, UPDATE_COURSES, UpdateCourse } from '../models/update_course';
+import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
+import { CardList } from '../widgets/card-list/card-list.component';
 
 @Injectable({
   providedIn: 'root'
@@ -143,6 +145,24 @@ export class UpdateCourseService extends CacheService {
         console.log("err converting =>", err);
         return of([])
       })
+    )
+  }
+
+  getPayments$(id: string) {
+    return this.queryItem$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS, [
+      where("updateCourseId", "==", id)
+    ])
+  }
+
+  getPaymentsList$(id: string): Observable<CardList[]> {
+    return this.getPayments$(id).pipe(
+      map(records => records.map(r => {
+        return {
+          title: r.userEmail,
+          subtitle: r.courseType,
+          text: ""
+        }
+      }))
     )
   }
 }
