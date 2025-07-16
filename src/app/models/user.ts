@@ -1,4 +1,4 @@
-import { FieldValue } from "firebase/firestore";
+import { FieldValue, serverTimestamp } from "firebase/firestore";
 import { environment } from "src/environments/environment";
 import { UpdateCourseType } from "./update_course_record";
 
@@ -31,6 +31,27 @@ export interface AppUser extends UserInfo {
   examinationRecords: string[];
   updateCourseRole: "admin" | "resource_person" | "college" | "participant" | "";
   examinationRole: "candidate" | "examiner" | "chief_examiner" | "";
+}
+
+export const DEFAULT_NEW_APPUSER: AppUser = {
+  userId: "",
+  firstname: "",
+  middlename: "",
+  lastname: "",
+  gender: "",
+  phoneNumber: "",
+  whatsapp: "",
+  email: "",
+  country: "",
+  zip: "",
+  designation: "",
+  practicePlace: "",
+  college: "",
+  dateOfRegistration: serverTimestamp(),
+  updateCourseRecords: [],
+  examinationRecords: [],
+  updateCourseRole: "",
+  examinationRole: ""
 }
 
 export const RESOURCE_PERSON_TITLES = ["Prof.", "Dr."] as const;
