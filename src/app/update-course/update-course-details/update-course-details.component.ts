@@ -110,7 +110,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.user$ = this.authService.getDocByUserId$<AppUser>(USERS);
+    this.user$ = this.authService.getAppUser$();
 
     // // this.courseRecords$ = this.getCourseRecords();
 

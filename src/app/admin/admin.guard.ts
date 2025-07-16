@@ -7,7 +7,7 @@ import { iif, map } from 'rxjs';
 export const adminGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
-  const isAdmin$ = authService.getDocByUserId$<AppUser>(USERS).pipe(
+  const isAdmin$ = authService.getAppUser$().pipe(
     map(appUser => appUser.updateCourseRole === "admin")
   );
   return isAdmin$;
