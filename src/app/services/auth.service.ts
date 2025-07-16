@@ -5,7 +5,7 @@ import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, si
 import { initializeApp, FirebaseOptions, FirebaseApp } from 'firebase/app';
 import { DocumentReference, Firestore, Query, QueryFieldFilterConstraint, QuerySnapshot, WhereFilterOp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, setDoc, updateDoc, where, writeBatch } from 'firebase/firestore';
 import { UploadTask, deleteObject, getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
-import { AppUser, IndexType, USERS } from '../models/user';
+import { AppUser, DEFAULT_NEW_APPUSER, IndexType, USERS } from '../models/user';
 import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
 import { BasePaystackConfig, BasicResponse, CustomerResponse, EventPayment, ParsedCustomerResponse, PaystackConfig, PaystackInitResponse } from '../models/payment';
@@ -313,18 +313,22 @@ export class AuthService {
               const data = doc.data() as Type;
               if (collectionName === USERS) this.appUser = data as AppUser;
               return data;
-            } else throw AuthErrorCodes.NULL_USER
+            } 
+            
+            return null;
           }
           )
         );
-        else throw new Error(AuthErrorCodes.NULL_USER);
+        else return of(null);
       })
     )
   }
 
   getAppUser$() {
     if (this.appUser !== null) return of(this.appUser);
-    return this.getDocByUserId$<AppUser>(USERS);
+    return this.getDocByUserId$<AppUser>(USERS).pipe(
+      map(appUser => appUser !== null ? appUser : Object.assign({}, DEFAULT_NEW_APPUSER))
+    );
   }
 
   updateDoc$(collectionName: string, docId: string, delta: any) {
