@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import PaystackPop from '@paystack/inline-js';
 import { catchError, concatMap, map, Observable, of } from 'rxjs';
 import { EventRecord } from 'src/app/models/event_record';
-import { PaystackTransaction } from 'src/app/models/payment';
+import { PaystackTransaction, Transaction } from 'src/app/models/payment';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
 import { HelperService } from 'src/app/services/helper.service';
@@ -14,15 +14,30 @@ import { environment } from 'src/environments/environment';
   templateUrl: './event-payment.component.html',
   styleUrls: ['./event-payment.component.css']
 })
-export class EventPaymentComponent {
+export class EventPaymentComponent implements OnInit {
   popup = new PaystackPop();
   pay$: Observable<string> | null = null;
   declare transaction: PaystackTransaction; // stored reference during automatic verification
+  paymentStatus$: Observable<string> | null = null;
 
   constructor(private activatedRoute: ActivatedRoute, private eventService: EventService,
     private authService: AuthService, private helper: HelperService, private router: Router) { }
 
-  verifyTransaction = (transaction: PaystackTransaction, callback: () => boolean) => {
+  ngOnInit(): void {
+    this.paymentStatus$ = this.getEventId$().pipe(
+      concatMap(eventId => this.eventService.getEventById$(eventId)),
+      map(event => new Date(event.registration_opens).toISOString().slice(0, 10)),
+      concatMap(date => this.eventService.verifyPayment$(date)),
+      concatMap(transactions => {
+        if (transactions.length > 0) {
+          this.verifyTransaction$(transactions[0], this.showSuccessDialog)
+        }
+        return of("empty");
+      })
+    )
+  }
+
+  verifyTransaction$ = (transaction: PaystackTransaction | Transaction, callback: () => boolean) => {
     // console.log("transaction in verifyTransaction => ", transaction);
     // console.log("transaction reference in verifyTransaction => ", transaction.reference);
     return this.authService.verifyTransaction({
@@ -150,7 +165,7 @@ export class EventPaymentComponent {
     // console.log("transaction in onSuccess =>", transaction);
     this.showProcessingDialog();
     this.transaction = transaction;
-    this.pay$ = this.verifyTransaction(
+    this.pay$ = this.verifyTransaction$(
       transaction,
       this.showSuccessDialog
     );

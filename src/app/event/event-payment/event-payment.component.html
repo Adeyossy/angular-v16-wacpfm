@@ -3,11 +3,22 @@
   <div class="wacpfm-underline"></div>
 </div>
 <br>
-<p class="wacpfm-heading-small">Pay for this workshop.</p>
-<button class="w-auto" *ngIf="pay$ === null; else initialising" (click)="pay()">Pay Now</button>
-<ng-template #initialising>
-  <span *ngIf="pay$ | async as payNow; else loading">{{ payNow }}</span>
-  <app-loading-small-circles></app-loading-small-circles>
-  <ng-template #loading>
+<div *ngIf="paymentStatus$ | async as status; else load">
+  <div *ngIf="status === 'empty'">
+    <p class="wacpfm-heading-small">Pay for this workshop.</p>
+    <button class="w-auto" *ngIf="pay$ === null; else initialising" (click)="pay()">Pay Now</button>
+    <ng-template #initialising>
+      <span *ngIf="pay$ | async as payNow; else loading">{{ payNow }}</span>
+      <app-loading-small-circles></app-loading-small-circles>
+      <ng-template #loading>
+      </ng-template>
+    </ng-template>
+  </div>
+  <ng-template #paid>
   </ng-template>
+</div>
+<ng-template #load>
+  <h1 class="wacpfm-subheading fw-bold">Checking for existing payment</h1>
+  <p>You will be automatically redirected if you have an existing payment.</p>
+  <app-loading-circles></app-loading-circles>
 </ng-template>
