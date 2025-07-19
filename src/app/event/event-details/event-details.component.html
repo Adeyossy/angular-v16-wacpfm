@@ -54,13 +54,14 @@
   <div *ngIf="user$ | async as user">
     <div *ngIf="event.paid_participants.includes(user.email!)">
       <div class="wacpfm-card" id="welcome">
-        <h2 class="wacpfm-subheading fw-bold">Welcome!</h2>
+        <h2 class="wacpfm-heading-small fw-bold">Welcome!</h2>
+        <hr>
         <p class="wacpfm-subheading">
           You have successfully registered for this workshop. 
           Everything you need for this workshop is on this page.
           Looking forward to your active participation.
         </p>
-        <p class="wacpfm-subheading">
+        <p class="wacpfm-subheading fw-bold">
           Thank you!
         </p>
       </div>
