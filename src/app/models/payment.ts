@@ -14,6 +14,37 @@ export interface PaystackInitResponse {
   }
 }
 
+export interface Transaction {
+  amount: number,
+  authorization_url: string,
+  customer: {
+    firstname: "",
+    lastname: "",
+    email: ""
+  },
+  metadata: {
+    custom_fields: [
+      {
+        display_name: "Category",
+        variable_name: "category",
+        value: UpdateCourseType
+      },
+      {
+        display_name: "Fee",
+        variable_name: "fee",
+        value: number
+      },
+      {
+        display_name: "Course ID",
+        variable_name: "course_id",
+        value: string
+      }
+    ]
+  },
+  reference: string,
+  status: string
+}
+
 export interface TransactionParams {
   customer: number,
   from: string,
@@ -25,39 +56,22 @@ export interface TransactionParamsWithSK {
   params: TransactionParams;
 }
 
+export interface TransactionResponse {
+  status: boolean,
+  message: string,
+  data: Transaction[]
+}
+
+export const DEFAULT_NEW_TRANSACTION_RESPONSE: TransactionResponse = {
+  status: false,
+  message: "",
+  data: []
+}
+
 export interface PaystackResponse {
   status: boolean,
   message: string,
-  data: {
-    amount: number,
-    authorization_url: string,
-    customer: {
-      firstname: "",
-      lastname: "",
-      email: ""
-    },
-    metadata: {
-      custom_fields: [
-        {
-          display_name: "Category",
-          variable_name: "category",
-          value: UpdateCourseType
-        },
-        {
-          display_name: "Fee",
-          variable_name: "fee",
-          value: number
-        },
-        {
-          display_name: "Course ID",
-          variable_name: "course_id",
-          value: string
-        }
-      ]
-    },
-    reference: string,
-    status: string
-  }
+  data: Transaction
 }
 
 export interface BasicResponse {
@@ -119,7 +133,8 @@ export interface CustomerResponse {
     email: string,
     firstname: string | null,
     lastname: string | null,
-    transactions: PaystackTransaction[]
+    transactions: PaystackTransaction[],
+    id: number
   }
 }
 
