@@ -160,6 +160,23 @@ export class EventService extends CacheService {
     );
   }
 
+  getAllPayments$ = (date: string) => {
+    return this.authService.getTransaction({
+      secret_key: environment.secret_key,
+      params: {
+        from: date,
+        status: "success"
+      }
+    }).pipe(
+      map(res => {
+        if (res.data && res.data.length) {
+          return res.data;
+        }
+        return [];
+      })
+    )
+  }
+
   computeEventRecordId(email: string, workshopId: string) {
     return `${email}-${workshopId}`;
   }

@@ -46,7 +46,7 @@ export interface Transaction {
 }
 
 export interface TransactionParams {
-  customer: number,
+  customer?: number,
   from: string,
   status: "success" | "failed" | "reversed"
 }

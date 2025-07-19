@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { concatMap, map, Observable, of } from 'rxjs';
+import { Transaction } from 'src/app/models/payment';
 import { PaymentService } from 'src/app/services/payment.service';
 import { CardList } from 'src/app/widgets/card-list/card-list.component';
 
@@ -11,6 +12,7 @@ import { CardList } from 'src/app/widgets/card-list/card-list.component';
 })
 export class PaymentsComponent implements OnInit {
   items$: Observable<Array<[string, CardList[]]>> = of([]);
+  transactions$: Observable<CardList[]> = of([]);
 
   constructor(private activatedRoute: ActivatedRoute, private paymentService: PaymentService) {}
 
@@ -33,6 +35,16 @@ export class PaymentsComponent implements OnInit {
       map(this.getParams),
       concatMap(([category, id]) => this.paymentService.getPaymentList(category, id)),
       map(list => [["All", list]])
+    );
+
+    this.transactions$ = this.paymentService.getEventPayments().pipe(
+      map(transactions => transactions.map(transaction => {
+        return {
+          title: transaction.customer.email,
+          subtitle: transaction.reference,
+          text: ""
+        }
+      }))
     );
   }
 }

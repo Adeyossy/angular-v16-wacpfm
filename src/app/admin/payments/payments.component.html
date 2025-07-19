@@ -26,6 +26,11 @@
     </div>
   </div>
 </div>
+<br><br>
+<div *ngIf="transactions$ | async as transactions">
+  <app-card-list *ngFor="let transaction of transactions; index as i" [item]="transaction"
+  [index]="i" [control]="true" [state]="true"></app-card-list>
+</div>
 <ng-template #loading>
   <app-loading-circles></app-loading-circles>
 </ng-template>
