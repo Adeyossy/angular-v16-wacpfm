@@ -38,7 +38,8 @@ export interface Event {
   platform: string, // could be Jitsi, Zoom or Zoho depending on the organisation
   verification_protocol: string,
   registered_participants: string[],
-  paid_participants: string[]
+  paid_participants: string[],
+  whatsapp: string //URL for QR code image for whatsapp group.
 }
 
 export const DEFAULT_NEW_EVENT: Event = {
@@ -66,5 +67,6 @@ export const DEFAULT_NEW_EVENT: Event = {
   platform: "",
   verification_protocol: "",
   registered_participants: [],
-  paid_participants: []
+  paid_participants: [],
+  whatsapp: ""
 }
