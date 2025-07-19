@@ -14,6 +14,17 @@ export interface PaystackInitResponse {
   }
 }
 
+export interface TransactionParams {
+  customer: number,
+  from: string,
+  status: "success" | "failed" | "reversed"
+}
+
+export interface TransactionParamsWithSK {
+  secret_key: string;
+  params: TransactionParams;
+}
+
 export interface PaystackResponse {
   status: boolean,
   message: string,
