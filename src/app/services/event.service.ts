@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from 'firebase/auth';
-import { concatMap, map, Observable } from 'rxjs';
+import { catchError, concatMap, map, Observable, of } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ParamMap } from '@angular/router';
 import { arrayUnion, Timestamp, where } from 'firebase/firestore';
@@ -10,6 +10,8 @@ import { DEFAULT_NEW_EVENT_RECORD, EVENT_RECORDS_COLLECTION, EventRecord } from 
 import { HelperService } from './helper.service';
 import { CacheService } from './cache.service';
 import { CardList } from '../widgets/card-list/card-list.component';
+import { PaystackTransaction } from '../models/payment';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +54,84 @@ export class EventService extends CacheService {
         }
       }))
     );
+  }
+
+  createEventRecord = (eventId: string) => {
+    return this.authService.getAppUser$().pipe(
+      map(user => {
+        const eventRecord: EventRecord = {
+          amountPaid: -1,
+          college: user.college,
+          country: user.country,
+          dateOfRegistration: user.dateOfRegistration,
+          designation: user.designation,
+          email: user.email,
+          eventId,
+          firstname: user.firstname,
+          gender: user.gender,
+          id: this.computeEventRecordId(user.email, eventId),
+          lastname: user.lastname,
+          middlename: user.middlename,
+          paymentData: null,
+          phoneNumber: user.phoneNumber,
+          practicePlace: user.practicePlace,
+          transaction: null,
+          userId: user.userId,
+          whatsapp: user.whatsapp,
+          zip: user.zip
+        };
+        return eventRecord;
+      })
+    )
+  }
+
+  verifyTransaction = (transaction: PaystackTransaction, eventId: string, callback: () => boolean) => {
+    // console.log("transaction in verifyTransaction => ", transaction);
+    // console.log("transaction reference in verifyTransaction => ", transaction.reference);
+    return this.authService.verifyTransaction({
+      reference: transaction.reference,
+      secret_key: environment.secret_key
+    }).pipe(
+      concatMap(response => {
+        // console.log("response => ", response);
+        return this.authService.fetchEventPayment$().pipe(
+          concatMap(config => this.getUser$().pipe(
+            map(user => Object.assign({email: user.email!}, config))
+          )),
+          concatMap(params => {
+            if (response && response.data && response.data.status === "success" &&
+              response.data.amount === params.payment.amount
+              && response.data.customer && response.data.customer.email.trim() ===
+              params.email?.trim()) {
+              const data = {
+                amountPaid: params.payment.fee,
+                transaction,
+                approved: response.data.customer.email.trim() === params.email?.trim(),
+                paymentData: response
+              };
+              
+              const approve$ = this.createEventRecord(eventId).pipe(
+                map(eventRecord => Object.assign(eventRecord, data) as EventRecord),
+                concatMap(eventRecord => this.approveEventRecord$(eventRecord))
+              );
+
+              return approve$;
+            } else {
+              const decline$ = this.createEventRecord(eventId).pipe(
+                concatMap(eventRecord => this.declineEventRecord$(eventRecord))
+              );
+              // console.log("Created declined records =>", val);
+              return decline$;
+            }
+          }),
+          catchError(err => {
+            // console.log("Caught error => ", err);
+            // this.verifyAgain$ = null;
+            return of("Verification Failed");
+          })
+        )
+      })
+    )
   }
 
   computeEventRecordId(email: string, workshopId: string) {
