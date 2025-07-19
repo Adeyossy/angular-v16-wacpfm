@@ -7,10 +7,10 @@ import { Handler, HandlerContext, HandlerEvent } from "@netlify/functions";
 
 const verifyHandler: Handler = async (event: HandlerEvent, content: HandlerContext) => {
   const body = event.body ? JSON.parse(event.body) : null;
-  console.log("event.body =>", event.body);
+  // console.log("event.body =>", event.body);
   if (body && body.hasOwnProperty('email')) {
     const email = body.email as string;
-    console.log("email =>", email);
+    // console.log("email =>", email);
     const secret_key = body.hasOwnProperty('secret_key') ? body.secret_key : '';
     const sk = process.env[secret_key];
     const options = {
