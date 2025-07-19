@@ -8,7 +8,7 @@ import { UploadTask, deleteObject, getDownloadURL, getStorage, ref, uploadBytes,
 import { AppUser, DEFAULT_NEW_APPUSER, IndexType, USERS } from '../models/user';
 import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
-import { BasePaystackConfig, BasicResponse, CustomerResponse, EventPayment, ParsedCustomerResponse, PaystackConfig, PaystackInitResponse } from '../models/payment';
+import { BasePaystackConfig, BasicResponse, CustomerResponse, EventPayment, ParsedCustomerResponse, PaystackConfig, PaystackInitResponse, PaystackResponse, TransactionParams } from '../models/payment';
 
 export interface RefinedData {
   user_email: string,
@@ -78,6 +78,10 @@ export class AuthService {
     return this.httpClient.post<BasicResponse>(
       `${this.backendUrl}/verify`, data
     )
+  }
+
+  getTransaction(options: TransactionParams) {
+    return this.httpClient.post<PaystackResponse>(`${this.backendUrl}/get-transaction`, options);
   }
 
   getPaystackCustomer(data: {email: string, secret_key: string}) {
