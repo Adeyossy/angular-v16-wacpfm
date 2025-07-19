@@ -10,7 +10,7 @@ import { DEFAULT_NEW_EVENT_RECORD, EVENT_RECORDS_COLLECTION, EventRecord } from 
 import { HelperService } from './helper.service';
 import { CacheService } from './cache.service';
 import { CardList } from '../widgets/card-list/card-list.component';
-import { PaystackTransaction } from '../models/payment';
+import { DEFAULT_NEW_TRANSACTION_RESPONSE, PaystackTransaction, Transaction } from '../models/payment';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -85,7 +85,7 @@ export class EventService extends CacheService {
     )
   }
 
-  verifyTransaction = (transaction: PaystackTransaction, eventId: string, callback: () => boolean) => {
+  verifyTransaction$ = (transaction: PaystackTransaction | Transaction, eventId: string) => {
     // console.log("transaction in verifyTransaction => ", transaction);
     // console.log("transaction reference in verifyTransaction => ", transaction.reference);
     return this.authService.verifyTransaction({
@@ -96,7 +96,7 @@ export class EventService extends CacheService {
         // console.log("response => ", response);
         return this.authService.fetchEventPayment$().pipe(
           concatMap(config => this.getUser$().pipe(
-            map(user => Object.assign({email: user.email!}, config))
+            map(user => Object.assign({ email: user.email! }, config))
           )),
           concatMap(params => {
             if (response && response.data && response.data.status === "success" &&
@@ -109,7 +109,7 @@ export class EventService extends CacheService {
                 approved: response.data.customer.email.trim() === params.email?.trim(),
                 paymentData: response
               };
-              
+
               const approve$ = this.createEventRecord(eventId).pipe(
                 map(eventRecord => Object.assign(eventRecord, data) as EventRecord),
                 concatMap(eventRecord => this.approveEventRecord$(eventRecord))
@@ -132,6 +132,32 @@ export class EventService extends CacheService {
         )
       })
     )
+  }
+
+  verifyPayment$ = (eventRegOpenDate: string) => {
+    return this.getUser$().pipe(
+      concatMap(user => this.authService.getPaystackCustomer({
+        email: user.email!, secret_key: environment.secret_key
+      })),
+      concatMap(customerResponse => {
+        if (customerResponse.data) {
+          return this.authService.getTransaction({
+            secret_key: environment.secret_key,
+            params: {
+              customer: customerResponse.data ? customerResponse.data.id : 0,
+              from: eventRegOpenDate,
+              status: "success"
+            }
+          })
+        } else return of(DEFAULT_NEW_TRANSACTION_RESPONSE);
+      }),
+      map(transResponse => {
+        if (transResponse.data && transResponse.data.length) {
+          return transResponse.data;
+        }
+        return [];
+      })
+    );
   }
 
   computeEventRecordId(email: string, workshopId: string) {
