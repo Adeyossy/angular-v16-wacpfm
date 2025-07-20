@@ -2,13 +2,16 @@ import { Component, Input, OnInit } from '@angular/core';
 import { arrayRemove, arrayUnion, collection, doc, where, writeBatch } from 'firebase/firestore';
 import { NEVER, Observable, concatMap, map, of } from 'rxjs';
 import { DEFAULT_UPDATE_COURSE, UPDATE_COURSES, UpdateCourse } from 'src/app/models/update_course';
-import { DEFAULT_COURSE_RECORD, UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
+import { DEFAULT_COURSE_RECORD, PaymentRecord, UPDATE_COURSES_RECORDS, UpdateCourseRecord } from 'src/app/models/update_course_record';
 import { AppUser, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { CardList } from '../card-list/card-list.component';
 
 type ApprovalStates = "initial" | "final";
+export interface PaymentManager {
+  record: PaymentRecord
+}
 
 @Component({
   selector: 'app-payment-viewer',
@@ -23,18 +26,20 @@ export class PaymentViewerComponent implements OnInit {
 
   constructor(private authService: AuthService, private helper: HelperService) { }
 
-  ngOnInit(): void {
+  appUsersToCardList = (appUsers: AppUser[]) => {
     const keys = ["firstname", "middlename", "lastname", "gender", "phoneNumber", "whatsapp",
       "email", "country", "zip", "designation", "practicePlace", "college"] as const;
+    if (appUsers.length > 0) {
+      return keys.map(key => { return { title: appUsers[0][key], subtitle: key, text: "" } })
+    }
+    return keys.map(_k => { return { title: "", subtitle: "", text: "" } });
+  }
+
+  ngOnInit(): void {
     this.userDetails$ = this.authService.queryCollections$<AppUser>
       (USERS, where("email", "==", this.record.userEmail)).pipe(
-        map(appUsers => {
-          if (appUsers.length > 0) {
-            return keys.map(key => { return { title: appUsers[0][key], subtitle: key, text: "" } })
-          }
-          return keys.map(key => { return { title: "", subtitle: "", text: "" } })
-        })
-      )
+        map(this.appUsersToCardList)
+      );
   }
 
   approve() {
