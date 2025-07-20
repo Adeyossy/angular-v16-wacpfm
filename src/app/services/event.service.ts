@@ -154,8 +154,8 @@ export class EventService extends CacheService {
       }),
       map(r => {
         const transResponse = JSON.parse(r) as TransactionResponse;
-        console.log("transResponse =>", transResponse);
-        console.log("transResponse data =>", transResponse["data"]);
+        // console.log("transResponse =>", transResponse);
+        // console.log("transResponse data =>", transResponse["data"]);
         if (transResponse.data && transResponse.data.length) {
           return transResponse.data;
         }
