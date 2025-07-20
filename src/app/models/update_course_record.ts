@@ -6,6 +6,9 @@ export const UPDATE_COURSE_TYPES = ["Membership", "Fellowship", "ToT"] as const;
 
 export type UpdateCourseType = "Membership" | "Fellowship" | "ToT";
 
+export interface PaymentRecord {
+}
+
 export type UpdateCourseRecord = {
   id: string;
   updateCourseId: string;
