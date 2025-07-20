@@ -25,6 +25,6 @@ export class PaymentService {
   }
 
   getEventPayments() {
-    return this.eventService.getAllPayments$("2025-07-05");
+    return this.eventService.getAllPayments$("2025-07-07");
   }
 }
