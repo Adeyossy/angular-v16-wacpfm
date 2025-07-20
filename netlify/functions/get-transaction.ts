@@ -27,10 +27,12 @@ const verifyHandler: Handler = async (event: HandlerEvent, content: HandlerConte
       const response = await fetch(`https://api.paystack.co/transaction?${queries}`, 
         options);
       const data = await response.json();
+      const d = JSON.stringify(data);
+      console.log("data =>", d)
 
       return {
         statusCode: 200,
-        body: JSON.stringify(data)
+        body: JSON.stringify(d)
       }
 
     } catch (error) {
