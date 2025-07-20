@@ -48,7 +48,8 @@ export interface Transaction {
 export interface TransactionParams {
   customer?: number,
   from: string,
-  status: "success" | "failed" | "reversed"
+  status: "success" | "failed" | "reversed",
+  perPage?: number
 }
 
 export interface TransactionParamsWithSK {
