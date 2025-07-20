@@ -30,9 +30,8 @@ export class EventPaymentComponent implements OnInit {
       concatMap(date => this.eventService.verifyPayment$(date)),
       concatMap(transactions => {
         if (transactions.length > 0) {
-          this.verifyTransaction$(transactions[0], this.showSuccessDialog)
-        }
-        return of("empty");
+          return this.verifyTransaction$(transactions[0], this.showSuccessDialog)
+        } else return of("empty");
       })
     )
   }
