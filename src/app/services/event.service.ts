@@ -10,7 +10,7 @@ import { DEFAULT_NEW_EVENT_RECORD, EVENT_RECORDS_COLLECTION, EventRecord } from 
 import { HelperService } from './helper.service';
 import { CacheService } from './cache.service';
 import { CardList } from '../widgets/card-list/card-list.component';
-import { DEFAULT_NEW_TRANSACTION_RESPONSE, PaystackTransaction, Transaction } from '../models/payment';
+import { DEFAULT_NEW_TRANSACTION_RESPONSE, PaystackTransaction, Transaction, TransactionResponse } from '../models/payment';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -146,12 +146,16 @@ export class EventService extends CacheService {
             params: {
               customer: customerResponse.data ? customerResponse.data.id : 0,
               from: eventRegOpenDate,
-              status: "success"
+              status: "success",
+              perPage: 600
             }
           })
-        } else return of(DEFAULT_NEW_TRANSACTION_RESPONSE);
+        } else return of("");
       }),
-      map(transResponse => {
+      map(r => {
+        const transResponse = JSON.parse(r) as TransactionResponse;
+        console.log("transResponse =>", transResponse);
+        console.log("transResponse data =>", transResponse["data"]);
         if (transResponse.data && transResponse.data.length) {
           return transResponse.data;
         }
@@ -162,15 +166,17 @@ export class EventService extends CacheService {
 
   getAllPayments$ = (date: string) => {
     return this.authService.getTransaction({
-      secret_key: environment.secret_key,
+      secret_key: "PAYSTACK_LIVE_SK",
       params: {
         from: date,
-        status: "success"
+        status: "success",
+        perPage: 500
       }
     }).pipe(
       map(res => {
-        if (res.data && res.data.length) {
-          return res.data;
+        const response = JSON.parse(res) as unknown as TransactionResponse;
+        if (response.data && response.data.length) {
+          return response.data;
         }
         return [];
       })

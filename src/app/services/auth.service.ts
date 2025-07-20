@@ -81,7 +81,7 @@ export class AuthService {
   }
 
   getTransaction(options: TransactionParamsWithSK) {
-    return this.httpClient.post<TransactionResponse>(
+    return this.httpClient.post<string>(
       `${this.backendUrl}/get-transaction`, options
     );
   }
