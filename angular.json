@@ -29,7 +29,13 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": [],
+            "scripts": [
+              {
+                "inject": true,
+                "bundleName": "jitsi-meet",
+                "input": "src/external_api.js"
+              }
+            ],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
           },
