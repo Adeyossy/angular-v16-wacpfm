@@ -79,6 +79,40 @@
           </div>
         </div>
       </div>
+      <br><br>
+      <div class="wacpfm-card">
+        <div class="wacpfm-heading-underline">
+          <h2 class="wacpfm-heading-small fw-bold">Lectures</h2>
+          <div class="wacpfm-underline"></div>
+        </div>
+        <br><br>
+        <div class="wacpfm-lectures" *ngIf="eventLectures$ | async as lectures">
+          <div class="wacpfm-lectures" *ngFor="let lecture of lectures; index as i">
+            <div class="container-fluid px-3 py-3 wacpfm-lecture">
+                <div class="row g-0">
+                  <div class="col-1">
+                    <p class="wacpfm-small-text color-accent">{{ i + 1 }}.</p>
+                  </div>
+                  <div class="col-9 px-1">
+                    <p class="wacpfm-lecture-title">{{ lecture.lectureTitle }}</p>
+                    <span class="wacpfm-smaller-text opacity-75 pe-2">{{ helper.millisToHour(lecture.startTime)
+                      }}</span>
+                    <i class="bi bi-three-dots-vertical color-accent wacpfm-smaller-text"></i>
+                    <span class="wacpfm-smaller-text fw-bold opacity-75">
+                      {{ helper.millisToHour(lecture.endTime) }}
+                    </span>
+                  </div>
+                  <div class="col-1 text-end" *ngFor="let link of lecture.materialLink">
+                    <a [href]="link" [download]="'Update.Course.Lecture.' + (i + 1) + '.pdf'" type="application/pdf"
+                      target="_blank" *ngIf="event.last_day <= today">
+                      <i class="bi bi-file-earmark-pdf-fill color-accent"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <br><br>

@@ -4,7 +4,7 @@ import { catchError, concatMap, map, Observable, of } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ParamMap } from '@angular/router';
 import { arrayUnion, Timestamp, where } from 'firebase/firestore';
-import { Event, DEFAULT_NEW_EVENT, EVENTS_COLLECTION } from '../models/event';
+import { Event, DEFAULT_NEW_EVENT, EVENTS_COLLECTION, EVENT_LECTURES_COLLECTION } from '../models/event';
 import { AppUser } from '../models/user';
 import { DEFAULT_NEW_EVENT_RECORD, EVENT_RECORDS_COLLECTION, EventRecord } from '../models/event_record';
 import { HelperService } from './helper.service';
@@ -12,6 +12,7 @@ import { CacheService } from './cache.service';
 import { CardList } from '../widgets/card-list/card-list.component';
 import { DEFAULT_NEW_TRANSACTION_RESPONSE, PaystackTransaction, Transaction, TransactionResponse } from '../models/payment';
 import { environment } from 'src/environments/environment';
+import { Lecture } from '../models/update_course';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,12 @@ export class EventService extends CacheService {
 
   getEvents() {
     return this.authService.getCollection$<Event>(EVENTS_COLLECTION);
+  }
+
+  getLecturesByEvent = (eventId: string) => {
+    return this.queryItem$<Lecture>(EVENT_LECTURES_COLLECTION, [
+      where("parentId", "==", eventId)
+    ]);
   }
 
   getEventId$(paramMap: Observable<ParamMap>) {

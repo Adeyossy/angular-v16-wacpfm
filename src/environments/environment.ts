@@ -9,6 +9,7 @@ export const environment = {
   event: "events",
   eventRecord: "event_records",
   eventFee: "event_fees",
+  eventLecture: "event_lectures",
   secret_key: "PAYSTACK_LIVE_SK",
   public_key: "live_pk"
 };

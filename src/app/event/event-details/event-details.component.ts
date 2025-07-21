@@ -3,7 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from 'firebase/auth';
 import { concatMap, map, Observable, of } from 'rxjs';
 import { DEFAULT_NEW_EVENT, Event } from 'src/app/models/event';
+import { Lecture } from 'src/app/models/update_course';
 import { EventService } from 'src/app/services/event.service';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-event-details',
@@ -13,9 +15,11 @@ import { EventService } from 'src/app/services/event.service';
 export class EventDetailsComponent {
   today = Date.now();
   event$: Observable<Event> = of(JSON.parse(JSON.stringify(DEFAULT_NEW_EVENT)));
+  eventLectures$: Observable<Lecture[]> = of([]);
   declare user$: Observable<User>;
 
-  constructor(public eventService: EventService, private activatedRoute: ActivatedRoute) {
+  constructor(public eventService: EventService, private activatedRoute: ActivatedRoute,
+    public helper: HelperService) {
     this.user$ = eventService.getUser$();
   }
 
@@ -25,7 +29,10 @@ export class EventDetailsComponent {
         const p = paramMap.get("eventId");
         return p ? p : ""
       }),
-      concatMap(id => this.eventService.getEventById$(id))
+      concatMap(id => {
+        this.eventLectures$ = this.eventService.getLecturesByEvent(id);
+        return this.eventService.getEventById$(id);
+      })
     );
   }
 
