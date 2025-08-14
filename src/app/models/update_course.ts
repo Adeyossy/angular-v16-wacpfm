@@ -3,6 +3,7 @@ import { UpdateCourseType } from "./update_course_record";
 
 export const UPDATE_COURSES = environment.updateCourse;
 export const UPDATE_COURSES_LECTURES = environment.updateCourseLecture;
+export const TRAINER_CERTIFICATIONS = environment.trainerCert;
 
 export type UpdateCourseDetails = {
   theme: string;
@@ -128,4 +129,18 @@ export const DEFAULT_LECTURE: UpdateCourseLecture = {
   endTime: String(Date.now() + (60 * 60 * 1000)),
   materialLink: [],
   videoLink: ""
+}
+
+/**
+ * Models a training certification with list of eligible trainers and the URL of the certificate
+ * to be modified.
+ * 
+ * The id and the updateCourseId are the same but included for redundancy in case of poor memory
+ * recall in the future about their relationship.
+ */
+export interface TrainerCertification {
+  id: string,
+  updateCourseId: string,
+  certificateURL: string,
+  trainers: string[]
 }
