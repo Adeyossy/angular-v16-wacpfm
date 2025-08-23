@@ -3,26 +3,51 @@
   <div class="wacpfm-underline"></div>
 </div>
 <br>
-<div class="container-fluid p-0" #container>
-  <div class="row g-0">
-    <div class="offset-lg-1 col-lg-10">
-      <div class="wacpfm-certificate">
-        <img #img [class.d-none]="!url" src="{{url}}"
-          alt="Update Course Certificate" crossorigin="anonymous">
-
-        <div class="wacpfm-padding-default" [class.d-none]="url">
-          <app-loading-ui></app-loading-ui>
+<div *ngIf="user$ | async as user; else loading">
+  <div class="container-fluid wacpfm-card" #container>
+    <div class="row g-0">
+      <div class="offset-lg-1 col-lg-10" *ngIf="certificateUrl$ | async as url; else loading">
+        <ng-container *ngIf="url.includes('http'); else nourl">
+          <div class="wacpfm-certificate">
+            <img #img src="{{url}}" alt="Update Course Certificate" crossorigin="anonymous"
+              (load)="onImgLoad(user, certificate, img)">
+            <canvas width="1056px" height="816px" id="update" #certificate></canvas>
+          </div>
           <br>
-          <app-loading-ui></app-loading-ui>
-          <br>
-          <app-loading-ui></app-loading-ui>
-        </div>
-        <canvas width="1056px" height="816px" #certificate></canvas>
+          <a href="{{downloadURLs[certificate.id]}}" [class.d-none]="!url" download="Certificate.png">
+            <button class="wacpfm-primary-button"><i class="bi bi-file-earmark-image"></i> Download Certificate</button>
+          </a>
+        </ng-container>
       </div>
-      <br>
-      <a href="{{this.downloadUrl}}" [class.d-none]="!url" download="Certificate.png" (click)="downloadCert()">
-        <button class="wacpfm-primary-button"><i class="bi bi-file-earmark-image"></i> Download Certificate</button>
-      </a>
     </div>
   </div>
+  <ng-template #nourl>
+    <h1 class="wacpfm-heading-small fw-bold">No certificate available at the moment.</h1>
+  </ng-template>
+  <br><br>
+  <ng-container *ngIf="trainerCertification$ | async as trainerCert">
+    <div class="container-fluid wacpfm-card" *ngIf="trainerCert.trainers.includes(user.email)" #trainerContainer>
+      <div class="row g-0">
+        <div class="offset-lg-1 col-lg-10">
+          <ng-container *ngIf="trainerCert.certificateURL.includes('http'); else nourl">
+            <div class="wacpfm-certificate">
+              <img #trainerImg src="{{trainerCert.certificateURL}}"
+                (load)="onImgLoad(user, trainerCertificate, trainerImg)"
+                alt="Update Course Certificate" crossorigin="anonymous">
+              <canvas width="1056px" height="816px" id="trainer" #trainerCertificate></canvas>
+            </div>
+            <br>
+            <a href="{{downloadURLs[trainerCertificate.id]}}" download="Trainer.Certification.png">
+              <button class="wacpfm-primary-button"><i class="bi bi-file-earmark-image"></i> Download Certificate</button>
+            </a>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>
+<ng-template #loading>
+  <app-loading-ui></app-loading-ui>
+  <br>
+  <app-loading-ui></app-loading-ui>
+</ng-template>
