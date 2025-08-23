@@ -2,7 +2,7 @@
   <h1 class="wacpfm-heading-small fw-bold">Update Course: Details</h1>
   <div class="wacpfm-underline"></div>
 </div>
-<br>
+<br><br>
 <div class="container-fluid p-0" *ngIf="ongoing | async as newCourse; else empty">
   <div class="row g-0" *ngIf="user$ | async as user">
     <div class="col-12 wacpfm-ongoing-course wacpfm-card wacpfm-header-card mb-5">
@@ -141,7 +141,7 @@
             </a>
             <button class="wacpfm-primary-button small" routerLink="./certificate/{{record.id}}"
               [disabled]="getEndDate(newCourse, record.courseType) > today">
-              <i class="bi bi-file-earmark-image"></i> Download Certificate
+              <i class="bi bi-file-earmark-image"></i> Download Certificate(s)
             </button>
             <br><br>
             <a href="{{getCourseTypeDeets(newCourse, record.courseType).cpd}}" type="application/pdf" [download]="'CPD.'.concat(record.courseType,'.', 

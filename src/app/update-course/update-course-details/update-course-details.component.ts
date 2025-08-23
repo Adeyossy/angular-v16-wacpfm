@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { User } from 'firebase/auth';
-import { collection, doc, runTransaction, where, writeBatch } from 'firebase/firestore';
+import { collection, doc, where, writeBatch } from 'firebase/firestore';
 import { AsyncSubject, NEVER, Observable, Subscription, concatMap, from, iif, map, of, partition } from 'rxjs';
-import { UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseDetails, UpdateCourseLecture, UpdateCourseRev } from 'src/app/models/update_course';
+import { DEFAULT_NEW_TRAINER_CERTIFICATION, TRAINER_CERTIFICATIONS, TrainerCertification, UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseDetails, UpdateCourseLecture, UpdateCourseRev } from 'src/app/models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
 import { AppUser, IndexType, RESOURCE_PERSONS, ResourcePerson, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { UpdateCourseService } from 'src/app/services/update-course.service';
 
 @Component({
   selector: 'app-update-course-details',
@@ -33,13 +33,18 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   membershipRecord$: Observable<UpdateCourseRecord> = NEVER;
   fellowshipRecord$: Observable<UpdateCourseRecord> = NEVER;
   totRecord$: Observable<UpdateCourseRecord> = NEVER;
+  trainerCertification$: Observable<TrainerCertification> = of(DEFAULT_NEW_TRAINER_CERTIFICATION);
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
-    public helper: HelperService) {
+    public helper: HelperService, private updateCourseService: UpdateCourseService) {
     this.lecturesPerRecord$.subscribe(this.lecturesPerRecordAsync);
   }
 
   ngOnInit(): void {
+    this.trainerCertification$ = this.getUpdateCourseId$().pipe(
+      concatMap(this.setTrainerCertification)
+    )
+
     this.getElders();
 
     this.resourcePersons$ = this.activatedRoute.paramMap.pipe(
@@ -55,7 +60,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
         }
         return of([])
       })
-    )
+    );
 
     this.ongoing = this.activatedRoute.paramMap.pipe(
       map(params => {
@@ -77,7 +82,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             certificate: uCourse.fellowshipCertificate,
             cpd: uCourse.fellowshipCPD,
             lectures: uCourse.fellowshipLectures,
-            participants: typeof(uCourse.fellowshipParticipants) === "string" ? 
+            participants: typeof (uCourse.fellowshipParticipants) === "string" ?
               uCourse.fellowshipParticipants.split(", ") : uCourse.fellowshipParticipants,
             releaseResources: uCourse.fellowshipRelease,
             theme: uCourse.fellowshipTheme,
@@ -88,8 +93,8 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             certificate: uCourse.membershipCertificate,
             cpd: uCourse.membershipCPD,
             lectures: uCourse.membershipLectures,
-            participants: typeof(uCourse.membershipParticipants) === "string" ? 
-            uCourse.membershipParticipants.split(", ") : uCourse.membershipParticipants,
+            participants: typeof (uCourse.membershipParticipants) === "string" ?
+              uCourse.membershipParticipants.split(", ") : uCourse.membershipParticipants,
             releaseResources: uCourse.membershipRelease,
             theme: uCourse.membershipTheme,
             groupLink: uCourse?.membershipGroupLink,
@@ -99,8 +104,8 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             certificate: uCourse.totCertificate,
             cpd: uCourse.totCPD,
             lectures: uCourse.totLectures,
-            participants: typeof(uCourse.totParticipants) === "string" ? 
-            uCourse.totParticipants.split(", ") : uCourse.totParticipants,
+            participants: typeof (uCourse.totParticipants) === "string" ?
+              uCourse.totParticipants.split(", ") : uCourse.totParticipants,
             releaseResources: uCourse.totRelease,
             theme: uCourse.totTheme,
             groupLink: uCourse?.totGroupLink,
@@ -121,7 +126,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     this.courseRecords$ = this.user$.pipe(
       concatMap(appUser => this.ongoing.pipe(
         concatMap((uCourse) => this.getCourseRecords(appUser.email).pipe(
-          concatMap(records =>  records.length > 0 ? 
+          concatMap(records => records.length > 0 ?
             of(records) : this.batchWriteRecords(uCourse, appUser))
         ))
       ))
@@ -158,6 +163,16 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.conversionSub.unsubscribe()
+  }
+
+  getUpdateCourseId$ = () => {
+    return this.activatedRoute.paramMap.pipe(
+      map(params => {
+        const updateCourseId = params.get("updateCourseId");
+        if (updateCourseId) return updateCourseId;
+        else return ""
+      })
+    )
   }
 
   hasPaid(course: UpdateCourseRev, email: string) {
@@ -208,15 +223,15 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   fetchLecturesByType = (params: ParamMap, courseType: UpdateCourseType) => {
     return this.authService.queriesCollections$<UpdateCourseLecture>(
       UPDATE_COURSES_LECTURES, [
-        where("updateCourseId", "==", params.get("updateCourseId") as string),
-        where("courseType", "==", courseType)
-      ]
+      where("updateCourseId", "==", params.get("updateCourseId") as string),
+      where("courseType", "==", courseType)
+    ]
     )
   }
 
   fetchAllLectures = (params: ParamMap) => {
     return this.authService.queryCollections$<UpdateCourseLecture>(
-      UPDATE_COURSES_LECTURES, 
+      UPDATE_COURSES_LECTURES,
       where("updateCourseId", "==", params.get("updateCourseId") as string)
     )
   }
@@ -372,6 +387,32 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   getElders() {
     this.elders$ = this.authService.fetchElders$().pipe(
       map(d => d["elders"])
+    )
+  }
+
+  createTrainerCert$ = (id: string) => {
+    return this.authService.addDocWithID$<TrainerCertification>(TRAINER_CERTIFICATIONS, id, {
+      id,
+      updateCourseId: id,
+      certificateURL: "https://firebasestorage.googleapis.com/v0/b/wacpfm.appspot.com/o/Certificate%2FJuly.2025%2FTrainer.Certification.png?alt=media&token=107b646c-22e9-41df-8508-8cfafe35bba2",
+      trainers: []
+    }).pipe(map(_v => id))
+  }
+
+  setTrainerCertification = (id: string) => {
+    return this.getUpdateCourseId$().pipe(
+      concatMap(id => this.updateCourseService.fetchTrainerCert$(id)),
+      // concatMap(certs => certs.length > 0 ? of(certs[0]) : this.isTrainerCertEnabled(id))
+      map(certs => certs.length > 0 ? certs[0] : DEFAULT_NEW_TRAINER_CERTIFICATION)
+    )
+  }
+
+  isTrainerCertEnabled(id: string) {
+    return this.authService.getCollection$<TrainerCertification>(TRAINER_CERTIFICATIONS).pipe(
+      map(trainerCerts => trainerCerts.length > 0),
+      concatMap(isEnabled => isEnabled ? of(id) : this.createTrainerCert$(id)),
+      concatMap(id => this.updateCourseService.fetchTrainerCert$(id)),
+      map(certs => certs.length > 0 ? certs[0] : DEFAULT_NEW_TRAINER_CERTIFICATION)
     )
   }
 }

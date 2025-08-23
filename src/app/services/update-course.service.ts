@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { Observable, of, map, concatMap, catchError } from 'rxjs';
 import { CacheService } from './cache.service';
-import { DEFAULT_UPDATE_COURSE, UPDATE_COURSES, UpdateCourse } from '../models/update_course';
+import { DEFAULT_UPDATE_COURSE, TRAINER_CERTIFICATIONS, TrainerCertification, UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
 import { CardList } from '../widgets/card-list/card-list.component';
 
@@ -164,5 +164,14 @@ export class UpdateCourseService extends CacheService {
         }
       }))
     )
+  }
+
+  fetchTrainerCert$ = (updateCourseId: string) => {
+    this.resetCache(TRAINER_CERTIFICATIONS);
+    return this.queryItem$<TrainerCertification>(
+      TRAINER_CERTIFICATIONS, [
+        where("id", "==", updateCourseId)
+      ]
+    );
   }
 }
