@@ -144,3 +144,10 @@ export interface TrainerCertification {
   certificateURL: string,
   trainers: string[]
 }
+
+export const DEFAULT_NEW_TRAINER_CERTIFICATION: TrainerCertification = {
+  id: "",
+  updateCourseId: "",
+  certificateURL: "",
+  trainers: []
+}
