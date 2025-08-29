@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { arrayUnion, serverTimestamp, where } from 'firebase/firestore';
 import { catchError, concatMap, map, Observable, of } from 'rxjs';
 import { EXAMINERS, EXAMS } from 'src/app/models/exam';
-import { Examiner, Geopolitical, NEW_EXAMINER, Referee } from "src/app/models/examiner";
+import { CurrentEmploymentStatus, DAETrainingStatus, Examiner, Geopolitical, NEW_EXAMINER, Referee, TrainerCertificationStatus, TrainingResponsibilities, WACPMembershipStatus } from "src/app/models/examiner";
 import { AppUser } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ExamService } from 'src/app/services/exam.service';
@@ -26,11 +26,13 @@ export class EditExaminerComponent implements OnInit {
 
   currentEmploymentStatus = ["Visiting", "Full time"] as const;
 
-  trainerCertificationStatus = ["Current", "Lapsed", "None"];
+  trainerCertificationStatus: TrainerCertificationStatus[] = ["Current", "Lapsed", "None"];
 
-  doctorsEducatorsTrainingStatus = ["Yes", "Equivalent", "No"];
+  doctorsEducatorsTrainingStatus: DAETrainingStatus[] = ["Yes", "Equivalent", "No"];
 
-  trainingResponsibilities = ["Institutional Residency TC", "Head of Department", "None"];
+  trainingResponsibilities: TrainingResponsibilities[] = [
+    "Institutional Residency TC", "Head of Department", "None"
+  ];
 
   accreditation = [
     "44 NAR, Hosp., Kaduna", "ABUTH, Zaria", "AKTH, Kano", "Askoro District Hospital, FCT",

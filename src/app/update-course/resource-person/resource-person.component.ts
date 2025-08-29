@@ -73,14 +73,11 @@ export class ResourcePersonComponent implements OnInit {
   }
 
   showLecture(lecture: UpdateCourseLecture) {
-    this.helper.setComponentDialogData({
-      courseId: lecture.updateCourseId,
-      lecture,
-      payment: Object.assign({}, DEFAULT_COURSE_RECORD),
-      course: this.helper.data.course,
-      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-      writing: [[], -1]
-    });
+    const data = this.helper.resetComponentDialogData();
+    data.courseId = lecture.updateCourseId;
+    data.lecture = lecture;
+    data.course = this.helper.data.course;
+    this.helper.setComponentDialogData(data);
 
     this.helper.toggleDialog(1);
     this.createNewLecture();

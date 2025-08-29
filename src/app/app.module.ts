@@ -55,6 +55,13 @@ import { UserInfoComponent } from './registration/user-info/user-info.component'
 import { EventPaymentComponent } from './event/event-payment/event-payment.component';
 import { EventAdminComponent } from './admin/event-admin/event-admin.component';
 import { PaymentsComponent } from './admin/payments/payments.component';
+import { AdminComponent as ExamAdminComponent } from './exam/admin/admin.component';
+import { AdminActionComponent } from './exam/admin-action/admin-action.component';
+import { ExaminerProfileComponent } from './exam/examiner-profile/examiner-profile.component';
+import { InviteExaminerComponent } from './exam/invite-examiner/invite-examiner.component';
+import { ExaminersListComponent } from './exam/examiners-list/examiners-list.component';
+import { DissertationComponent } from './exam/dissertation/dissertation.component';
+import { CasebookComponent } from './exam/casebook/casebook.component';
 
 @NgModule({
   declarations: [
@@ -107,7 +114,14 @@ import { PaymentsComponent } from './admin/payments/payments.component';
     UserInfoComponent,
     EventPaymentComponent,
     EventAdminComponent,
-    PaymentsComponent
+    PaymentsComponent,
+    ExamAdminComponent,
+    AdminActionComponent,
+    ExaminerProfileComponent,
+    InviteExaminerComponent,
+    ExaminersListComponent,
+    DissertationComponent,
+    CasebookComponent
   ],
   imports: [
     BrowserModule,

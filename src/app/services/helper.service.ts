@@ -4,6 +4,7 @@ import { DEFAULT_LECTURE, DEFAULT_UPDATE_COURSE, UpdateCourse, UpdateCourseLectu
 import { DEFAULT_COURSE_RECORD, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
 import { DEFAULT_RESOURCE_PERSON, ResourcePerson } from '../models/user';
 import { AcademicWriting, DEFAULT_ACADEMIC_WRITING, DEFAULT_WRITING, Writing } from '../models/candidate';
+import { Examiner, NEW_EXAMINER } from '../models/examiner';
 
 export interface SimpleDialog {
   title: string,
@@ -24,6 +25,9 @@ export interface ComponentDialogData {
   payment: UpdateCourseRecord,
   course: UpdateCourse,
   lecturer: ResourcePerson,
+  examiner: Examiner,
+  academicWriting: AcademicWriting,
+  allWritings: AcademicWriting[],
   writing: [AcademicWriting[], number]
 }
 
@@ -36,14 +40,7 @@ export class HelperService {
   isDialogShown = -1;
   componentDialogType = "";
 
-  data: ComponentDialogData = {
-    courseId: "",
-    lecture: Object.assign({}, DEFAULT_LECTURE),
-    payment: Object.assign({}, DEFAULT_COURSE_RECORD),
-    course: Object.assign({}, DEFAULT_UPDATE_COURSE),
-    lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-    writing: [[], -1]
-  }
+  data: ComponentDialogData = this.resetComponentDialogData();
 
   dialog: SimpleDialog = {
     title: "",
@@ -131,18 +128,23 @@ export class HelperService {
   }
 
   setComponentDialogData(data: ComponentDialogData) {
+    this.toggleDialog(1);
     this.data = data;
   }
 
   resetComponentDialogData() {
-    this.data = {
+    this.toggleDialog(-1);
+    return {
       courseId: "",
       lecture: Object.assign({}, DEFAULT_LECTURE),
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
       course: Object.assign({}, DEFAULT_UPDATE_COURSE),
       lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-      writing: [[], -1]
-    };
+      examiner: Object.assign({}, NEW_EXAMINER),
+      academicWriting: Object.assign({}, DEFAULT_ACADEMIC_WRITING),
+      allWritings: [] as AcademicWriting[],
+      writing: [[], -1] as [AcademicWriting[], number]
+    }
   }
 
   sortByUpdateCourseType = (type1: UpdateCourseType, type2: UpdateCourseType) => {

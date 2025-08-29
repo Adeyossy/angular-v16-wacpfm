@@ -43,16 +43,10 @@ export class EditFellowshipComponent implements OnInit {
   }
 
   showWriting(fellowship: FellowshipExamRecord, index: number, writings: AcademicWriting[]) {
-    this.helper.setComponentDialogData({
-      course: Object.assign({}, DEFAULT_UPDATE_COURSE),
-      courseId: this.examService.parseCandidateExamId(fellowship),
-      lecture: Object.assign({}, DEFAULT_LECTURE),
-      lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
-      payment: Object.assign({}, DEFAULT_COURSE_RECORD),
-      writing: [writings, index]
-    });
-
-    this.helper.toggleDialog(1);
+    const data = this.helper.resetComponentDialogData();
+    data.courseId = this.examService.parseCandidateExamId(fellowship);
+    data.writing = [writings, index];
+    this.helper.setComponentDialogData(data);
   }
 
   addDissertation(fellowship: FellowshipExamRecord) {
@@ -67,7 +61,7 @@ export class EditFellowshipComponent implements OnInit {
       gradesByExaminer: [],
       title: "",
       type: "dissertations",
-      wacpNo: "",
+      wacpNo: fellowship.examNo,
       description: ""
     };
     fellowship.dissertations.push(dissertation);
@@ -85,7 +79,7 @@ export class EditFellowshipComponent implements OnInit {
       gradesByExaminer: [],
       title: "",
       type: "casebooks",
-      wacpNo: fellowship.wacpNo,
+      wacpNo: fellowship.examNo,
       description: ""
     };
     fellowship.casebooks.push(casebook);

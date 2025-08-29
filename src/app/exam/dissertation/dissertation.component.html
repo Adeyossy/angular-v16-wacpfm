@@ -1,0 +1,49 @@
+<div class="wacpfm-card">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-subheading fw-bold">{{dissertation.type}}</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <h2 class="wacpfm-heading-small fw-bold">{{dissertation.title}}</h2>
+  <p>{{dissertation.description}}</p>
+  <br>
+  <button class="wacpfm-primary-button small px-3" *ngIf="dissertation.files[0] as file">
+    <a [href]="file.url" [download]="file.description">
+      <i class="bi bi-file-earmark-arrow-down-fill text-white"></i> Download Book
+    </a>
+  </button>
+</div>
+<br>
+<div class="wacpfm-card" *ngFor="let grade of dissertation.gradesByExaminer">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-heading-small fw-bold">Grade</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+  <br>
+  <div *ngIf="(getUserDetails$(grade.examinerEmail) | async) as appUser">
+    <h2 class="wacpfm-subheading fw-bold">
+      Examiner: {{ appUser[0].firstname }} {{ appUser[0].lastname }}
+    </h2>
+    <br>
+    <hr><br>
+    <div *ngIf="user$ | async as user">
+      <details *ngFor="let item of gradesToCardList(grade); index as i">
+        <summary class="summary-no-marker">
+          <app-card-list [item]="item" [index]="i"></app-card-list>
+        </summary>
+        <input type="number" name="wacpfm-grade-score" id="wacpfm-grade-score" 
+          [(ngModel)]="this.getSections(grade)[i].score" [disabled]="appUser[0].email !== user.email">
+        <textarea name="wacpfm-grade-comment" id="wacpfm-grade-comment"
+          [(ngModel)]="this.getSections(grade)[i].comment"
+          [disabled]="appUser[0].email !== user.email"></textarea>
+      </details>
+    </div>
+  </div>
+  <button class="wacpfm-primary-button" *ngIf="updateStatus$ === null; else updating" 
+  (click)="update()"></button>
+  <ng-template #updating>
+    <button class="wacpfm-primary-button" *ngIf="updateStatus$ | async; else loading">Continue</button>
+    <ng-template #loading>
+      <app-loading-circles></app-loading-circles>
+    </ng-template>
+  </ng-template>
+</div>

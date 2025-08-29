@@ -119,7 +119,7 @@ export class PaymentViewerComponent implements OnInit {
   }
 
   continue() {
-    this.helper.toggleDialog(-1);
+    this.helper.resetComponentDialogData();
     // this.helper.setComponentDialogData()
   }
 }

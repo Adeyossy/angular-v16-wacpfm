@@ -191,7 +191,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
         )),
         map(res => {
           this.router.navigateByUrl("/dashboard/updatecourse");
-          this.helper.toggleDialog(-1);
+          this.helper.resetComponentDialogData();
           return "done"
         })
       );

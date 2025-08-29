@@ -1,0 +1,62 @@
+<div class="wacpfm-card">
+  <div class="wacpfm-card-exam">
+    <div class="wacpfm-heading-underline">
+      <h1 class="wacpfm-heading-medium fw-bold">Examinations</h1>
+      <div class="wacpfm-underline"></div>
+    </div>
+  </div>
+</div>
+<br>
+<details class="wacpfm-card">
+  <summary class="wacpfm-heading wacpfm-heading-small fw-bold">Invite</summary>
+  <br>
+  <a href="mailto:" class="wacpfm-small-text wacpfm-link-card">
+    Email Invited Examiners
+  </a>
+  <br>
+  <hr><br>
+  <div *ngIf="examiners$ | async as examiners; else fetching">
+    <app-card-list *ngFor="let examiner of examiners; index as i" [item]="toCardListItem(examiner)"
+    [index]="i" [state]="examiner.venue !== undefined && examiner.venue !== ''" [control]="true" 
+    (click)="showInviteExaminer(examiner)">
+      <button class="icon small mt-2 text-success" *ngIf="examiner.venue !== undefined && examiner.venue !== ''">
+        <i class="bi bi-geo-alt-fill"></i> {{ examiner.venue.toUpperCase() }}
+      </button>
+    </app-card-list>
+  </div>
+  <ng-template #fetching>
+    <app-loading-circles></app-loading-circles>
+  </ng-template>
+</details>
+<br>
+<details class="wacpfm-card">
+  <summary class="wacpfm-heading wacpfm-heading-small fw-bold">Assign</summary>
+  <br>
+  <hr><br>
+  <div *ngIf="writings$ | async as writings; else fetching">
+    <app-card-list *ngFor="let writing of writings; index as i" [item]="writingToCardListItem(writing)"
+    [index]="i" [control]="true" [state]="writing.examinerEmails.length > 0"
+    (click)="showAssignmentDialog(writings, writing)">
+      <div class="mt-2 d-flex">
+        <button class="icon small text-success me-3">{{ writing.examinerEmails.length }} Examiner(s)</button>
+      </div>
+    </app-card-list>
+  </div>
+  <ng-template #fetching>
+    <app-loading-circles></app-loading-circles>
+  </ng-template>
+</details>
+<br>
+<details class="wacpfm-card">
+  <summary class="wacpfm-heading wacpfm-heading-small fw-bold">Monitor</summary>
+  <br>
+  <hr><br>
+  <div *ngIf="writings$ | async as writings; else fetching">
+    <app-card-list *ngFor="let writing of writings; index as i" [item]="writingToCardListItem(writing)"
+    [index]="i" [control]="true" [state]="writing.examinerEmails.length > 0">
+    </app-card-list>
+  </div>
+  <ng-template #fetching>
+    <app-loading-circles></app-loading-circles>
+  </ng-template>
+</details>

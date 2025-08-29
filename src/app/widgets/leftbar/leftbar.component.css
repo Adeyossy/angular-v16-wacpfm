@@ -1,6 +1,10 @@
+details {
+  margin: 8px;
+  border-color: 2px solid var(--wacpfm-primary-colour-contrast);
+}
+
 .wacpfm-leftbar-item {
   padding: 18px var(--wacpfm-spacing-small);
-  margin: 8px;
 }
 
 .wacpfm-leftbar-header {
@@ -19,7 +23,7 @@
 }
 
 .wacpfm-leftbar i.bi {
-  color: var(--wacpfm-accent-colour-orange);
+  color: var(--wacpfm-primary-colour);
   margin-right: 16px;
   line-height: inherit;
 }
@@ -44,4 +48,14 @@ span {
 summary {
   display: list-item;
   list-style: none;
+}
+
+.wacpfm-leftbar-link.wacpfm-leftbar-subitem {
+  cursor: pointer;
+  background-color: var(--wacpfm-light-grey);
+  border-color: var(--wacpfm-grey);
+}
+
+.wacpfm-leftbar-subitem:hover {
+  background-color: var(--wacpfm-background-white);
 }

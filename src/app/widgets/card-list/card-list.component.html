@@ -11,6 +11,10 @@
       <span class="wacpfm-smaller-text fw-bold opacity-75">
         {{ item.text }}
       </span>
+      <br>
+      <div>
+        <ng-content></ng-content>
+      </div>
     </div>
     <div class="col-2 offset-lg-1 col-lg-1 text-end wacpfm-heading-small" *ngIf="control">
       <i class="bi bi-check-circle-fill text-success" *ngIf="state; else negative"></i>

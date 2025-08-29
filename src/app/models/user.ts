@@ -9,6 +9,9 @@ export interface IndexType {
 export const USERS = "users";
 export const RESOURCE_PERSONS = environment.resourcePersons;
 
+export type ExamCommittee = "host_examiner" | "chief_examiner";
+export const EXAM_COMMITTEE: ExamCommittee[] = ["chief_examiner", "host_examiner"]
+
 export interface UserInfo {
   userId: string; // corresponds to Firebase UserId
   firstname: string;
@@ -30,7 +33,7 @@ export interface AppUser extends UserInfo {
   updateCourseRecords: string[];
   examinationRecords: string[];
   updateCourseRole: "admin" | "resource_person" | "college" | "participant" | "";
-  examinationRole: "candidate" | "examiner" | "chief_examiner" | "";
+  examinationRole: ExamCommittee | "candidate" | "examiner" | "";
 }
 
 export const DEFAULT_NEW_APPUSER: AppUser = {
