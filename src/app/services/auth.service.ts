@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AsyncSubject, Observable, concatMap, from, iif, map, of, zip } from 'rxjs';
 import { User, Auth, getAuth, createUserWithEmailAndPassword, UserCredential, signInWithEmailAndPassword, sendEmailVerification, AuthErrorCodes, sendPasswordResetEmail, signOut, updateProfile, IdTokenResult } from 'firebase/auth';
@@ -8,7 +8,8 @@ import { UploadTask, deleteObject, getDownloadURL, getStorage, ref, uploadBytes,
 import { AppUser, DEFAULT_NEW_APPUSER, IndexType, USERS } from '../models/user';
 import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
-import { BasePaystackConfig, BasicResponse, CustomerResponse, EventPayment, ParsedCustomerResponse, PaystackConfig, PaystackInitResponse, PaystackResponse, TransactionParams, TransactionParamsWithSK, TransactionResponse } from '../models/payment';
+import { AccountDetails, BasePaystackConfig, BasicResponse, CustomerResponse, DEFAULT_TRANSFER_RECIPIENT, EventPayment, ParsedCustomerResponse, PaystackConfig, PaystackInitResponse, PaystackResponse, TransactionParams, TransactionParamsWithSK, TransactionResponse, TransferRecipient } from '../models/payment';
+import { environment } from 'src/environments/environment';
 
 export interface RefinedData {
   user_email: string,
@@ -70,11 +71,20 @@ export class AuthService {
     return this.httpClient.get<EventPayment>(`${this.backendUrl}/event-payment`);
   }
 
+  getPaystackHeaders$ = () => {
+    return this.fetchBasePaystackConfig$().pipe(
+      map(config => new HttpHeaders({
+        "Authorization": `Bearer ${config[environment.secret_key as 'live_sk' | 'test_sk']}`
+      })
+      )
+    )
+  }
+
   initialiseTransaction(data: unknown): Observable<PaystackInitResponse> {
     return this.httpClient.post<PaystackInitResponse>(`${this.backendUrl}/pay`, data);
   }
 
-  verifyTransaction(data: {reference: string, secret_key: string}) {
+  verifyTransaction(data: { reference: string, secret_key: string }) {
     return this.httpClient.post<BasicResponse>(
       `${this.backendUrl}/verify`, data
     )
@@ -86,10 +96,38 @@ export class AuthService {
     );
   }
 
-  getPaystackCustomer(data: {email: string, secret_key: string}) {
+  getPaystackCustomer(data: { email: string, secret_key: string }) {
     return this.httpClient.post<CustomerResponse>(
       `${this.backendUrl}/get-customer`, data
     )
+  }
+
+  verifyAccountNumber$ = (accountNumber: string, bankCode: string) => {
+    return this.getPaystackHeaders$().pipe(
+      concatMap(headers => this.httpClient.get<AccountDetails>(
+        `https://api.paystack.co/bank/resolve?account_number=${accountNumber}&bank_code=${bankCode}`,
+        { headers }
+      ))
+    );
+  };
+
+  createTransferRecipient$ = (accountNumber: string, bankCode: string) => {
+    return this.verifyAccountNumber$(accountNumber, bankCode).pipe(
+      concatMap(account => {
+        if (account.status) {
+          return this.httpClient.post<TransferRecipient>(
+            "https://api.paystack.co/transferrecipient",
+            {
+              type: "nuban",
+              name: account.data.account_name,
+              account_number: account.data.account_number,
+              bank_code: bankCode,
+              currency: "NGN"
+            }
+          );
+        } else return of(DEFAULT_TRANSFER_RECIPIENT);
+      })
+    );
   }
 
   getFirebaseApp$(): Observable<FirebaseApp> {
@@ -217,7 +255,7 @@ export class AuthService {
       map(doc => doc.exists() ? doc.data() as Type : null)
     )
   }
-  
+
   addDoc$(collectionName: string, data: any) {
     return this.getFirestore$().pipe(
       concatMap(db => addDoc(collection(db, collectionName), data))
@@ -273,15 +311,17 @@ export class AuthService {
    * @param refAndData Array of objects describing the document reference and data for cloud write
    * @returns Observable<string>
    */
-  batchWriteDocs$(refAndData: {path: string, data: object, 
-    type: "set" | "update" | "delete"}[]) {
+  batchWriteDocs$(refAndData: {
+    path: string, data: object,
+    type: "set" | "update" | "delete"
+  }[]) {
     return this.getFirestore$().pipe(
       concatMap(db => {
         const batch = writeBatch(db);
         refAndData.forEach(rd => {
           let ref = doc(db, rd.path);
           if (rd.type === "set") {
-            batch.set(ref, rd.data, {merge: true});
+            batch.set(ref, rd.data, { merge: true });
           } else {
             if (rd.type === "update") batch.update(ref, rd.data);
             else batch.delete(ref)
@@ -319,8 +359,8 @@ export class AuthService {
               const data = doc.data() as Type;
               if (collectionName === USERS) this.appUser = data as AppUser;
               return data;
-            } 
-            
+            }
+
             return null;
           }
           )
@@ -512,28 +552,28 @@ export class AuthService {
     return this.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS, where("updateCourseId",
       "==", courseId)).pipe(
         concatMap(records => zip(records.filter(record => record.userEmail !== "adeyossy1@gmail.com").
-          filter(record => record.userEmail !== "adeyosolamustapha@outlook.com").filter(record => 
+          filter(record => record.userEmail !== "adeyosolamustapha@outlook.com").filter(record =>
             record.userEmail !== "amustapha133@stu.ui.edu.ng")
           .map(record => this.queryCollections$<AppUser>(
-          USERS, where("email", "==", record.userEmail)).pipe(
-          map(([appUser]) => {
-            return {
-              user_email: appUser.email,
-              record_email: record.userEmail,
-              first_name: appUser.firstname,
-              middle_name: appUser.middlename,
-              last_name: appUser.lastname,
-              course_id: record.updateCourseId,
-              category: record.courseType,
-              gender: appUser.gender,
-              country: appUser.country,
-              designation: appUser.designation,
-              place_of_practice: appUser.practicePlace,
-              college: appUser.college,
-              has_paid: record.approved
-            }
-          })
-        ))))
+            USERS, where("email", "==", record.userEmail)).pipe(
+              map(([appUser]) => {
+                return {
+                  user_email: appUser.email,
+                  record_email: record.userEmail,
+                  first_name: appUser.firstname,
+                  middle_name: appUser.middlename,
+                  last_name: appUser.lastname,
+                  course_id: record.updateCourseId,
+                  category: record.courseType,
+                  gender: appUser.gender,
+                  country: appUser.country,
+                  designation: appUser.designation,
+                  place_of_practice: appUser.practicePlace,
+                  college: appUser.college,
+                  has_paid: record.approved
+                }
+              })
+            ))))
       )
   }
 }
