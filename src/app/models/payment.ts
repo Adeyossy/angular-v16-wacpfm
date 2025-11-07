@@ -169,7 +169,7 @@ export interface TransferRecipient {
     recipient_code: string,
     type: string,
     updatedAt: string,
-    is_deleted: false,
+    is_deleted: boolean,
     details: {
       authorization_code: null,
       account_number: string,
@@ -179,6 +179,31 @@ export interface TransferRecipient {
     }
   }
 }
+
+export const DEFAULT_TRANSFER_RECIPIENT: TransferRecipient = {
+  status: false,
+  message: "",
+  data: {
+    active: false,
+    createdAt: "",
+    currency: "",
+    domain: "",
+    id: -1,
+    integration: -1,
+    name: "",
+    recipient_code: "",
+    type: "",
+    updatedAt: "",
+    is_deleted: false,
+    details: {
+      authorization_code: null,
+      account_number: "",
+      account_name: null,
+      bank_code: "",
+      bank_name: ""
+    }
+  }
+};
 
 export interface NewTransactionOptions {
   /**
