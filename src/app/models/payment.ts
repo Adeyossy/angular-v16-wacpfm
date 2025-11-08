@@ -155,6 +155,14 @@ export interface AccountDetails {
   }
 }
 
+export interface CreateTransferRecipientBody {
+  type: "nuban" | "ghipss" | "mobile_money" | "basa",
+  name: string,
+  account_number: string,
+  bank_code: string,
+  currency: string
+}
+
 export interface TransferRecipient {
   status: boolean,
   message: string,
