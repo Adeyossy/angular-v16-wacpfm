@@ -213,6 +213,14 @@ export const DEFAULT_TRANSFER_RECIPIENT: TransferRecipient = {
   }
 };
 
+export interface InitiateTransferBody { 
+source: string,
+amount: 100000,
+reference: string,
+recipient: string,
+reason: string
+}
+
 export interface NewTransactionOptions {
   /**
    * Your Paystack public key. You can find this on your dashboard in Settings > API Keys & Webhooks
