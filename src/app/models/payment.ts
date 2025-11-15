@@ -213,12 +213,39 @@ export const DEFAULT_TRANSFER_RECIPIENT: TransferRecipient = {
   }
 };
 
-export interface InitiateTransferBody { 
-source: string,
-amount: 100000,
-reference: string,
-recipient: string,
-reason: string
+export interface InitiateTransferBody {
+  source: string,
+  amount: 100000,
+  reference: string,
+  recipient: string,
+  reason: string
+}
+
+export interface InitiateTransferResponse {
+  status: boolean,
+  message: string,
+  data: {
+    transfersessionid: unknown[],
+    transfertrials: unknown[],
+    domain: string,
+    amount: number,
+    currency: string,
+    reference: string,
+    source: string,
+    source_details: null,
+    reason: string,
+    status: string,
+    failures: null,
+    transfer_code: string,
+    titan_code: null,
+    transferred_at: null,
+    id: number,
+    integration: number,
+    request: number,
+    recipient: number,
+    createdAt: string,
+    updatedAt: string
+  }
 }
 
 export interface NewTransactionOptions {
