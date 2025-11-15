@@ -8,7 +8,7 @@ import { UploadTask, deleteObject, getDownloadURL, getStorage, ref, uploadBytes,
 import { AppUser, DEFAULT_NEW_APPUSER, IndexType, USERS } from '../models/user';
 import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
-import { AccountDetails, BasePaystackConfig, BasicResponse, CustomerResponse, DEFAULT_TRANSFER_RECIPIENT, EventPayment, ParsedCustomerResponse, PaystackConfig, PaystackInitResponse, PaystackResponse, TransactionParams, TransactionParamsWithSK, TransactionResponse, TransferRecipient } from '../models/payment';
+import { AccountDetails, BasePaystackConfig, BasicResponse, CreateTransferRecipientBody, CustomerResponse, DEFAULT_TRANSFER_RECIPIENT, EventPayment, InitiateTransferBody, InitiateTransferResponse, ParsedCustomerResponse, PaystackConfig, PaystackInitResponse, PaystackResponse, TransactionParams, TransactionParamsWithSK, TransactionResponse, TransferRecipient } from '../models/payment';
 import { environment } from 'src/environments/environment';
 
 export interface RefinedData {
@@ -111,23 +111,24 @@ export class AuthService {
     );
   };
 
-  createTransferRecipient$ = (accountNumber: string, bankCode: string) => {
-    return this.verifyAccountNumber$(accountNumber, bankCode).pipe(
-      concatMap(account => {
-        if (account.status) {
-          return this.httpClient.post<TransferRecipient>(
-            "https://api.paystack.co/transferrecipient",
-            {
-              type: "nuban",
-              name: account.data.account_name,
-              account_number: account.data.account_number,
-              bank_code: bankCode,
-              currency: "NGN"
-            }
-          );
-        } else return of(DEFAULT_TRANSFER_RECIPIENT);
-      })
+  createTransferRecipient$ = (body: CreateTransferRecipientBody) => {
+    return this.getPaystackHeaders$().pipe(
+      concatMap(headers => this.httpClient.post<TransferRecipient>(
+        "https://api.paystack.co/transferrecipient",
+        body,
+        { headers }
+      ))
     );
+  }
+
+  initiateTransfer$ = (body: InitiateTransferBody) => {
+    return this.getPaystackHeaders$().pipe(
+      concatMap(headers => this.httpClient.post<InitiateTransferResponse>(
+        "https://api.paystack.co/transfer",
+        body,
+        { headers }
+      ))
+    )
   }
 
   getFirebaseApp$(): Observable<FirebaseApp> {
