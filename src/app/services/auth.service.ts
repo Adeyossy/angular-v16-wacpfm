@@ -8,7 +8,7 @@ import { UploadTask, deleteObject, getDownloadURL, getStorage, ref, uploadBytes,
 import { AppUser, DEFAULT_NEW_APPUSER, IndexType, USERS } from '../models/user';
 import { UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
-import { AccountDetails, BasePaystackConfig, BasicResponse, CreateTransferRecipientBody, CustomerResponse, DEFAULT_TRANSFER_RECIPIENT, EventPayment, InitiateTransferBody, InitiateTransferResponse, ParsedCustomerResponse, PaystackConfig, PaystackInitResponse, PaystackResponse, TransactionParams, TransactionParamsWithSK, TransactionResponse, TransferRecipient } from '../models/payment';
+import { AccountDetails, BasePaystackConfig, BasicResponse, CreateTransferRecipientBody, CustomerResponse, DEFAULT_TRANSFER_RECIPIENT, EventPayment, InitiateTransferBody, InitiateTransferResponse, ParsedCustomerResponse, PaystackConfig, PaystackInitResponse, PaystackResponse, TransactionParams, TransactionParamsWithSK, TransactionResponse, TransferRecipient, VerifyTransferResponse } from '../models/payment';
 import { environment } from 'src/environments/environment';
 
 export interface RefinedData {
@@ -129,6 +129,15 @@ export class AuthService {
         { headers }
       ))
     )
+  }
+
+  verifyTransfer$ = (reference: string) => {
+    return this.getPaystackHeaders$().pipe(
+      concatMap(headers => this.httpClient.get<VerifyTransferResponse>(
+        `https://api.paystack.co/transfer/verify/${reference}`,
+        { headers }
+      ))
+    );
   }
 
   getFirebaseApp$(): Observable<FirebaseApp> {
