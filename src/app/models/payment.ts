@@ -248,6 +248,116 @@ export interface InitiateTransferResponse {
   }
 }
 
+export interface VerifyTransferResponse {
+  status: boolean,
+  message: string,
+  data: {
+    amount: number,
+    createdAt: string,
+    currency: string,
+    domain: string,
+    failures: null,
+    id: number,
+    integration: number,
+    reason: string,
+    reference: string,
+    source: string,
+    source_details: null,
+    status: string,
+    titan_code: null,
+    transfer_code: string,
+    request: number,
+    transferred_at: null,
+    updatedAt: string,
+    recipient: {
+      active: boolean,
+      createdAt: string,
+      currency: string,
+      description: string,
+      domain: string,
+      email: null,
+      id: number,
+      integration: number,
+      metadata: null,
+      name: string,
+      recipient_code: string,
+      type: string,
+      updatedAt: string,
+      is_deleted: boolean,
+      isDeleted: boolean,
+      details: {
+        authorization_code: null,
+        account_number: string,
+        account_name: null,
+        bank_code: string,
+        bank_name: string
+      }
+    },
+    session: {
+      provider: null,
+      id: null
+    },
+    fee_charged: number,
+    fees_breakdown: null,
+    gateway_response: null
+  }
+}
+
+export const DEFAULT_VERIFY_TRANSFER_RESPONSE: VerifyTransferResponse = {
+status: false,
+message: "",
+data: {
+amount: 0,
+createdAt: "",
+currency: "",
+domain: "",
+failures: null,
+id: 0,
+integration: 0,
+reason: "",
+reference: "",
+source: "",
+source_details: null,
+status: "",
+titan_code: null,
+transfer_code: "",
+request: 0,
+transferred_at: null,
+updatedAt: "",
+recipient: {
+active: true,
+createdAt: "",
+currency: "",
+description: "",
+domain: "",
+email: null,
+id: 0,
+integration: 0,
+metadata: null,
+name: "",
+recipient_code: "",
+type: "",
+updatedAt: "",
+is_deleted: false,
+isDeleted: false,
+details: {
+authorization_code: null,
+account_number: "",
+account_name: null,
+bank_code: "",
+bank_name: ""
+      }
+    },
+session: {
+provider: null,
+id: null
+    },
+fee_charged: 0,
+fees_breakdown: null,
+gateway_response: null
+  }
+}
+
 export interface NewTransactionOptions {
   /**
    * Your Paystack public key. You can find this on your dashboard in Settings > API Keys & Webhooks
