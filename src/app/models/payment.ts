@@ -1,8 +1,16 @@
+import { User } from "firebase/auth";
 import { UpdateCourseType } from "./update_course_record";
 
 export const PAYMENTS = "payments";
 
 export type Category = 'jnr' | 'snr' | 'tot' | 'tot-resident' | 'developer';
+
+export interface PaymentParams { 
+  user: User, 
+  uCourseId: string, 
+  category: string,
+  result: string
+}
 
 export type Payment = {}
 
