@@ -2,6 +2,8 @@ import { UpdateCourseType } from "./update_course_record";
 
 export const PAYMENTS = "payments";
 
+export type Category = 'jnr' | 'snr' | 'tot' | 'tot-resident' | 'developer';
+
 export type Payment = {}
 
 export interface PaystackInitResponse {
@@ -304,57 +306,57 @@ export interface VerifyTransferResponse {
 }
 
 export const DEFAULT_VERIFY_TRANSFER_RESPONSE: VerifyTransferResponse = {
-status: false,
-message: "",
-data: {
-amount: 0,
-createdAt: "",
-currency: "",
-domain: "",
-failures: null,
-id: 0,
-integration: 0,
-reason: "",
-reference: "",
-source: "",
-source_details: null,
-status: "",
-titan_code: null,
-transfer_code: "",
-request: 0,
-transferred_at: null,
-updatedAt: "",
-recipient: {
-active: true,
-createdAt: "",
-currency: "",
-description: "",
-domain: "",
-email: null,
-id: 0,
-integration: 0,
-metadata: null,
-name: "",
-recipient_code: "",
-type: "",
-updatedAt: "",
-is_deleted: false,
-isDeleted: false,
-details: {
-authorization_code: null,
-account_number: "",
-account_name: null,
-bank_code: "",
-bank_name: ""
+  status: false,
+  message: "",
+  data: {
+    amount: 0,
+    createdAt: "",
+    currency: "",
+    domain: "",
+    failures: null,
+    id: 0,
+    integration: 0,
+    reason: "",
+    reference: "",
+    source: "",
+    source_details: null,
+    status: "",
+    titan_code: null,
+    transfer_code: "",
+    request: 0,
+    transferred_at: null,
+    updatedAt: "",
+    recipient: {
+      active: true,
+      createdAt: "",
+      currency: "",
+      description: "",
+      domain: "",
+      email: null,
+      id: 0,
+      integration: 0,
+      metadata: null,
+      name: "",
+      recipient_code: "",
+      type: "",
+      updatedAt: "",
+      is_deleted: false,
+      isDeleted: false,
+      details: {
+        authorization_code: null,
+        account_number: "",
+        account_name: null,
+        bank_code: "",
+        bank_name: ""
       }
     },
-session: {
-provider: null,
-id: null
+    session: {
+      provider: null,
+      id: null
     },
-fee_charged: 0,
-fees_breakdown: null,
-gateway_response: null
+    fee_charged: 0,
+    fees_breakdown: null,
+    gateway_response: null
   }
 }
 

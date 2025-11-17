@@ -8,15 +8,13 @@ import { BY_CATEGORY, UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseTy
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 import PaystackPop from '@paystack/inline-js';
-import { BasicResponse, CustomerResponse, Payment, PaystackInitResponse, PaystackResponse, PaystackTransaction } from 'src/app/models/payment';
+import { BasicResponse, Category, CustomerResponse, Payment, PaystackInitResponse, PaystackResponse, PaystackTransaction } from 'src/app/models/payment';
 import { environment } from 'src/environments/environment';
 import { UPDATE_COURSES } from 'src/app/models/update_course';
 
 interface ResumeOptions {
   accessCode: string
 }
-
-type Category = 'jnr' | 'snr' | 'tot' | 'tot-resident' | 'developer';
 
 @Component({
   selector: 'app-update-course-payment',
