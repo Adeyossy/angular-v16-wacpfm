@@ -8,7 +8,7 @@ import { BY_CATEGORY, UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseTy
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 import PaystackPop from '@paystack/inline-js';
-import { BasicResponse, Category, CustomerResponse, Payment, PaystackInitResponse, PaystackResponse, PaystackTransaction } from 'src/app/models/payment';
+import { BasicResponse, Category, CustomerResponse, Payment, PaymentParams, PaystackInitResponse, PaystackResponse, PaystackTransaction } from 'src/app/models/payment';
 import { environment } from 'src/environments/environment';
 import { UPDATE_COURSES } from 'src/app/models/update_course';
 
@@ -151,13 +151,11 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
 
   aggregateParams$ = (result: string) => {
     return this.activatedRoute.paramMap.pipe(
-      map(params => {
-        return {
-          category: params.get("category") ? params.get("category") as Category : "",
-          uCourseId: params.get("updateCourseId") ? params.get("updateCourseId") as string : "",
-          result: result
-        }
-      }),
+      map(params => ({
+        category: params.get("category") ? params.get("category") as Category : "",
+        uCourseId: params.get("updateCourseId") ? params.get("updateCourseId") as string : "",
+        result
+      })),
       concatMap(params => this.authService.getFirebaseUser$().pipe(
         map(user => { return { ...params, user } })
       ))
@@ -170,6 +168,9 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     )
   }
 
+  /**
+   * Upload payment receipt for those who paid externally for admin verification.
+   */
   uploadReceipt() {
     // Use transactions for multiple uploads
     // When payment receipt upload is done
@@ -215,7 +216,41 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     if (pay === 'done') this.router.navigateByUrl('/dashboard/updatecourse')
   }
 
-  createApprovedRecord = (params: { user: User, uCourseId: string, category: string },
+  /**
+   * Create records for successful but unverified transactions. This will be useful for
+   * verification at the dashboard as one of the checks run to grant access to the course.
+   * @param params object containing user info, update course ID, course category and result?
+   * @param transaction Paystack transaction object
+   * @returns Array<UpdateCourseRecords>
+   */
+  createUnverifiedRecord = (params: PaymentParams, transaction: PaystackTransaction) => {
+    return BY_CATEGORY[params.category as Category]
+      .items.map(category => {
+        let record: UpdateCourseRecord = {
+          courseType: category as UpdateCourseType,
+          updateCourseId: params.uCourseId,
+          id: "",
+          paymentId: null,
+          userEmail: params.user.email!,
+          userId: params.user.uid,
+          approved: undefined,
+          transaction,
+          paymentEvidence: ""
+        }
+        return record;
+      });
+  }
+
+  /**
+   * Uploads the created records for successful but unverified payments to cloud firestore.
+   * @param records Array of update course records
+   * @returns Observable of a string containing the status of the upload
+   */
+  saveUnverifiedRecord = (records: UpdateCourseRecord[]) => {
+    return this.authService.addDocsInBulk$(records, UPDATE_COURSES_RECORDS);
+  }
+
+  createApprovedRecord = (params: PaymentParams,
     response: BasicResponse, transaction: PaystackTransaction): UpdateCourseRecord[] => {
     return BY_CATEGORY[params.category as Category]
       .items.map(category => {
@@ -225,7 +260,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
           id: "",
           paymentId: response,
           userEmail: response.data.customer.email,
-          userId: "",
+          userId: params.user.uid,
           approved: response.data.customer.email.trim() === params.user.email?.trim(),
           transaction,
           paymentEvidence: "",
@@ -236,7 +271,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   }
 
   updateCourseUpdate = (records: UpdateCourseRecord[]) => {
-    const update: {[p: string]: FieldValue} = {};
+    const update: { [p: string]: FieldValue } = {};
     records.forEach(r => {
       if (r.courseType === "Membership") update["membershipParticipants"] = arrayUnion(r.userEmail);
       if (r.courseType === "Fellowship") update["fellowshipParticipants"] = arrayUnion(r.userEmail);
@@ -255,7 +290,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
           id: "",
           paymentId: null,
           userEmail: response.data.customer.email,
-          userId: "",
+          userId: params.user.uid,
           transaction,
           paymentEvidence: "",
           flaggedForFraud: !(response.data.customer.email.trim() === params.user.email?.trim())
@@ -264,7 +299,7 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       });
   }
 
-  verifyTransaction = (transaction: PaystackTransaction, callback: () => boolean) => {
+  verifyTransaction = (transaction: PaystackTransaction, callback: () => boolean, params: PaymentParams) => {
     // console.log("transaction in verifyTransaction => ", transaction);
     // console.log("transaction reference in verifyTransaction => ", transaction.reference);
     return this.authService.verifyTransaction({
@@ -272,42 +307,37 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       secret_key: environment.secret_key
     }).pipe(
       concatMap(response => {
-        // console.log("response => ", response);
-        return this.aggregateParams$("").pipe(
-          concatMap(params => {
-            if (response && response.data && response.data.status === "success" &&
-              response.data.amount === BY_CATEGORY[params.category as Category].amount
-              && response.data.customer && response.data.customer.email.trim() ===
-              params.user.email?.trim()) {
-              const val = this.createApprovedRecord(params, response, transaction);
-              // console.log("Created approved records =>", val);
-              return this.authService.addDocsInBulk$(val, UPDATE_COURSES_RECORDS).pipe(
-                concatMap(_v => this.authService.batchWriteDocs$([{
-                  path: `${UPDATE_COURSES}/${params.uCourseId}`,
-                  data: this.updateCourseUpdate(val),
-                  type: "update"
-                }]))
-              );
-            } else {
-              const val = this.createDeclinedRecord(params, response, transaction);
-              // console.log("Created declined records =>", val);
-              return this.authService.addDocsInBulk$(val, UPDATE_COURSES_RECORDS);
-            }
-          }),
-          map(callback),
-          concatMap(_val => {
-            this.helper.resetDialog();
-            return this.router.navigate(["../.."], { relativeTo: this.activatedRoute })
-          }),
-          map(state => state ? "Successful" : "Verification Failed"),
-          catchError(err => {
-            // console.log("Caught error => ", err);
-            this.showErrorDialog();
-            this.payWithCard$ = null;
-            this.verifyAgain$ = null;
-            return of("Verification Failed");
-          })
-        )
+        if (response && response.data && response.data.status === "success" &&
+          response.data.amount === BY_CATEGORY[params.category as Category].amount
+          && response.data.customer && response.data.customer.email.trim() ===
+          params.user.email?.trim()) {
+          const val = this.createApprovedRecord(params, response, transaction);
+          // console.log("Created approved records =>", val);
+          return this.authService.addDocsInBulk$(val, UPDATE_COURSES_RECORDS).pipe(
+            concatMap(_v => this.authService.batchWriteDocs$([{
+              path: `${UPDATE_COURSES}/${params.uCourseId}`,
+              data: this.updateCourseUpdate(val),
+              type: "update"
+            }]))
+          );
+        } else {
+          const val = this.createDeclinedRecord(params, response, transaction);
+          // console.log("Created declined records =>", val);
+          return this.authService.addDocsInBulk$(val, UPDATE_COURSES_RECORDS);
+        }
+      }),
+      map(callback),
+      concatMap(_val => {
+        this.helper.resetDialog();
+        return this.router.navigate(["../.."], { relativeTo: this.activatedRoute })
+      }),
+      map(state => state ? "Successful" : "Verification Failed"),
+      catchError(err => {
+        // console.log("Caught error => ", err);
+        this.showErrorDialog();
+        this.payWithCard$ = null;
+        this.verifyAgain$ = null;
+        return of("Verification Failed");
       })
     )
   }
@@ -378,10 +408,23 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   onSuccess = (transaction: PaystackTransaction) => {
     // console.log("onSuccess called");
     // console.log("transaction in onSuccess =>", transaction);
+
     this.transaction = transaction;
-    this.payWithCard$ = this.verifyTransaction(
-      transaction,
-      this.showSuccessDialog
+
+    // Fetch params and use for the following:
+    // 1. Create records for successful but unverified payments
+    // 2. Save those unverified records to firestore - useful for dashboard verification
+    // 3. Finally verify the transaction
+    this.payWithCard$ = this.aggregateParams$("").pipe(
+      concatMap(params => this.saveUnverifiedRecord(
+        this.createUnverifiedRecord(params, transaction)
+      ).pipe(
+        concatMap(_v => this.verifyTransaction(
+          transaction,
+          this.showSuccessDialog,
+          params
+        ))
+      ))
     );
   }
 
@@ -415,7 +458,11 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       concatMap(params => {
         if (userId === params.user.uid && updateCourseId === params.uCourseId &&
           timetruth && customer.status) {
-          return this.verifyTransaction(this.toTransaction(reference), this.showSuccessDialog)
+          return this.verifyTransaction(
+            this.toTransaction(reference),
+            this.showSuccessDialog,
+            params
+          );
         }
         this.showRefErrorDialog();
         this.verifyAgain$ = null;
@@ -440,7 +487,13 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
           concatMap(transaction => {
             // console.log("transaction => ", transaction);
             if (transaction !== undefined) {
-              return this.verifyTransaction(transaction, this.showSuccessDialog);
+              return this.aggregateParams$("").pipe(
+                concatMap(params => this.verifyTransaction(
+                  transaction,
+                  this.showSuccessDialog,
+                  params
+                ))
+              );
             }
 
             return of("Failed");
