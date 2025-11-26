@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthErrorCodes, User } from 'firebase/auth';
 import { arrayUnion, FieldValue, where } from 'firebase/firestore';
 import { UploadResult } from 'firebase/storage';
-import { NEVER, Observable, Subscription, catchError, concatMap, map, of, timeout } from 'rxjs';
+import { NEVER, Observable, Subscription, catchError, concatMap, map, of, timeout, zip } from 'rxjs';
 import { BY_CATEGORY, UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
@@ -11,6 +11,7 @@ import PaystackPop from '@paystack/inline-js';
 import { BasicResponse, Category, CustomerResponse, Payment, PaymentParams, PaystackInitResponse, PaystackResponse, PaystackTransaction } from 'src/app/models/payment';
 import { environment } from 'src/environments/environment';
 import { UPDATE_COURSES } from 'src/app/models/update_course';
+import { UpdateCourseService } from 'src/app/services/update-course.service';
 
 interface ResumeOptions {
   accessCode: string
@@ -51,7 +52,8 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   verifyAgain$: Observable<string> | null = null;
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
-    private router: Router, public helper: HelperService) {
+    private router: Router, public helper: HelperService,
+    private updateCourservice: UpdateCourseService) {
   }
 
   ngOnInit(): void {
@@ -224,21 +226,30 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
    * @returns Array<UpdateCourseRecords>
    */
   createUnverifiedRecord = (params: PaymentParams, transaction: PaystackTransaction) => {
-    return BY_CATEGORY[params.category as Category]
-      .items.map(category => {
-        let record: UpdateCourseRecord = {
+    return zip(BY_CATEGORY[params.category as Category]
+      .items.map(category => this.createUnverifiedRecordWithId(
+        params, transaction, category
+      )));
+  }
+
+  createUnverifiedRecordWithId = (
+    params: PaymentParams,
+    transaction: PaystackTransaction,
+    category: string): Observable<UpdateCourseRecord> => {
+    return this.authService.getDocId$(UPDATE_COURSES_RECORDS).pipe(
+      map(docc => (
+        {
           courseType: category as UpdateCourseType,
           updateCourseId: params.uCourseId,
-          id: "",
+          id: docc.id,
           paymentId: null,
           userEmail: params.user.email!,
           userId: params.user.uid,
-          approved: undefined,
           transaction,
           paymentEvidence: ""
         }
-        return record;
-      });
+      ))
+    )
   }
 
   /**
@@ -247,7 +258,12 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
    * @returns Observable of a string containing the status of the upload
    */
   saveUnverifiedRecord = (records: UpdateCourseRecord[]) => {
-    return this.authService.addDocsInBulk$(records, UPDATE_COURSES_RECORDS);
+    return this.authService.batchWriteDocs$(records.map(r => ({
+      path: `${UPDATE_COURSES_RECORDS}/${r.id}`,
+      data: r,
+      type: "set"
+    })));
+    // return this.authService.addDocsInBulk$(records, UPDATE_COURSES_RECORDS);
   }
 
   createApprovedRecord = (params: PaymentParams,
@@ -326,6 +342,42 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
           return this.authService.addDocsInBulk$(val, UPDATE_COURSES_RECORDS);
         }
       }),
+      map(callback),
+      concatMap(_val => {
+        this.helper.resetDialog();
+        return this.router.navigate(["../.."], { relativeTo: this.activatedRoute })
+      }),
+      map(state => state ? "Successful" : "Verification Failed"),
+      catchError(err => {
+        // console.log("Caught error => ", err);
+        this.showErrorDialog();
+        this.payWithCard$ = null;
+        this.verifyAgain$ = null;
+        return of("Verification Failed");
+      })
+    )
+  }
+
+  verifyFromRecord$ = (record: UpdateCourseRecord, callback: () => boolean) => {
+    return this.updateCourservice.verifyPaymentFromRecord$(record).pipe(
+      map(callback),
+      concatMap(_val => {
+        this.helper.resetDialog();
+        return this.router.navigate(["../.."], { relativeTo: this.activatedRoute })
+      }),
+      map(state => state ? "Successful" : "Verification Failed"),
+      catchError(err => {
+        // console.log("Caught error => ", err);
+        this.showErrorDialog();
+        this.payWithCard$ = null;
+        this.verifyAgain$ = null;
+        return of("Verification Failed");
+      })
+    )
+  }
+
+  verifyFromRecords$ = (records: UpdateCourseRecord[], callback: () => boolean) => {
+    return this.updateCourservice.verifyPaymentFromRecords$(records).pipe(
       map(callback),
       concatMap(_val => {
         this.helper.resetDialog();
@@ -438,16 +490,11 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     setTimeout(
       () => {
         this.payWithCard$ = this.aggregateParams$("").pipe(
-          concatMap(params => this.saveUnverifiedRecord(
-            this.createUnverifiedRecord(params, transaction)
-          ).pipe(
-            concatMap(_v => this.verifyTransaction(
-              transaction,
-              this.showSuccessDialog,
-              params
-            ))
+          concatMap(params => this.createUnverifiedRecord(params, transaction)),
+          concatMap(records => this.saveUnverifiedRecord(records).pipe(
+            concatMap(_v => this.verifyFromRecords$(records, this.showSuccessDialog))
           ))
-        );
+        )
       },
       10000
     );
