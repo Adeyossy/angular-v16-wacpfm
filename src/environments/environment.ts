@@ -12,5 +12,5 @@ export const environment = {
   eventLecture: "event_lectures",
   trainerCert: "trainer_certifications",
   secret_key: "PAYSTACK_LIVE_SK",
-  public_key: "PAYSTACK_LIVE_PK"
+  public_key: "live_pk"
 };
