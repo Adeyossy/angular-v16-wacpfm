@@ -102,12 +102,20 @@ export class AuthService {
     )
   }
 
-  verifyAccountNumber$ = (accountNumber: string, bankCode: string) => {
+  verifyAccountNumber$ = (accountNumber: string, bankCode: string,)
+  : Observable<CreateTransferRecipientBody> => {
     return this.getPaystackHeaders$().pipe(
       concatMap(headers => this.httpClient.get<AccountDetails>(
         `https://api.paystack.co/bank/resolve?account_number=${accountNumber}&bank_code=${bankCode}`,
         { headers }
-      ))
+      )),
+      map(accountDetails => ({
+        account_number: accountNumber,
+        bank_code: bankCode,
+        currency: "",
+        name: accountDetails.data.account_name,
+        type: "nuban"
+      }))
     );
   };
 
