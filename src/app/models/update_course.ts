@@ -49,6 +49,11 @@ export type UpdateCourse = {
   totGroupLink: string;
   totClassLink: string[];
   resourcePersons: string[];
+  type?: "nuban" | "ghipss" | "mobile_money" | "basa";
+  name?: string;
+  account_number?: string;
+  bank_code?: string;
+  currency?: string;
 }
 
 export type UpdateCourseRev = {
