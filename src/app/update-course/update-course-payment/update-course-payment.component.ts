@@ -395,6 +395,16 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     this.payWithCard$ = null;
   }
 
+  showWaitingDialog = (startTime: number) => {
+    this.helper.setDialog({
+      title: "Please wait",
+      message: `Payment information is being processed (${startTime})`,
+      buttonText: "Continue"
+    });
+    this.helper.toggleDialog(0);
+    return true
+  }
+
   showSuccessDialog = () => {
     this.helper.setDialog({
       title: "Payment Successful",
@@ -409,22 +419,37 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
     // console.log("onSuccess called");
     // console.log("transaction in onSuccess =>", transaction);
 
+    let startTime = 10;
     this.transaction = transaction;
+    this.showWaitingDialog(startTime);
+    const countdown = setInterval(
+      () => {
+        startTime = startTime - 1;
+        this.showWaitingDialog(startTime)
+        if (startTime === 0) clearInterval(countdown);
+      },
+      1000
+    );
 
     // Fetch params and use for the following:
     // 1. Create records for successful but unverified payments
     // 2. Save those unverified records to firestore - useful for dashboard verification
     // 3. Finally verify the transaction
-    this.payWithCard$ = this.aggregateParams$("").pipe(
-      concatMap(params => this.saveUnverifiedRecord(
-        this.createUnverifiedRecord(params, transaction)
-      ).pipe(
-        concatMap(_v => this.verifyTransaction(
-          transaction,
-          this.showSuccessDialog,
-          params
-        ))
-      ))
+    setTimeout(
+      () => {
+        this.payWithCard$ = this.aggregateParams$("").pipe(
+          concatMap(params => this.saveUnverifiedRecord(
+            this.createUnverifiedRecord(params, transaction)
+          ).pipe(
+            concatMap(_v => this.verifyTransaction(
+              transaction,
+              this.showSuccessDialog,
+              params
+            ))
+          ))
+        );
+      },
+      10000
     );
   }
 
