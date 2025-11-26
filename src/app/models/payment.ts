@@ -95,6 +95,14 @@ export interface BasicResponse {
   }
 }
 
+export const DEFAULT_BASIC_RESPONSE: BasicResponse = {
+  data: {
+    status: "",
+    amount: -1,
+    customer: { email: "" }
+  }
+}
+
 export interface EventPaymentDetails {
   amount: number,
   fee: number
