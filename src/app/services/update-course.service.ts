@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
+import { arrayUnion, QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { Observable, of, map, concatMap, catchError } from 'rxjs';
 import { CacheService } from './cache.service';
 import { DEFAULT_UPDATE_COURSE, TRAINER_CERTIFICATIONS, TrainerCertification, UPDATE_COURSES, UpdateCourse } from '../models/update_course';
-import { UPDATE_COURSES_RECORDS, UpdateCourseRecord } from '../models/update_course_record';
+import { BY_CATEGORY, UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
 import { CardList } from '../widgets/card-list/card-list.component';
+import { BasicResponse, Category, PaystackTransaction, Transaction } from '../models/payment';
+import { environment } from 'src/environments/environment';
+import { User } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -174,4 +177,164 @@ export class UpdateCourseService extends CacheService {
       ]
     );
   }
+
+  parseTransactionDetails = (transaction: Transaction, record: UpdateCourseRecord) => {
+    const fields = transaction.metadata.custom_fields;
+    fields.forEach((field) => {
+      switch(field.variable_name) {
+        case "category":
+          record.courseType = field.value;
+          break;
+
+        case "course_id":
+          record.updateCourseId = field.value;
+          break;
+
+        case "fee":
+          // begin transfer
+
+        default:
+          break;
+      }
+    });
+
+    return record;
+  }
+
+  transferCoursePayment$ = (updateCourse: UpdateCourse) => {
+    return this.authService.createTransferRecipient$({
+      account_number: updateCourse.account_number ? updateCourse.account_number : "",
+      bank_code: updateCourse.bank_code ? updateCourse.bank_code : "",
+      currency: updateCourse.currency ? updateCourse.currency : "",
+       name: updateCourse.name ? updateCourse.name : "",
+       type: updateCourse.type ? updateCourse.type : "nuban"
+    }).pipe(
+      // concatMap(transferRecipient => {})
+    )
+  }
+
+  createApprovedRecord = (params: { user: User, uCourseId: string, category: string },
+    response: BasicResponse, transaction: PaystackTransaction): UpdateCourseRecord[] => {
+    return BY_CATEGORY[params.category as Category]
+      .items.map(category => {
+        let record: UpdateCourseRecord = {
+          courseType: category as UpdateCourseType,
+          updateCourseId: params.uCourseId,
+          id: "",
+          paymentId: response,
+          userEmail: response.data.customer.email,
+          userId: "",
+          approved: response.data.customer.email.trim() === params.user.email?.trim(),
+          transaction,
+          paymentEvidence: "",
+          flaggedForFraud: !(response.data.customer.email.trim() === params.user.email?.trim())
+        }
+        return record;
+      });
+  }
+
+  getCategoryFromRecord = (courseType: UpdateCourseType): Category => {
+    switch (courseType) {
+      case "Membership":
+        return "jnr";
+
+      case "Fellowship":
+        return "snr";
+
+      case "ToT":
+        return "tot";
+
+      default:
+        return "jnr";
+    }
+  }
+
+  getCategoryAmount = (courseType: UpdateCourseType) => {
+    return BY_CATEGORY[this.getCategoryFromRecord(courseType)].amount;
+  }
+
+  approveRecord$(record: UpdateCourseRecord) {
+    return this.authService.batchWriteDocs$(
+      [
+        {
+          path: `${UPDATE_COURSES_RECORDS}/${record.id}`,
+          data: record,
+          type: 'set'
+        },
+        {
+          path: `${UPDATE_COURSES}/${record.updateCourseId}`,
+          data: {
+            registered_participants: arrayUnion(record.userEmail),
+            paid_participants: arrayUnion(record.userEmail)
+          },
+          type: 'update'
+        }
+      ]
+    )
+  }
+
+  declineRecord$(record: UpdateCourseRecord) {
+    return this.authService.batchWriteDocs$(
+      [
+        {
+          path: `${UPDATE_COURSES_RECORDS}/${record.id}`,
+          data: record,
+          type: 'set'
+        },
+        {
+          path: `${UPDATE_COURSES}/${record.updateCourseId}`,
+          data: {
+            registered_participants: arrayUnion(record.userEmail)
+          },
+          type: 'update'
+        }
+      ]
+    )
+  }
+
+  verifyFromRecord$ = (transaction: PaystackTransaction | Transaction, record: UpdateCourseRecord) => {
+      // console.log("transaction in verifyTransaction => ", transaction);
+      // console.log("transaction reference in verifyTransaction => ", transaction.reference);
+      const amountPaid = this.getCategoryAmount(record.courseType);
+      return this.authService.verifyTransaction({
+        reference: transaction.reference,
+        secret_key: environment.secret_key
+      }).pipe(
+        concatMap(response => {
+          // console.log("response => ", response);
+          return this.authService.fetchPaystackConfig$().pipe(
+            concatMap(config => this.authService.getFirebaseUser$().pipe(
+              map(user => Object.assign({ email: user.email! }, config))
+            )),
+            concatMap(params => {
+              if (response && response.data && response.data.status === "success" &&
+                response.data.amount === amountPaid
+                && response.data.customer && response.data.customer.email.trim() ===
+                params.email?.trim()) {
+                const data: UpdateCourseRecord = Object.assign(
+                  record, {
+                    paymentId: response,
+                    approved: true
+                  }
+                );
+  
+                return this.approveRecord$(data);
+              } else {
+                return this.declineRecord$(Object.assign(
+                  record, {
+                    approved: false,
+                    paymentId: null
+                  }
+                ));
+              }
+            }),
+            catchError(err => {
+              console.log("Caught error => ", err);
+              // this.verifyAgain$ = null;
+              return of("Verification Failed");
+            })
+          )
+        })
+      )
+    }
 }
