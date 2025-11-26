@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { collection, doc, where, writeBatch } from 'firebase/firestore';
 import { AsyncSubject, NEVER, Observable, Subscription, concatMap, from, iif, map, of, partition } from 'rxjs';
+import { PaystackTransaction } from 'src/app/models/payment';
 import { DEFAULT_NEW_TRAINER_CERTIFICATION, TRAINER_CERTIFICATIONS, TrainerCertification, UPDATE_COURSES, UPDATE_COURSES_LECTURES, UpdateCourse, UpdateCourseDetails, UpdateCourseLecture, UpdateCourseRev } from 'src/app/models/update_course';
 import { UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from 'src/app/models/update_course_record';
 import { AppUser, IndexType, RESOURCE_PERSONS, ResourcePerson, USERS } from 'src/app/models/user';
@@ -34,6 +35,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   fellowshipRecord$: Observable<UpdateCourseRecord> = NEVER;
   totRecord$: Observable<UpdateCourseRecord> = NEVER;
   trainerCertification$: Observable<TrainerCertification> = of(DEFAULT_NEW_TRAINER_CERTIFICATION);
+  paymentVerification$: Observable<string> = of("");
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
     public helper: HelperService, private updateCourseService: UpdateCourseService) {
@@ -318,6 +320,10 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
       }),
       map(_v => [] as UpdateCourseRecord[])
     )
+  }
+
+  verifyPaymentFromRecord$ = (record: UpdateCourseRecord) => {
+    this.paymentVerification$ = this.updateCourseService.verifyPaymentFromRecord$(record);
   }
 
   goToClass() {
