@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { arrayUnion, QueryFieldFilterConstraint, where } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { Observable, of, map, concatMap, catchError } from 'rxjs';
 import { CacheService } from './cache.service';
 import { DEFAULT_UPDATE_COURSE, TRAINER_CERTIFICATIONS, TrainerCertification, UPDATE_COURSES, UpdateCourse } from '../models/update_course';
@@ -284,7 +284,7 @@ export class UpdateCourseService extends CacheService {
         {
           path: `${UPDATE_COURSES}/${record.updateCourseId}`,
           data: {
-            registered_participants: arrayUnion(record.userEmail)
+            registered_participants: arrayRemove(record.userEmail)
           },
           type: 'update'
         }
