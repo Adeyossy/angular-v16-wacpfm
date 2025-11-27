@@ -62,6 +62,7 @@ import { InviteExaminerComponent } from './exam/invite-examiner/invite-examiner.
 import { ExaminersListComponent } from './exam/examiners-list/examiners-list.component';
 import { DissertationComponent } from './exam/dissertation/dissertation.component';
 import { CasebookComponent } from './exam/casebook/casebook.component';
+import { EventCertificateComponent } from './event/event-certificate/event-certificate.component';
 
 @NgModule({
   declarations: [
@@ -121,7 +122,8 @@ import { CasebookComponent } from './exam/casebook/casebook.component';
     InviteExaminerComponent,
     ExaminersListComponent,
     DissertationComponent,
-    CasebookComponent
+    CasebookComponent,
+    EventCertificateComponent
   ],
   imports: [
     BrowserModule,
