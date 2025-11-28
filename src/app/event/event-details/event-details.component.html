@@ -44,6 +44,11 @@
           </ng-template>
         </ng-template>
       </div>
+      <button class="w-auto wacpfm-primary-button mt-3" routerLink="resources/certificate"
+      *ngIf="event.registered_participants.includes(user.email!) && 
+      event.paid_participants.includes(user.email!)">
+        Download Certificate
+      </button>
     </div>
     <br>
     <a routerLink="./register/pay" class="wacpfm-link-card wacpfm-smaller-text">

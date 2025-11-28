@@ -36,6 +36,7 @@ import { EventPaymentComponent } from './event/event-payment/event-payment.compo
 import { EventAdminComponent } from './admin/event-admin/event-admin.component';
 import { PaymentsComponent } from './admin/payments/payments.component';
 import { AdminActionComponent } from './exam/admin-action/admin-action.component';
+import { EventCertificateComponent } from './event/event-certificate/event-certificate.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
@@ -77,6 +78,7 @@ const routes: Routes = [
       { path: "exam/:examAlias/candidate/:category/:candidateId/home", component: ExamComponent },
       { path: "events", component: EventsComponent },
       { path: "events/:eventId", component: EventDetailsComponent },
+      { path: "events/:eventId/resources/certificate", component: EventCertificateComponent },
       { path: "events/:eventId/home", component: EventComponent },
       { path: "events/:eventId/register", component: RegistrationComponent },
       { path: "events/:eventId/register/pay", component: EventPaymentComponent },
