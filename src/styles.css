@@ -38,6 +38,11 @@
   --wacpfm-font-text-small: 12px;
 }
 
+@font-face {
+  font-family: "Certifont";
+  src: url("assets/fonts/imperialscript-regular-webfont.woff2");
+}
+
 body {
   background-color: var(--wacpfm-background-colour);
 }
