@@ -19,7 +19,7 @@ import { Lecture } from '../models/update_course';
 })
 export class EventService extends CacheService {
 
-  getEvents() {
+  getEvents = () => {
     return this.authService.getCollection$<Event>(EVENTS_COLLECTION);
   }
 
@@ -29,28 +29,28 @@ export class EventService extends CacheService {
     ]);
   }
 
-  getEventId$(paramMap: Observable<ParamMap>) {
+  getEventId$ = (paramMap: Observable<ParamMap>) => {
     return paramMap.pipe(
       map(params => {
-        const p = params.get("workshop");
+        const p = params.get("eventId");
         return p ? p : ""
       })
     );
   }
 
-  getEventById$(id: string): Observable<Event> {
+  getEventById$ = (id: string): Observable<Event> => {
     return this.authService.getDocById$<Event>(EVENTS_COLLECTION, id).pipe(
       map(w => w !== null ? w : JSON.parse(JSON.stringify(DEFAULT_NEW_EVENT)))
     );
   }
 
-  getPayments$(eventId: string) {
+  getPayments$ = (eventId: string) => {
     return this.queryItem$<EventRecord>(EVENT_RECORDS_COLLECTION, [
       where("eventId", "==", eventId)
     ]);
   }
 
-  getPaymentsList$(id: string): Observable<CardList[]> {
+  getPaymentsList$ = (id: string): Observable<CardList[]> => {
     return this.getPayments$(id).pipe(
       map(records => records.map(r => {
         const t = r.dateOfRegistration as unknown as Timestamp;
@@ -190,11 +190,11 @@ export class EventService extends CacheService {
     )
   }
 
-  computeEventRecordId(email: string, workshopId: string) {
+  computeEventRecordId = (email: string, workshopId: string) => {
     return `${email}-${workshopId}`;
   }
 
-  getEventRecordById$(id: string): Observable<EventRecord> {
+  getEventRecordById$ = (id: string): Observable<EventRecord> => {
     return this.authService.getDocById$<EventRecord>(EVENT_RECORDS_COLLECTION, id).pipe(
       map(w => {
         if (w !== null) return w;
@@ -247,11 +247,11 @@ export class EventService extends CacheService {
     )
   }
 
-  getUser$(): Observable<User> {
+  getUser$ = (): Observable<User> => {
     return this.authService.getFirebaseUser$();
   }
 
-  getUserEventRecord$(eventId: string): Observable<EventRecord> {
+  getUserEventRecord$ = (eventId: string): Observable<EventRecord> => {
     return this.getUser$().pipe(
       map(user => this.computeEventRecordId(user.email!, eventId)),
       concatMap(id => this.getEventRecordById$(id))
