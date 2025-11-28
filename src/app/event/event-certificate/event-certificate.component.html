@@ -1,1 +1,36 @@
-<p>event-certificate works!</p>
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small fw-bold" style="font-family: 'Certifont';">Download Your Certificate</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+  <br>
+  <div *ngIf="record$ | async as record; else loading">
+    <div class="container-fluid app-card" #container>
+      <div class="row g-0">
+        <div class="offset-lg-1 col-lg-10" *ngIf="event$ | async as event; else loading">
+          <ng-container *ngIf="event.certificate_url.includes('http'); else nourl">
+            <div class="wacpfm-certificate">
+              <img #img src="{{event.certificate_url}}" alt="Event Certificate" crossorigin="anonymous"
+                (load)="onImgLoad(record, certificate, img)">
+              <canvas width="1056px" height="880px" id="update" #certificate></canvas>
+            </div>
+            <br>
+            <a href="{{downloadURLs[certificate.id]}}" download="Certificate.png"
+              [class.d-none]="!downloadURLs[certificate.id]">
+              <button class="primary-button">
+                <i class="bi bi-file-earmark-image"></i> Download Certificate
+              </button>
+            </a>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <ng-template #nourl>
+      <h1 class="heading-small fw-bold">No certificate available at the moment.</h1>
+    </ng-template>
+    <br><br>
+  </div>
+  <ng-template #loading>
+    <app-loading-ui></app-loading-ui>
+    <br>
+    <app-loading-ui></app-loading-ui>
+  </ng-template>
