@@ -63,6 +63,7 @@ import { ExaminersListComponent } from './exam/examiners-list/examiners-list.com
 import { DissertationComponent } from './exam/dissertation/dissertation.component';
 import { CasebookComponent } from './exam/casebook/casebook.component';
 import { EventCertificateComponent } from './event/event-certificate/event-certificate.component';
+import { PortfolioComponent } from './portfolio/portfolio.component';
 
 @NgModule({
   declarations: [
@@ -123,7 +124,8 @@ import { EventCertificateComponent } from './event/event-certificate/event-certi
     ExaminersListComponent,
     DissertationComponent,
     CasebookComponent,
-    EventCertificateComponent
+    EventCertificateComponent,
+    PortfolioComponent
   ],
   imports: [
     BrowserModule,
