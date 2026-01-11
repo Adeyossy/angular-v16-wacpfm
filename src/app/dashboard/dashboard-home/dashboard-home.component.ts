@@ -21,6 +21,11 @@ export class DashboardHomeComponent {
       title: "Event",
       description: "",
       link: "/dashboard/events"
+    },
+    {
+      title: "Portfolio",
+      description: "",
+      link: "/dashboard/portfolio"
     }
   ]
 }
