@@ -1,1 +1,9 @@
-<p>portfolio works!</p>
+<div class="wacpfm-card wacpfm-header-card">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-heading-small fw-bold">Your Portfolio</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+</div>
+<br><br>
+<app-card-list *ngFor="let section of sections; index as i" [item]="section"
+[index]="i" [routerLink]="section.title.toLowerCase().replace(' ', '-')"></app-card-list>
