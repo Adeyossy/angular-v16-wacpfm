@@ -64,6 +64,7 @@ import { DissertationComponent } from './exam/dissertation/dissertation.componen
 import { CasebookComponent } from './exam/casebook/casebook.component';
 import { EventCertificateComponent } from './event/event-certificate/event-certificate.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
+import { PortfolioSectionComponent } from './portfolio-section/portfolio-section.component';
 
 @NgModule({
   declarations: [
@@ -125,7 +126,8 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
     DissertationComponent,
     CasebookComponent,
     EventCertificateComponent,
-    PortfolioComponent
+    PortfolioComponent,
+    PortfolioSectionComponent
   ],
   imports: [
     BrowserModule,
