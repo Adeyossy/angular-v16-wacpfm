@@ -1,6 +1,6 @@
 import { FieldValue } from "firebase/firestore";
 
-export interface Portfolio {
+export interface PortfolioSectionItem {
   id: string,
   userId: string,
   email: string,
