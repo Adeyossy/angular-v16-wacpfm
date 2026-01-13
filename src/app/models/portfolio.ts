@@ -1,4 +1,7 @@
 import { FieldValue } from "firebase/firestore";
+import { environment } from "src/environments/environment";
+
+export const PORTFOLIO_COLLECTION = environment.portfolio;
 
 export interface PortfolioSectionItem {
   id: string,
