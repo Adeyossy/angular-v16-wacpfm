@@ -65,6 +65,7 @@ import { CasebookComponent } from './exam/casebook/casebook.component';
 import { EventCertificateComponent } from './event/event-certificate/event-certificate.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { PortfolioSectionComponent } from './portfolio-section/portfolio-section.component';
+import { PortfolioSectionItemComponent } from './portfolio-section-item/portfolio-section-item.component';
 
 @NgModule({
   declarations: [
@@ -127,7 +128,8 @@ import { PortfolioSectionComponent } from './portfolio-section/portfolio-section
     CasebookComponent,
     EventCertificateComponent,
     PortfolioComponent,
-    PortfolioSectionComponent
+    PortfolioSectionComponent,
+    PortfolioSectionItemComponent
   ],
   imports: [
     BrowserModule,
