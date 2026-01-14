@@ -1,1 +1,9 @@
-<p>portfolio-section works!</p>
+<div class="wacpfm-card wacpfm-header-card">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-heading-small fw-bold">Portfolio: Section {{ section | async }}</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+</div>
+<br><br>
+<app-card-list *ngFor="let item of sectionItemsList | async; index as i"
+[item]="item" [index]="i"></app-card-list>
