@@ -12,8 +12,9 @@ import { PortfolioSectionItem } from '../models/portfolio';
 })
 export class PortfolioSectionComponent implements OnInit {
   section = of("");
-  sectionItems: Observable<PortfolioSectionItem[]> = of([]);
-  sectionItemsList: Observable<CardList[]> = of([]);
+  sectionItems$: Observable<PortfolioSectionItem[]> = of([]);
+  sectionItemsList: { [index: string]: CardList } = {};
+  sectionItemsList$: Observable<CardList[]> = of([]);
 
   constructor (
     private portfolioService: PortfolioService,
@@ -25,20 +26,29 @@ export class PortfolioSectionComponent implements OnInit {
       map(paramMap => paramMap.get("section") ? paramMap.get("section")! : "")
     );
 
-    this.sectionItems = this.section.pipe(
+    this.sectionItems$ = this.section.pipe(
       concatMap(this.portfolioService.getUserPortfolioSection$)
     );
 
-    this.sectionItemsList = this.sectionItems.pipe(
+    this.sectionItemsList$ = this.sectionItems$.pipe(
       map(items => items.map(this.toCardList))
     );
   }
 
   toCardList = (sectionItem: PortfolioSectionItem): CardList => {
-    return {
+    const existing = this.sectionItemsList[sectionItem.id];
+    if (existing) return existing;
+    
+    const cardList: CardList = {
       title: sectionItem.title,
       subtitle: sectionItem.description,
       text: sectionItem.category
-    }
+    };
+    this.sectionItemsList[sectionItem.id] = cardList;
+    return cardList;
+  }
+
+  trackBy = (index: number, item: PortfolioSectionItem) => {
+    return item.id;
   }
 }

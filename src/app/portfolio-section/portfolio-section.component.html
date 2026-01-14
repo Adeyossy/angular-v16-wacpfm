@@ -5,5 +5,5 @@
   </div>
 </div>
 <br><br>
-<app-card-list *ngFor="let item of sectionItemsList | async; index as i"
-[item]="item" [index]="i"></app-card-list>
+<app-card-list *ngFor="let item of sectionItems$ | async; index as i"
+[item]="toCardList(item)" [index]="i" [routerLink]="item.id"></app-card-list>
