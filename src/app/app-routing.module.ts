@@ -38,6 +38,7 @@ import { PaymentsComponent } from './admin/payments/payments.component';
 import { AdminActionComponent } from './exam/admin-action/admin-action.component';
 import { EventCertificateComponent } from './event/event-certificate/event-certificate.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
+import { PortfolioSectionComponent } from './portfolio-section/portfolio-section.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
@@ -84,6 +85,7 @@ const routes: Routes = [
       { path: "events/:eventId/register", component: RegistrationComponent },
       { path: "events/:eventId/register/pay", component: EventPaymentComponent },
       { path: "portfolio", component: PortfolioComponent  },
+      { path: "portfolio/:section", component: PortfolioSectionComponent  },
       {
         path: "**", component: NotFoundComponent, title: "Not found | Faculty of Family Medicine App"
       }
