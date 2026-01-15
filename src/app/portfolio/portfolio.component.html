@@ -5,5 +5,7 @@
   </div>
 </div>
 <br><br>
-<app-card-list *ngFor="let section of sections; index as i" [item]="section"
-[index]="i" [routerLink]="section.title.toLowerCase().replace(' ', '-')"></app-card-list>
+<div class="wacpfm-card">
+  <app-card-list *ngFor="let section of sections; index as i" [item]="section" [index]="i"
+    [routerLink]="section.title.split(' ')[1]"></app-card-list>
+</div>
