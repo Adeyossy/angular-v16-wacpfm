@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CardList } from '../widgets/card-list/card-list.component';
 import { concatMap, map, Observable, of } from 'rxjs';
 import { PortfolioService } from '../services/portfolio.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PortfolioSectionItem } from '../models/portfolio';
 
 @Component({
@@ -15,10 +15,12 @@ export class PortfolioSectionComponent implements OnInit {
   sectionItems$: Observable<PortfolioSectionItem[]> = of([]);
   sectionItemsList: { [index: string]: CardList } = {};
   sectionItemsList$: Observable<CardList[]> = of([]);
+  newItem$: Observable<string> | null = null;
 
   constructor (
     private portfolioService: PortfolioService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +50,12 @@ export class PortfolioSectionComponent implements OnInit {
     return cardList;
   }
 
-  trackBy = (index: number, item: PortfolioSectionItem) => {
-    return item.id;
+  addNewItem$ = () => {
+    this.newItem$ = this.portfolioService.createPortfolioSectionItemRef$().pipe(
+      map(id => {
+        this.router.navigate([this.router.url, id]);
+        return id;
+      })
+    );
   }
 }

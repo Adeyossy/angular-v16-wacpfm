@@ -3,7 +3,22 @@
     <h1 class="wacpfm-heading-small fw-bold">Portfolio: Section {{ section | async }}</h1>
     <div class="wacpfm-underline"></div>
   </div>
+  <br>
+  <button class="small icon" *ngIf="newItem$ === null; else wait" (click)="addNewItem$()">
+    <i class="bi bi-plus-circle-fill"></i> Add New Item
+  </button>
+  <ng-template #wait>
+    <p class="wacpfm-subheading" *ngIf="newItem$ | async as newItemId; else loading"></p>
+    <ng-template #loading>
+      <app-loading-circles></app-loading-circles>
+    </ng-template>
+  </ng-template>
 </div>
 <br><br>
-<app-card-list *ngFor="let item of sectionItems$ | async; index as i"
-[item]="toCardList(item)" [index]="i" [routerLink]="item.id"></app-card-list>
+<div class="wacpfm-card" *ngIf="sectionItems$ | async as items; else loading">
+  <app-card-list *ngFor="let item of items; index as i"
+  [item]="toCardList(item)" [index]="i" [routerLink]="item.id"></app-card-list>
+</div>
+<ng-template #loading>
+  <app-loading-circles></app-loading-circles>
+</ng-template>
