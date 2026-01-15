@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { DEFAULT_PORTFOLIO_SECTION_ITEM, PORTFOLIO_COLLECTION, PortfolioSectionItem } from '../models/portfolio';
-import { where } from 'firebase/firestore';
+import { doc, where } from 'firebase/firestore';
 import { concatMap, map } from 'rxjs';
 
 @Injectable({
@@ -11,13 +11,22 @@ export class PortfolioService {
 
   constructor(private authService: AuthService) { }
 
-  getPortfolioSectionItem$ = (itemId: string) => {
-    return this.authService.getDocById$<PortfolioSectionItem>(PORTFOLIO_COLLECTION, itemId).pipe(
-      map(item => item !== null ? 
-        item : 
-        JSON.parse(JSON.stringify(DEFAULT_PORTFOLIO_SECTION_ITEM)) as PortfolioSectionItem
-      )
+  createPortfolioSectionItemRef$ = () => {
+    return this.authService.getDocId$(PORTFOLIO_COLLECTION).pipe(
+      map(doc => doc.id)
     );
+  }
+
+  getUser$ = () => {
+    return this.authService.getFirebaseUser$();
+  }
+
+  getPortfolioSectionItem$ = (itemId: string) => {
+    return this.authService.getDocById$<PortfolioSectionItem>(PORTFOLIO_COLLECTION, itemId);
+  }
+
+  savePortfolioSectionItem$ = (item: PortfolioSectionItem) => {
+    return this.authService.addDocWithID$(PORTFOLIO_COLLECTION, item.id, item, true);
   }
 
   getPortfolioSection$ = (section: string, userId: string) => {
@@ -32,7 +41,7 @@ export class PortfolioService {
 
   getUserPortfolioSection$ = (section: string) => {
     return this.authService.getFirebaseUser$().pipe(
-      concatMap(user => this.getPortfolioSection$(section, user.email!))
+      concatMap(user => this.getPortfolioSection$(section.toString(), user.uid))
     );
   }
 

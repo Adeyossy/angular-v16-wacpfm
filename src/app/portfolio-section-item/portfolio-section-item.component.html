@@ -4,6 +4,7 @@
       <h1 class="wacpfm-heading-small fw-bold">Portfolio Item</h1>
       <div class="wacpfm-underline"></div>
     </div>
+    <br>
     <p class="wacpfm-subheading">{{item.title}}</p>
   </div>
   <br><br>
@@ -15,8 +16,23 @@
   <input type="text" name="item-description" id="wacpfm-item-description" required 
   [(ngModel)]="item.description" placeholder="Brief description on this item">
   <br><br>
+  <label for="wacpfm-item-category">Category of Portfolio</label>
+  <app-select [items]="['Membership', 'Fellowship']" (emitItems)="item.category = $event[0]"
+  [itemsSelectionState]="toSelectionState(['Membership', 'Fellowship'], item.category)"
+  mode="single"></app-select>
+  <br><br>
   <app-file-upload [uploads]="item.files" [path]="getPath(item)"
   (uploadsEmitter)="item.files = $event"></app-file-upload>
+  <br><br>
+  <button class="wacpfm-primary-button w-100" *ngIf="itemSavingStatus$ === null; else saving" 
+  (click)="saveItem$(item)">Save Portfolio Item</button>
+  <ng-template #saving>
+    <button class="w-100" *ngIf="itemSavingStatus$ | async as url; else loading"
+    [routerLink]="url">Continue</button>
+    <ng-template #loading>
+      <app-loading-circles></app-loading-circles>
+    </ng-template>
+  </ng-template>
 </ng-container>
 <ng-template #loading>
   <div class="wacpfm-card">

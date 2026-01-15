@@ -8,7 +8,7 @@ export interface PortfolioSectionItem {
   id: string,
   userId: string,
   email: string,
-  category: "Membership" | "Fellowship" | "",
+  category: string,
   title: string,
   description: string,
   files: Upload[],
