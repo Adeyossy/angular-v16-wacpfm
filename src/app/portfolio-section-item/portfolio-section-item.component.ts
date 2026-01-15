@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { concatMap, map, Observable, of } from 'rxjs';
-import { PortfolioSectionItem } from '../models/portfolio';
+import { PORTFOLIO_COLLECTION, PortfolioSectionItem } from '../models/portfolio';
 import { PortfolioService } from '../services/portfolio.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -28,5 +28,11 @@ export class PortfolioSectionItemComponent implements OnInit {
     this.item$ = itemId$.pipe(
       concatMap(this.portfolioService.getPortfolioSectionItem$)
     );
+  }
+
+  initialiseItem$ = () => {}
+
+  getPath = (item: PortfolioSectionItem) => {
+    return `${PORTFOLIO_COLLECTION}/${item.userId}/${item.id}`;
   }
 }

@@ -1,1 +1,29 @@
-<p>portfolio-section-item works!</p>
+<ng-container *ngIf="item$ | async as item; else loading">
+  <div class="wacpfm-card wacpfm-header-card">
+    <div class="wacpfm-heading-underline">
+      <h1 class="wacpfm-heading-small fw-bold">Portfolio Item</h1>
+      <div class="wacpfm-underline"></div>
+    </div>
+    <p class="wacpfm-subheading">{{item.title}}</p>
+  </div>
+  <br><br>
+  <label for="wacpfm-item-title">Title of this Portfolio Item:</label>
+  <input type="text" name="item-title" id="wacpfm-item-title" required 
+  [(ngModel)]="item.title" placeholder="">
+  <br><br>
+  <label for="wacpfm-item-description">Details of this Portfolio Item:</label>
+  <input type="text" name="item-description" id="wacpfm-item-description" required 
+  [(ngModel)]="item.description" placeholder="Brief description on this item">
+  <br><br>
+  <app-file-upload [uploads]="item.files" [path]="getPath(item)"
+  (uploadsEmitter)="item.files = $event"></app-file-upload>
+</ng-container>
+<ng-template #loading>
+  <div class="wacpfm-card">
+    <app-loading-ui></app-loading-ui>
+    <br>
+    <div class="w-75"><app-loading-ui></app-loading-ui></div>
+    <br>
+    <div class="w-50"><app-loading-ui></app-loading-ui></div>
+  </div>
+</ng-template>
