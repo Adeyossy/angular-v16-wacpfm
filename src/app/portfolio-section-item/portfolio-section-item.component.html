@@ -8,14 +8,14 @@
     <p class="wacpfm-subheading">{{item.title}}</p>
   </div>
   <br><br>
-  <label for="wacpfm-item-title">Title of this Portfolio Item:</label>
+  <!-- <label for="wacpfm-item-title">Title of this Portfolio Item:</label>
   <input type="text" name="item-title" id="wacpfm-item-title" required 
   [(ngModel)]="item.title" placeholder="">
-  <br><br>
-  <label for="wacpfm-item-description">Details of this Portfolio Item:</label>
+  <br><br> -->
+  <!-- <label for="wacpfm-item-description">Details of this Portfolio Item:</label>
   <input type="text" name="item-description" id="wacpfm-item-description" required 
   [(ngModel)]="item.description" placeholder="Brief description on this item">
-  <br><br>
+  <br><br> -->
   <label for="wacpfm-item-category">Category of Portfolio</label>
   <app-select [items]="['Membership', 'Fellowship']" (emitItems)="item.category = $event[0]"
   [itemsSelectionState]="toSelectionState(['Membership', 'Fellowship'], item.category)"
