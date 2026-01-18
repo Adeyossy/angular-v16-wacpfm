@@ -97,6 +97,11 @@ export class ExamService extends CacheService {
     return this.queryItem$<Examiner>(EXAMINERS, [where("examAlias", "==", examAlias)])
   }
 
+  queryAllExaminers$(): Observable<Examiner[]> {
+    return this.authService.getCollection$(EXAMINERS);
+    // return this.queryItem$<Examiner>(EXAMINERS, [where("examAlias", "==", examAlias)])
+  }
+
   queryExam$(examAlias: string): Observable<Exam[]> {
     return this.queryCacheFirst$<Exam & {[key: string]: number}>(EXAMS, "examAlias", "==", examAlias);
   }

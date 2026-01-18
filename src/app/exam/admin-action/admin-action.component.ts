@@ -34,9 +34,7 @@ export class AdminActionComponent implements OnInit {
       concatMap(examAlias => this.examService.queryExam$(examAlias))
     );
 
-    this.examiners$ = examAlias$.pipe(
-      concatMap(examAlias => this.examService.queryExaminers$(examAlias))
-    );
+    this.examiners$ = this.examService.queryAllExaminers$();
 
     this.examinersList$ = this.examiners$.pipe(
       concatMap(examiners => {
