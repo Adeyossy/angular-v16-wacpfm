@@ -1,11 +1,11 @@
 <ng-container *ngIf="item$ | async as item; else loading">
   <div class="wacpfm-card wacpfm-header-card">
     <div class="wacpfm-heading-underline">
-      <h1 class="wacpfm-heading-small fw-bold">Portfolio Item</h1>
+      <h1 class="wacpfm-heading-small fw-bold">Portfolio Section {{ item.section }}</h1>
       <div class="wacpfm-underline"></div>
     </div>
     <br>
-    <p class="wacpfm-subheading">{{item.title}}</p>
+    <p class="wacpfm-subheading">{{getSectionDescription(item.section)}}</p>
   </div>
   <br><br>
   <!-- <label for="wacpfm-item-title">Title of this Portfolio Item:</label>
@@ -17,7 +17,7 @@
   [(ngModel)]="item.description" placeholder="Brief description on this item">
   <br><br> -->
   <label for="wacpfm-item-category">Category of Portfolio</label>
-  <app-select [items]="['Membership', 'Fellowship']" (emitItems)="item.category = $event[0]"
+  <app-select [items]="['Membership', 'Fellowship']" (emitItems)="item.category = updateCategory($event)"
   [itemsSelectionState]="toSelectionState(['Membership', 'Fellowship'], item.category)"
   mode="single"></app-select>
   <br><br>

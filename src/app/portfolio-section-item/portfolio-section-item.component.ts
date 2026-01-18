@@ -4,6 +4,7 @@ import { DEFAULT_PORTFOLIO_SECTION_ITEM, PORTFOLIO_COLLECTION, PortfolioSectionI
 import { PortfolioService } from '../services/portfolio.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'firebase/auth';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-portfolio-section-item',
@@ -16,10 +17,11 @@ export class PortfolioSectionItemComponent implements OnInit {
   itemSavingStatus$: Observable<string> | null = null;
 
   constructor(
-    private portfolioService: PortfolioService, 
+    private portfolioService: PortfolioService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
-  ) {}
+    private router: Router,
+    private helper: HelperService
+  ) { }
 
   ngOnInit(): void {
     this.itemId$ = this.activatedRoute.paramMap.pipe(
@@ -31,11 +33,15 @@ export class PortfolioSectionItemComponent implements OnInit {
 
     this.item$ = this.itemId$.pipe(
       concatMap(this.portfolioService.getPortfolioSectionItem$),
-      concatMap(item => item !== null ? 
-        of(item) : 
+      concatMap(item => item !== null ?
+        of(item) :
         this.initialiseItem$()
       )
     );
+  }
+
+  getSectionDescription = (sectionId: string) => {
+    return this.portfolioService.getSection(sectionId).description;
   }
 
   getSubsections = (sectionId: string) => {
@@ -45,6 +51,14 @@ export class PortfolioSectionItemComponent implements OnInit {
   updateItemId = (item: PortfolioSectionItem, id: string) => {
     item.id = id;
     return item;
+  }
+
+  updateCategory = (categories: string[]) => {
+    if (categories.length === 0) {
+      return "";
+    } else {
+      return categories[0];
+    }
   }
 
   updateItemUserDetails = (item: PortfolioSectionItem, user: User) => {
@@ -76,20 +90,35 @@ export class PortfolioSectionItemComponent implements OnInit {
   getPath = (item: PortfolioSectionItem) => {
     return `${PORTFOLIO_COLLECTION}/${item.userId}/${item.id}`;
   }
-  
+
   toSelectionState(items: string[], value: string) {
     return items.map(item => item.toLowerCase().trim() === value.toLowerCase().trim())
   }
 
   saveItem$ = (item: PortfolioSectionItem) => {
-    this.itemSavingStatus$ = this.portfolioService.savePortfolioSectionItem$(item).pipe(
-      map(_v => {
-        const url = this.router.url.split("/");
-        url.pop();
-        
-        this.router.navigateByUrl(url.join("/"));
-        return "..";
-      })
-    );
+    let error = "";
+    if (item.category === "") error = "Choose if this portfolio is for Membership or Fellowship";
+    if (item.files.length === 0) error = "Upload the appropriate portfolio item.";
+    if (item.files.length > 1) error = `Only one of ${item.subsection} should be uploaded here. 
+    Delete the extra item(s) till one remains.`;
+
+    if (error !== "") {
+      this.helper.setDialog({
+        title: "Error Detected",
+        message: error,
+        buttonText: "Close"
+      });
+      this.helper.toggleDialog(0);
+    } else {
+      this.itemSavingStatus$ = this.portfolioService.savePortfolioSectionItem$(item).pipe(
+        map(_v => {
+          const url = this.router.url.split("/");
+          url.pop();
+
+          this.router.navigateByUrl(url.join("/"));
+          return "..";
+        })
+      );
+    }
   }
 }
