@@ -3,12 +3,13 @@ import { AuthService } from './auth.service';
 import { DEFAULT_PORTFOLIO_SECTION_ITEM, PORTFOLIO_COLLECTION, PortfolioSectionItem } from '../models/portfolio';
 import { doc, where } from 'firebase/firestore';
 import { concatMap, map } from 'rxjs';
+import { SECTIONS } from '../models/portfolio-section';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PortfolioService {
-
+  
   constructor(private authService: AuthService) { }
 
   createPortfolioSectionItemRef$ = () => {
@@ -56,5 +57,123 @@ export class PortfolioService {
     return this.authService.getFirebaseUser$().pipe(
       concatMap(user => this.getPortfolioSections$(user.email!))
     );
+  }
+
+  getSection = (sectionId: string) => {
+    const sections = SECTIONS.filter(section => section.id === sectionId);
+    if (sections.length === 0) throw "section does not exist";
+    return sections[0]
+  }
+
+  getSubsections = (sectionId: string) => {
+    const section = this.getSection(sectionId);
+    return section.subsections;
+  }
+
+  getSubsection = (sectionId: string, subsection: string) => {
+    return this.getSubsections(sectionId).find(sub => sub.subsection === subsection);
+  }
+
+  getNonzeroCategorySubsections = (sectionId: string, category: "membership" | "fellowship") => {
+    return this.getSubsections(sectionId).filter(subsection => subsection[category] > 0);
+  }
+
+  getNonzeroCategorySubsection = (
+    sectionId: string, 
+    category: "membership" | "fellowship",
+    subsection: string
+  ) => {
+    return this.getSubsections(sectionId).find(
+      sub => sub.subsection === subsection && sub[category] > 0
+    );
+  }
+
+  getNonzeroMembershipSubsections = (sectionId: string) => {
+    return this.getSubsections(sectionId).filter(subsection => subsection.membership > 0);
+  }
+
+  getNonzeroMembershipSubsection = (sectionId: string, subsection: string) => {
+    return this.getNonzeroMembershipSubsections(sectionId)
+    .find(sub => sub.subsection === subsection && sub.membership > 0);
+  }
+
+  calculateSubsectionScore = (
+    subsectionItems: PortfolioSectionItem[],
+    sectionId: string,
+    subsection: string,
+    category: "membership" | "fellowship"
+  ): number => {
+    // Get the candidate's portfolio items and filter to the specific subsection and category
+    const portfolioSubsection = subsectionItems.filter(
+      psi => psi.section === sectionId && 
+      psi.subsection === subsection && 
+      psi.category === category
+    );
+
+    const candidateSubsectionCount = portfolioSubsection.length;
+
+    const expectedSubsectionCount = this.getNonzeroCategorySubsection(
+      sectionId,
+      category,
+      subsection
+    );
+
+    if (expectedSubsectionCount !== undefined) {
+      const diff = candidateSubsectionCount - expectedSubsectionCount[category];
+      
+      if (diff >= 0) {
+        return 10;
+      } else {
+        if (diff < 0 && diff >= -2) {
+          return 6;
+        } else {
+          return 0;
+        }
+      }
+    } else throw "nonzero category subsection could not be found";
+  }
+
+  calculateSectionScore = (
+    sectionItems: PortfolioSectionItem[],
+    sectionId: string,
+    category: "membership" | "fellowship"
+  ) => {
+    const portfolioSection = SECTIONS.find(section => section.id === sectionId);
+    if (portfolioSection === undefined) throw "incorrect sectionId";
+    const subsectionScores = portfolioSection.subsections.map(subsection => {
+      const subsectionText = subsection.subsection;
+      const candidateSubsectionItems = sectionItems.filter(
+        si => si.subsection === subsectionText
+      )
+      return this.calculateSubsectionScore(
+        candidateSubsectionItems,
+        sectionId,
+        subsectionText,
+        category
+      );
+    });
+
+    // Calculate the total score for all subsections under this section.
+    const totalScore = subsectionScores.reduce((previous, current) => previous + current);
+    
+    // Section score is an average of subsection scores. A section has maximum of 10.
+    const sectionScore = totalScore / subsectionScores.length;
+    return sectionScore;
+  }
+
+  calculatePortfolioScore = (
+    portfolioSectionItems: PortfolioSectionItem[],
+    category: "membership" | "fellowship"
+  ) => {
+    const sectionScores = SECTIONS.map(section => {
+      const id = section.id;
+      const candidateSectionItems = portfolioSectionItems.filter(
+        psi => psi.section === id && psi.category === category
+      );
+      return this.calculateSectionScore(candidateSectionItems, id, category);
+    });
+
+    const sumOfAllSections = sectionScores.reduce((pre, curr) => pre + curr);
+    return sumOfAllSections / sectionScores.length;
   }
 }
