@@ -21,6 +21,14 @@
   [itemsSelectionState]="toSelectionState(['Membership', 'Fellowship'], item.category)"
   mode="single"></app-select>
   <br><br>
+  <label for="wacpfm-item-subsection">What item is this?</label>
+  <select name="wacpfm-item-subsection" id="wacpfm-item-subsection"
+    [(ngModel)]="item.subsection">
+    <option *ngFor="let subsection of getSubsections(item.section)" 
+    [ngValue]="subsection.subsection" (click)="item.section = subsection.subsection"
+      [selected]="item.section === subsection.subsection">{{ subsection.subsection }}</option>
+  </select>
+  <br><br>
   <app-file-upload [uploads]="item.files" [path]="getPath(item)"
   (uploadsEmitter)="item.files = $event"></app-file-upload>
   <br><br>

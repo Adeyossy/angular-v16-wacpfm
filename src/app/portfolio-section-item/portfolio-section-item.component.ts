@@ -38,6 +38,10 @@ export class PortfolioSectionItemComponent implements OnInit {
     );
   }
 
+  getSubsections = (sectionId: string) => {
+    return this.portfolioService.getSubsections(sectionId);
+  }
+
   updateItemId = (item: PortfolioSectionItem, id: string) => {
     item.id = id;
     return item;
