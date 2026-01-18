@@ -4,6 +4,7 @@ import { concatMap, map, Observable, of } from 'rxjs';
 import { PortfolioService } from '../services/portfolio.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PortfolioSectionItem } from '../models/portfolio';
+import { FieldValue, serverTimestamp, Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-portfolio-section',
@@ -40,10 +41,12 @@ export class PortfolioSectionComponent implements OnInit {
   toCardList = (sectionItem: PortfolioSectionItem): CardList => {
     const existing = this.sectionItemsList[sectionItem.id];
     if (existing) return existing;
+
+    const timestamp = sectionItem.submission_timestamp as unknown as Timestamp;
     
     const cardList: CardList = {
-      title: sectionItem.title,
-      subtitle: sectionItem.description,
+      title: sectionItem.subsection,
+      subtitle: timestamp.toDate().toLocaleString("en-NG"),
       text: sectionItem.category
     };
     this.sectionItemsList[sectionItem.id] = cardList;
