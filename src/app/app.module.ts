@@ -66,6 +66,7 @@ import { EventCertificateComponent } from './event/event-certificate/event-certi
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { PortfolioSectionComponent } from './portfolio-section/portfolio-section.component';
 import { PortfolioSectionItemComponent } from './portfolio-section-item/portfolio-section-item.component';
+import { AdminSectionsComponent } from './exam/admin-sections/admin-sections.component';
 
 @NgModule({
   declarations: [
@@ -129,7 +130,8 @@ import { PortfolioSectionItemComponent } from './portfolio-section-item/portfoli
     EventCertificateComponent,
     PortfolioComponent,
     PortfolioSectionComponent,
-    PortfolioSectionItemComponent
+    PortfolioSectionItemComponent,
+    AdminSectionsComponent
   ],
   imports: [
     BrowserModule,
