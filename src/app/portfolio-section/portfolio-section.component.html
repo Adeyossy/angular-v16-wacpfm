@@ -16,6 +16,8 @@
 </div>
 <br><br>
 <div class="wacpfm-card" *ngIf="sectionItems$ | async as items; else loading">
+  <h1 class="wacpfm-subheading fw-bold">Items in this Section</h1>
+  <br><hr><br>
   <app-card-list *ngFor="let item of items; index as i"
   [item]="toCardList(item)" [index]="i" [routerLink]="item.id"></app-card-list>
 </div>
