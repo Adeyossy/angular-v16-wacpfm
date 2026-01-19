@@ -7,6 +7,7 @@ import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { Candidate, CANDIDATES, FellowshipExamRecord, MembershipExamRecord } from '../models/candidate';
 import { HelperService } from './helper.service';
 import { CacheService } from './cache.service';
+import { ParamMap } from '@angular/router';
 
 type Cache = {
   [collection: string]: unknown[];
@@ -62,6 +63,15 @@ export class ExamService extends CacheService {
   }
 
   refineQuery<Type>(exams: Exam[]) {}
+
+  parseExamAliasFromRoute$ = (paramMap$: Observable<ParamMap>) => {
+    return paramMap$.pipe(
+      map(paramMap => {
+        const examAlias = paramMap.get("examAlias");
+        return examAlias !== null ? examAlias : ""
+      })
+    );
+  }
 
   queryCandidate$<Type>(examAlias: string, candidateId: string, instance: Type) {
     return this.queryItem$<Type>(CANDIDATES, [
