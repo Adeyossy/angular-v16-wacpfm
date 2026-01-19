@@ -68,6 +68,7 @@ import { PortfolioSectionComponent } from './portfolio-section/portfolio-section
 import { PortfolioSectionItemComponent } from './portfolio-section-item/portfolio-section-item.component';
 import { AdminSectionsComponent } from './exam/admin-sections/admin-sections.component';
 import { AdminCandidatesComponent } from './exam/admin-candidates/admin-candidates.component';
+import { PortfolioSubsectionComponent } from './portfolio-subsection/portfolio-subsection.component';
 
 @NgModule({
   declarations: [
@@ -133,7 +134,8 @@ import { AdminCandidatesComponent } from './exam/admin-candidates/admin-candidat
     PortfolioSectionComponent,
     PortfolioSectionItemComponent,
     AdminSectionsComponent,
-    AdminCandidatesComponent
+    AdminCandidatesComponent,
+    PortfolioSubsectionComponent
   ],
   imports: [
     BrowserModule,
