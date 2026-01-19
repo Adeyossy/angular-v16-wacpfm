@@ -1,1 +1,24 @@
-<p>portfolio-subsection works!</p>
+<ng-container *ngIf="subsections$ | async as subsections; else loading">
+  <div class="wacpfm-card wacpfm-header-card">
+    <div class="wacpfm-heading-underline">
+      <h1 class="wacpfm-heading-small fw-bold">Your Portfolio: Section {{ sectionId$ | async }}</h1>
+      <div class="wacpfm-underline"></div>
+    </div>
+  </div>
+  <br><br>
+  <div class="wacpfm-card">
+    <h1 class="wacpfm-heading-small fw-bold">Subsections</h1>
+    <br>
+    <hr>
+    <br>
+    <app-card-list *ngFor="let subsection of subsections; index as i" [item]="subsection" [index]="i"
+      [routerLink]="subsection.title.replace(/\W/g, '')"></app-card-list>
+  </div>
+</ng-container>
+<ng-template #loading>
+  <div class="w-100"><app-loading-ui></app-loading-ui></div>
+  <br><br>
+  <div class="w-75"><app-loading-ui></app-loading-ui></div>
+  <br><br>
+  <div class="w-50"><app-loading-ui></app-loading-ui></div>
+</ng-template>
