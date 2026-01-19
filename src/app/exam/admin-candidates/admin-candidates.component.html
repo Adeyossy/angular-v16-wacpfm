@@ -1,1 +1,17 @@
-<p>admin-candidates works!</p>
+<div class="wacpfm-card wacpfm-header-card">
+  <div class="wacpfm-heading-underline">
+    <h1 class="wacpfm-heading-small fw-bold">All Candidates</h1>
+    <div class="wacpfm-underline"></div>
+  </div>
+</div>
+<br><br>
+<div class="wacpfm-card" *ngIf="candidates$ | async as candidates">
+  <h1 class="wacpfm-heading-small fw-bold">Candidates</h1>
+  <br>
+  <hr><br>
+  <app-card-list *ngFor="let candidate of candidates; index as i" [item]="toCardList(candidate)">
+    <div class="wacpfm-quick-buttons">
+      <button class="icon small" routerLink="{{candidate}}">View Portfolio</button>
+    </div>
+  </app-card-list>
+</div>
