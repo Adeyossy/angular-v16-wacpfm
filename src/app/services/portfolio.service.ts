@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { DEFAULT_PORTFOLIO_SECTION_ITEM, PORTFOLIO_COLLECTION, PortfolioSectionItem } from '../models/portfolio';
 import { doc, where } from 'firebase/firestore';
-import { concatMap, map } from 'rxjs';
+import { concatMap, map, Observable } from 'rxjs';
 import { SECTIONS } from '../models/portfolio-section';
+import { ParamMap } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +57,15 @@ export class PortfolioService {
   getUserPortfolioSections$ = () => {
     return this.authService.getFirebaseUser$().pipe(
       concatMap(user => this.getPortfolioSections$(user.email!))
+    );
+  }
+
+  parseSectionFromRoute$ = (paramMap$: Observable<ParamMap>) => {
+    return paramMap$.pipe(
+      map(paramMap => {
+        const sectionId = paramMap.get("section");
+        return sectionId !== null ? sectionId : ""
+      })
     );
   }
 
