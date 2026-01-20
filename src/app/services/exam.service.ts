@@ -73,7 +73,7 @@ export class ExamService extends CacheService {
     );
   }
 
-  queryCandidate$<Type>(examAlias: string, candidateId: string, instance: Type) {
+  queryCandidate$ = <Type>(examAlias: string, candidateId: string, instance: Type) => {
     return this.queryItem$<Type>(CANDIDATES, [
       where("examAlias", "==", examAlias),
       where("candidateId", "==", candidateId)
@@ -85,13 +85,13 @@ export class ExamService extends CacheService {
     )
   }
 
-  queryCandidates$(examAlias: string) {
+  queryCandidates$ = (examAlias: string) => {
     return this.queryItem$<MembershipExamRecord | FellowshipExamRecord>(
       CANDIDATES, [where("examAlias", "==", examAlias)]
     );
   }
 
-  queryExaminer$(examAlias: string, examinerId: string) {
+  queryExaminer$ = (examAlias: string, examinerId: string) => {
     return this.queryItem$<Examiner>(EXAMINERS, [
       where("examAlias", "==", examAlias),
       where("userId", "==", examinerId)
@@ -103,32 +103,32 @@ export class ExamService extends CacheService {
     )
   }
 
-  queryExaminers$(examAlias: string): Observable<Examiner[]> {
+  queryExaminers$ = (examAlias: string): Observable<Examiner[]> => {
     return this.queryItem$<Examiner>(EXAMINERS, [where("examAlias", "==", examAlias)])
   }
 
-  queryAllExaminers$(): Observable<Examiner[]> {
+  queryAllExaminers$ = (): Observable<Examiner[]> => {
     return this.authService.getCollection$(EXAMINERS);
     // return this.queryItem$<Examiner>(EXAMINERS, [where("examAlias", "==", examAlias)])
   }
 
-  queryExam$(examAlias: string): Observable<Exam[]> {
+  queryExam$ = (examAlias: string): Observable<Exam[]> => {
     return this.queryCacheFirst$<Exam & {[key: string]: number}>(EXAMS, "examAlias", "==", examAlias);
   }
 
-  parseIdToExamId(id: string, examAlias: string) {
+  parseIdToExamId = (id: string, examAlias: string) => {
     return id.concat("_", examAlias);
   }
 
-  parseCandidateExamId(candidate: Candidate) {
+  parseCandidateExamId = (candidate: Candidate) => {
     return candidate.candidateId.concat("_", candidate.examAlias);
   }
 
-  parseExaminerExamId(examiner: Examiner) {
+  parseExaminerExamId = (examiner: Examiner) => {
     return examiner.userId.concat("_", examiner.examAlias);
   }
 
-  showDoneMessage() {
+  showDoneMessage = () => {
     this.helper.setDialog({
       title: "Registration Complete",
       message: "Your registration is complete. Click the button below to continue.",
@@ -138,7 +138,7 @@ export class ExamService extends CacheService {
     this.helper.toggleDialog(0);
   }
 
-  alert() {
+  alert = () => {
     this.helper.setDialog({
       title: "Missing Upload",
       message: "It seems you have not uploaded a required file. Maybe you picked a file but forgot to upload it?",
@@ -309,7 +309,7 @@ export class ExamService extends CacheService {
     }
   }
 
-  scoreExaminer(examiner: Examiner) {
+  scoreExaminer = (examiner: Examiner) => {
     let score = 0;
 
     // 1. score wacp membership status
