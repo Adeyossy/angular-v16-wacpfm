@@ -30,4 +30,8 @@ export class PortfolioSubsectionComponent implements OnInit {
       })))
     )
   }
+
+  replaceSubsection = (subsection: string) => {
+    return subsection.replace(/\W/g, '');
+  }
 }

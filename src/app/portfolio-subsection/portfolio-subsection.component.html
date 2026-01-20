@@ -12,7 +12,7 @@
     <hr>
     <br>
     <app-card-list *ngFor="let subsection of subsections; index as i" [item]="subsection" [index]="i"
-      [routerLink]="subsection.title.replace(/\W/g, '')"></app-card-list>
+      [routerLink]="replaceSubsection(subsection.title)"></app-card-list>
   </div>
 </ng-container>
 <ng-template #loading>
