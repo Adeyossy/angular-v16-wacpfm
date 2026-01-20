@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CardList } from '../widgets/card-list/card-list.component';
 import { PortfolioService } from '../services/portfolio.service';
 import { PortfolioSection, SECTIONS } from '../models/portfolio-section';
+import { concatMap, map, Observable, of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { USERID_ROUTE_PARAM } from '../app-routing.module';
+import { PortfolioSectionItem } from '../models/portfolio';
 
 @Component({
   selector: 'app-portfolio',
@@ -9,6 +13,8 @@ import { PortfolioSection, SECTIONS } from '../models/portfolio-section';
   styleUrls: ['./portfolio.component.css']
 })
 export class PortfolioComponent implements OnInit {
+  userId$ = of("");
+  portfolioItems$: Observable<PortfolioSectionItem[]> = of([]);
   sections: CardList[] = [
     {
       title: "Section 3",
@@ -47,10 +53,33 @@ export class PortfolioComponent implements OnInit {
     }
   ];
 
-  constructor (private portfolioService: PortfolioService) {}
+  constructor (
+    private portfolioService: PortfolioService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.sections = SECTIONS.map(this.toCardList)
+    this.userId$ = this.portfolioService.parseParamFromRoute$(
+      this.activatedRoute.paramMap,
+      USERID_ROUTE_PARAM
+    ).pipe(
+      concatMap(userId => {
+        if (userId === "") {
+          return this.portfolioService.getUser$().pipe(
+            map(user => {
+              this.portfolioItems$ = this.portfolioService.getPortfolioSections$(user.uid);
+              return user.uid;
+            })
+          )
+        } else {
+          this.portfolioItems$ = this.portfolioService.getPortfolioSections$(userId)
+          return of(userId)};
+        }
+      )
+    );
+
+    this.sections = SECTIONS.map(this.toCardList);
+    // const allItems = ;
   }
 
   toCardList = (section: PortfolioSection): CardList => {
@@ -59,5 +88,11 @@ export class PortfolioComponent implements OnInit {
       subtitle: section.description,
       text: "-"
     }
+  }
+
+  extractSectionId = (title: string) => title.split(' ')[1]
+
+  getPortfolioScore = (items: PortfolioSectionItem[], sectionId: string) => {
+    return this.portfolioService.calculateSectionScore(items, sectionId, 'membership')
   }
 }

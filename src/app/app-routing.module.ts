@@ -43,6 +43,8 @@ import { PortfolioSectionItemComponent } from './portfolio-section-item/portfoli
 import { AdminSectionsComponent } from './exam/admin-sections/admin-sections.component';
 import { AdminCandidatesComponent } from './exam/admin-candidates/admin-candidates.component';
 
+export const USERID_ROUTE_PARAM = "userId";
+
 const routes: Routes = [
   { path: "", component: HomeComponent, title: "Faculty of Family Medicine App, West African College of Physicians" },
   {
@@ -74,7 +76,21 @@ const routes: Routes = [
       { path: "admin/:category/:id/payments", component: PaymentsComponent, canActivate: [adminGuard] },
       { path: "admin/exams", component: ExamAdminComponent, title: "Exam Admin | FM App" },
       { path: "admin/exams/:examAlias/sections", component: AdminSectionsComponent, title: "Exam Admin Sections | FM App" },
-      { path: "admin/exams/:examAlias/sections/candidates", component: AdminCandidatesComponent, title: "Exam Admin Candidates | FM App" },
+      { 
+        path: "admin/exams/:examAlias/sections/candidates", 
+        component: AdminCandidatesComponent, 
+        title: "Exam Admin Candidates | FM App" 
+      },
+      { 
+        path: `admin/exams/:examAlias/sections/candidates/portfolio/:${USERID_ROUTE_PARAM}`, 
+        component: PortfolioComponent, 
+        title: "Exam Admin Candidate Portfolio | FM App" 
+      },
+      { 
+        path: `admin/exams/:examAlias/sections/candidates/portfolio/:${USERID_ROUTE_PARAM}/:section`, 
+        component: PortfolioSectionComponent, 
+        title: "Exam Admin Candidate Portfolio | FM App" 
+      },
       { path: "admin/exams/:examAlias/actions", component: AdminActionComponent, title: "Exam Admin Actions | FM App" },
       { path: "exam", component: ExamComponent, title: "Examination | Faculty of Family Medicine App" },
       { path: "exam/:examAlias/edit", component: EditExamComponent, title: "Edit Exam Details | FM App" },
@@ -90,8 +106,12 @@ const routes: Routes = [
       { path: "events/:eventId/register", component: RegistrationComponent },
       { path: "events/:eventId/register/pay", component: EventPaymentComponent },
       { path: "portfolio", component: PortfolioComponent  },
-      { path: "portfolio/:section", component: PortfolioSectionComponent  },
-      { path: "portfolio/:section/:itemId", component: PortfolioSectionItemComponent  },
+      { path: `portfolio/:${USERID_ROUTE_PARAM}`, component: PortfolioComponent  },
+      { path: `portfolio/:${USERID_ROUTE_PARAM}/:section`, component: PortfolioSectionComponent  },
+      { 
+        path: `portfolio/:${USERID_ROUTE_PARAM}/:section/:itemId`, 
+        component: PortfolioSectionItemComponent  
+      },
       {
         path: "**", component: NotFoundComponent, title: "Not found | Faculty of Family Medicine App"
       }

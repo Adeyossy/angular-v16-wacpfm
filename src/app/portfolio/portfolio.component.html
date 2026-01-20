@@ -10,6 +10,17 @@
   <br>
   <hr>
   <br>
-  <app-card-list *ngFor="let section of sections; index as i" [item]="section" [index]="i"
-    [routerLink]="section.title.split(' ')[1]"></app-card-list>
+  <ng-container *ngIf="userId$ | async as userId; else loading">
+    <ng-container *ngIf="portfolioItems$ | async as items; else loading">
+      <app-card-list *ngFor="let section of sections; index as i" [item]="section" [index]="i"
+        [routerLink]="extractSectionId(section.title)">
+        <button class="icon small">
+          Score: {{getPortfolioScore(items, extractSectionId(section.title))}}
+        </button>
+      </app-card-list>
+    </ng-container>
+  </ng-container>
+  <ng-template #loading>
+    <app-loading-circles></app-loading-circles>
+  </ng-template>
 </div>
