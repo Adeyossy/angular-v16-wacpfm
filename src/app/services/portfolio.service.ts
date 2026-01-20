@@ -60,6 +60,15 @@ export class PortfolioService {
     );
   }
 
+  parseParamFromRoute$ = (paramMap$: Observable<ParamMap>, param: string) => {
+    return paramMap$.pipe(
+      map(paramMap => {
+        const value = paramMap.get(param);
+        return value !== null ? value : "";
+      })
+    );
+  }
+
   parseSectionFromRoute$ = (paramMap$: Observable<ParamMap>) => {
     return paramMap$.pipe(
       map(paramMap => {
@@ -140,7 +149,7 @@ export class PortfolioService {
           return 0;
         }
       }
-    } else throw "nonzero category subsection could not be found";
+    } else return 0; // throw "nonzero category subsection could not be found";
   }
 
   calculateSectionScore = (
