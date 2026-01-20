@@ -11,7 +11,7 @@
   <hr><br>
   <app-card-list *ngFor="let candidate of candidates; index as i" [item]="toCardList(candidate)">
     <div class="wacpfm-quick-buttons">
-      <button class="icon small" routerLink="{{candidate}}">View Portfolio</button>
+      <button class="icon small" routerLink="portfolio/{{candidate.candidateId}}">View Portfolio</button>
     </div>
   </app-card-list>
 </div>

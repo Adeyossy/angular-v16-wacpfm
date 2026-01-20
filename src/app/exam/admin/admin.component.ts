@@ -30,7 +30,7 @@ export class AdminComponent implements OnInit {
     return {
       title: exam.alias.replace("-", " ").replace("_", " "),
       description: exam.title,
-      link: `./${exam.alias}`
+      link: `./${exam.alias}/sections`
     }
   }
 
