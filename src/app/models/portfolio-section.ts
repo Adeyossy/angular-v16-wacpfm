@@ -117,28 +117,28 @@ export const SECTIONS: PortfolioSection[] = [
     subsections: [
       {
         subsection: "Basic Life Support (BLS)",
-        membership: 0,
-        fellowship: 0
+        membership: 1,
+        fellowship: 1
       },
       {
         subsection: "Advanced Life Support (ALS)",
-        membership: 0,
-        fellowship: 0
+        membership: 1,
+        fellowship: 1
       },
       {
         subsection: "Advanced Life Support - Obstetrics (ALSO)",
-        membership: 0,
-        fellowship: 0
+        membership: 1,
+        fellowship: 1
       },
       {
         subsection: "Advanced Trauma Life Support (ATLS)",
-        membership: 0,
-        fellowship: 0
+        membership: 1,
+        fellowship: 1
       },
       {
         subsection: "Paediatric Advanced Life Support (PALS)",
-        membership: 0,
-        fellowship: 0
+        membership: 1,
+        fellowship: 1
       },
     ]
   },
