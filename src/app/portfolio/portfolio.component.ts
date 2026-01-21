@@ -15,6 +15,7 @@ import { PortfolioSectionItem } from '../models/portfolio';
 export class PortfolioComponent implements OnInit {
   userId$ = of("");
   portfolioItems$: Observable<PortfolioSectionItem[]> = of([]);
+  portfolioScore: number | undefined = undefined;
   sections: CardList[] = [
     {
       title: "Section 3",
@@ -78,7 +79,7 @@ export class PortfolioComponent implements OnInit {
       )
     );
 
-    this.sections = SECTIONS.map(this.toCardList);
+    this.sections = SECTIONS.filter(s => s.subsections.filter(sub => sub['membership'] > 0).length > 0).map(this.toCardList);
     // const allItems = ;
   }
 
@@ -92,7 +93,15 @@ export class PortfolioComponent implements OnInit {
 
   extractSectionId = (title: string) => title.split(' ')[1]
 
-  getPortfolioScore = (items: PortfolioSectionItem[], sectionId: string) => {
+  getSectionScore = (items: PortfolioSectionItem[], sectionId: string) => {
     return this.portfolioService.calculateSectionScore(items, sectionId, 'membership')
+  }
+
+  getPortfolioScore = (items: PortfolioSectionItem[]) => {
+    if (this.portfolioScore === undefined) {
+      this.portfolioScore = this.portfolioService.calculatePortfolioScore(items, 'membership')
+    }
+    
+    return this.portfolioScore;
   }
 }
