@@ -2,11 +2,19 @@
   <!-- <div class="wacpfm-leftbar-header wacpfm-leftbar-item m-1">
     <h1 class="wacpfm-subheading text-white">Dashboard</h1>
   </div> -->
-  <details class="wacpfm-leftbar-item wacpfm-leftbar-link" *ngIf="appUser$|async"
-    routerLink="/dashboard/admin/updatecourse" routerLinkActive="active"
-    (click)="helper.toggleSidebar(false)">
-    <summary><i class="bi bi-gear-wide-connected"></i> <span>Admin</span></summary>
-  </details>
+  <ng-container *ngIf="appUser$ | async as appUser">
+    <details class="wacpfm-leftbar-item wacpfm-leftbar-link" *ngIf="isCourseAdmin(appUser)"
+      routerLink="/dashboard/admin/updatecourse" routerLinkActive="active"
+      (click)="helper.toggleSidebar(false)">
+      <summary><i class="bi bi-gear-wide-connected"></i> <span>Admin</span></summary>
+    </details>
+    <details class="wacpfm-leftbar-item wacpfm-leftbar-link" [open]="true"
+      routerLink="/dashboard/portfolio/{{appUser.userId}}" routerLinkActive="active"
+      (click)="helper.toggleSidebar(false)">
+      <summary><i class="bi bi-mortarboard-fill"></i> <span>Portfolio</span></summary>
+    </details>
+  </ng-container>
+  
   <details class="wacpfm-leftbar-item wacpfm-leftbar-link" [open]="true"
     routerLink="/dashboard/updatecourse" routerLinkActive="active"
     (click)="helper.toggleSidebar(false)">
