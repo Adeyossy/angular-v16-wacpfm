@@ -3,4 +3,4 @@
   <div class="wacpfm-underline"></div>
 </div>
 <br>
-<app-card-grid [items]="items"></app-card-grid>
+<app-card-grid *ngIf="items$ | async as items" [items]="items"></app-card-grid>
