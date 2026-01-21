@@ -126,7 +126,7 @@ export class PortfolioService {
     const portfolioSubsection = subsectionItems.filter(
       psi => psi.section === sectionId && 
       psi.subsection === subsection && 
-      psi.category === category
+      psi.category.toLowerCase() === category
     );
 
     const candidateSubsectionCount = portfolioSubsection.length;
