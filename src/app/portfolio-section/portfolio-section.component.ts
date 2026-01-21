@@ -19,7 +19,13 @@ export class PortfolioSectionComponent implements OnInit {
   sectionItems$: Observable<PortfolioSectionItem[]> = of([]);
   sectionItemsList: { [index: string]: CardList } = {};
   sectionItemsList$: Observable<CardList[]> = of([]);
-  sectionItemsGroupsList$: Observable<{subsection: string, items: PortfolioSectionItem[]}[]> = of([]);
+  sectionItemsGroupsList$: Observable<{
+    subsection: string, 
+    items: PortfolioSectionItem[],
+    membership: number,
+    fellowship: number
+  }[]
+    > = of([]);
   newItem$: Observable<string> | null = null;
 
   constructor (
@@ -54,7 +60,8 @@ export class PortfolioSectionComponent implements OnInit {
     this.sectionItemsGroupsList$ = this.section.pipe(
       concatMap(section => this.userId$.pipe(
         concatMap(userId => this.portfolioService.getPortfolioSection$(section, userId)),
-        map(items => this.groupBySubsections(items, section).sort((a, b) => b.items.length - a.items.length))
+        map(items => this.groupBySubsections(items, section, 'membership')
+        .sort((a, b) => b.items.length - a.items.length))
       ))
     );
   }
@@ -84,14 +91,20 @@ export class PortfolioSectionComponent implements OnInit {
     return cardList;
   }
 
-  groupBySubsections = (sectionItems: PortfolioSectionItem[], sectionId: string) => {
-    const subsections = this.portfolioService.getSubsections(sectionId);
+  groupBySubsections = (
+    sectionItems: PortfolioSectionItem[], 
+    sectionId: string,
+    category: 'membership' | 'fellowship'
+  ) => {
+    const subsections = this.portfolioService.getNonzeroCategorySubsections(sectionId, category);
     return subsections.map(subsection => ({
       subsection: subsection.subsection,
       items: sectionItems.filter(
         sectionItem => sectionItem.section === sectionId && 
         sectionItem.subsection === subsection.subsection
-      )
+      ),
+      membership: subsection.membership,
+      fellowship: subsection.fellowship
     }));
   }
 
@@ -106,5 +119,19 @@ export class PortfolioSectionComponent implements OnInit {
 
   navigate = (shouldNavigate: boolean, url: string) => {
     if (shouldNavigate) this.router.navigate([this.router.url, url]);
+  }
+
+  getSubsectionScore = (
+    items: PortfolioSectionItem[], 
+    sectionId: string,
+    subsection: string,
+    category: string
+  ) => {
+    return this.portfolioService.calculateSubsectionScore(
+      items, 
+      sectionId, 
+      subsection, 
+      category.toLowerCase() as 'membership' | 'fellowship'
+    )
   }
 }

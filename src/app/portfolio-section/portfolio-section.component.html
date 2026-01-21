@@ -24,7 +24,15 @@
   </div> -->
   <div *ngIf="sectionItemsGroupsList$ | async as groups; else loading">
     <details *ngFor="let sub of groups" class="wacpfm-card mb-3" [open]="true">
-      <summary class="wacpfm-heading wacpfm-heading-small fw-bold">{{ sub.subsection }}</summary>
+      <summary class="wacpfm-heading wacpfm-subheading fw-bold">{{ sub.subsection }}</summary>
+      <br>
+      <button class="icon small">
+        {{ sub.items.length }} out of {{ sub.membership }} expected submissions
+      </button>
+      <br>
+      <button class="icon small mt-1" *ngIf="sub.items.length > 0">
+        Score: {{ getSubsectionScore(sub.items, sub.items[0].section, sub.subsection, sub.items[0].category) }}
+      </button>
       <br>
       <hr><br>
       <app-card-list *ngFor="let item of sub.items; index as i" [item]="cachedToCardList(item)" [index]="i"
