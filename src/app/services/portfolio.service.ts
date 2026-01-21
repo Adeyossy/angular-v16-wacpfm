@@ -84,12 +84,13 @@ export class PortfolioService {
 
   getSection = (sectionId: string, category: 'membership' | 'fellowship') => {
     const sections = this.getApplicableSections(category).filter(section => section.id === sectionId);
-    if (sections.length === 0) throw "section does not exist";
+    if (sections.length === 0) return null;
     return sections[0]
   }
 
   getSubsections = (sectionId: string, category: 'membership' | 'fellowship') => {
     const section = this.getSection(sectionId, category);
+    if (section === null) return []
     return section.subsections;
   }
 
@@ -187,7 +188,7 @@ export class PortfolioService {
     portfolioSectionItems: PortfolioSectionItem[],
     category: "membership" | "fellowship"
   ) => {
-    const sectionScores = SECTIONS.map(section => {
+    const sectionScores = this.getApplicableSections(category).map(section => {
       const id = section.id;
       const candidateSectionItems = portfolioSectionItems.filter(
         psi => psi.section === id && psi.category.toLowerCase() === category

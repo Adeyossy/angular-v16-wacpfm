@@ -43,7 +43,7 @@ export class PortfolioComponent implements OnInit {
       )
     );
 
-    // this.sections = this.portfolioService.getApplicableSections('membership').map(this.toCardList);
+    this.sections = this.portfolioService.getApplicableSections('membership').map(this.toCardList);
     // const allItems = ;
   }
 

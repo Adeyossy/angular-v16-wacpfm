@@ -41,7 +41,9 @@ export class PortfolioSectionItemComponent implements OnInit {
   }
 
   getSectionDescription = (sectionId: string) => {
-    return this.portfolioService.getSection(sectionId, 'membership').description;
+    const section = this.portfolioService.getSection(sectionId, 'membership');
+    if (section === null) return "";
+    return section.description;
   }
 
   getSubsections = (sectionId: string) => {
