@@ -157,9 +157,8 @@ export class PortfolioService {
     sectionId: string,
     category: "membership" | "fellowship"
   ) => {
-    const portfolioSection = SECTIONS.find(section => section.id === sectionId);
-    if (portfolioSection === undefined) throw "incorrect sectionId";
-    const subsectionScores = portfolioSection.subsections.map(subsection => {
+    const subsectionScores = this.getNonzeroCategorySubsections(sectionId, category)
+    .map(subsection => {
       const subsectionText = subsection.subsection;
       const candidateSubsectionItems = sectionItems.filter(
         si => si.subsection === subsectionText
@@ -173,7 +172,7 @@ export class PortfolioService {
     });
 
     // Calculate the total score for all subsections under this section.
-    const totalScore = subsectionScores.reduce((previous, current) => previous + current);
+    const totalScore = subsectionScores.reduce((previous, current) => previous + current, 0);
     
     // Section score is an average of subsection scores. A section has maximum of 10.
     const sectionScore = totalScore / subsectionScores.length;
@@ -187,12 +186,12 @@ export class PortfolioService {
     const sectionScores = SECTIONS.map(section => {
       const id = section.id;
       const candidateSectionItems = portfolioSectionItems.filter(
-        psi => psi.section === id && psi.category === category
+        psi => psi.section === id && psi.category.toLowerCase() === category
       );
       return this.calculateSectionScore(candidateSectionItems, id, category);
     });
 
     const sumOfAllSections = sectionScores.reduce((pre, curr) => pre + curr);
-    return sumOfAllSections / sectionScores.length;
+    return sumOfAllSections;
   }
 }
