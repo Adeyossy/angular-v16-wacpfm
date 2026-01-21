@@ -78,23 +78,27 @@ export class PortfolioService {
     );
   }
 
-  getSection = (sectionId: string) => {
-    const sections = SECTIONS.filter(section => section.id === sectionId);
+  getApplicableSections = (category: 'membership'| 'fellowship') => {
+    return SECTIONS.filter(s => s.subsections.filter(sub => sub[category] > 0).length > 0);
+  }
+
+  getSection = (sectionId: string, category: 'membership' | 'fellowship') => {
+    const sections = this.getApplicableSections(category).filter(section => section.id === sectionId);
     if (sections.length === 0) throw "section does not exist";
     return sections[0]
   }
 
-  getSubsections = (sectionId: string) => {
-    const section = this.getSection(sectionId);
+  getSubsections = (sectionId: string, category: 'membership' | 'fellowship') => {
+    const section = this.getSection(sectionId, category);
     return section.subsections;
   }
 
-  getSubsection = (sectionId: string, subsection: string) => {
-    return this.getSubsections(sectionId).find(sub => sub.subsection === subsection);
+  getSubsection = (sectionId: string, subsection: string, category: 'membership' | 'fellowship') => {
+    return this.getSubsections(sectionId, category).find(sub => sub.subsection === subsection);
   }
 
   getNonzeroCategorySubsections = (sectionId: string, category: "membership" | "fellowship") => {
-    return this.getSubsections(sectionId).filter(subsection => subsection[category] > 0);
+    return this.getSubsections(sectionId, category).filter(subsection => subsection[category] > 0);
   }
 
   getNonzeroCategorySubsection = (
@@ -102,13 +106,13 @@ export class PortfolioService {
     category: "membership" | "fellowship",
     subsection: string
   ) => {
-    return this.getSubsections(sectionId).find(
+    return this.getSubsections(sectionId, category).find(
       sub => sub.subsection === subsection && sub[category] > 0
     );
   }
 
   getNonzeroMembershipSubsections = (sectionId: string) => {
-    return this.getSubsections(sectionId).filter(subsection => subsection.membership > 0);
+    return this.getSubsections(sectionId, 'membership').filter(subsection => subsection.membership > 0);
   }
 
   getNonzeroMembershipSubsection = (sectionId: string, subsection: string) => {

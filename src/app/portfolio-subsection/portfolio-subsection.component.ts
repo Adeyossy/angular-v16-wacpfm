@@ -22,7 +22,7 @@ export class PortfolioSubsectionComponent implements OnInit {
     this.sectionId$ = this.portfolioService.parseSectionFromRoute$(this.activatedRoute.paramMap);
 
     this.subsections$ = this.sectionId$.pipe(
-      map(this.portfolioService.getSubsections),
+      map(id => this.portfolioService.getSubsections(id, 'membership')),
       map(subsections => subsections.map(subsection => ({
         title: subsection.subsection, 
         subtitle: `${subsection.membership} items expected`, 

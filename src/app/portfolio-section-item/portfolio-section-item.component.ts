@@ -41,11 +41,11 @@ export class PortfolioSectionItemComponent implements OnInit {
   }
 
   getSectionDescription = (sectionId: string) => {
-    return this.portfolioService.getSection(sectionId).description;
+    return this.portfolioService.getSection(sectionId, 'membership').description;
   }
 
   getSubsections = (sectionId: string) => {
-    return this.portfolioService.getSubsections(sectionId);
+    return this.portfolioService.getNonzeroCategorySubsections(sectionId, 'membership');
   }
 
   updateItemId = (item: PortfolioSectionItem, id: string) => {

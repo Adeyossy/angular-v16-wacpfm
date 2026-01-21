@@ -16,43 +16,7 @@ export class PortfolioComponent implements OnInit {
   userId$ = of("");
   portfolioItems$: Observable<PortfolioSectionItem[]> = of([]);
   portfolioScore: number | undefined = undefined;
-  sections: CardList[] = [
-    {
-      title: "Section 3",
-      subtitle: "Learning Plans and Rotations",
-      text: ""
-    },
-    {
-      title: "Section 4",
-      subtitle: "Record of Education Supervision",
-      text: ""
-    },
-    {
-      title: "Section 5",
-      subtitle: "Observations by Supervisors",
-      text: ""
-    },
-    {
-      title: "Section 6",
-      subtitle: "Written Assignments",
-      text: ""
-    },
-    {
-      title: "Section 8",
-      subtitle: "Emergency Medicine Certification",
-      text: ""
-    },
-    {
-      title: "Section 9",
-      subtitle: "Professional and Scientific Meetings",
-      text: ""
-    },
-    {
-      title: "Section 10",
-      subtitle: "End of Year Assessments",
-      text: ""
-    }
-  ];
+  sections: CardList[] = [];
 
   constructor (
     private portfolioService: PortfolioService,
@@ -79,7 +43,7 @@ export class PortfolioComponent implements OnInit {
       )
     );
 
-    this.sections = SECTIONS.filter(s => s.subsections.filter(sub => sub['membership'] > 0).length > 0).map(this.toCardList);
+    // this.sections = this.portfolioService.getApplicableSections('membership').map(this.toCardList);
     // const allItems = ;
   }
 
