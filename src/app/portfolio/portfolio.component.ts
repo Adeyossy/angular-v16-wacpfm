@@ -17,6 +17,7 @@ export class PortfolioComponent implements OnInit {
   portfolioItems$: Observable<PortfolioSectionItem[]> = of([]);
   portfolioScore: number | undefined = undefined;
   sections: CardList[] = [];
+  portfolioScoreTotal = 0;
 
   constructor (
     private portfolioService: PortfolioService,
@@ -43,7 +44,9 @@ export class PortfolioComponent implements OnInit {
       )
     );
 
-    this.sections = this.portfolioService.getApplicableSections('membership').map(this.toCardList);
+    const applicableSections = this.portfolioService.getApplicableSections('membership');
+    this.sections = applicableSections.map(this.toCardList);
+    this.portfolioScoreTotal = applicableSections.length * 10;
     // const allItems = ;
   }
 
