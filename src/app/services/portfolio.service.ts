@@ -143,12 +143,20 @@ export class PortfolioService {
     );
 
     if (expectedSubsectionCount !== undefined) {
-      const diff = candidateSubsectionCount - expectedSubsectionCount[category];
+      const expectedCount = expectedSubsectionCount[category];
+      const diff = candidateSubsectionCount - expectedCount;
       
       if (diff >= 0) {
+        // if (sectionId === "8") return 2;
         return 10;
       } else {
         if (diff < 0 && diff >= -2) {
+          if (expectedCount === 1) {
+            return 0
+          }
+          if (expectedCount === 2) {
+            return diff === -1 ? 6 : 0;
+          }
           return 6;
         } else {
           return 0;
