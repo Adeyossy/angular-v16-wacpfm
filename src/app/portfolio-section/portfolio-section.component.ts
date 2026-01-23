@@ -48,7 +48,7 @@ export class PortfolioSectionComponent implements OnInit {
     );
 
     this.sectionItems$ = this.section.pipe(
-      concatMap(section => this.userId$.pipe(
+      concatMap(section => this.userIdParam$.pipe(
         concatMap(userId => this.portfolioService.getPortfolioSection$(section, userId))
       ))
     );
@@ -58,7 +58,7 @@ export class PortfolioSectionComponent implements OnInit {
     );
 
     this.sectionItemsGroupsList$ = this.section.pipe(
-      concatMap(section => this.userId$.pipe(
+      concatMap(section => this.userIdParam$.pipe(
         concatMap(userId => this.portfolioService.getPortfolioSection$(section, userId)),
         map(items => this.groupBySubsections(items, section, 'membership')
           .sort((a, b) => b.items.length - a.items.length))
