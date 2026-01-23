@@ -189,7 +189,7 @@ export class PortfolioService {
     
     // Section score is an average of subsection scores. A section has maximum of 10.
     const sectionScore = totalScore / subsectionScores.length;
-    return sectionScore;
+    return Math.round(sectionScore * 100) / 100;
   }
 
   calculatePortfolioScore = (
