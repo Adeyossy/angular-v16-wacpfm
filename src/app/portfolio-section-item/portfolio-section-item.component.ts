@@ -123,4 +123,11 @@ export class PortfolioSectionItemComponent implements OnInit {
       );
     }
   }
+
+  goBack = () => {
+    const url = this.router.url.split("/");
+    url.pop();
+
+    this.router.navigateByUrl(url.join("/"));
+  }
 }

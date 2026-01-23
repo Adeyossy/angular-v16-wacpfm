@@ -20,19 +20,19 @@ export class PortfolioSectionComponent implements OnInit {
   sectionItemsList: { [index: string]: CardList } = {};
   sectionItemsList$: Observable<CardList[]> = of([]);
   sectionItemsGroupsList$: Observable<{
-    subsection: string, 
+    subsection: string,
     items: PortfolioSectionItem[],
     membership: number,
     fellowship: number
   }[]
-    > = of([]);
+  > = of([]);
   newItem$: Observable<string> | null = null;
 
-  constructor (
+  constructor(
     private portfolioService: PortfolioService,
     private activatedRoute: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.section = this.activatedRoute.paramMap.pipe(
@@ -42,7 +42,7 @@ export class PortfolioSectionComponent implements OnInit {
     this.userId$ = this.portfolioService.getUser$().pipe(
       map(user => user.uid)
     );
-    
+
     this.userIdParam$ = this.portfolioService.parseParamFromRoute$(
       this.activatedRoute.paramMap, USERID_ROUTE_PARAM
     );
@@ -61,14 +61,14 @@ export class PortfolioSectionComponent implements OnInit {
       concatMap(section => this.userId$.pipe(
         concatMap(userId => this.portfolioService.getPortfolioSection$(section, userId)),
         map(items => this.groupBySubsections(items, section, 'membership')
-        .sort((a, b) => b.items.length - a.items.length))
+          .sort((a, b) => b.items.length - a.items.length))
       ))
     );
   }
 
   toCardList = (sectionItem: PortfolioSectionItem): CardList => {
     const timestamp = sectionItem.submission_timestamp as unknown as Timestamp;
-    
+
     return {
       title: sectionItem.subsection,
       subtitle: timestamp.toDate().toLocaleString("en-NG"),
@@ -81,7 +81,7 @@ export class PortfolioSectionComponent implements OnInit {
     if (existing) return existing;
 
     const timestamp = sectionItem.submission_timestamp as unknown as Timestamp;
-    
+
     const cardList: CardList = {
       title: sectionItem.subsection,
       subtitle: timestamp.toDate().toLocaleString("en-NG"),
@@ -92,7 +92,7 @@ export class PortfolioSectionComponent implements OnInit {
   }
 
   groupBySubsections = (
-    sectionItems: PortfolioSectionItem[], 
+    sectionItems: PortfolioSectionItem[],
     sectionId: string,
     category: 'membership' | 'fellowship'
   ) => {
@@ -100,8 +100,8 @@ export class PortfolioSectionComponent implements OnInit {
     return subsections.map(subsection => ({
       subsection: subsection.subsection,
       items: sectionItems.filter(
-        sectionItem => sectionItem.section === sectionId && 
-        sectionItem.subsection === subsection.subsection
+        sectionItem => sectionItem.section === sectionId &&
+          sectionItem.subsection === subsection.subsection
       ),
       membership: subsection.membership,
       fellowship: subsection.fellowship
@@ -122,16 +122,23 @@ export class PortfolioSectionComponent implements OnInit {
   }
 
   getSubsectionScore = (
-    items: PortfolioSectionItem[], 
+    items: PortfolioSectionItem[],
     sectionId: string,
     subsection: string,
     category: string
   ) => {
     return this.portfolioService.calculateSubsectionScore(
-      items, 
-      sectionId, 
-      subsection, 
+      items,
+      sectionId,
+      subsection,
       category.toLowerCase() as 'membership' | 'fellowship'
     )
+  }
+
+  goBack = () => {
+    const url = this.router.url.split("/");
+    url.pop();
+
+    this.router.navigateByUrl(url.join("/"));
   }
 }
