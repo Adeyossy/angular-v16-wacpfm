@@ -59,16 +59,16 @@
                 <i class="bi bi-patch-question-fill"></i> Which course do you want to register for?
               </h2>
             </div>
-            <div class="col-lg-6 p-2">
+            <div class="col-lg-6 p-2" [class.d-none]="states['jnr']">
               <a routerLink="./payment/jnr"><button class="small">Junior Resident</button></a>
             </div>
-            <div class="col-lg-6 p-2">
+            <div class="col-lg-6 p-2" [class.d-none]="states['snr']">
               <a routerLink="./payment/snr"><button class="small">Senior Resident</button></a>
             </div>
-            <div class="col-4 col-lg-6 p-2">
+            <div class="col-4 col-lg-6 p-2" [class.d-none]="states['tot']">
               <a routerLink="./payment/tot"><button class="small">ToT</button></a>
             </div>
-            <div class="col-8 col-lg-6 p-2">
+            <div class="col-8 col-lg-6 p-2" [class.d-none]="states['tot-resident']">
               <a routerLink="./payment/tot-resident"><button class="small">ToT & Resident</button></a>
             </div>
           </div>

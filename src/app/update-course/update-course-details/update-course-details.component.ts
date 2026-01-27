@@ -36,6 +36,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
   totRecord$: Observable<UpdateCourseRecord> = NEVER;
   trainerCertification$: Observable<TrainerCertification> = of(DEFAULT_NEW_TRAINER_CERTIFICATION);
   paymentVerification$: Observable<string> = of("");
+  states: {[index: string]: boolean} = {}
 
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService,
     public helper: HelperService, private updateCourseService: UpdateCourseService) {
@@ -114,6 +115,10 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
             classLink: uCourse?.totClassLink
           }
         };
+      }),
+      map(courseRev => {
+        this.states = this.stopRegistration(courseRev);
+        return courseRev;
       })
     );
 
@@ -388,6 +393,15 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
         return [newCourse.endDate]
       }
     }
+  }
+
+  stopRegistration = (newCourse: UpdateCourseRev) => {
+    const states: {[index: string]: boolean} = {}
+    states['jnr'] = this.calculateDates(newCourse, "Membership")[0] < Date.now();
+    states['snr'] = this.calculateDates(newCourse, "Fellowship")[0] < Date.now();
+    states['tot'] = this.calculateDates(newCourse, "ToT")[0] < Date.now();
+    states['tot-resident'] = states['snr'] && states['tot'];
+    return states;
   }
 
   getElders() {
