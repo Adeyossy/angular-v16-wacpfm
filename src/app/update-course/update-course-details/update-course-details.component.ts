@@ -400,7 +400,7 @@ export class UpdateCourseDetailsComponent implements OnInit, OnDestroy {
     states['jnr'] = this.calculateDates(newCourse, "Membership")[0] < Date.now();
     states['snr'] = this.calculateDates(newCourse, "Fellowship")[0] < Date.now();
     states['tot'] = this.calculateDates(newCourse, "ToT")[0] < Date.now();
-    states['tot-resident'] = states['snr'] && states['tot'];
+    states['tot-resident'] = states['jnr'] || states['snr'] || states['tot'];
     return states;
   }
 
