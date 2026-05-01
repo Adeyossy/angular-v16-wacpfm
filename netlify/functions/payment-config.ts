@@ -13,7 +13,7 @@ const TOT_FEE = 15000 * 100;
 const TOT_RESIDENT_FEE = 25000 * 100;
 
 const calculateTotal = (fee: number) => {
-  return Math.ceil((100 * (fee + 115000)) / 98.5);
+  return Math.ceil((100 * (fee + 145000)) / 98.5);
 }
 
 export const BY_CATEGORY = {
