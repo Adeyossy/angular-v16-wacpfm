@@ -625,7 +625,6 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
                 }
               ]
             },
-            reference: `${vals.userId}-${vals.uCourseId}-${Date.now()}`,
             onSuccess: this.onSuccess,
             onError: this.error,
             onCancel: this.cancel
