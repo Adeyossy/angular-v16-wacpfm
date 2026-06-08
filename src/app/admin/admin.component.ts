@@ -10,6 +10,8 @@ import { DEFAULT_WRITING } from '../models/candidate';
 import { EventService } from '../services/event.service';
 import { Event } from '../models/event';
 import { CardGridItem } from '../widgets/card-grid/card-grid.component';
+import { PaymentService } from '../services/payment.service';
+import { Transaction } from '../models/payment';
 
 @Component({
   selector: 'app-admin',
@@ -18,7 +20,7 @@ import { CardGridItem } from '../widgets/card-grid/card-grid.component';
 })
 export class AdminComponent implements OnInit {
   courses$: Observable<UpdateCourse[]> = NEVER;
-  cardItem$: Observable<CardList> = of({title: "", subtitle: "", text: ""});
+  cardItem$: Observable<CardList> = of({ title: "", subtitle: "", text: "" });
   records$: Observable<UpdateCourseRecord[]> = NEVER;
   // list$: Observable<CardList[]> = new Observable();
   level = 0;
@@ -37,8 +39,12 @@ export class AdminComponent implements OnInit {
   // shouldRefresh: "lecture" | "payment" | "resource_person" | "" = "";
   // refreshID = "";
 
-  constructor(private authService: AuthService, public helper: HelperService,
-    private eventService: EventService) { }
+  constructor(
+    private authService: AuthService,
+    public helper: HelperService,
+    private eventService: EventService,
+    private paymentService: PaymentService
+  ) { }
 
   ngOnInit(): void {
     // this.records$ = this.authService.queryCollections$<UpdateCourseRecord>(UPDATE_COURSES_RECORDS,
@@ -139,17 +145,39 @@ export class AdminComponent implements OnInit {
   //   .pipe(map(rec => this.paymentToCardList(rec)));
   // }
 
+  transactionToRecords = (transaction: Transaction): UpdateCourseRecord => {
+    const metabyte = transaction.metadata.custom_fields.map(f => [ f.variable_name, f.value ]);
+    const metadata: { 
+      category: string, 
+      fee: number, 
+      course_id: string 
+    } = Object.fromEntries(metabyte);
+
+    if (metadata.category === "ToT & Resident") {}
+
+    return {
+      id: "",
+      courseType: metadata.category as UpdateCourseType,
+      updateCourseId: metadata.course_id,
+      userEmail: transaction.customer.email,
+      userId: "",
+      paymentId: transaction,
+    }
+  }
+
   setToPayment() {
     this.level = 2;
     this.sublevel = 0;
-    this.records$ = this.authService.queryForListener$(UPDATE_COURSES_RECORDS,
-      "updateCourseId", "==", this.currentCourse?.updateCourseId!).pipe(
-        map(snapshot => snapshot.docs.map(doc => {
-          const record = doc.data() as UpdateCourseRecord;
-          if (record.id !== doc.id) record.id = doc.id;
-          return record;
-        }))
-      );
+    this.records$ = this.authService.queryForListener$(
+      UPDATE_COURSES_RECORDS,
+      "updateCourseId", "==", this.currentCourse?.updateCourseId!
+    ).pipe(
+      map(snapshot => snapshot.docs.map(doc => {
+        const record = doc.data() as UpdateCourseRecord;
+        if (record.id !== doc.id) record.id = doc.id;
+        return record;
+      }))
+    );
   }
 
   setToLectures() {
@@ -286,16 +314,16 @@ export class AdminComponent implements OnInit {
         for (let i = 0; i < data.length; i++) {
           const d = data[i];
           if (refined.find(r => r.user_email === d.user_email)) continue;
-          for (let j = i+1; j < data.length; j++) {
+          for (let j = i + 1; j < data.length; j++) {
             const next = data[j];
             if (d.user_email === next.user_email) {
               if (!d.category.includes(next.category)) {
                 // Get the sort value. The order of the arguments matter
                 const sortNumber = this.helper.sortByUpdateCourseType(d.category, next.category);
-                
+
                 // If the sortNumber is negative, concat in the order of the arguments,
                 // else concat in the reverse order.
-                d.category = sortNumber < 0 ? 
+                d.category = sortNumber < 0 ?
                   d.category.concat(", ", next.category) as UpdateCourseType :
                   next.category.concat(", ", d.category) as UpdateCourseType;
               }
@@ -306,7 +334,7 @@ export class AdminComponent implements OnInit {
         const rows = refined.map(d => Object.values(d).join(";")).join("\r\n");
         const final = Object.keys(refined[0]).join(";").concat("\r\n", rows);
         const json = JSON.stringify(data);
-        return URL.createObjectURL(new Blob([final], {type: "text/csv"}))
+        return URL.createObjectURL(new Blob([final], { type: "text/csv" }))
       })
     )
   }
