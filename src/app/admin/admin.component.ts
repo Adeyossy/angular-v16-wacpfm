@@ -225,9 +225,11 @@ export class AdminComponent implements OnInit {
 
   showLecture(lecture: UpdateCourseLecture) {
     const data = this.helper.resetComponentDialogData();
-    data.courseId = this.currentCourse!.updateCourseId;
-    data.course = this.helper.data.course;
+    data.courseId = lecture.updateCourseId;
+    data.lecture = lecture;
+    data.course = this.currentCourse!;
     this.helper.setComponentDialogData(data);
+
     this.createNewLecture();
   }
 
