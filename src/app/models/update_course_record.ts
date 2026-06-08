@@ -20,6 +20,7 @@ export type UpdateCourseRecord = {
   approved?: boolean; // true if approved, false if declined; missing if not yet attended to
   transaction?: PaystackTransaction;
   flaggedForFraud?: boolean;
+  source?: "webhook" | "verify";
 }
 
 export const DEFAULT_COURSE_RECORD: UpdateCourseRecord = {
