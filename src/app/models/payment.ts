@@ -59,12 +59,18 @@ export interface TransactionParams {
   customer?: number,
   from: string,
   status: "success" | "failed" | "reversed",
-  perPage?: number
+  perPage?: number,
+  to?: string
 }
 
 export interface TransactionParamsWithSK {
   secret_key: string;
   params: TransactionParams;
+}
+
+export interface WebhookBody {
+  event: string,
+  data: Transaction
 }
 
 export interface TransactionResponse {

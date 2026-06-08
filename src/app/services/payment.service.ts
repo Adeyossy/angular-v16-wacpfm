@@ -5,6 +5,7 @@ import { UpdateCourseService } from './update-course.service';
 import { TransactionParamsWithSK, TransactionResponse } from '../models/payment';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 type Channels = ["card", "bank_transfer", "apple_pay", "ussd", "qr", "mobile_money", "eft"];
 
@@ -42,13 +43,14 @@ export class PaymentService {
     return this.eventService.getAllPayments$("2025-07-07");
   }
 
-  getAllPayments$ = (date: string) => {
+  getSuccessfulPayments$ = (from: string, to: string) => {
     return this.getTransaction({
-      secret_key: "PAYSTACK_LIVE_SK",
+      secret_key: environment.secret_key,
       params: {
-        from: date,
+        from,
         status: "success",
-        perPage: 500
+        perPage: 500,
+        to
       }
     }).pipe(
       map(res => {
