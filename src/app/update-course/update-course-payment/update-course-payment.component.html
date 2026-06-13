@@ -61,8 +61,11 @@
             </ng-template>
           </div>
           <div class="col-lg-6 p-2">
-            <button (click)="hasVerificationFailed = true"><i class="bi bi-check-circle-fill"></i> Verify
-              Payment</button>
+            <button (click)="hasVerificationFailed = true">
+              <span routerLink="." fragment="wacpfm-verify">
+                <i class="bi bi-check-circle-fill"></i> Verify Payment<sup>+</sup>
+              </span>
+            </button>
           </div>
         </div>
       </div>
@@ -100,9 +103,9 @@
           </div>
         </div>
       </div>
-      <div class="wacpfm-card" *ngIf="hasVerificationFailed">
+      <div class="wacpfm-card" *ngIf="hasVerificationFailed" id="wacpfm-verify">
         <div class="wacpfm-heading-underline">
-          <h1 class="wacpfm-heading fw-bold">Verify Payment</h1>
+          <h1 class="wacpfm-heading-small fw-bold">Verify Payment (Updated)</h1>
           <div class="wacpfm-underline"></div>
         </div>
         <br>
