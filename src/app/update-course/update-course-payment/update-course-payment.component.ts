@@ -8,7 +8,7 @@ import { BY_CATEGORY, UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseTy
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 import PaystackPop from '@paystack/inline-js';
-import { BasicResponse, Category, CustomerResponse, Payment, PaymentParams, PaystackInitResponse, PaystackResponse, PaystackTransaction } from 'src/app/models/payment';
+import { BasicResponse, Category, CustomerResponse, Payment, PaymentParams, PaystackInitResponse, PaystackResponse, PaystackTransaction, VerifyTransactionResponse } from 'src/app/models/payment';
 import { environment } from 'src/environments/environment';
 import { UPDATE_COURSES } from 'src/app/models/update_course';
 import { UpdateCourseService } from 'src/app/services/update-course.service';
@@ -315,6 +315,63 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       });
   }
 
+  checkResponseTimeframe = (response: VerifyTransactionResponse) => {
+    const data = response.data || { paid_at: "" };
+    const paidAt = data.paid_at;
+    const timestamp = Date.parse(paidAt);
+    const timetruth = this.parseTimestamp(timestamp.toString());
+    console.log("timetruth =>", timetruth);
+    return timetruth;
+  }
+
+  parseResponse = (response: VerifyTransactionResponse, category: Category, email: string) => {
+    if (response) {
+      console.log("response is true");
+      if (this.checkResponseTimeframe(response)) {
+        if (response.data.customer.email.trim().toLowerCase() === email.trim().toLowerCase()) {
+          if (response.data.status === "success") {
+            const fee = response.data.metadata.custom_fields.find(f => f.variable_name === 'fee');
+            const ctgy = response.data.metadata.custom_fields.find(
+              f => f.variable_name === 'category'
+            );
+
+            if (ctgy) {
+              if (
+                (ctgy.value === "Membership" && category === "jnr") ||
+                (ctgy.value === "Fellowship" && category === "snr") ||
+                (ctgy.value === "ToT" && category === "tot") ||
+                (ctgy.value === "ToT & Resident" && category === "tot-resident")
+              ) {
+                if (fee) {
+                  if (fee.value === BY_CATEGORY[category].fee) {
+                    return true;
+                  }
+
+                  throw "Incorrect amount was paid."
+                }
+              }
+
+              throw `
+                The reference is for a wrong category 
+                e.g. You paid for membership but verifying for fellowship.
+              `
+            }
+
+            throw ""
+          }
+
+          throw "Payment for the reference supplied was unsuccessful."
+        }
+
+        throw "The payment reference supplied belongs to another participant.";
+      }
+
+      throw "The reference supplied seems to be for a previous update course.";
+    }
+
+    throw "Please check your network. Verification could not be completed.";
+  }
+
   verifyTransaction = (transaction: PaystackTransaction, callback: () => boolean, params: PaymentParams) => {
     // console.log("transaction in verifyTransaction => ", transaction);
     // console.log("transaction reference in verifyTransaction => ", transaction.reference);
@@ -323,10 +380,17 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       secret_key: environment.secret_key
     }).pipe(
       concatMap(response => {
-        if (response && response.data && response.data.status === "success" &&
-          response.data.amount === BY_CATEGORY[params.category as Category].amount
-          && response.data.customer && response.data.customer.email.trim() ===
-          params.user.email?.trim()) {
+        // if (response && response.data && response.data.status === "success" &&
+        //   response.data.amount === BY_CATEGORY[params.category as Category].amount
+        //   && response.data.customer && response.data.customer.email.trim() ===
+        //   params.user.email?.trim()) 
+        const responseParseResult = this.parseResponse(
+          response,
+          params.category as Category,
+          params.user.email!.trim()
+        );
+
+        if (responseParseResult) {
           const val = this.createApprovedRecord(params, response, transaction);
           // console.log("Created approved records =>", val);
           return this.authService.addDocsInBulk$(val, UPDATE_COURSES_RECORDS).pipe(
@@ -349,8 +413,8 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
       }),
       map(state => state ? "Successful" : "Verification Failed"),
       catchError(err => {
-        // console.log("Caught error => ", err);
-        this.showErrorDialog();
+        console.log("Caught error => ", err);
+        this.showErrorDialog(err as string);
         this.payWithCard$ = null;
         this.verifyAgain$ = null;
         return of("Verification Failed");
@@ -516,27 +580,36 @@ export class UpdateCoursePaymentComponent implements OnInit, OnDestroy, AfterVie
   parseTimestamp(timestamp: string) {
     const epochOffset = parseInt(timestamp);
     const nan = isNaN(epochOffset);
+    const fourMonthOffset = 1000 * 60 * 60 * 24 * 30 * 4;
     if (!nan) {
-      return (new Date().getMonth() - new Date(epochOffset).getMonth()) <= 4
+      return (Date.now() - epochOffset) <= fourMonthOffset;
     } return nan;
   }
 
   parseReference(reference: string, customer: CustomerResponse) {
     // console.log("customer => ", customer);
-    const segments = reference.split("-");
-    const [userId, updateCourseId, timestamp] = segments.length === 3 ? segments : reference.split("_");
-    const timetruth = this.parseTimestamp(timestamp);
+    // const segments = reference.split("-");
+    // const [userId, updateCourseId, timestamp] = segments.length === 3 ? segments : reference.split("_");
+    // const timetruth = this.parseTimestamp(timestamp);
     this.verifyAgain$ = this.aggregateParams$("").pipe(
       concatMap(params => {
-        if (userId === params.user.uid && updateCourseId === params.uCourseId &&
-          timetruth && customer.status) {
-          return this.verifyTransaction(
-            this.toTransaction(reference),
-            this.showSuccessDialog,
-            params
-          );
-        }
-        this.showRefErrorDialog();
+        // Legacy code using reference with 2 hyphens and user and course uids and timestamp
+        // if (userId === params.user.uid && updateCourseId === params.uCourseId &&
+        //   timetruth && customer.status) {
+        // }
+
+        return this.verifyTransaction(
+          this.toTransaction(reference),
+          this.showSuccessDialog,
+          params
+        );
+        // this.showRefErrorDialog();
+        this.verifyAgain$ = null;
+        return of("Error occurred");
+      }),
+      catchError(err => {
+        console.log("err =>", err);
+        this.showVerifyErrorDialog();
         this.verifyAgain$ = null;
         return of("Error occurred");
       })
