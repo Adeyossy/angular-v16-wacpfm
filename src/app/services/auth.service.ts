@@ -388,7 +388,18 @@ export class AuthService {
     )
   }
 
-  getAppUser$() {
+  initialiseAppUser$ = () => {
+    return this.getFirebaseUser$().pipe(
+      map(user => {
+        const appUser = Object.assign({}, DEFAULT_NEW_APPUSER);
+        appUser.email = user.email || "";
+        appUser.userId = user.uid;
+        return appUser;
+      })
+    )
+  }
+
+  getAppUser$ = () => {
     if (this.appUser !== null) return of(this.appUser);
     return this.getDocByUserId$<AppUser>(USERS).pipe(
       map(appUser => appUser !== null ? appUser : Object.assign({}, DEFAULT_NEW_APPUSER))
