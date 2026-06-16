@@ -25,6 +25,18 @@
       <h1 class="wacpfm-heading-medium wacpfm-heading-primary fw-bold">Events</h1>
       <br>
       <p class="wacpfm-subheading">Manage events here.</p>
+      <button class="icon small" (click)="createNextEvent$()" 
+      *ngIf="creatingEvent$ === null; else creating">
+        <i class="bi bi-plus-circle-fill"></i> Create Event
+      </button>
+      <ng-template #creating>
+        <button class="icon small" *ngIf="creatingEvent$ | async as creating; else processing">
+          Done
+        </button>
+        <ng-template #processing>
+          <app-loading-small-circles></app-loading-small-circles>
+        </ng-template>
+      </ng-template>
       <br>
       <div *ngIf="events$ | async as events; else loading">
         <app-card-grid [items]="events"></app-card-grid>

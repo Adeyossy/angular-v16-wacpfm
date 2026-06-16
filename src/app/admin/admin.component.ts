@@ -8,7 +8,7 @@ import { HelperService } from '../services/helper.service';
 import { DEFAULT_RESOURCE_PERSON, RESOURCE_PERSONS, ResourcePerson } from '../models/user';
 import { DEFAULT_WRITING } from '../models/candidate';
 import { EventService } from '../services/event.service';
-import { Event } from '../models/event';
+import { Event, PRECONFERENCE } from '../models/event';
 import { CardGridItem } from '../widgets/card-grid/card-grid.component';
 import { PaymentService } from '../services/payment.service';
 import { Transaction } from '../models/payment';
@@ -34,6 +34,7 @@ export class AdminComponent implements OnInit {
   grantAccess$: Observable<void> = NEVER;
   data$: Observable<string> | null = null;
   events$: Observable<CardGridItem[]> = of([]);
+  creatingEvent$: Observable<boolean> | null = null;
 
   // should lecture is a flag to let the system knoww that
   // shouldRefresh: "lecture" | "payment" | "resource_person" | "" = "";
@@ -114,6 +115,12 @@ export class AdminComponent implements OnInit {
       subtitle: Intl.DateTimeFormat("en-NG").format(course.startDate),
       text: Date.now() > course.endDate ? "Ended" : "In Progress"
     }
+  }
+
+  createNextEvent$ = () => {
+    this.creatingEvent$ = this.eventService.createEvent$(PRECONFERENCE).pipe(
+      map(_v => true)
+    );
   }
 
   setCourse(course: UpdateCourse) {

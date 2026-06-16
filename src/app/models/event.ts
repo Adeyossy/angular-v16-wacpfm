@@ -73,3 +73,33 @@ export const DEFAULT_NEW_EVENT: Event = {
   whatsapp: "",
   certificate_url: ""
 }
+
+export const PRECONFERENCE: Event = {
+  accept_payment: true,
+  acronym: "preconference",
+  certificate_url: "",
+  course_duration: 14400000,
+  day: "6",
+  edition: "50",
+  expected_capacity: 500,
+  fees: [],
+  first_day: 1783292400000,
+  id: "preconference-06-07-2026",
+  last_day: 1783353600000,
+  month: "7",
+  objectives: [],
+  organisation_email: "",
+  organisation_id: "wacpfm",
+  organisation_phone: "",
+  other_info: [],
+  paid_participants: [],
+  platform: "",
+  registered_participants: [],
+  registration_closes: 1783328400000,
+  registration_opens: 1781520801000,
+  summary: "Family Medicine Leadership in Person Centered Quality Improvement.",
+  title: "50th AGSM Faculty of Family Medicine Virtual Preconference Workshop",
+  verification_protocol: "",
+  whatsapp: "",
+  year: "2026"
+}

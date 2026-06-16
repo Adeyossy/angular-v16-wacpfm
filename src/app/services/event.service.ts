@@ -19,6 +19,16 @@ import { Lecture } from '../models/update_course';
 })
 export class EventService extends CacheService {
 
+  createEvent$ = (event: Event) => {
+    return this.authService.addDocWithID$(
+      EVENTS_COLLECTION,
+      event.id,
+      event
+    );
+  }
+
+  copyEvent$ = (event: Event) => {}
+
   getEvents = () => {
     return this.authService.getCollection$<Event>(EVENTS_COLLECTION);
   }
