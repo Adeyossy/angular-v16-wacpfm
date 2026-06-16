@@ -4,7 +4,7 @@
 </div>
 <br><br>
 <div *ngIf="events$ | async as events; else loading">
-  <div class="wacpfm-card" *ngFor="let event of events">
+  <div class="wacpfm-card" *ngFor="let event of events; first as f" [class.wacpfm-header-card]="f">
     <h1 class="wacpfm-heading-small fw-bold mb-3">{{ event.title }}</h1>
     <p class="wacpfm-subheading mb-3">{{ event.summary }}</p>
     <button class="w-auto wacpfm-primary-button" routerLink="./{{event.id}}">View Event</button>

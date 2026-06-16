@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { Event } from 'src/app/models/event';
 import { EventService } from 'src/app/services/event.service';
 
@@ -14,6 +14,8 @@ export class EventsComponent implements OnInit {
   constructor (private eventService: EventService) {}
 
   ngOnInit(): void {
-    this.events$ = this.eventService.getEvents();
+    this.events$ = this.eventService.getEvents().pipe(
+      map(events => events.sort((a, b) => b.first_day - a.first_day))
+    );
   }
 }
