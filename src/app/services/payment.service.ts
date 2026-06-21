@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import PaystackPop from '@paystack/inline-js';
 import { EventService } from './event.service';
 import { UpdateCourseService } from './update-course.service';
-import { TransactionParamsWithSK, TransactionResponse } from '../models/payment';
+import { Transaction, TransactionParamsWithSK, TransactionResponse } from '../models/payment';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -31,12 +31,36 @@ export class PaymentService {
     );
   }
 
+  getRecords$ = (type: string, id: string, email: string) => {
+    if (type === "updatecourse") {
+      return this.courseService.getRecords$(id, email)
+    }
+
+    return this.eventService.getRecords$(id, email);
+  }
+
+  parseTrxMetadata = (transaction: Transaction) => {
+    return this.courseService.parseTrxMetadata(transaction);
+  }
+
   getPaymentList(type: string, id: string) {
     if (type === "updatecourse") {
       return this.courseService.getPaymentsList$(id);
     }
 
     return this.eventService.getPaymentsList$(id);
+  }
+
+  getCategory$ = (category: string, id: string) => {
+    if (category === "updatecourse") {
+      return this.courseService.getUpdateCourse$(id);
+    }
+
+    return this.eventService.getEventById$(id);
+  }
+
+  getCourse$ = (id: string) => {
+    return this.courseService.getUpdateCourse$(id);
   }
 
   getEventPayments() {

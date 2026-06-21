@@ -58,6 +58,24 @@
     </div>
     <div class="col-lg-6 py-3">
       <div class="wacpfm-card wacpfm-match-height">
+        <h1 class="wacpfm-subheading fw-bold">Paystack Payments</h1>
+        <br>
+        <p class="wacpfm-small-text wacpfm-lines">
+          Resolve payment and registration issues.
+        </p>
+        <br>
+        <button class="wacpfm-primary-button" 
+        routerLink="updatecourse/{{currentCourse?.updateCourseId}}/payments"
+        [queryParams]="{
+          from: helper.toDateString(currentCourse?.registrationOpenDate!), 
+          to: helper.toDateString(currentCourse?.endDate!)
+        }">
+          GO TO PAYMENTS
+        </button>
+      </div>
+    </div>
+    <div class="col-lg-6 py-3">
+      <div class="wacpfm-card wacpfm-match-height">
         <h1 class="wacpfm-subheading fw-bold">Lectures</h1>
         <br>
         <p class="wacpfm-small-text wacpfm-lines">

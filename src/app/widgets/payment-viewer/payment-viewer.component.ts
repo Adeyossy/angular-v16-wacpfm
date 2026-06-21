@@ -36,35 +36,38 @@ export class PaymentViewerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userDetails$ = this.authService.queryCollections$<AppUser>
-      (USERS, where("email", "==", this.record.userEmail)).pipe(
-        map(this.appUsersToCardList)
-      );
+    this.userDetails$ = this.authService.queryCollections$<AppUser>(
+      USERS,
+      where("email", "==", this.record.userEmail)
+    ).pipe(
+      map(this.appUsersToCardList)
+    );
   }
 
   approve() {
     this.approval$ = this.authService.getFirestore$().pipe(
       concatMap(db => {
         const batch = writeBatch(db);
+        this.record.approved = true;
         const recordRef = doc(collection(db, UPDATE_COURSES_RECORDS), this.record.id);
-        batch.update(recordRef, { approved: true });
+        batch.update(recordRef, this.record);
         const updateCourseRef = doc(collection(db, UPDATE_COURSES), this.updateCourse.updateCourseId);
         if (this.record.courseType === 'Membership') {
-          const members = typeof(this.updateCourse.membershipParticipants) === "string" ?
-            this.updateCourse.membershipParticipants.split(", ") : 
+          const members = typeof (this.updateCourse.membershipParticipants) === "string" ?
+            this.updateCourse.membershipParticipants.split(", ") :
             this.updateCourse.membershipParticipants
           members.push(this.record.userEmail);
           batch.update(updateCourseRef, { membershipParticipants: arrayUnion(this.record.userEmail) })
         }
         if (this.record.courseType === 'Fellowship') {
-          const fellows = typeof(this.updateCourse.fellowshipParticipants) === "string" ? 
-            this.updateCourse.fellowshipParticipants.split(", ") : 
+          const fellows = typeof (this.updateCourse.fellowshipParticipants) === "string" ?
+            this.updateCourse.fellowshipParticipants.split(", ") :
             this.updateCourse.fellowshipParticipants;
           fellows.push(this.record.userEmail);
-          batch.update(updateCourseRef, { fellowshipParticipants: arrayUnion(this.record.userEmail)})
+          batch.update(updateCourseRef, { fellowshipParticipants: arrayUnion(this.record.userEmail) })
         }
         if (this.record.courseType === 'ToT') {
-          const tots = typeof(this.updateCourse.totParticipants) === "string" ? 
+          const tots = typeof (this.updateCourse.totParticipants) === "string" ?
             this.updateCourse.totParticipants.split(", ") :
             this.updateCourse.totParticipants;
           tots.push(this.record.userEmail);
@@ -85,17 +88,17 @@ export class PaymentViewerComponent implements OnInit {
         batch.update(recordRef, { approved: false });
         const updateCourseRef = doc(collection(db, UPDATE_COURSES), this.updateCourse.updateCourseId);
         if (this.record.courseType === 'Membership') {
-          let members = typeof(this.updateCourse.membershipParticipants) === "string" ?
-          this.updateCourse.membershipParticipants.split(", ") : 
-          this.updateCourse.membershipParticipants;
+          let members = typeof (this.updateCourse.membershipParticipants) === "string" ?
+            this.updateCourse.membershipParticipants.split(", ") :
+            this.updateCourse.membershipParticipants;
           if (members.includes(this.record.userEmail)) {
             members = members.filter(rec => rec.toLowerCase() !== this.record.userEmail.toLowerCase());
             batch.update(updateCourseRef, { membershipParticipants: arrayRemove(this.record.userEmail) })
           }
         }
         if (this.record.courseType === 'Fellowship') {
-          let fellows = typeof(this.updateCourse.fellowshipParticipants) === "string" ? 
-            this.updateCourse.fellowshipParticipants.split(", ") : 
+          let fellows = typeof (this.updateCourse.fellowshipParticipants) === "string" ?
+            this.updateCourse.fellowshipParticipants.split(", ") :
             this.updateCourse.fellowshipParticipants;
           if (fellows.includes(this.record.userEmail)) {
             fellows = fellows.filter(rec => rec.toLowerCase() !== this.record.userEmail.toLowerCase());
@@ -103,8 +106,8 @@ export class PaymentViewerComponent implements OnInit {
           }
         }
         if (this.record.courseType === 'ToT') {
-          let tots = typeof(this.updateCourse.totParticipants) === "string" ? 
-            this.updateCourse.totParticipants.split(", ") : 
+          let tots = typeof (this.updateCourse.totParticipants) === "string" ?
+            this.updateCourse.totParticipants.split(", ") :
             this.updateCourse.totParticipants;
           if (tots.includes(this.record.userEmail)) {
             tots = tots.filter(rec => rec.toLowerCase() !== this.record.userEmail.toLowerCase());

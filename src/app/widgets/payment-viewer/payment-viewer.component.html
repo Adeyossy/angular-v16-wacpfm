@@ -3,10 +3,11 @@
   <p class="wacpfm-heading-medium fw-bold" *ngIf="record.approved"><i class="bi bi-check-circle-fill"></i> Approved</p>
 </div>
 <br><br>
-<div class="wacpfm-card">
+<details class="wacpfm-card">
+  <summary>Payer's Information</summary>
   <app-card-list *ngFor="let list of userDetails$ | async; index as i" [item]="list" [index]="i">
   </app-card-list>
-</div>
+</details>
 <br><br>
 <img [src]="record.paymentEvidence" alt="Payment receipt for this update course" class="img-fluid">
 <br><br>

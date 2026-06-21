@@ -73,7 +73,7 @@ const routes: Routes = [
       { path: "updatecourse/:updateCourseId/details/certificate/:recordId", component: CertificateComponent },
       { path: "admin", component: AdminComponent, canActivate: [adminGuard] },
       { path: "admin/updatecourse", component: AdminComponent, canActivate: [adminGuard] },
-      { path: "admin/event/:id", component: EventAdminComponent, canActivate: [adminGuard] },
+      { path: "admin/event/:eventId", component: EventAdminComponent, canActivate: [adminGuard] },
       { path: "admin/:category/:id/payments", component: PaymentsComponent, canActivate: [adminGuard] },
       { path: "admin/exams", component: ExamAdminComponent, title: "Exam Admin | FM App" },
       { path: "admin/exams/:examAlias/sections", component: AdminSectionsComponent, title: "Exam Admin Sections | FM App" },

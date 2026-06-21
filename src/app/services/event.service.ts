@@ -54,6 +54,16 @@ export class EventService extends CacheService {
     );
   }
 
+  getRecords$ = (eventId: string, email: string) => {
+    return this.authService.queriesCollections$<EventRecord>(
+      EVENT_RECORDS_COLLECTION,
+      [
+        where("eventId", "==", eventId),
+        where("email", "==", email)
+      ]
+    );
+  }
+
   getPayments$ = (eventId: string) => {
     return this.queryItem$<EventRecord>(EVENT_RECORDS_COLLECTION, [
       where("eventId", "==", eventId)

@@ -7,7 +7,7 @@
     View payment information for Faculty App activities.
   </p>
 </div>
-<br><br>
+<!-- <br><br>
 <div *ngIf="items$ | async as items; else loading">
   <div *ngFor="let item of items">
     <details class="wacpfm-card">
@@ -25,12 +25,16 @@
       <h1 class="wacpfm-subheading fw-bold">No one has made payment at the moment.</h1>
     </div>
   </div>
-</div>
+</div> -->
 <br><br>
-<div *ngIf="transactions$ | async as transactions">
-  <app-card-list *ngFor="let transaction of transactions; index as i" [item]="transaction"
-  [index]="i" [control]="true" [state]="true"></app-card-list>
-</div>
+<ng-container *ngIf="updateCourse$ | async as course">
+  <div *ngIf="transactions$ | async as transactions">
+    <app-card-list *ngFor="let transaction of transactions; index as i; trackBy trackById" 
+    [item]="transactionToCardList(transaction, course)" 
+    [index]="i" [control]="true" [state]="!!flag(course, transaction.customer.email)"
+    (click)="showDialog(transaction, course)"></app-card-list>
+  </div>
+</ng-container>
 <ng-template #loading>
   <app-loading-circles></app-loading-circles>
 </ng-template>

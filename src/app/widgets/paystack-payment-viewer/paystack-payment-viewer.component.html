@@ -1,1 +1,12 @@
-<p>paystack-payment-viewer works!</p>
+<div class="wacpfm-heading-underline">
+  <h1 class="wacpfm-heading-small">Paystack Payment Details</h1>
+  <div class="wacpfm-underline"></div>
+</div>
+<br><br>
+<ng-container *ngIf="records$ | async as records; else loading">
+  <app-payment-viewer *ngFor="let record of records" [record]="record"
+  [updateCourse]="helper.data.course"></app-payment-viewer>
+</ng-container>
+<ng-template #loading>
+  <app-loading-circles></app-loading-circles>
+</ng-template>

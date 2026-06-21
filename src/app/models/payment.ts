@@ -29,6 +29,23 @@ export interface PaystackInitResponse {
 export interface Transaction {
   amount: number,
   authorization_url: string,
+  paid_at: string,
+  customer: {
+    firstname: string,
+    lastname: string,
+    email: string
+  },
+  metadata: {
+    custom_fields: UpdateCourseCustomFields | EventCustomFields
+  },
+  reference: string,
+  status: string
+}
+
+export const DEFAULT_TRANSACTION: Transaction = {
+  amount: 0,
+  authorization_url: "",
+  paid_at: "",
   customer: {
     firstname: "",
     lastname: "",
@@ -39,22 +56,22 @@ export interface Transaction {
       {
         display_name: "Category",
         variable_name: "category",
-        value: UpdateCourseType
+        value: "Membership"
       },
       {
         display_name: "Fee",
         variable_name: "fee",
-        value: number
+        value: 0
       },
       {
         display_name: "Course ID",
         variable_name: "course_id",
-        value: string
+        value: ""
       }
     ]
   },
-  reference: string,
-  status: string
+  reference: "",
+  status: ""
 }
 
 export interface TransactionParams {
@@ -84,6 +101,24 @@ export type UpdateCourseCustomFields = [
   {
     display_name: "Course ID",
     variable_name: "course_id",
+    value: string
+  }
+];
+
+export type EventCustomFields = [
+  {
+    display_name: "Name",
+    variable_name: "name",
+    value: string
+  },
+  {
+    display_name: "Fee",
+    variable_name: "fee",
+    value: number
+  },
+  {
+    display_name: "Event ID",
+    variable_name: "event_id",
     value: string
   }
 ];
@@ -164,23 +199,7 @@ export interface UpdateCourseTransactionData {
   currency: string,
   ip_address: string,
   metadata: {
-    custom_fields: [
-      {
-        display_name: "Category",
-        variable_name: "category",
-        value: PaymentCategory
-      },
-      {
-        display_name: "Fee",
-        variable_name: "fee",
-        value: number
-      },
-      {
-        display_name: "Course ID",
-        variable_name: "course_id",
-        value: string
-      }
-    ]
+    custom_fields: UpdateCourseCustomFields
   },
   log: {
     time_spent: number,

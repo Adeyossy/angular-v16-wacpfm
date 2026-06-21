@@ -25,7 +25,11 @@
             [examiner]="helper.data.examiner">
           </app-invite-examiner>
           <app-examiners-list *ngIf="helper.data.allWritings.length > 0"
-            [writing]="helper.data.academicWriting" [allWritings]="helper.data.allWritings"></app-examiners-list>
+            [writing]="helper.data.academicWriting" [allWritings]="helper.data.allWritings">
+          </app-examiners-list>
+          <app-paystack-payment-viewer *ngIf="helper.data.paystack.status !== ''"
+          [transaction]="helper.data.paystack">
+          </app-paystack-payment-viewer>
         </app-component-overlay>
       </div>
       <div class="wacpfm-overlay-container main" *ngIf="helper.isDialogShown === 0">

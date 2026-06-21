@@ -5,6 +5,7 @@ import { DEFAULT_COURSE_RECORD, UpdateCourseRecord, UpdateCourseType } from '../
 import { DEFAULT_RESOURCE_PERSON, ResourcePerson } from '../models/user';
 import { AcademicWriting, DEFAULT_ACADEMIC_WRITING, DEFAULT_WRITING, Writing } from '../models/candidate';
 import { Examiner, NEW_EXAMINER } from '../models/examiner';
+import { DEFAULT_TRANSACTION, Transaction } from '../models/payment';
 
 export interface SimpleDialog {
   title: string,
@@ -23,6 +24,7 @@ export interface ComponentDialogData {
   courseId: string,
   lecture: UpdateCourseLecture,
   payment: UpdateCourseRecord,
+  paystack: Transaction,
   course: UpdateCourse,
   lecturer: ResourcePerson,
   examiner: Examiner,
@@ -138,6 +140,7 @@ export class HelperService {
       courseId: "",
       lecture: Object.assign({}, DEFAULT_LECTURE),
       payment: Object.assign({}, DEFAULT_COURSE_RECORD),
+      paystack: Object.assign({}, DEFAULT_TRANSACTION),
       course: Object.assign({}, DEFAULT_UPDATE_COURSE),
       lecturer: Object.assign({}, DEFAULT_RESOURCE_PERSON),
       examiner: Object.assign({}, NEW_EXAMINER),

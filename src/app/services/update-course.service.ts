@@ -6,9 +6,15 @@ import { CacheService } from './cache.service';
 import { DEFAULT_UPDATE_COURSE, TRAINER_CERTIFICATIONS, TrainerCertification, UPDATE_COURSES, UpdateCourse } from '../models/update_course';
 import { BY_CATEGORY, UPDATE_COURSES_RECORDS, UpdateCourseRecord, UpdateCourseType } from '../models/update_course_record';
 import { CardList } from '../widgets/card-list/card-list.component';
-import { BasicResponse, Category, DEFAULT_BASIC_RESPONSE, PaystackTransaction, Transaction } from '../models/payment';
+import { BasicResponse, Category, DEFAULT_BASIC_RESPONSE, PaymentCategory, PaystackTransaction, Transaction, UpdateCourseCustomFields } from '../models/payment';
 import { environment } from 'src/environments/environment';
 import { User } from 'firebase/auth';
+
+export interface UpdateCourseMetadata {
+  category: PaymentCategory,
+  course_id: string,
+  fee: number
+}
 
 @Injectable({
   providedIn: 'root'
@@ -157,6 +163,18 @@ export class UpdateCourseService extends CacheService {
     ])
   }
 
+  getRecords$ = (id: string, email: string) => {
+    console.log("id =>", id);
+    console.log("email =>", email);
+    return this.authService.queriesCollections$<UpdateCourseRecord>(
+      UPDATE_COURSES_RECORDS,
+      [
+        where("updateCourseId", "==", id),
+        where("userEmail", "==", email)
+      ]
+    );
+  }
+
   getPaymentsList$(id: string): Observable<CardList[]> {
     return this.getPayments$(id).pipe(
       map(records => records.map(r => {
@@ -169,6 +187,12 @@ export class UpdateCourseService extends CacheService {
     )
   }
 
+  getUpdateCourse$ = (id: string): Observable<UpdateCourse> => {
+    return this.authService.getDocById$<UpdateCourse>(UPDATE_COURSES, id).pipe(
+      map(ucourse => ucourse || JSON.parse(JSON.stringify(DEFAULT_UPDATE_COURSE)))
+    )
+  }
+
   fetchTrainerCert$ = (updateCourseId: string) => {
     this.resetCache(TRAINER_CERTIFICATIONS);
     return this.queryItem$<TrainerCertification>(
@@ -178,12 +202,18 @@ export class UpdateCourseService extends CacheService {
     );
   }
 
+  parseTrxMetadata = (transaction: Transaction) => {
+    const metadataArray = transaction.metadata.custom_fields as UpdateCourseCustomFields;
+    const metadata = metadataArray.map(m => [m.variable_name, m.value]);
+    return Object.fromEntries(metadata) as UpdateCourseMetadata;
+  }
+
   parseTransactionDetails = (transaction: Transaction, record: UpdateCourseRecord) => {
     const fields = transaction.metadata.custom_fields;
     fields.forEach((field) => {
       switch (field.variable_name) {
         case "category":
-          record.courseType = field.value;
+          if (field.value !== "ToT & Resident") record.courseType = field.value;
           break;
 
         case "course_id":

@@ -1,14 +1,17 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="event$ | async as event; else loading">
   <div class="row">
     <div class="col-lg-6 py-3">
-      <div class="wacpfm-card wacpfm-match-height" routerLink="./payments">
+      <div class="wacpfm-card wacpfm-match-height">
         <h1 class="wacpfm-subheading fw-bold">Payments</h1>
         <br>
         <p class="wacpfm-small-text wacpfm-lines">
           Review and approve payments made for update courses for each category.
         </p>
         <br>
-        <button class="wacpfm-primary-button" routerLink="./payments">GO TO PAYMENTS</button>
+        <button class="wacpfm-primary-button" routerLink="./payments" 
+        [queryParams]="{from: msToDate(event.registration_opens), to: msToDate(event.last_day)}">
+          GO TO PAYMENTS
+        </button>
       </div>
     </div>
     <!-- <div class="col-lg-6 py-3">
@@ -24,3 +27,16 @@
     </div> -->
   </div>
 </div>
+<ng-template #loading>
+  <div class="w-50">
+    <app-loading-ui></app-loading-ui>
+  </div>
+  <br>
+  <div class="w-75">
+    <app-loading-ui></app-loading-ui>
+  </div>
+  <br>
+  <div class="w-25">
+    <app-loading-ui></app-loading-ui>
+  </div>
+</ng-template>
