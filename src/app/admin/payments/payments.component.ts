@@ -68,7 +68,7 @@ export class PaymentsComponent implements OnInit {
         map(([category, id]) => transactions.filter(trx => {
           if (category === "updatecourse") return trx.amount > 1200000;
           return trx.amount < 1200000
-        }).sort((a, b) => a.customer.email.charCodeAt(0) - b.customer.email.charCodeAt(0)))
+        }).sort())
       ))
     );
   }
