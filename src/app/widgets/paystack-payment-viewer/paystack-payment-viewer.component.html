@@ -1,7 +1,8 @@
 <div class="wacpfm-heading-underline">
-  <h1 class="wacpfm-heading-small">Paystack Payment Details</h1>
+  <h1 class="wacpfm-subheading">Paystack Payment Details</h1>
   <div class="wacpfm-underline"></div>
 </div>
+<p>{{ metadata.category }}</p>
 <br><br>
 <ng-container *ngIf="records$ | async as records; else loading">
   <app-payment-viewer *ngFor="let record of records" [record]="record"
