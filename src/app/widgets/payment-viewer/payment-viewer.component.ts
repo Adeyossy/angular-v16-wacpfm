@@ -50,7 +50,8 @@ export class PaymentViewerComponent implements OnInit {
         const batch = writeBatch(db);
         this.record.approved = true;
         const recordRef = doc(collection(db, UPDATE_COURSES_RECORDS), this.record.id);
-        batch.update(recordRef, this.record);
+        batch.set(recordRef, this.record);
+        // batch.update(recordRef, this.record);
         const updateCourseRef = doc(collection(db, UPDATE_COURSES), this.updateCourse.updateCourseId);
         if (this.record.courseType === 'Membership') {
           const members = typeof (this.updateCourse.membershipParticipants) === "string" ?
