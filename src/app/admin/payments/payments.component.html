@@ -14,9 +14,9 @@
       <summary class="wacpfm-heading wacpfm-heading-small fw-bold">{{ item[0] }}</summary>
       <br>
       <hr><br>
-      <app-card-list *ngFor="let listItem of item[1]; index as i" [item]="listItem"
+      <app-card-list-item *ngFor="let listItem of item[1]; index as i" [item]="listItem"
         [index]="i" [control]="true"
-        [state]="true"></app-card-list>
+        [state]="true"></app-card-list-item>
     </details>
     <br>
   </div>
@@ -29,10 +29,10 @@
 <br><br>
 <ng-container *ngIf="updateCourse$ | async as course">
   <div *ngIf="transactions$ | async as transactions">
-    <app-card-list *ngFor="let transaction of transactions; index as i; trackBy trackById" 
+    <app-card-list-item *ngFor="let transaction of transactions; index as i; trackBy trackById" 
     [item]="transactionToCardList(transaction, course)" 
     [index]="i" [control]="true" [state]="!!flag(course, transaction.customer.email)"
-    (click)="showDialog(transaction, course)"></app-card-list>
+    (click)="showDialog(transaction, course)"></app-card-list-item>
   </div>
 </ng-container>
 <ng-template #loading>

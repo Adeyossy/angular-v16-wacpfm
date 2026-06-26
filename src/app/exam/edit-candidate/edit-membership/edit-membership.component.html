@@ -21,8 +21,8 @@
     <button class="icon small" (click)="addPMR(membership)"><i class="bi bi-plus-circle"></i> Add PMRs</button>
     <br>
     <hr><br>
-    <app-card-list *ngFor="let pmr of membership.pmrs.map(toCardList); index as i" [item]="pmr" [index]="i"
-      [control]="membership.pmrs[i].files.length > 0" (click)="showWriting(membership, i)"></app-card-list>
+    <app-card-list-item *ngFor="let pmr of membership.pmrs.map(toCardList); index as i" [item]="pmr" [index]="i"
+      [control]="membership.pmrs[i].files.length > 0" (click)="showWriting(membership, i)"></app-card-list-item>
   </div>
   <div *ngIf="updateTracker$ === null; else update">
     <button class="wacpfm-primary-button" (click)="update$(membership)">Submit</button>

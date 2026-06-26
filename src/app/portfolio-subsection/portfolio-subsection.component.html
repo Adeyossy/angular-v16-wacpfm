@@ -11,8 +11,8 @@
     <br>
     <hr>
     <br>
-    <app-card-list *ngFor="let subsection of subsections; index as i" [item]="subsection" [index]="i"
-      [routerLink]="replaceSubsection(subsection.title)"></app-card-list>
+    <app-card-list-item *ngFor="let subsection of subsections; index as i" [item]="subsection" [index]="i"
+      [routerLink]="replaceSubsection(subsection.title)"></app-card-list-item>
   </div>
 </ng-container>
 <ng-template #loading>

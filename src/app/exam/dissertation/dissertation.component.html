@@ -28,7 +28,7 @@
     <div *ngIf="user$ | async as user">
       <details *ngFor="let item of gradesToCardList(grade); index as i">
         <summary class="summary-no-marker">
-          <app-card-list [item]="item" [index]="i"></app-card-list>
+          <app-card-list-item [item]="item" [index]="i"></app-card-list-item>
         </summary>
         <input type="number" name="wacpfm-grade-score" id="wacpfm-grade-score" 
           [(ngModel)]="this.getSections(grade)[i].score" [disabled]="appUser[0].email !== user.email">

@@ -6,7 +6,7 @@
   </div>
 </div>
 <br>
-<app-card-list *ngFor="let examiner of examiners$ | async; index as i" [item]="toCardListItem(examiner)" [index]="i"
+<app-card-list-item *ngFor="let examiner of examiners$ | async; index as i" [item]="toCardListItem(examiner)" [index]="i"
   [state]="writing.examinerEmails.includes(examiner.userEmail)" (click)="selectExaminer(examiner)"
   [control]="writing.examinerEmails.includes(examiner.userEmail)">
   <div class="d-flex" *ngIf="getSupervisions(examiner) as supervisions"
@@ -23,6 +23,6 @@
       </ng-template>
     </ng-template>
   </div>
-</app-card-list>
+</app-card-list-item>
 <br>
 <button class="wacpfm-primary-button" (click)="helper.resetComponentDialogData()">Done</button>

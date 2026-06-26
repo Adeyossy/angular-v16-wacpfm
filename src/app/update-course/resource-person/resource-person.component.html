@@ -71,8 +71,8 @@
       </button>
     </div>
     <div class="col-lg-6 py-3">
-      <app-card-list *ngFor="let lecture of lectures$ | async; index as i" [item]="lectureToCardList(lecture)"
-        [index]="i" (click)="showLecture(lecture)"></app-card-list>
+      <app-card-list-item *ngFor="let lecture of lectures$ | async; index as i" [item]="lectureToCardList(lecture)"
+        [index]="i" (click)="showLecture(lecture)"></app-card-list-item>
     </div>
   </div>
 </div>

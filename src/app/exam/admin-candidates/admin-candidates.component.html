@@ -9,9 +9,9 @@
   <h1 class="wacpfm-heading-small fw-bold">Candidates</h1>
   <br>
   <hr><br>
-  <app-card-list *ngFor="let candidate of candidates; index as i" [item]="toCardList(candidate)">
+  <app-card-list-item *ngFor="let candidate of candidates; index as i" [item]="toCardList(candidate)">
     <div class="wacpfm-quick-buttons">
       <button class="icon small" routerLink="portfolio/{{candidate.candidateId}}">View Portfolio</button>
     </div>
-  </app-card-list>
+  </app-card-list-item>
 </div>

@@ -16,12 +16,12 @@
       <br>
       <hr>
       <br>
-      <app-card-list *ngFor="let section of sections; index as i" [item]="section" [index]="i"
+      <app-card-list-item *ngFor="let section of sections; index as i" [item]="section" [index]="i"
         [routerLink]="extractSectionId(section.title)">
         <button class="icon small">
           Score: {{getSectionScore(items, extractSectionId(section.title))}}
         </button>
-      </app-card-list>
+      </app-card-list-item>
     </div>
   </ng-container>
 </ng-container>

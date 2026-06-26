@@ -62,12 +62,12 @@
     <br>
     <div class="wacpfm-previous-attempts">
       <details class="wacpfm-previous-attempt" *ngFor="let attempt of candidate.previousAttemptsDetails; index as i">
-        <summary><app-card-list [item]="{
+        <summary><app-card-list-item [item]="{
             title: attempt.modulesPassed.join(', '), 
             subtitle: attempt.month,
             text: '(click to edit)'
           }" [index]="i" [state]="!!attempt.month" 
-          [control]="attempt.modulesPassed.length > 0"></app-card-list></summary>
+          [control]="attempt.modulesPassed.length > 0"></app-card-list-item></summary>
         <br>
         <label for="wacpfm-previous-attempt-month">Month and Year of Attempt</label>
         <input type="month" name="wacpfm-previous-attempt-month" id="wacpfm-previous-attempt-month" placeholder="month"

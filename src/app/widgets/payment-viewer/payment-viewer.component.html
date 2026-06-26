@@ -5,8 +5,8 @@
 <br><br>
 <details class="wacpfm-card">
   <summary>Payer's Information</summary>
-  <app-card-list *ngFor="let list of userDetails$ | async; index as i" [item]="list" [index]="i">
-  </app-card-list>
+  <app-card-list-item *ngFor="let list of userDetails$ | async; index as i" [item]="list" [index]="i">
+  </app-card-list-item>
 </details>
 <br><br>
 <img [src]="record.paymentEvidence" alt="Payment receipt for this update course" class="img-fluid">
