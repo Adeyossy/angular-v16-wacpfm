@@ -16,9 +16,9 @@ import { CardList } from 'src/app/widgets/card-list/card-list.component';
 export class AdminActionComponent implements OnInit {
   exam$: Observable<Exam[]> = of([]);
   examiners$: Observable<Examiner[]> = of([]);
-  examinersList$: Observable<CardList[]> = of([]);
+  examinersList$: Observable<CardList> = of([]);
   candidates$: Observable<Array<MembershipExamRecord | FellowshipExamRecord>> = of([]);
-  candidatesList$: Observable<CardList[]> = of([]);
+  candidatesList$: Observable<CardList> = of([]);
   writings$: Observable<AcademicWriting[]> = of([]);
 
   constructor(private examService: ExamService, private activatedRoute: ActivatedRoute, 

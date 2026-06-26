@@ -12,6 +12,7 @@ import { Event, PRECONFERENCE } from '../models/event';
 import { CardGridItem } from '../widgets/card-grid/card-grid.component';
 import { PaymentService } from '../services/payment.service';
 import { Transaction } from '../models/payment';
+import { CardListItem } from '../widgets/card-list-item/card-list-item.component';
 
 @Component({
   selector: 'app-admin',
@@ -20,7 +21,7 @@ import { Transaction } from '../models/payment';
 })
 export class AdminComponent implements OnInit {
   courses$: Observable<UpdateCourse[]> = NEVER;
-  cardItem$: Observable<CardList> = of({ title: "", subtitle: "", text: "" });
+  cardItem$: Observable<CardListItem> = of({ title: "", subtitle: "", text: "" });
   records$: Observable<UpdateCourseRecord[]> = NEVER;
   // list$: Observable<CardList[]> = new Observable();
   level = 0;

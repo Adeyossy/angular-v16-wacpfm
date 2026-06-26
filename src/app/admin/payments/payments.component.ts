@@ -6,6 +6,7 @@ import { Transaction } from 'src/app/models/payment';
 import { DEFAULT_UPDATE_COURSE, UpdateCourse } from 'src/app/models/update_course';
 import { HelperService } from 'src/app/services/helper.service';
 import { PaymentService } from 'src/app/services/payment.service';
+import { CardListItem } from 'src/app/widgets/card-list-item/card-list-item.component';
 import { CardList } from 'src/app/widgets/card-list/card-list.component';
 
 @Component({
@@ -14,7 +15,7 @@ import { CardList } from 'src/app/widgets/card-list/card-list.component';
   styleUrls: ['./payments.component.css']
 })
 export class PaymentsComponent implements OnInit {
-  items$: Observable<Array<[string, CardList[]]>> = of([]);
+  items$: Observable<Array<[string, CardListItem[]]>> = of([]);
   transactions$: Observable<Transaction[]> = of([]);
   category$: Observable<UpdateCourse | Event> = of();
   updateCourse$: Observable<UpdateCourse> = of(DEFAULT_UPDATE_COURSE);

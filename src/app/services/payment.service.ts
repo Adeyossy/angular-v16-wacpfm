@@ -4,8 +4,10 @@ import { EventService } from './event.service';
 import { UpdateCourseService } from './update-course.service';
 import { Transaction, TransactionParamsWithSK, TransactionResponse } from '../models/payment';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { CardListItem } from '../widgets/card-list-item/card-list-item.component';
+import { CardList } from '../widgets/card-list/card-list.component';
 
 type Channels = ["card", "bank_transfer", "apple_pay", "ussd", "qr", "mobile_money", "eft"];
 
@@ -43,7 +45,7 @@ export class PaymentService {
     return this.courseService.parseTrxMetadata(transaction);
   }
 
-  getPaymentList(type: string, id: string) {
+  getPaymentList = (type: string, id: string): Observable<CardList> => {
     if (type === "updatecourse") {
       return this.courseService.getPaymentsList$(id);
     }

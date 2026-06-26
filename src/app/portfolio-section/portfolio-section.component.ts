@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PortfolioSectionItem } from '../models/portfolio';
 import { FieldValue, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { USERID_ROUTE_PARAM } from '../app-routing.module';
+import { CardListItem } from '../widgets/card-list-item/card-list-item.component';
 
 @Component({
   selector: 'app-portfolio-section',
@@ -17,8 +18,8 @@ export class PortfolioSectionComponent implements OnInit {
   userIdParam$ = of("");
   section = of("");
   sectionItems$: Observable<PortfolioSectionItem[]> = of([]);
-  sectionItemsList: { [index: string]: CardList } = {};
-  sectionItemsList$: Observable<CardList[]> = of([]);
+  sectionItemsList: { [index: string]: CardListItem } = {};
+  sectionItemsList$: Observable<CardList> = of([]);
   sectionItemsGroupsList$: Observable<{
     subsection: string,
     items: PortfolioSectionItem[],
@@ -66,7 +67,7 @@ export class PortfolioSectionComponent implements OnInit {
     );
   }
 
-  toCardList = (sectionItem: PortfolioSectionItem): CardList => {
+  toCardList = (sectionItem: PortfolioSectionItem): CardListItem => {
     const timestamp = sectionItem.submission_timestamp as unknown as Timestamp;
 
     return {
@@ -76,13 +77,13 @@ export class PortfolioSectionComponent implements OnInit {
     };
   }
 
-  cachedToCardList = (sectionItem: PortfolioSectionItem): CardList => {
+  cachedToCardList = (sectionItem: PortfolioSectionItem): CardListItem => {
     const existing = this.sectionItemsList[sectionItem.id];
     if (existing) return existing;
 
     const timestamp = sectionItem.submission_timestamp as unknown as Timestamp;
 
-    const cardList: CardList = {
+    const cardList: CardListItem = {
       title: sectionItem.subsection,
       subtitle: timestamp.toDate().toLocaleString("en-NG"),
       text: sectionItem.category

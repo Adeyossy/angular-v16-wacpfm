@@ -70,7 +70,7 @@ export class EventService extends CacheService {
     ]);
   }
 
-  getPaymentsList$ = (id: string): Observable<CardList[]> => {
+  getPaymentsList$ = (id: string): Observable<CardList> => {
     return this.getPayments$(id).pipe(
       map(records => records.map(r => {
         const t = r.dateOfRegistration as unknown as Timestamp;

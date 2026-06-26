@@ -9,6 +9,7 @@ import { CardList } from '../widgets/card-list/card-list.component';
 import { BasicResponse, Category, DEFAULT_BASIC_RESPONSE, PaymentCategory, PaystackTransaction, Transaction, UpdateCourseCustomFields } from '../models/payment';
 import { environment } from 'src/environments/environment';
 import { User } from 'firebase/auth';
+import { CardListItem } from '../widgets/card-list-item/card-list-item.component';
 
 export interface UpdateCourseMetadata {
   category: PaymentCategory,
@@ -175,7 +176,7 @@ export class UpdateCourseService extends CacheService {
     );
   }
 
-  getPaymentsList$(id: string): Observable<CardList[]> {
+  getPaymentsList$ = (id: string): Observable<CardListItem[]> => {
     return this.getPayments$(id).pipe(
       map(records => records.map(r => {
         return {

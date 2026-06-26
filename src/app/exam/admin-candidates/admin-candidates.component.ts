@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { concatMap, Observable, of } from 'rxjs';
 import { FellowshipExamRecord, MembershipExamRecord } from 'src/app/models/candidate';
 import { ExamService } from 'src/app/services/exam.service';
+import { CardListItem } from 'src/app/widgets/card-list-item/card-list-item.component';
 import { CardList } from 'src/app/widgets/card-list/card-list.component';
 
 @Component({
@@ -28,7 +29,7 @@ export class AdminCandidatesComponent implements OnInit {
     );
   }
 
-  toCardList = (candidate: MembershipExamRecord | FellowshipExamRecord): CardList => {
+  toCardList = (candidate: MembershipExamRecord | FellowshipExamRecord): CardListItem => {
     return {
       title: candidate.wacpNo,
       subtitle: candidate.examNo,

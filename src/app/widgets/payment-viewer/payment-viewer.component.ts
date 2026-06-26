@@ -22,7 +22,7 @@ export class PaymentViewerComponent implements OnInit {
   @Input() record: UpdateCourseRecord = Object.assign({}, DEFAULT_COURSE_RECORD);
   @Input() updateCourse: UpdateCourse = Object.assign({}, DEFAULT_UPDATE_COURSE);
   approval$: Observable<ApprovalStates> = of("initial");
-  userDetails$: Observable<CardList[]> = NEVER;
+  userDetails$: Observable<CardList> = NEVER;
 
   constructor(private authService: AuthService, private helper: HelperService) { }
 

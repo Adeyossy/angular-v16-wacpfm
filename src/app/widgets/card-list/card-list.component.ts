@@ -1,10 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CardListItem } from '../card-list-item/card-list-item.component';
 
-export interface CardList {
-  title: string;
-  subtitle: string;
-  text: string;
-}
+export type CardList = CardListItem[];
 
 @Component({
   selector: 'app-card-list',
@@ -12,8 +9,19 @@ export interface CardList {
   styleUrls: ['./card-list.component.css']
 })
 export class CardListComponent {
-  @Input() item: CardList = {title: "", subtitle: "", text: "" }
-  @Input() index: number = -1;
-  @Input() control = false;
-  @Input() state = false;
+  @Input() items: CardList = [];
+  @Input() title = "";
+  @Output() itemEmitter: EventEmitter<string> = new EventEmitter();
+
+  emitClick = (id: string) => {
+    this.itemEmitter.emit(id);
+  }
+
+  // trackByTitle = (_index: number, item: CardListItem) => {
+  //   return item.title;
+  // }
+
+  sort = () => {
+    this.items.sort((a, b) => a.title.localeCompare(b.title));
+  }
 }

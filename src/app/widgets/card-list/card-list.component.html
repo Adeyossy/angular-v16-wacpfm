@@ -1,26 +1,4 @@
-<div class="container-fluid px-3 py-2 wacpfm-card-item mb-2"
-[ngClass]="control ? state ? 'success' : 'danger': ''">
-  <div class="row g-0">
-    <div class="col-1">
-      <p class="wacpfm-small-text color-accent">{{ index + 1 }}.</p>
-    </div>
-    <div class="col-9 px-1">
-      <p class="mb-0">{{ item.title }}</p>
-      <span class="wacpfm-smaller-text opacity-75 pe-2 text-capitalize">{{ item.subtitle }}</span>
-      <i class="bi bi-three-dots-vertical color-accent wacpfm-smaller-text"></i>
-      <span class="wacpfm-smaller-text fw-bold opacity-75">
-        {{ item.text }}
-      </span>
-      <br>
-      <div>
-        <ng-content></ng-content>
-      </div>
-    </div>
-    <div class="col-2 offset-lg-1 col-lg-1 text-end wacpfm-heading-small" *ngIf="control">
-      <i class="bi bi-check-circle-fill text-success" *ngIf="state; else negative"></i>
-      <ng-template #negative>
-        <i class="bi bi-x-circle-fill text-danger"></i>
-      </ng-template>
-    </div>
-  </div>
-</div>
+<button class="icon small mb-3" (click)="sort()">Sort <i class="bi bi-arrow-down"></i></button>
+<app-card-list-item *ngFor="let item of items; index as i" [item]="item"
+[index]="i" [control]="!!item.control" [state]="!!item.state"
+(click)="emitClick(item.title)"></app-card-list-item>

@@ -4,6 +4,8 @@ export interface CardListItem {
   title: string;
   subtitle: string;
   text: string;
+  control?: boolean;
+  state?: boolean;
 }
 
 @Component({

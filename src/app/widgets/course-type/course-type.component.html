@@ -15,8 +15,12 @@
     </a>
     <br>
     <hr><br>
-    <app-card-list-item *ngFor="let list of courseTypeOnly(lists, courseType); index as i" [item]="convertToCardList(list)"
-      [index]="i" (click)="emit(list)" [control]="evaluateControl(list)" [state]="evaluateState(list)"></app-card-list-item>
+    <app-card-list [items]="cardListMap[courseType]" (itemEmitter)="emitItem($event)"></app-card-list>
+    <br>
+    <!-- <app-card-list-item
+    *ngFor="let list of courseTypeOnly(lists, courseType); index as i; trackBy trackByEmail"
+    [item]="convertToCardList(list)" [index]="i" (click)="emit(list)" 
+    [control]="evaluateControl(list)" [state]="evaluateState(list)"></app-card-list-item> -->
   </details>
   <br>
 </div>

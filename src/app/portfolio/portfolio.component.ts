@@ -6,6 +6,7 @@ import { concatMap, map, Observable, of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { USERID_ROUTE_PARAM } from '../app-routing.module';
 import { PortfolioSectionItem } from '../models/portfolio';
+import { CardListItem } from '../widgets/card-list-item/card-list-item.component';
 
 @Component({
   selector: 'app-portfolio',
@@ -16,7 +17,7 @@ export class PortfolioComponent implements OnInit {
   userId$ = of("");
   portfolioItems$: Observable<PortfolioSectionItem[]> = of([]);
   portfolioScore: number | undefined = undefined;
-  sections: CardList[] = [];
+  sections: CardList = [];
   portfolioScoreTotal = 0;
 
   constructor (
@@ -50,7 +51,7 @@ export class PortfolioComponent implements OnInit {
     // const allItems = ;
   }
 
-  toCardList = (section: PortfolioSection): CardList => {
+  toCardList = (section: PortfolioSection): CardListItem => {
     return {
       title: section.section,
       subtitle: section.description,

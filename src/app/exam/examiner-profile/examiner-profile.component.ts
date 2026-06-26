@@ -10,7 +10,7 @@ import { CardList } from 'src/app/widgets/card-list/card-list.component';
 })
 export class ExaminerProfileComponent implements OnInit {
   @Input() examiner: Examiner = Object.assign({}, NEW_EXAMINER);
-  list: CardList[] = [];
+  list: CardList = [];
 
   ngOnInit(): void {
     this.list.push({

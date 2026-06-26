@@ -5,6 +5,7 @@ import { CANDIDATES, DISSERTATION, Dissertation, DissertationGrade, SubGrade } f
 import { AppUser, USERS } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ExamService } from 'src/app/services/exam.service';
+import { CardListItem } from 'src/app/widgets/card-list-item/card-list-item.component';
 import { CardList } from 'src/app/widgets/card-list/card-list.component';
 
 @Component({
@@ -19,7 +20,7 @@ export class DissertationComponent implements OnInit {
   @Input() dissertation: Dissertation = JSON.parse(JSON.stringify(DISSERTATION));
   declare oldBook: typeof this.dissertation;
   declare user$: Observable<User>;
-  gradesBySection: CardList[][] = [];
+  gradesBySection: CardList[] = [];
   sections: SubGrade[] = [];
   updateStatus$: Observable<boolean> | null = null;
   
@@ -42,7 +43,7 @@ export class DissertationComponent implements OnInit {
     ];
   }
 
-  subGradeToCardList = (subGrade: SubGrade & {title: string}): CardList => {
+  subGradeToCardList = (subGrade: SubGrade & {title: string}): CardListItem => {
     return {
       title: subGrade.title,
       subtitle: `Score: ${subGrade.score}`,

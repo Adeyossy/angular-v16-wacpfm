@@ -10,7 +10,7 @@ import { map, Observable, of } from 'rxjs';
   styleUrls: ['./portfolio-subsection.component.css']
 })
 export class PortfolioSubsectionComponent implements OnInit {
-  subsections$: Observable<CardList[]> = of([]);
+  subsections$: Observable<CardList> = of([]);
   sectionId$: Observable<string> = of("")
 
   constructor (

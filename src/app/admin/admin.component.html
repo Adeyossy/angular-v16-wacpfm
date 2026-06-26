@@ -16,7 +16,7 @@
       </p>
     </div>
     <div class="col-lg-6">
-      <app-card-list-item-item *ngFor="let course of courses$ | async; index as i" [item]="courseToCardList(course)" [index]="i"
+      <app-card-list-item *ngFor="let course of courses$ | async; index as i" [item]="courseToCardList(course)" [index]="i"
       (click)="setCourse(course)"></app-card-list-item>
     </div>
   </div>
@@ -131,7 +131,7 @@
         <p class="wacpfm-small-text">Please DO NOT USE to approve payments.</p>
         <br>
         <hr><br>
-        <app-card-list-item-item *ngFor="let item of getHybridParticipants(records); index as i" [item]="paymentToCardList(item)"
+        <app-card-list-item *ngFor="let item of getHybridParticipants(records); index as i" [item]="paymentToCardList(item)"
           [index]="i" [state]="!!item.approved" [control]="!(item.approved === undefined)"></app-card-list-item>
       </div>
     </div>
