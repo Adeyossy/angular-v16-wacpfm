@@ -70,6 +70,7 @@ import { AdminSectionsComponent } from './exam/admin-sections/admin-sections.com
 import { AdminCandidatesComponent } from './exam/admin-candidates/admin-candidates.component';
 import { PortfolioSubsectionComponent } from './portfolio-subsection/portfolio-subsection.component';
 import { PaystackPaymentViewerComponent } from './widgets/paystack-payment-viewer/paystack-payment-viewer.component';
+import { CardListItemComponent } from './widgets/card-list-item/card-list-item.component';
 
 @NgModule({
   declarations: [
@@ -137,7 +138,8 @@ import { PaystackPaymentViewerComponent } from './widgets/paystack-payment-viewe
     AdminSectionsComponent,
     AdminCandidatesComponent,
     PortfolioSubsectionComponent,
-    PaystackPaymentViewerComponent
+    PaystackPaymentViewerComponent,
+    CardListItemComponent
   ],
   imports: [
     BrowserModule,
