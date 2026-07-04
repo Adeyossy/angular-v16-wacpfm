@@ -20,6 +20,11 @@
     (click)="helper.toggleSidebar(false)">
     <summary><i class="bi bi-mortarboard-fill"></i> <span>Update Course</span></summary>
   </details>
+  <details class="wacpfm-leftbar-item wacpfm-leftbar-link" [open]="true"
+    routerLink="/dashboard/events" routerLinkActive="active"
+    (click)="helper.toggleSidebar(false)">
+    <summary><i class="bi bi-mortarboard-fill"></i> <span>Events</span></summary>
+  </details>
   <details [open]="true">
     <summary class="wacpfm-leftbar-item wacpfm-leftbar-link"
     routerLink="/dashboard/exam" routerLinkActive="active">
