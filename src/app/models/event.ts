@@ -41,7 +41,8 @@ export interface Event {
   registered_participants: string[],
   paid_participants: string[],
   whatsapp: string, //URL for QR code image for whatsapp group.
-  certificate_url: string
+  certificate_url: string,
+  cpd_url?: string
 }
 
 export const DEFAULT_NEW_EVENT: Event = {

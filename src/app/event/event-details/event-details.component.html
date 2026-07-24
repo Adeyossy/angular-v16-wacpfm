@@ -49,6 +49,14 @@
       event.paid_participants.includes(user.email!)">
         Download Certificate
       </button>
+      <a
+      [ngClass]="event.registered_participants.includes(user.email!) && 
+      event.paid_participants.includes(user.email!) && event.cpd_url ? 'd-block' : 'd-none'"
+      [href]="event.cpd_url" target="_blank" download>
+        <button class="w-auto wacpfm-primary-button mt-3">
+          Download CPD
+        </button>
+      </a>
     </div>
     <br>
     <a routerLink="./register/pay" class="wacpfm-link-card wacpfm-smaller-text">
